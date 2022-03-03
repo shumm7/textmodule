@@ -373,4 +373,9 @@ eigen/
 hash-library/
 
 # Package
-Package/
+Package/cpprest142_2_10.dll
+Package/cpprest142_2_10d.dll
+Package/libmecab.dll
+Package/LICENSE
+Package/README.md
+Package/textmodule/MeCab

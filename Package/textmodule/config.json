@@ -1,0 +1,28 @@
+{
+  "module": true,
+  "api": {
+    "base": true,
+    "string": true,
+    "tmstring": true,
+    "os": true,
+    "utf8": true,
+    "color": true,
+    "clipboard": true,
+    "filesystem": true,
+    "complex": true,
+    "quaternion": true,
+    "hash": true,
+    "http": false
+  },
+  "api-alias": {
+    "tmstring": true,
+    "filesystem": true
+  },
+  "api-global": {
+    "clipboard": true,
+    "complex": true,
+    "quaternion": true,
+    "hash": true,
+    "http": false
+  }
+}
