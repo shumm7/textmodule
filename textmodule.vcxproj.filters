@@ -1,0 +1,195 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="ソース ファイル">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="ヘッダー ファイル">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="リソース ファイル">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="ソース ファイル\function">
+      <UniqueIdentifier>{d3bfb1eb-1ba9-46b2-9289-05e9bfa66f14}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\function">
+      <UniqueIdentifier>{85081870-ecd6-4265-83e1-2ab179e37636}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\lib">
+      <UniqueIdentifier>{832950ea-11fa-4e31-a325-0e2f0ac01b66}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\lib">
+      <UniqueIdentifier>{9e4925c8-fac4-469a-b75b-1654c754bf69}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\lib\hash-library">
+      <UniqueIdentifier>{437c353c-8b83-4a34-ae5b-e334832a3b8b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\lib\hash-library">
+      <UniqueIdentifier>{12a80149-39b7-42b5-9dc4-df682ddd86aa}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="lua.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="string.cpp">
+      <Filter>ソース ファイル\function</Filter>
+    </ClCompile>
+    <ClCompile Include="base.cpp">
+      <Filter>ソース ファイル\function</Filter>
+    </ClCompile>
+    <ClCompile Include="utf8.cpp">
+      <Filter>ソース ファイル\function</Filter>
+    </ClCompile>
+    <ClCompile Include="os.cpp">
+      <Filter>ソース ファイル\function</Filter>
+    </ClCompile>
+    <ClCompile Include="tmstring.cpp">
+      <Filter>ソース ファイル\function</Filter>
+    </ClCompile>
+    <ClCompile Include="color.cpp">
+      <Filter>ソース ファイル\function</Filter>
+    </ClCompile>
+    <ClCompile Include="clipboard.cpp">
+      <Filter>ソース ファイル\function</Filter>
+    </ClCompile>
+    <ClCompile Include="filesystem.cpp">
+      <Filter>ソース ファイル\function</Filter>
+    </ClCompile>
+    <ClCompile Include="textmodule.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="mecab.cpp">
+      <Filter>ソース ファイル\function</Filter>
+    </ClCompile>
+    <ClCompile Include="textmodule_lua.cpp">
+      <Filter>ソース ファイル\lib</Filter>
+    </ClCompile>
+    <ClCompile Include="textmodule_string.cpp">
+      <Filter>ソース ファイル\lib</Filter>
+    </ClCompile>
+    <ClCompile Include="textmodule_exception.cpp">
+      <Filter>ソース ファイル\lib</Filter>
+    </ClCompile>
+    <ClCompile Include="complex.cpp">
+      <Filter>ソース ファイル\function</Filter>
+    </ClCompile>
+    <ClCompile Include="quaternion.cpp">
+      <Filter>ソース ファイル\function</Filter>
+    </ClCompile>
+    <ClCompile Include="textmodule_option.cpp">
+      <Filter>ソース ファイル\lib</Filter>
+    </ClCompile>
+    <ClCompile Include="hash.cpp">
+      <Filter>ソース ファイル\function</Filter>
+    </ClCompile>
+    <ClCompile Include="hash-library\crc32.cpp">
+      <Filter>ソース ファイル\lib\hash-library</Filter>
+    </ClCompile>
+    <ClCompile Include="hash-library\digest.cpp">
+      <Filter>ソース ファイル\lib\hash-library</Filter>
+    </ClCompile>
+    <ClCompile Include="hash-library\keccak.cpp">
+      <Filter>ソース ファイル\lib\hash-library</Filter>
+    </ClCompile>
+    <ClCompile Include="hash-library\md5.cpp">
+      <Filter>ソース ファイル\lib\hash-library</Filter>
+    </ClCompile>
+    <ClCompile Include="hash-library\sha1.cpp">
+      <Filter>ソース ファイル\lib\hash-library</Filter>
+    </ClCompile>
+    <ClCompile Include="hash-library\sha3.cpp">
+      <Filter>ソース ファイル\lib\hash-library</Filter>
+    </ClCompile>
+    <ClCompile Include="hash-library\sha256.cpp">
+      <Filter>ソース ファイル\lib\hash-library</Filter>
+    </ClCompile>
+    <ClCompile Include="http.cpp">
+      <Filter>ソース ファイル\function</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="string.h">
+      <Filter>ヘッダー ファイル\function</Filter>
+    </ClInclude>
+    <ClInclude Include="base.h">
+      <Filter>ヘッダー ファイル\function</Filter>
+    </ClInclude>
+    <ClInclude Include="utf8.h">
+      <Filter>ヘッダー ファイル\function</Filter>
+    </ClInclude>
+    <ClInclude Include="os.h">
+      <Filter>ヘッダー ファイル\function</Filter>
+    </ClInclude>
+    <ClInclude Include="tmstring.h">
+      <Filter>ヘッダー ファイル\function</Filter>
+    </ClInclude>
+    <ClInclude Include="color.h">
+      <Filter>ヘッダー ファイル\function</Filter>
+    </ClInclude>
+    <ClInclude Include="clipboard.h">
+      <Filter>ヘッダー ファイル\function</Filter>
+    </ClInclude>
+    <ClInclude Include="filesystem.h">
+      <Filter>ヘッダー ファイル\function</Filter>
+    </ClInclude>
+    <ClInclude Include="mecab.h">
+      <Filter>ヘッダー ファイル\function</Filter>
+    </ClInclude>
+    <ClInclude Include="textmodule.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="textmodule_string.h">
+      <Filter>ヘッダー ファイル\lib</Filter>
+    </ClInclude>
+    <ClInclude Include="textmodule_lua.h">
+      <Filter>ヘッダー ファイル\lib</Filter>
+    </ClInclude>
+    <ClInclude Include="textmodule_exception.h">
+      <Filter>ヘッダー ファイル\lib</Filter>
+    </ClInclude>
+    <ClInclude Include="complex.h">
+      <Filter>ヘッダー ファイル\function</Filter>
+    </ClInclude>
+    <ClInclude Include="quaternion.h">
+      <Filter>ヘッダー ファイル\function</Filter>
+    </ClInclude>
+    <ClInclude Include="textmodule_option.h">
+      <Filter>ヘッダー ファイル\lib</Filter>
+    </ClInclude>
+    <ClInclude Include="hash.h">
+      <Filter>ヘッダー ファイル\function</Filter>
+    </ClInclude>
+    <ClInclude Include="hash-library\crc32.h">
+      <Filter>ヘッダー ファイル\lib\hash-library</Filter>
+    </ClInclude>
+    <ClInclude Include="hash-library\hash.h">
+      <Filter>ヘッダー ファイル\lib\hash-library</Filter>
+    </ClInclude>
+    <ClInclude Include="hash-library\hmac.h">
+      <Filter>ヘッダー ファイル\lib\hash-library</Filter>
+    </ClInclude>
+    <ClInclude Include="hash-library\keccak.h">
+      <Filter>ヘッダー ファイル\lib\hash-library</Filter>
+    </ClInclude>
+    <ClInclude Include="hash-library\md5.h">
+      <Filter>ヘッダー ファイル\lib\hash-library</Filter>
+    </ClInclude>
+    <ClInclude Include="hash-library\sha1.h">
+      <Filter>ヘッダー ファイル\lib\hash-library</Filter>
+    </ClInclude>
+    <ClInclude Include="hash-library\sha3.h">
+      <Filter>ヘッダー ファイル\lib\hash-library</Filter>
+    </ClInclude>
+    <ClInclude Include="hash-library\sha256.h">
+      <Filter>ヘッダー ファイル\lib\hash-library</Filter>
+    </ClInclude>
+    <ClInclude Include="http.h">
+      <Filter>ヘッダー ファイル\function</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <ProjectGuid>{24122964-5DB9-4029-9CED-7CF288D88143}</ProjectGuid>
+    <RootNamespace>textmodule</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+    <UseOfMfc>Dynamic</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <TargetExt>.dll</TargetExt>
+    <IncludePath>D:\Visual Studio 2019\source\repos\textmodule\MeCab\sdk;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\Visual Studio 2019\source\repos\textmodule\MeCab\sdk;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <TargetExt>.dll</TargetExt>
+    <IncludePath>D:\Visual Studio 2019\source\repos\textmodule\MeCab\sdk;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\Visual Studio 2019\source\repos\textmodule\MeCab\sdk;$(LibraryPath)</LibraryPath>
+    <GenerateManifest>false</GenerateManifest>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>D:\Visual Studio 2019\source\repos\textmodule\lua\include;D:\Visual Studio 2019\source\repos\textmodule\eigen;D:\Visual Studio 2019\source\repos\textmodule\MeCab\sdk;D:\Visual Studio 2019\source\repos\textmodule\cpprestsdk.v142.2.10.15\include;D:\Visual Studio 2019\source\repos\textmodule\json\single_include;D:\Visual Studio 2019\source\repos\textmodule\icu\include</AdditionalIncludeDirectories>
+      <ExceptionHandling>Async</ExceptionHandling>
+      <AssemblerOutput>All</AssemblerOutput>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <AdditionalLibraryDirectories>D:\Visual Studio 2019\source\repos\textmodule\lua\lib;D:\Visual Studio 2019\source\repos\textmodule\cpprestsdk.v142.2.10.15\x86\lib;D:\Visual Studio 2019\source\repos\textmodule\MeCab\sdk;D:\Visual Studio 2019\source\repos\textmodule\icu\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>lua51.lib;libmecab.lib;cpprest142_2_10.lib;cpprest142_2_10d.lib;icudt.lib;icuin.lib;icuio.lib;icutest.lib;icutu.lib;icuuc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <GenerateMapFile>true</GenerateMapFile>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>D:\Visual Studio 2019\source\repos\textmodule\lua\include;D:\Visual Studio 2019\source\repos\textmodule\eigen;D:\Visual Studio 2019\source\repos\textmodule\MeCab\sdk;D:\Visual Studio 2019\source\repos\textmodule\cpprestsdk.v142.2.10.15\include;D:\Visual Studio 2019\source\repos\textmodule\json\single_include;</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <ExceptionHandling>Async</ExceptionHandling>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>D:\Visual Studio 2019\source\repos\textmodule\lua\lib;D:\Visual Studio 2019\source\repos\textmodule\cpprestsdk.v142.2.10.15\x86\lib;D:\Visual Studio 2019\source\repos\textmodule\MeCab\sdk;</AdditionalLibraryDirectories>
+      <AdditionalDependencies>lua51.lib;libmecab.lib;cpprest142_2_10.lib;cpprest142_2_10d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <GenerateMapFile>false</GenerateMapFile>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="clipboard.cpp" />
+    <ClCompile Include="color.cpp" />
+    <ClCompile Include="complex.cpp" />
+    <ClCompile Include="base.cpp" />
+    <ClCompile Include="filesystem.cpp" />
+    <ClCompile Include="hash-library\crc32.cpp" />
+    <ClCompile Include="hash-library\digest.cpp" />
+    <ClCompile Include="hash-library\keccak.cpp" />
+    <ClCompile Include="hash-library\md5.cpp" />
+    <ClCompile Include="hash-library\sha1.cpp" />
+    <ClCompile Include="hash-library\sha256.cpp" />
+    <ClCompile Include="hash-library\sha3.cpp" />
+    <ClCompile Include="hash.cpp" />
+    <ClCompile Include="http.cpp" />
+    <ClCompile Include="lua.cpp" />
+    <ClCompile Include="mecab.cpp" />
+    <ClCompile Include="quaternion.cpp" />
+    <ClCompile Include="string.cpp" />
+    <ClCompile Include="textmodule.cpp" />
+    <ClCompile Include="textmodule_lua.cpp" />
+    <ClCompile Include="textmodule_option.cpp" />
+    <ClCompile Include="textmodule_string.cpp" />
+    <ClCompile Include="os.cpp" />
+    <ClCompile Include="tmstring.cpp" />
+    <ClCompile Include="utf8.cpp" />
+    <ClCompile Include="textmodule_exception.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="clipboard.h" />
+    <ClInclude Include="color.h" />
+    <ClInclude Include="complex.h" />
+    <ClInclude Include="base.h" />
+    <ClInclude Include="filesystem.h" />
+    <ClInclude Include="hash-library\crc32.h" />
+    <ClInclude Include="hash-library\hash.h" />
+    <ClInclude Include="hash-library\hmac.h" />
+    <ClInclude Include="hash-library\keccak.h" />
+    <ClInclude Include="hash-library\md5.h" />
+    <ClInclude Include="hash-library\sha1.h" />
+    <ClInclude Include="hash-library\sha256.h" />
+    <ClInclude Include="hash-library\sha3.h" />
+    <ClInclude Include="hash.h" />
+    <ClInclude Include="http.h" />
+    <ClInclude Include="mecab.h" />
+    <ClInclude Include="quaternion.h" />
+    <ClInclude Include="string.h" />
+    <ClInclude Include="textmodule.h" />
+    <ClInclude Include="textmodule_exception.h" />
+    <ClInclude Include="textmodule_lua.h" />
+    <ClInclude Include="textmodule_option.h" />
+    <ClInclude Include="textmodule_string.h" />
+    <ClInclude Include="os.h" />
+    <ClInclude Include="tmstring.h" />
+    <ClInclude Include="utf8.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
