@@ -15,6 +15,7 @@
 #define MECAB_PARAM_A MODULE_NAME
 #define MECAB_PARAM_R "-r.\\textmodule\\MeCab\\etc\\mecabrc"
 #define MECAB_PARAM_D "-d.\\textmodule\\MeCab\\dic\\ipadic"
+#define MECAB_PARAM_O "-Ochasen"
 
 void mecab_check(MeCab::Model* model) {
 	if (model == nullptr) {
@@ -261,32 +262,34 @@ int mecab_words(lua_State* L) {
 			return 0;
 		}
 
-		char* c[MECAB_PARAM_N] = {
+		char* c[MECAB_PARAM_N+1] = {
 		const_cast<char*>(MECAB_PARAM_A),
 		const_cast<char*>(MECAB_PARAM_R),
 		const_cast<char*>(MECAB_PARAM_D),
+		const_cast<char*>("-Owakati")
 		};
 
-		MeCab::Model* model = MeCab::Model::create(MECAB_PARAM_N, c);
+		MeCab::Model* model = MeCab::Model::create(MECAB_PARAM_N+1, c);
 		mecab_check(model);
 		MeCab::Tagger* tagger = model->createTagger();
 		mecab_check(tagger);
-		const MeCab::Node* node = mecab_getNode(tagger, text);
-		mecab_check(node);
+		std::string val = tagger->parse(WstrToStr(text).c_str());
 
-		int i = 1;
+		lua_pushsstring(L, val);
+
 		lua_newtable(L);
-		for (; node; node = node->next) {
-			std::vector<std::wstring> v = split(StrToWstr(node->feature), L',');
-			lua_pushinteger(L, i);
-			lua_pushwstring(L, v[7]);
-			lua_settable(L, -3);
-			i++;
+		std::vector<std::wstring> v = split(StrToWstr(val), L' ');
+
+		for (int i = 0; i < v.size(); ++i) {
+			if (v[i] != L"" && v[i] != L"\n") {
+				lua_pushinteger(L, i + 1);
+				lua_pushwstring(L, v[i]);
+				lua_settable(L, -3);
+			}
 		}
-		
+
 		delete model;
 		delete tagger;
-		delete node;
 		return 1;
 	}
 	catch (std::exception& e) {

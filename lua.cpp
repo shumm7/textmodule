@@ -77,23 +77,41 @@ void luaGlobal(lua_State* L, nlohmann::json o) {
 	luaGlobal_http(L, API_HTTP, getOptionParamB(o, OPTION_VAPI_GLOBAL, API_HTTP));
 }
 
-void luaSetup(lua_State* L) {
+int luaSetup(lua_State* L) {
 	nlohmann::json option = getOption();
 	if (getOptionParamB(option, OPTION_VMODULE)) {
 		luaReg(L, option);
 		luaAlias(L, option);
 		luaGlobal(L, option);
 	}
+
+	int n = 0;
+
+	if (getOptionParamB(option, OPTION_VVER_CHECK)) {
+		n = versionCheck();
+		if (n == VERSION_CHECK_ERROR) {
+			luaL_error(L, VERSION_CHECK_MSG_ERROR);
+			n = 1;
+		}
+		else if (n == VERSION_CHECK_OUTDATED) {
+			luaL_error(L, VERSION_CHECK_MSG_OUTDATED);
+		}
+	}
+	return n;
 }
 
 extern "C" {
 	__declspec(dllexport) int luaopen_textmodule(lua_State* L) {
 		try {
-			luaSetup(L);
+			int n = luaSetup(L);
+
+			
+
+			return 1 + n;
 		}
 		catch (std::exception& e) {
 			luaL_error(L, e.what());
+			return 1;
 		}
-		return 1;
 	}
 }

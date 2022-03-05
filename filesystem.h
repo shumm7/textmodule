@@ -17,6 +17,7 @@ int fs_remove(lua_State* L);
 int fs_remove_all(lua_State* L);
 
 int fs_copy(lua_State* L);
+int fs_copy_file(lua_State* L);
 int fs_rename(lua_State* L);
 
 int fs_type(lua_State* L);
@@ -36,6 +37,7 @@ static luaL_Reg TEXTMODULE_FILESYSTEM_REG[] = {
 	{"remove", fs_remove},
 	{"remove_all", fs_remove_all},
 	{"copy", fs_copy},
+	{"copy_file", fs_copy_file},
 	{"rename", fs_rename},
 	{"type", fs_type},
 	{"size", fs_size},

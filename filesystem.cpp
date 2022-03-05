@@ -260,6 +260,47 @@ int fs_copy(lua_State* L) {
 	}
 }
 
+int fs_copy_file(lua_State* L) {
+	try {
+		std::wstring from;
+		std::wstring to;
+		if (lua_type(L, 1) == LUA_TSTRING && lua_type(L, 2) == LUA_TSTRING) {
+			from = lua_towstring(L, 1);
+			to = lua_towstring(L, 2);
+		}
+		else {
+			return 0;
+		}
+
+		int cnt = 3;
+		std::filesystem::copy_options options = std::filesystem::copy_options::none;
+
+		while (lua_type(L, cnt) == LUA_TSTRING) {
+			std::wstring mode = lua_towstring(L, cnt);
+
+			if (mode == L"none") options = options | std::filesystem::copy_options::none;
+			else if (mode == L"skip_existing") options = options | std::filesystem::copy_options::skip_existing;
+			else if (mode == L"overwrite_existing") options = options | std::filesystem::copy_options::overwrite_existing;
+			else if (mode == L"update_existing") options = options | std::filesystem::copy_options::update_existing;
+			else if (mode == L"recursive") options = options | std::filesystem::copy_options::recursive;
+			else if (mode == L"copy_symlinks") options = options | std::filesystem::copy_options::copy_symlinks;
+			else if (mode == L"skip_symlinks") options = options | std::filesystem::copy_options::skip_symlinks;
+			else if (mode == L"directories_only") options = options | std::filesystem::copy_options::directories_only;
+			else if (mode == L"create_symlinks") options = options | std::filesystem::copy_options::create_symlinks;
+			else if (mode == L"create_hard_links") options = options | std::filesystem::copy_options::create_hard_links;
+
+			cnt++;
+		}
+
+		std::filesystem::copy_file(from, to, options);
+		return 0;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
 int fs_rename(lua_State* L) {
 	try {
 		std::wstring from;
