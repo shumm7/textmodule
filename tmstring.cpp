@@ -382,16 +382,16 @@ void luaReg_tmstring(lua_State* L, const char* name, bool reg) {
 		lua_setfield(L, -2, "ascii");
 
 		lua_pushstring(L, S_HIRAGANA);
-		lua_setfield(L, -2, "hiragana");
+		lua_setfield(L, -2, "c_hiragana");
 
 		lua_pushstring(L, S_KATAKANA);
-		lua_setfield(L, -2, "katakana");
+		lua_setfield(L, -2, "c_katakana");
 
 		lua_pushstring(L, S_HALF_KATAKANA);
 		lua_setfield(L, -2, "half_katakana");
 
 		lua_pushstring(L, S_HIRAGANA_N);
-		lua_setfield(L, -2, "hiragana_n");
+		lua_setfield(L, -2, "n_hiragana");
 
 		lua_pushstring(L, S_IROHA);
 		lua_setfield(L, -2, "iroha");
