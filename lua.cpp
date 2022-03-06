@@ -18,6 +18,7 @@
 #include "quaternion.h"
 #include "hash.h"
 #include "http.h"
+#include "cmath.h"
 
 void luaReg(lua_State* L, nlohmann::json o) {
 	//base
@@ -55,6 +56,9 @@ void luaReg(lua_State* L, nlohmann::json o) {
 
 	//hash
 	luaReg_http(L, API_HTTP, getOptionParamB(o, OPTION_VAPI, API_HTTP));
+
+	//math
+	luaReg_cmath(L, API_CMATH, getOptionParamB(o, OPTION_VAPI, API_CMATH));
 }
 
 void luaAlias(lua_State* L, nlohmann::json o) {
@@ -104,8 +108,6 @@ extern "C" {
 	__declspec(dllexport) int luaopen_textmodule(lua_State* L) {
 		try {
 			int n = luaSetup(L);
-
-			
 
 			return 1 + n;
 		}

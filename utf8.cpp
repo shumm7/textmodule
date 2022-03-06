@@ -8,33 +8,10 @@
 
 int utf8_byte(lua_State* L) {
 	try {
-		if (lua_type(L, 1) != LUA_TSTRING) {
-			return 0;
-		}
-		std::wstring text = lua_towstring(L, 1);
-		int i;
-		int j;
+		std::wstring text = tm_towstring(L, 1);
+		int i = tm_tointeger_s(L, 2, 1) - 1;
+		int j = tm_tointeger_s(L, 3, 1) - 1;
 		int length = text.length();
-
-		if (lua_type(L, 2) == LUA_TNUMBER) {
-			i = lua_tointeger(L, 2) - 1;
-		}
-		else if (lua_type(L, 2) == LUA_TNIL || lua_type(L, 2) == LUA_TNONE) {
-			i = 0;
-		}
-		else {
-			return 0;
-		}
-
-		if (lua_type(L, 3) == LUA_TNUMBER) {
-			j = lua_tointeger(L, 3) - 1;
-		}
-		else if (lua_type(L, 3) == LUA_TNIL || lua_type(L, 3) == LUA_TNONE) {
-			j = i;
-		}
-		else {
-			return 0;
-		}
 
 		if (length < 1) {
 			return 0;

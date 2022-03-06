@@ -73,13 +73,7 @@ std::wstring mecab_getYomigana(MeCab::Tagger* tagger, std::wstring w_input) {
 
 int mecab_node(lua_State* L) {
 	try {
-		std::wstring text;
-		if (lua_type(L, 1) == LUA_TSTRING) {
-			text = lua_towstring(L, 1);
-		}
-		else {
-			return 0;
-		}
+		std::wstring text = tm_towstring(L, 1);
 
 		char* c[MECAB_PARAM_N] = {
 		const_cast<char*>(MECAB_PARAM_A),
@@ -188,13 +182,7 @@ int mecab_node(lua_State* L) {
 
 int mecab_yomi_hiragana(lua_State* L) {
 	try {
-		std::wstring text;
-		if (lua_type(L, 1) == LUA_TSTRING) {
-			text = lua_towstring(L, 1);
-		}
-		else {
-			return 0;
-		}
+		std::wstring text = tm_towstring(L, 1);
 
 		char* c[MECAB_PARAM_N] = {
 		const_cast<char*>(MECAB_PARAM_A),
@@ -221,13 +209,7 @@ int mecab_yomi_hiragana(lua_State* L) {
 
 int mecab_yomi_katakana(lua_State* L) {
 	try {
-		std::wstring text;
-		if (lua_type(L, 1) == LUA_TSTRING) {
-			text = lua_towstring(L, 1);
-		}
-		else {
-			return 0;
-		}
+		std::wstring text = tm_towstring(L, 1);
 
 		char* c[MECAB_PARAM_N] = {
 		const_cast<char*>(MECAB_PARAM_A),
@@ -254,13 +236,7 @@ int mecab_yomi_katakana(lua_State* L) {
 
 int mecab_words(lua_State* L) {
 	try {
-		std::wstring text;
-		if (lua_type(L, 1) == LUA_TSTRING) {
-			text = lua_towstring(L, 1);
-		}
-		else {
-			return 0;
-		}
+		std::wstring text = tm_towstring(L, 1);
 
 		char* c[MECAB_PARAM_N+1] = {
 		const_cast<char*>(MECAB_PARAM_A),

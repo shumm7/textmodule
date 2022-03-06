@@ -10,6 +10,7 @@ unsigned long long UnicodeToUTF8(unsigned long long code);
 unsigned long long UTF8ToUnicode(unsigned long long code);
 std::wstring toKatakana(std::wstring string, bool invert);
 std::wstring toHalfwidth(std::wstring string, bool invert, bool space);
+std::wstring toRoundNumber(std::wstring string, bool invert);
 
 std::wstring DecToHex(int num);
 int HexToDec(std::wstring num);

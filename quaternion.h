@@ -1,8 +1,18 @@
 #pragma once
+#include <Eigen/Geometry>
+#include <Eigen/Dense>
+#include <lua.hpp>
+
+typedef Eigen::Quaternion<double> Quat;
+typedef Eigen::Vector3d Vector3;
+typedef Eigen::Matrix3d Matrix3;
+typedef Eigen::AngleAxisd AngleAxis;
+
 #define TEXTMODULE_QUATERNION "Eigen::Quaternion<double>*"
+#define quaternion_check(L, n) (reinterpret_cast<Quat*>(luaL_checkudata(L, n, TEXTMODULE_QUATERNION)))
 
 int quaternion_new(lua_State* L);
-int quaternion_enew(lua_State* L);
+int quaternion_euler_new(lua_State* L);
 int quaternion_angleaxis(lua_State* L);
 int quaternion_twovectors(lua_State* L);
 int quaternion_identity(lua_State* L);
@@ -36,7 +46,8 @@ void luaGlobal_quaternion(lua_State* L, const char* name, bool reg);
 
 static luaL_Reg TEXTMODULE_QUATERNION_REG[] = {
 	{"new", quaternion_new},
-	{"enew", quaternion_enew},
+	{"euler_new", quaternion_euler_new},
+	{"enew", quaternion_euler_new},
 	{"angleaxis", quaternion_angleaxis},
 	{"twovectors", quaternion_twovectors},
 	{"identity", quaternion_identity},

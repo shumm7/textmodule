@@ -12,14 +12,17 @@ using namespace std::chrono;
 
 int os_time(lua_State* L) {
 	try {
-		if (lua_type(L, 1) == LUA_TNIL || lua_type(L, 1) == LUA_TNONE) {
+		int tp = lua_type(L, 1);
+		luaL_argcheck(L, tp == LUA_TNONE || tp == LUA_TTABLE, 1, "table/none expected");
+
+		if (tp == LUA_TNONE) {
 			auto now = std::chrono::system_clock::now();
 			__time64_t now_c = std::chrono::system_clock::to_time_t(now);
 
 			lua_pushnumber(L, static_cast<double>(now_c));
 			return 1;
 		}
-		else if (lua_type(L, 1) == LUA_TTABLE) {
+		else if (tp == LUA_TTABLE) {
 			lua_getfield(L, 1, "year");
 			lua_getfield(L, 1, "month");
 			lua_getfield(L, 1, "day");
@@ -31,24 +34,24 @@ int os_time(lua_State* L) {
 			__time64_t res;
 
 			if (lua_type(L, -6) == LUA_TNUMBER) //year
-				Time.tm_year = lua_tointeger(L, -6) - 1900;
+				Time.tm_year = luaL_checkinteger(L, -6) - 1900;
 			else
 				return 0;
 			if (lua_type(L, -5) == LUA_TNUMBER) //month
-				Time.tm_mon = lua_tointeger(L, -5) - 1;
+				Time.tm_mon = luaL_checkinteger(L, -5) - 1;
 			else
 				return 0;
 			if (lua_type(L, -4) == LUA_TNUMBER) //day
-				Time.tm_mday = lua_tointeger(L, -4);
+				Time.tm_mday = luaL_checkinteger(L, -4);
 			else
 				return 0;
 
 			if (lua_type(L, -3) == LUA_TNUMBER) //hour
-				Time.tm_hour = lua_tointeger(L, -3);
+				Time.tm_hour = luaL_checkinteger(L, -3);
 			if (lua_type(L, -2) == LUA_TNUMBER) //min
-				Time.tm_min = lua_tointeger(L, -2);
+				Time.tm_min = luaL_checkinteger(L, -2);
 			if (lua_type(L, -1) == LUA_TNUMBER) //sec
-				Time.tm_sec = lua_tointeger(L, -1);
+				Time.tm_sec = luaL_checkinteger(L, -1);
 
 			res = _mktime64(&Time);
 			lua_pushnumber(L, static_cast<double>(res));
@@ -69,15 +72,14 @@ int os_date(lua_State* L) {
 
 		__time64_t time_t;
 
+		int tp = lua_type(L, 1);
+		luaL_argcheck(L, tp == LUA_TNONE || tp == LUA_TSTRING, 1, "string/none expected");
 
-		if (lua_type(L, 1) == LUA_TNIL || lua_type(L, 1) == LUA_TNONE) {
+		if (tp == LUA_TNONE) {
 			format = L"%c";
 		}
-		else if (lua_type(L, 1) == LUA_TSTRING) {
+		else if (tp== LUA_TSTRING) {
 			format = lua_towstring(L, 1);
-		}
-		else {
-			return 0;
 		}
 
 		if (format[0] == L'!') {  //UTC
@@ -88,16 +90,15 @@ int os_date(lua_State* L) {
 
 		std::chrono::time_point now = std::chrono::system_clock::now();
 
-		if (lua_type(L, 2) == LUA_TNIL || lua_type(L, 2) == LUA_TNONE) {
+		tp = lua_type(L, 2);
+		luaL_argcheck(L, tp == LUA_TNONE || tp == LUA_TNUMBER, 2, "number/none expected");
+
+		if (tp == LUA_TNONE) {
 			time_t = std::chrono::system_clock::to_time_t(now);
 		}
-		else if (lua_type(L, 2) == LUA_TNUMBER) {
+		else if (tp == LUA_TNUMBER) {
 			time_t = static_cast<__time64_t>(lua_tonumber(L, 2));
 		}
-		else {
-			return 0;
-		}
-
 
 		if (format == L"*t") {
 			struct tm tm;
@@ -157,21 +158,8 @@ int os_date(lua_State* L) {
 
 int os_difftime(lua_State* L) {
 	try {
-		__time64_t time2_t;
-		__time64_t time1_t;
-
-		if (lua_type(L, 1) == LUA_TNUMBER) {
-			time2_t = static_cast<__time64_t>(lua_tonumber(L, 1));
-		}
-		else {
-			return 0;
-		}
-		if (lua_type(L, 2) == LUA_TNUMBER) {
-			time1_t = static_cast<__time64_t>(lua_tonumber(L, 2));
-		}
-		else {
-			return 0;
-		}
+		__time64_t time2_t = static_cast<__time64_t>(tm_tonumber(L, 1));
+		__time64_t time1_t = static_cast<__time64_t>(tm_tonumber(L, 2));
 
 		time_point time2 = std::chrono::system_clock::from_time_t(time2_t);
 		time_point time1 = std::chrono::system_clock::from_time_t(time1_t);
@@ -201,13 +189,7 @@ int os_clock(lua_State* L) {
 
 int os_sleep(lua_State* L) {
 	try {
-		double time;
-		if (lua_type(L, 1) == LUA_TNUMBER) {
-			time = lua_tonumber(L, 1);
-		}
-		else {
-			return 0;
-		}
+		double time = tm_tonumber_s(L, 1, 0);
 
 		if (time <= 0)
 			return 0;

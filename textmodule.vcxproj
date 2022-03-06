@@ -165,6 +165,7 @@
     <ClCompile Include="hash.cpp" />
     <ClCompile Include="http.cpp" />
     <ClCompile Include="lua.cpp" />
+    <ClCompile Include="cmath.cpp" />
     <ClCompile Include="mecab.cpp" />
     <ClCompile Include="quaternion.cpp" />
     <ClCompile Include="string.cpp" />
@@ -179,6 +180,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="clipboard.h" />
+    <ClInclude Include="cmath.h" />
     <ClInclude Include="color.h" />
     <ClInclude Include="complex.h" />
     <ClInclude Include="base.h" />

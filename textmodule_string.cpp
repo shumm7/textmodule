@@ -334,6 +334,53 @@ std::wstring toHalfwidth(std::wstring string, bool invert, bool space) {
 	return string;
 }
 
+std::wstring toRoundNumber(std::wstring string, bool invert)
+{
+	string = _jreplace(string, L"20", L"‡S", invert);
+	string = _jreplace(string, L"19", L"‡R", invert);
+	string = _jreplace(string, L"18", L"‡Q", invert);
+	string = _jreplace(string, L"17", L"‡P", invert);
+	string = _jreplace(string, L"16", L"‡O", invert);
+	string = _jreplace(string, L"15", L"‡N", invert);
+	string = _jreplace(string, L"14", L"‡M", invert);
+	string = _jreplace(string, L"13", L"‡L", invert);
+	string = _jreplace(string, L"12", L"‡K", invert);
+	string = _jreplace(string, L"11", L"‡J", invert);
+	string = _jreplace(string, L"10", L"‡I", invert);
+	string = _jreplace(string, L"9", L"‡H", invert);
+	string = _jreplace(string, L"8", L"‡G", invert);
+	string = _jreplace(string, L"7", L"‡F", invert);
+	string = _jreplace(string, L"6", L"‡E", invert);
+	string = _jreplace(string, L"5", L"‡D", invert);
+	string = _jreplace(string, L"4", L"‡C", invert);
+	string = _jreplace(string, L"3", L"‡B", invert);
+	string = _jreplace(string, L"2", L"‡A", invert);
+	string = _jreplace(string, L"1", L"‡@", invert);
+
+	string = _jreplace(string, L"‚Q‚O", L"‡S", invert);
+	string = _jreplace(string, L"‚P‚X", L"‡R", invert);
+	string = _jreplace(string, L"‚P‚W", L"‡Q", invert);
+	string = _jreplace(string, L"‚P‚V", L"‡P", invert);
+	string = _jreplace(string, L"‚P‚U", L"‡O", invert);
+	string = _jreplace(string, L"‚P‚T", L"‡N", invert);
+	string = _jreplace(string, L"‚P‚S", L"‡M", invert);
+	string = _jreplace(string, L"‚P‚R", L"‡L", invert);
+	string = _jreplace(string, L"‚P‚Q", L"‡K", invert);
+	string = _jreplace(string, L"‚P‚P", L"‡J", invert);
+	string = _jreplace(string, L"‚P‚O", L"‡I", invert);
+	string = _jreplace(string, L"‚X", L"‡H", invert);
+	string = _jreplace(string, L"‚W", L"‡G", invert);
+	string = _jreplace(string, L"‚V", L"‡F", invert);
+	string = _jreplace(string, L"‚U", L"‡E", invert);
+	string = _jreplace(string, L"‚T", L"‡D", invert);
+	string = _jreplace(string, L"‚S", L"‡C", invert);
+	string = _jreplace(string, L"‚R", L"‡B", invert);
+	string = _jreplace(string, L"‚Q", L"‡A", invert);
+	string = _jreplace(string, L"‚P", L"‡@", invert);
+
+	return string;
+}
+
 
 //Unicode  - UTF8@‘ŠŒİ•ÏŠ·
 unsigned long long UnicodeToUTF8(unsigned long long code) {

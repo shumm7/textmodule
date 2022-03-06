@@ -5,6 +5,7 @@
     "base": true,
     "string": true,
     "tmstring": true,
+    "math": true,
     "os": true,
     "utf8": true,
     "color": true,

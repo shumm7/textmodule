@@ -111,6 +111,9 @@
     <ClCompile Include="http.cpp">
       <Filter>ソース ファイル\function</Filter>
     </ClCompile>
+    <ClCompile Include="cmath.cpp">
+      <Filter>ソース ファイル\function</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="string.h">
@@ -189,6 +192,9 @@
       <Filter>ヘッダー ファイル\lib\hash-library</Filter>
     </ClInclude>
     <ClInclude Include="http.h">
+      <Filter>ヘッダー ファイル\function</Filter>
+    </ClInclude>
+    <ClInclude Include="cmath.h">
       <Filter>ヘッダー ファイル\function</Filter>
     </ClInclude>
   </ItemGroup>

@@ -16,13 +16,7 @@
 
 int hash_sha256(lua_State* L) {
 	try {
-		std::string str;
-		if (lua_type(L, 1) == LUA_TSTRING) {
-			str = lua_tostring(L, 1);
-		}
-		else {
-			return 0;
-		}
+		std::string str = tm_tostring(L, 1);
 
 		SHA256 hash;
 		lua_pushsstring(L, hash(str));
@@ -36,13 +30,7 @@ int hash_sha256(lua_State* L) {
 
 int hash_sha3(lua_State* L) {
 	try {
-		std::string str;
-		if (lua_type(L, 1) == LUA_TSTRING) {
-			str = lua_tostring(L, 1);
-		}
-		else {
-			return 0;
-		}
+		std::string str = tm_tostring(L, 1);
 
 		SHA3 hash;
 		lua_pushsstring(L, hash(str));
@@ -56,13 +44,7 @@ int hash_sha3(lua_State* L) {
 
 int hash_sha1(lua_State* L) {
 	try {
-		std::string str;
-		if (lua_type(L, 1) == LUA_TSTRING) {
-			str = lua_tostring(L, 1);
-		}
-		else {
-			return 0;
-		}
+		std::string str = tm_tostring(L, 1);
 
 		SHA1 hash;
 		lua_pushsstring(L, hash(str));
@@ -76,13 +58,7 @@ int hash_sha1(lua_State* L) {
 
 int hash_md5(lua_State* L) {
 	try {
-		std::string str;
-		if (lua_type(L, 1) == LUA_TSTRING) {
-			str = lua_tostring(L, 1);
-		}
-		else {
-			return 0;
-		}
+		std::string str = tm_tostring(L, 1);
 
 		MD5 hash;
 		lua_pushsstring(L, hash(str));
@@ -96,13 +72,7 @@ int hash_md5(lua_State* L) {
 
 int hash_keccak(lua_State* L) {
 	try {
-		std::string str;
-		if (lua_type(L, 1) == LUA_TSTRING) {
-			str = lua_tostring(L, 1);
-		}
-		else {
-			return 0;
-		}
+		std::string str = tm_tostring(L, 1);
 
 		Keccak hash;
 		lua_pushsstring(L, hash(str));
@@ -116,13 +86,7 @@ int hash_keccak(lua_State* L) {
 
 int hash_crc32(lua_State* L) {
 	try {
-		std::string str;
-		if (lua_type(L, 1) == LUA_TSTRING) {
-			str = lua_tostring(L, 1);
-		}
-		else {
-			return 0;
-		}
+		std::string str = tm_tostring(L, 1);
 
 		CRC32 hash;
 		lua_pushsstring(L, hash(str));
@@ -136,30 +100,9 @@ int hash_crc32(lua_State* L) {
 
 int hash_hmac(lua_State* L) {
 	try {
-		std::string str;
-		std::string key;
-		std::string type;
-
-		if (lua_type(L, 1) == LUA_TSTRING) {
-			str = lua_tostring(L, 1);
-		}
-		else {
-			return 0;
-		}
-
-		if (lua_type(L, 2) == LUA_TSTRING) {
-			key = lua_tostring(L, 2);
-		}
-		else {
-			return 0;
-		}
-
-		if (lua_type(L, 3) == LUA_TSTRING) {
-			type = lowerString(lua_tostring(L, 3));
-		}
-		else {
-			return 0;
-		}
+		std::string str = tm_tostring(L, 1);
+		std::string key = tm_tostring(L, 2);
+		std::string type = lowerString(tm_tostring_s(L, 3, "sha256"));
 
 		if (type == "sha256") {
 			lua_pushsstring(L, hmac<SHA256>(str, key));
@@ -190,7 +133,9 @@ void luaReg_hash(lua_State* L, const char* name, bool reg) {
 }
 
 void luaGlobal_hash(lua_State* L, const char* name, bool reg) {
-	lua_newtable(L);
-	luaL_register(L, NULL, TEXTMODULE_HASH_REG);
-	lua_setglobal(L, name);
+	if (reg) {
+		lua_newtable(L);
+		luaL_register(L, NULL, TEXTMODULE_HASH_REG);
+		lua_setglobal(L, name);
+	}
 }

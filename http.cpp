@@ -13,21 +13,9 @@ using namespace std;
 
 int http_get(lua_State* L) {
 	try {
-		std::wstring url;
-		std::wstring body;
-		if (lua_type(L, 1) == LUA_TSTRING) {
-			url = lua_towstring(L, 1);
-		}
-		else {
-			return 0;
-		}
+		std::wstring url = tm_towstring(L, 1);
+		std::wstring body = tm_towstring(L, 2);
 
-		if (lua_type(L, 2) == LUA_TSTRING) {
-			body = lua_towstring(L, 2);
-		}
-		else {
-			return 0;
-		}
 		web::http::http_request request(methods::GET);
 		request.set_body(body);
 
@@ -61,21 +49,9 @@ int http_get(lua_State* L) {
 
 int http_post(lua_State* L) {
 	try {
-		std::wstring url;
-		std::wstring body;
-		if (lua_type(L, 1) == LUA_TSTRING) {
-			url = lua_towstring(L, 1);
-		}
-		else {
-			return 0;
-		}
+		std::wstring url = tm_towstring(L, 1);
+		std::wstring body = tm_towstring(L, 2);
 
-		if (lua_type(L, 2) == LUA_TSTRING) {
-			body = lua_towstring(L, 2);
-		}
-		else {
-			return 0;
-		}
 		web::http::http_request request(methods::POST);
 		request.set_body(body);
 
@@ -116,7 +92,9 @@ void luaReg_http(lua_State* L, const char* name, bool reg) {
 }
 
 void luaGlobal_http(lua_State* L, const char* name, bool reg) {
-	lua_newtable(L);
-	luaL_register(L, NULL, TEXTMODULE_HTTP_REG);
-	lua_setglobal(L, name);
+	if (reg) {
+		lua_newtable(L);
+		luaL_register(L, NULL, TEXTMODULE_HTTP_REG);
+		lua_setglobal(L, name);
+	}
 }

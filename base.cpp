@@ -11,22 +11,8 @@
 
 int main_getinfo(lua_State* L) {
 	try {
-		int i;
-		std::wstring t;
-
-		if (lua_type(L, 1) == LUA_TSTRING) {
-			t = lua_towstring(L, 1);
-		}
-		else {
-			throw_invalid_argument();
-		}
-
-		if (lua_type(L, 2) == LUA_TNUMBER) {
-			i = lua_tointeger(L, 2);
-		}
-		else {
-			i = 1;
-		}
+		std::wstring t = tm_towstring(L, 1);
+		int i = tm_tointeger_s(L, 2, 1);
 
 		if (t == L"version") {
 			if (i == 1) {
@@ -127,7 +113,7 @@ int main_exception(lua_State* L) {
 	if (lua_type(L, 1) == LUA_TSTRING) {
 		throw std::exception(lua_tostring(L, 1));
 	}
-	else if (lua_type(L, 1) == LUA_TNIL || lua_type(L, 1) == LUA_TNONE) {
+	else if (lua_type(L, 1) == LUA_TNONE) {
 		throw std::exception();
 	}
 	return 0;

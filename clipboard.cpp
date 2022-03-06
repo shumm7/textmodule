@@ -3,6 +3,7 @@
 #include <windows.h>
 
 #include "clipboard.h"
+#include "textmodule_lua.h"
 #include "textmodule_string.h"
 #include "textmodule_exception.h"
 
@@ -42,16 +43,9 @@ int clipboard_set(lua_State* L) {
 	try {
 		HGLOBAL hMem;
 		LPTSTR lpBuff;
-		LPTSTR lpText;
 		DWORD dwSize;
+		LPTSTR lpText = (LPTSTR)tm_tostring(L, 1);
 		bool flag = false;
-
-		if (lua_type(L, 1) == LUA_TSTRING) {
-			lpText = (LPTSTR)lua_tostring(L, 1);
-		}
-		else {
-			throw_invalid_argument();
-		}
 
 		dwSize = ((lstrlen(lpText) + 1) * sizeof(TCHAR));
 
@@ -119,7 +113,9 @@ void luaReg_clipboard(lua_State* L, const char* name, bool reg) {
 }
 
 void luaGlobal_clipboard(lua_State* L, const char* name, bool reg) {
-	lua_newtable(L);
-	luaL_register(L, NULL, TEXTMODULE_CLIPBOARD_REG);
-	lua_setglobal(L, name);
+	if (reg) {
+		lua_newtable(L);
+		luaL_register(L, NULL, TEXTMODULE_CLIPBOARD_REG);
+		lua_setglobal(L, name);
+	}
 }

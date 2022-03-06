@@ -1,9 +1,10 @@
 #pragma once
 #include <lua.hpp>
 #define TEXTMODULE_COMPLEX "std::complex<double>*"
+#define complex_check(L, n) (reinterpret_cast<std::complex<double>*>(luaL_checkudata(L, n, TEXTMODULE_COMPLEX)))
 
 int complex_new(lua_State* L);
-int complex_new_polar(lua_State* L);
+int complex_polar_new(lua_State* L);
 
 int complex__real(lua_State* L);
 int complex__imag(lua_State* L);
@@ -51,7 +52,8 @@ void luaGlobal_complex(lua_State* L, const char* name, bool reg);
 
 static luaL_Reg TEXTMODULE_COMPLEX_REG[] = {
 	{"new", complex_new},
-	{"pnew", complex_new_polar},
+	{"polar_new", complex_polar_new},
+	{"pnew", complex_polar_new},
 
 	{"real", complex__real},
 	{"imag", complex__imag},

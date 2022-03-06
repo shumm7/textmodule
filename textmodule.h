@@ -1,12 +1,12 @@
 #include <iostream>
 
 #define MODULE_NAME "textmodule"
-#define MODULE_VERSION 18
+#define MODULE_VERSION 19
 
 #define API_BASE "base"
 #define API_STRING "string"
 #define API_TMSTRING "tmstring"
-#define API_MECAB "analyze"
+#define API_CMATH "math"
 #define API_OS "os"
 #define API_UTF8 "utf8"
 #define API_COLOR "color"
