@@ -31,6 +31,8 @@ int quaternion____div(lua_State* L);
 int quaternion____unm(lua_State* L);
 int quaternion____lt(lua_State* L);
 int quaternion____le(lua_State* L);
+int quaternion____index(lua_State* L);
+int quaternion____newindex(lua_State* L);
 
 int quaternion__abs(lua_State* L);
 int quaternion__norm(lua_State* L);
@@ -82,6 +84,8 @@ static luaL_Reg TEXTMODULE_QUATERNION_META_REG[] = {
 	{"__unm", quaternion____unm},
 	{"__lt", quaternion____lt},
 	{"__le", quaternion____le},
+	//{"__index", quaternion____index},
+	{"__newindex", quaternion____newindex},
 
 	{"abs", quaternion__abs},
 	{"norm", quaternion__norm},

@@ -34,6 +34,10 @@ bool getOptionParamB(nlohmann::json j, std::string p1, std::string p2) {
 	return j[p1][p2].get<bool>();
 }
 
+bool getOptionParamB(nlohmann::json j, std::string p1, std::string p2, std::string p3) {
+	return j[p1][p2][p3].get<bool>();
+}
+
 int versionCheck() {
 	try {
 		std::wstring url = VERSION_CHECK_URL;

@@ -7,11 +7,24 @@
 #include "cmath.h"
 #include "textmodule_lua.h"
 
+int cmath_cbrt(lua_State* L) {
+	try {
+		double x = tm_tonumber(L, 1);
+
+		lua_pushnumber(L, std::cbrt(x));
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
 int cmath_trunc(lua_State* L) {
 	try {
 		double n = tm_tonumber(L, 1);
 
-		lua_pushnumber(L, trunc(n));
+		lua_pushnumber(L, std::trunc(n));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -63,6 +76,62 @@ int cmath_clamp(lua_State* L) {
 	}
 }
 
+int cmath_rep(lua_State* L) {
+	try {
+		double value = tm_tonumber(L, 1);
+		double min = tm_tonumber_s(L, 2, 0);
+		double max = tm_tonumber_s(L, 3, 1);
+
+		if (min > max) {
+			throw std::invalid_argument("invalid argument");
+		}
+
+		while (min > value || value >= max) {
+			if (value < min) {
+				value += (max - min);
+			}
+			else if (value >= max) {
+				value -= (max -min);
+			}
+		}
+
+		lua_pushnumber(L, value);
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int cmath_tgamma(lua_State* L) {
+	try {
+		double x = tm_tonumber(L, 1);
+
+		lua_pushnumber(L, std::tgamma(x));
+
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int cmath_lgamma(lua_State* L) {
+	try {
+		double x = tm_tonumber(L, 1);
+
+		lua_pushnumber(L, std::lgamma(x));
+
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
 int cmath_erf(lua_State* L) {
 	try {
 		double x = tm_tonumber(L, 1);
@@ -96,7 +165,15 @@ int cmath_hypot(lua_State* L) {
 		double x = tm_tonumber(L, 1);
 		double y = tm_tonumber(L, 2);
 
-		lua_pushnumber(L, std::hypot(x, y));
+		int tp = lua_type(L, 3);
+		luaL_argcheck(L, tp == LUA_TNONE || tp == LUA_TNUMBER, 3, "number/none expected");
+		if (tp == LUA_TNONE) {
+			lua_pushnumber(L, std::hypot(x, y));
+		}
+		else {
+			double z = tm_tonumber(L, 3);
+			lua_pushnumber(L, std::hypot(x, y, z));
+		}
 
 		return 1;
 	}

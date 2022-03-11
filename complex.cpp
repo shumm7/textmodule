@@ -439,6 +439,93 @@ int complex____le(lua_State* L) {
 	}
 }
 
+int complex____index(lua_State* L) {
+	try {
+		std::complex<double>* val1 = complex_check(L, 1);
+
+		int tp = lua_type(L, 2);
+		luaL_argcheck(L, tp == LUA_TNUMBER || tp == LUA_TSTRING, 2, "string/number expected");
+
+		if (tp == LUA_TNUMBER) {
+			switch (tm_tointeger(L, 2)) {
+			case 1:
+				lua_pushnumber(L, val1->real());
+				return 1;
+			case 2:
+				lua_pushnumber(L, val1->imag());
+				return 1;
+			default:
+				return 0;
+			}
+		}
+		else if (tp == LUA_TSTRING) {
+			std::string l = tm_tostring(L, 2);
+			if (l == "r" || l == "real") {
+				lua_pushnumber(L, val1->real());
+				return 1;
+			}
+			else if (l == "i" || l == "imag") {
+				lua_pushnumber(L, val1->imag());
+				return 1;
+			}
+			else {
+				return 0;
+			}
+		}
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int complex____newindex(lua_State* L) {
+	try {
+		std::complex<double>* val1 = complex_check(L, 1);
+
+		int tp = lua_type(L, 2);
+		luaL_argcheck(L, tp == LUA_TNUMBER || tp == LUA_TSTRING, 2, "string/number expected");
+
+		double value = tm_tonumber(L, 3);
+
+		if (tp == LUA_TNUMBER) {
+			switch (tm_tointeger(L, 2)) {
+				case 1:
+					val1->real(value);
+					break;
+				case 2:
+					val1->imag(value);
+					break;
+				default:
+					return 0;
+			}
+		}
+		else if (tp == LUA_TSTRING) {
+			std::string l = tm_tostring(L, 2);
+			if (l == "r" || l == "real") {
+				val1->real(value);
+			}
+			else if (l == "i" || l == "imag") {
+				val1->imag(value);
+			}
+			else {
+				return 0;
+			}
+		}
+
+		std::complex<double>* vret = reinterpret_cast<std::complex<double>*>(lua_newuserdata(L, sizeof(std::complex<double>)));
+		luaL_getmetatable(L, TEXTMODULE_COMPLEX);
+		lua_setmetatable(L, -2);
+		*vret = *val1;
+
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
 int complex__abs(lua_State* L) {
 	try {
 		std::complex<double>* val1 = new std::complex<double>;
@@ -1118,10 +1205,12 @@ void luaReg_complex(lua_State* L, const char* name, bool reg) {
 		//complex (metatable)
 		luaL_newmetatable(L, TEXTMODULE_COMPLEX); //add metatable
 		luaL_register(L, NULL, TEXTMODULE_COMPLEX_META_REG);
+		
 		lua_pushstring(L, "__index"); //add __index
 		lua_newtable(L);
 		luaL_register(L, NULL, TEXTMODULE_COMPLEX_META_REG);
 		lua_settable(L, -3);
+		
 		lua_pop(L, 1); //remove metatable
 	}
 }

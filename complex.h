@@ -19,6 +19,8 @@ int complex____unm(lua_State* L);
 int complex____pow(lua_State* L);
 int complex____lt(lua_State* L);
 int complex____le(lua_State* L);
+int complex____index(lua_State* L);
+int complex____newindex(lua_State* L);
 
 int complex__abs(lua_State* L);
 int complex__arg(lua_State* L);
@@ -102,6 +104,8 @@ static luaL_Reg TEXTMODULE_COMPLEX_META_REG[] = {
 	{"__unm", complex____unm},
 	{"__lt", complex____lt},
 	{"__le", complex____le},
+	//{"__index", complex____index},
+	{"__newindex", complex____newindex},
 
 	{"abs", complex__abs},
 	{"arg", complex__arg},

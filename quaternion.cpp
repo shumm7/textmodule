@@ -539,6 +539,118 @@ int quaternion____le(lua_State* L) {
 	}
 }
 
+int quaternion____index(lua_State* L) {
+	try {
+		Quat* val1 = quaternion_check(L, 1);
+
+		int tp = lua_type(L, 2);
+		luaL_argcheck(L, tp == LUA_TSTRING || tp == LUA_TNUMBER, 2, "string/number expected");
+
+		if (tp == LUA_TNUMBER) {
+			switch (tm_tointeger(L, 2)) {
+				case 1:
+					lua_pushnumber(L, val1->w());
+					return 1;
+				case 2:
+					lua_pushnumber(L, val1->x());
+					return 1;
+				case 3:
+					lua_pushnumber(L, val1->y());
+					return 1;
+				case 4:
+					lua_pushnumber(L, val1->z());
+					return 1;
+				default:
+					return 0;
+			}
+		}
+		else if (tp == LUA_TSTRING) {
+			std::string l = tm_tostring(L, 2);
+			if (l == "w") {
+				lua_pushnumber(L, val1->w());
+				return 1;
+			}
+			else if (l == "x") {
+				lua_pushnumber(L, val1->x());
+				return 1;
+			}
+			else if (l == "y") {
+				lua_pushnumber(L, val1->y());
+				return 1;
+			}
+			else if (l == "z") {
+				lua_pushnumber(L, val1->z());
+				return 1;
+			}
+			else {
+				return 0;
+			}
+		}
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int quaternion____newindex(lua_State* L) {
+	try {
+		Quat* val1 = quaternion_check(L, 1);
+
+		int tp = lua_type(L, 2);
+		luaL_argcheck(L, tp == LUA_TSTRING || tp == LUA_TNUMBER, 2, get_qargmsg().c_str());
+		double value = tm_tonumber(L, 3);
+
+		if (tp == LUA_TNUMBER) {
+			switch (tm_tointeger(L, 2)) {
+				case 1:
+					val1->w() = value;
+					break;
+				case 2:
+					val1->x() = value;
+					break;
+				case 3:
+					val1->y() = value;
+					break;
+				case 4:
+					val1->z() = value;
+					break;
+				default:
+					return 0;
+			}
+		}
+		else if (tp == LUA_TSTRING) {
+			std::string l = tm_tostring(L, 2);
+			if (l == "w") {
+				val1->w() = value;
+			}
+			else if (l == "x") {
+				val1->x() = value;
+			}
+			else if (l == "y") {
+				val1->y() = value;
+			}
+			else if (l == "z") {
+				val1->z() = value;
+			}
+			else {
+				return 0;
+			}
+		}
+
+		Quat* vret = reinterpret_cast<Quat*>(lua_newuserdata(L, sizeof(Quat)));
+		luaL_getmetatable(L, TEXTMODULE_QUATERNION);
+		lua_setmetatable(L, -2);
+		*vret = *val1;
+
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
 int quaternion__abs(lua_State* L) {
 	try {
 		Quat* val1 = new Quat(0,0,0,0);
@@ -790,10 +902,12 @@ void luaReg_quaternion(lua_State* L, const char* name, bool reg) {
 		//quaternion (metatable)
 		luaL_newmetatable(L, TEXTMODULE_QUATERNION); //add metatable
 		luaL_register(L, NULL, TEXTMODULE_QUATERNION_META_REG);
+
 		lua_pushstring(L, "__index"); //add __index
 		lua_newtable(L);
 		luaL_register(L, NULL, TEXTMODULE_QUATERNION_META_REG);
 		lua_settable(L, -3);
+
 		lua_pop(L, 1); //remove metatable
 	}
 }

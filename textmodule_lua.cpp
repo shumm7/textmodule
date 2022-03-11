@@ -27,6 +27,10 @@ double tm_todouble(lua_State* L, int idx) {
 	return static_cast<double>(luaL_checknumber(L, idx));
 }
 
+double tm_tonumber(lua_State* L, int idx) {
+	return tm_todouble(L, idx);
+}
+
 
 void lua_pushwstring(lua_State* L, std::wstring s) {
 	lua_pushstring(L, WstrToStr(s).c_str());

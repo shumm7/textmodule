@@ -1,7 +1,7 @@
 #include <iostream>
 
 #define MODULE_NAME "textmodule"
-#define MODULE_VERSION 20
+#define MODULE_VERSION 21
 
 #define API_BASE "base"
 #define API_STRING "string"
@@ -16,6 +16,11 @@
 #define API_QUATERNION "quaternion"
 #define API_HASH "hash"
 #define API_HTTP "http"
+
+#define API_COLOR_BASE "base"
+#define API_RGB "rgb"
+#define API_HSV "hsv"
+#define API_HSL "hsl"
 
 #define ALIAS_MODULE_NAME "tm"
 #define ALIAS_API_TMSTRING "tmstr"

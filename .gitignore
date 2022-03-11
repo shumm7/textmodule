@@ -371,6 +371,7 @@ icu/
 json/
 eigen/
 hash-library/
+color/
 
 # Package
 Package/cpprest142_2_10.dll

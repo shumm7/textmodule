@@ -1,8 +1,12 @@
 #include <lua.hpp>
 
+int cmath_cbrt(lua_State* L);
 int cmath_trunc(lua_State* L);
 int cmath_lerp(lua_State* L);
+int cmath_rep(lua_State* L);
 int cmath_clamp(lua_State* L);
+int cmath_tgamma(lua_State* L);
+int cmath_lgamma(lua_State* L);
 int cmath_erf(lua_State* L);
 int cmath_erfc(lua_State* L);
 int cmath_hypot(lua_State* L);
@@ -35,9 +39,13 @@ int cmath_uniform_distribution(lua_State* L);
 void luaReg_cmath(lua_State* L, const char* name, bool reg);
 
 static luaL_Reg TEXTMODULE_CMATH_REG[] = {
+	{"cbrt", cmath_cbrt},
 	{"trunc", cmath_trunc},
 	{"lerp", cmath_lerp},
 	{"clamp", cmath_clamp},
+	{"rep", cmath_rep},
+	{"tgamma", cmath_tgamma},
+	{"lgamma", cmath_lgamma},
 	{"erf", cmath_erf},
 	{"erfc", cmath_erfc},
 	{"hypot", cmath_hypot},

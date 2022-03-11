@@ -17,5 +17,6 @@ nlohmann::json getOption();
 
 bool getOptionParamB(nlohmann::json j, std::string p1);
 bool getOptionParamB(nlohmann::json j, std::string p1, std::string p2);
+bool getOptionParamB(nlohmann::json j, std::string p1, std::string p2, std::string p3);
 
 int versionCheck();

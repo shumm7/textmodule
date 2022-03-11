@@ -19,6 +19,9 @@
 #include "hash.h"
 #include "http.h"
 #include "cmath.h"
+#include "rgb.h"
+#include "hsv.h"
+#include "hsl.h"
 
 void luaReg(lua_State* L, nlohmann::json o) {
 	//base
@@ -37,7 +40,10 @@ void luaReg(lua_State* L, nlohmann::json o) {
 	luaReg_utf8(L, API_UTF8, getOptionParamB(o, OPTION_VAPI, API_UTF8));
 
 	//color
-	luaReg_color(L, API_COLOR, getOptionParamB(o, OPTION_VAPI, API_COLOR));
+	luaReg_color(L, API_COLOR, getOptionParamB(o, OPTION_VAPI, API_COLOR, API_COLOR_BASE));
+	luaReg_rgb(L, API_RGB, getOptionParamB(o, OPTION_VAPI, API_COLOR, API_RGB));
+	luaReg_hsv(L, API_HSV, getOptionParamB(o, OPTION_VAPI, API_COLOR, API_HSV));
+	luaReg_hsl(L, API_HSL, getOptionParamB(o, OPTION_VAPI, API_COLOR, API_HSL));
 
 	//clipboard
 	luaReg_clipboard(L, API_CLIPBOARD, getOptionParamB(o, OPTION_VAPI, API_CLIPBOARD));

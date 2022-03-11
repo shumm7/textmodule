@@ -8,7 +8,12 @@
     "math": true,
     "os": true,
     "utf8": true,
-    "color": true,
+    "color": {
+       "base": true,
+       "rgb": true,
+       "hsv": true,
+       "hsl": true
+    },
     "clipboard": true,
     "filesystem": true,
     "complex": true,

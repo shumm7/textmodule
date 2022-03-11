@@ -31,6 +31,12 @@
     <Filter Include="ソース ファイル\lib\hash-library">
       <UniqueIdentifier>{12a80149-39b7-42b5-9dc4-df682ddd86aa}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\function\color">
+      <UniqueIdentifier>{c580d9a8-cab1-4a41-a490-5150e706859f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\function\color">
+      <UniqueIdentifier>{fa895cee-2234-44c1-8bb9-dbd6b7bcd813}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="lua.cpp">
@@ -49,9 +55,6 @@
       <Filter>ソース ファイル\function</Filter>
     </ClCompile>
     <ClCompile Include="tmstring.cpp">
-      <Filter>ソース ファイル\function</Filter>
-    </ClCompile>
-    <ClCompile Include="color.cpp">
       <Filter>ソース ファイル\function</Filter>
     </ClCompile>
     <ClCompile Include="clipboard.cpp">
@@ -114,6 +117,21 @@
     <ClCompile Include="cmath.cpp">
       <Filter>ソース ファイル\function</Filter>
     </ClCompile>
+    <ClCompile Include="rgb.cpp">
+      <Filter>ソース ファイル\function\color</Filter>
+    </ClCompile>
+    <ClCompile Include="textmodule_color.cpp">
+      <Filter>ソース ファイル\lib</Filter>
+    </ClCompile>
+    <ClCompile Include="hsv.cpp">
+      <Filter>ソース ファイル\function\color</Filter>
+    </ClCompile>
+    <ClCompile Include="hsl.cpp">
+      <Filter>ソース ファイル\function\color</Filter>
+    </ClCompile>
+    <ClCompile Include="color.cpp">
+      <Filter>ソース ファイル\function\color</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="string.h">
@@ -129,9 +147,6 @@
       <Filter>ヘッダー ファイル\function</Filter>
     </ClInclude>
     <ClInclude Include="tmstring.h">
-      <Filter>ヘッダー ファイル\function</Filter>
-    </ClInclude>
-    <ClInclude Include="color.h">
       <Filter>ヘッダー ファイル\function</Filter>
     </ClInclude>
     <ClInclude Include="clipboard.h">
@@ -196,6 +211,21 @@
     </ClInclude>
     <ClInclude Include="cmath.h">
       <Filter>ヘッダー ファイル\function</Filter>
+    </ClInclude>
+    <ClInclude Include="rgb.h">
+      <Filter>ヘッダー ファイル\function\color</Filter>
+    </ClInclude>
+    <ClInclude Include="textmodule_color.h">
+      <Filter>ヘッダー ファイル\lib</Filter>
+    </ClInclude>
+    <ClInclude Include="hsv.h">
+      <Filter>ヘッダー ファイル\function\color</Filter>
+    </ClInclude>
+    <ClInclude Include="hsl.h">
+      <Filter>ヘッダー ファイル\function\color</Filter>
+    </ClInclude>
+    <ClInclude Include="color.h">
+      <Filter>ヘッダー ファイル\function\color</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
