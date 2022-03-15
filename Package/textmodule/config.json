@@ -9,15 +9,19 @@
     "os": true,
     "utf8": true,
     "color": {
-       "base": true,
+       "color": true,
        "rgb": true,
        "hsv": true,
        "hsl": true
     },
+    "geometry": {
+       "vector2": true,
+       "vector3": true,
+       "complex": true,
+       "quaternion": true
+    },
     "clipboard": true,
     "filesystem": true,
-    "complex": true,
-    "quaternion": true,
     "hash": true,
     "http": false
   },
@@ -27,8 +31,12 @@
   },
   "api-global": {
     "clipboard": true,
-    "complex": true,
-    "quaternion": true,
+    "geometry": {
+       "vector2": true,
+       "vector3": true,
+       "complex": true,
+       "quaternion": true
+    },
     "hash": true,
     "http": false
   }

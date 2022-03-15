@@ -23,3 +23,5 @@ std::wstring tm_towstring_s(lua_State* L, int idx);
 std::wstring tm_towstring_s(lua_State* L, int idx, std::wstring def);
 bool tm_toboolean_s(lua_State* L, int idx);
 bool tm_toboolean_s(lua_State* L, int idx, bool def);
+
+bool luaL_checkmetatable(lua_State* L, int ud, const char* tname);

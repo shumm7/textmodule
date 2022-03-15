@@ -10,15 +10,18 @@
 #include "utf8.h"
 #include "os.h"
 #include "tmstring.h"
-#include "color.h"
 #include "clipboard.h"
 #include "filesystem.h"
-#include "io.h"
-#include "complex.h"
-#include "quaternion.h"
 #include "hash.h"
 #include "http.h"
 #include "cmath.h"
+
+#include "complex.h"
+#include "vector2.h"
+#include "vector3.h"
+#include "quaternion.h"
+
+#include "color.h"
 #include "rgb.h"
 #include "hsv.h"
 #include "hsl.h"
@@ -40,22 +43,22 @@ void luaReg(lua_State* L, nlohmann::json o) {
 	luaReg_utf8(L, API_UTF8, getOptionParamB(o, OPTION_VAPI, API_UTF8));
 
 	//color
-	luaReg_color(L, API_COLOR, getOptionParamB(o, OPTION_VAPI, API_COLOR, API_COLOR_BASE));
+	luaReg_color(L, API_COLOR_BASE, getOptionParamB(o, OPTION_VAPI, API_COLOR, API_COLOR_BASE));
 	luaReg_rgb(L, API_RGB, getOptionParamB(o, OPTION_VAPI, API_COLOR, API_RGB));
 	luaReg_hsv(L, API_HSV, getOptionParamB(o, OPTION_VAPI, API_COLOR, API_HSV));
 	luaReg_hsl(L, API_HSL, getOptionParamB(o, OPTION_VAPI, API_COLOR, API_HSL));
+
+	//geometry
+	luaReg_complex(L, API_COMPLEX, getOptionParamB(o, OPTION_VAPI, API_GEOMETRY, API_COMPLEX));
+	luaReg_vector2(L, API_VECTOR2, getOptionParamB(o, OPTION_VAPI, API_GEOMETRY, API_VECTOR2));
+	luaReg_vector3(L, API_VECTOR3, getOptionParamB(o, OPTION_VAPI, API_GEOMETRY, API_VECTOR3));
+	luaReg_quaternion(L, API_QUATERNION, getOptionParamB(o, OPTION_VAPI, API_GEOMETRY, API_QUATERNION));
 
 	//clipboard
 	luaReg_clipboard(L, API_CLIPBOARD, getOptionParamB(o, OPTION_VAPI, API_CLIPBOARD));
 
 	//filesystem
 	luaReg_filesystem(L, API_FILESYSTEM, getOptionParamB(o, OPTION_VAPI, API_FILESYSTEM));
-
-	//complex
-	luaReg_complex(L, API_COMPLEX, getOptionParamB(o, OPTION_VAPI, API_COMPLEX));
-
-	//quaternion
-	luaReg_quaternion(L, API_QUATERNION, getOptionParamB(o, OPTION_VAPI, API_QUATERNION));
 
 	//hash
 	luaReg_hash(L, API_HASH, getOptionParamB(o, OPTION_VAPI, API_HASH));
@@ -81,10 +84,13 @@ void luaAlias(lua_State* L, nlohmann::json o) {
 
 void luaGlobal(lua_State* L, nlohmann::json o) {
 	luaGlobal_clipboard(L, API_CLIPBOARD, getOptionParamB(o, OPTION_VAPI_GLOBAL, API_CLIPBOARD));
-	luaGlobal_complex(L, API_COMPLEX, getOptionParamB(o, OPTION_VAPI_GLOBAL, API_COMPLEX));
-	luaGlobal_quaternion(L, API_QUATERNION, getOptionParamB(o, OPTION_VAPI_GLOBAL, API_QUATERNION));
 	luaGlobal_hash(L, API_HASH, getOptionParamB(o, OPTION_VAPI_GLOBAL, API_HASH));
 	luaGlobal_http(L, API_HTTP, getOptionParamB(o, OPTION_VAPI_GLOBAL, API_HTTP));
+
+	//geometry
+	luaGlobal_complex(L, API_COMPLEX, getOptionParamB(o, OPTION_VAPI_GLOBAL, API_GEOMETRY, API_COMPLEX));
+	luaGlobal_vector3(L, API_VECTOR3, getOptionParamB(o, OPTION_VAPI_GLOBAL, API_GEOMETRY, API_VECTOR3));
+	luaGlobal_quaternion(L, API_QUATERNION, getOptionParamB(o, OPTION_VAPI_GLOBAL, API_GEOMETRY, API_QUATERNION));
 }
 
 int luaSetup(lua_State* L) {

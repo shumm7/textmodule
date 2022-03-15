@@ -99,6 +99,10 @@ void luaReg_utf8(lua_State* L, const char* name, bool reg) {
 	if (reg) {
 		lua_newtable(L);
 		luaL_register(L, NULL, TEXTMODULE_UTF8_REG);
+
+		lua_pushlstring(L, UTF8PATT, sizeof(UTF8PATT) / sizeof(char) - 1);
+		lua_setfield(L, -2, "charpattern");
+
 		lua_setfield(L, -2, name);
 	}
 }

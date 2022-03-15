@@ -158,3 +158,14 @@ bool tm_toboolean_s(lua_State* L, int idx, bool def) {
 		return lua_toboolean(L, idx);
 	}
 }
+
+bool luaL_checkmetatable(lua_State* L, int ud, const char* tname) {
+	if (lua_getmetatable(L, ud)) {  /* does it have a metatable? */
+		lua_getfield(L, LUA_REGISTRYINDEX, tname);  /* get correct metatable */
+		if (lua_rawequal(L, -1, -2)) {  /* does it have the correct mt? */
+			lua_pop(L, 2);
+			return true;
+		}
+	}
+	return false;
+}

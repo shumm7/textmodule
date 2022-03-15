@@ -37,6 +37,12 @@
     <Filter Include="ヘッダー ファイル\function\color">
       <UniqueIdentifier>{fa895cee-2234-44c1-8bb9-dbd6b7bcd813}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\function\geometry">
+      <UniqueIdentifier>{ba94b497-2100-4962-90a8-068d815603ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\function\geometry">
+      <UniqueIdentifier>{c87bda3b-b224-4f11-a8c5-fa3987aa91ca}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="lua.cpp">
@@ -77,12 +83,6 @@
     </ClCompile>
     <ClCompile Include="textmodule_exception.cpp">
       <Filter>ソース ファイル\lib</Filter>
-    </ClCompile>
-    <ClCompile Include="complex.cpp">
-      <Filter>ソース ファイル\function</Filter>
-    </ClCompile>
-    <ClCompile Include="quaternion.cpp">
-      <Filter>ソース ファイル\function</Filter>
     </ClCompile>
     <ClCompile Include="textmodule_option.cpp">
       <Filter>ソース ファイル\lib</Filter>
@@ -132,6 +132,18 @@
     <ClCompile Include="color.cpp">
       <Filter>ソース ファイル\function\color</Filter>
     </ClCompile>
+    <ClCompile Include="complex.cpp">
+      <Filter>ソース ファイル\function\geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="quaternion.cpp">
+      <Filter>ソース ファイル\function\geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="vector3.cpp">
+      <Filter>ソース ファイル\function\geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="vector2.cpp">
+      <Filter>ソース ファイル\function\geometry</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="string.h">
@@ -169,12 +181,6 @@
     </ClInclude>
     <ClInclude Include="textmodule_exception.h">
       <Filter>ヘッダー ファイル\lib</Filter>
-    </ClInclude>
-    <ClInclude Include="complex.h">
-      <Filter>ヘッダー ファイル\function</Filter>
-    </ClInclude>
-    <ClInclude Include="quaternion.h">
-      <Filter>ヘッダー ファイル\function</Filter>
     </ClInclude>
     <ClInclude Include="textmodule_option.h">
       <Filter>ヘッダー ファイル\lib</Filter>
@@ -226,6 +232,18 @@
     </ClInclude>
     <ClInclude Include="color.h">
       <Filter>ヘッダー ファイル\function\color</Filter>
+    </ClInclude>
+    <ClInclude Include="complex.h">
+      <Filter>ヘッダー ファイル\function\geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="quaternion.h">
+      <Filter>ヘッダー ファイル\function\geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="vector3.h">
+      <Filter>ヘッダー ファイル\function\geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="vector2.h">
+      <Filter>ヘッダー ファイル\function\geometry</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

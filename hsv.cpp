@@ -4,6 +4,8 @@
 #include "rgb.h"
 #include "hsl.h"
 #include "color.h"
+#include "vector3.h"
+
 #include "textmodule_lua.h"
 #include "textmodule_string.h"
 #include "textmodule_color.h"
@@ -43,10 +45,18 @@ int hsv_new(lua_State* L) {
 			v = tm_tointeger(L, 3);
 		}
 		else if (tp1 == LUA_TUSERDATA && tp2 == LUA_TNONE && tp3 == LUA_TNONE) {
-			HSV* val = hsv_check(L, 1);
-			h = val->h;
-			s = val->s;
-			v = val->v;
+			if (luaL_checkmetatable(L, 1, TEXTMODULE_HSV)) {
+				HSV* val = hsv_check(L, 1);
+				h = val->h;
+				s = val->s;
+				v = val->v;
+			}
+			else if (luaL_checkmetatable(L, 1, TEXTMODULE_VECTOR3)) {
+				Vector3* val = vector3_check(L, 1);
+				h = val->x();
+				s = val->y();
+				v = val->z();
+			}
 		}
 
 		HSV* ret = reinterpret_cast<HSV*>(lua_newuserdata(L, sizeof(HSV)));

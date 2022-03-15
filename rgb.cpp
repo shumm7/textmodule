@@ -6,6 +6,8 @@
 #include "hsl.h"
 #include "color.h"
 
+#include "vector3.h"
+
 #include "textmodule_lua.h"
 #include "textmodule_string.h"
 #include "textmodule_color.h"
@@ -50,10 +52,18 @@ void get_value(lua_State* L, RGB* col, int idx) {
 		b = ret.b;
 	}
 	else if (tp == LUA_TUSERDATA) {
-		RGB* val = rgb_check(L, idx);
-		r = val->r;
-		g = val->g;
-		b = val->b;
+		if (luaL_checkmetatable(L, idx, TEXTMODULE_RGB)) {
+			RGB* val = rgb_check(L, idx);
+			r = val->r;
+			g = val->g;
+			b = val->b;
+		}
+		else if (luaL_checkmetatable(L, idx, TEXTMODULE_VECTOR3)) {
+			Vector3* val = vector3_check(L, idx);
+			r = val->x();
+			g = val->y();
+			b = val->z();
+		}
 	}
 	col->r = check_rgbvalue(r);
 	col->g = check_rgbvalue(g);
@@ -81,10 +91,18 @@ void get_tvalue(lua_State* L, int idx, RGB* ret) {
 		getRGBhex(val, ret);
 	}
 	else if (tp1 == LUA_TUSERDATA && tp2 == LUA_TNONE && tp3 == LUA_TNONE) {
-		RGB* val = rgb_check(L, 1);
-		ret->r = val->r;
-		ret->g = val->g;
-		ret->b = val->b;
+		if (luaL_checkmetatable(L, idx, TEXTMODULE_RGB)) {
+			RGB* val = rgb_check(L, idx);
+			ret->r = val->r;
+			ret->g = val->g;
+			ret->b = val->b;
+		}
+		else if (luaL_checkmetatable(L, idx, TEXTMODULE_VECTOR3)) {
+			Vector3* val = vector3_check(L, idx);
+			ret->r = val->x();
+			ret->g = val->y();
+			ret->b = val->z();
+		}
 	}
 	else if (tp1 == LUA_TNUMBER && tp2 == LUA_TNONE && tp3 == LUA_TNONE) {
 		int val = tm_tointeger(L, 1);

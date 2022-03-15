@@ -45,3 +45,8 @@ This library is licensed under the zlib License.
 https://github.com/microsoft/cpprestsdk
 Copyright (C) Microsoft Corporation. All rights reserved.
 This library is licensed under the MIT License.
+
+### Fast C++ CSV Parser
+https://github.com/ben-strasser/fast-cpp-csv-parser
+Copyright (c) 2015, ben-strasser. All rights reserved.
+This library is licensed under the BSD 3-Clause "New" or "Revised" License.

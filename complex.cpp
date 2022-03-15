@@ -7,6 +7,7 @@
 #include "textmodule_lua.h"
 #include "textmodule_string.h"
 #include "textmodule_exception.h"
+#include "vector2.h"
 
 std::string get_cargmsg() {
 	std::string m = "number/";
@@ -18,8 +19,25 @@ std::string get_cargmsg() {
 
 int complex_new(lua_State* L) {
 	try {
-		double r = tm_tonumber_s(L, 1, 0);
-		double i = tm_tonumber_s(L, 2, 0);
+		int tp = lua_type(L, 1);
+		luaL_argcheck(L, tp == LUA_TNUMBER || tp == LUA_TUSERDATA || tp==LUA_TNONE, 1, "number/userdata/none expected");
+
+		double r;
+		double i;
+
+		if (tp == LUA_TNUMBER || tp==LUA_TNONE) {
+			r = tm_tonumber_s(L, 1, 0);
+			i = tm_tonumber_s(L, 2, 0);
+		}
+		else if (tp == LUA_TUSERDATA) {
+			Vector2* v = vector2_check(L, 1);
+			r = v->x();
+			i = v->y();
+		}
+		else {
+			return 0;
+		}
+		
 
 		std::complex<double>* ret = reinterpret_cast<std::complex<double>*>(lua_newuserdata(L, sizeof(std::complex<double>)));
 		luaL_getmetatable(L, TEXTMODULE_COMPLEX);

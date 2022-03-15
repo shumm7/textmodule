@@ -1,302 +1,199 @@
 #include <lua.hpp>
-#include <iostream>
-#include <sstream>
-#include <exception>
-#include <cmath>
-#include <algorithm>
+#include <csv.h>
+#include <vector>
 
 #include "color.h"
+#include "rgb.h"
 #include "textmodule_lua.h"
 #include "textmodule_string.h"
 #include "textmodule_color.h"
 
-/*
-int color_RGB(lua_State* L) {
-	try {
-		int val1 = 0;
-		int val2 = 0;
-		int val3 = 0;
-		int mode = 0;
+#define LIST_DIRECTORY ".\\textmodule\\color\\"
 
-		if (lua_type(L, 1) == LUA_TNUMBER && lua_type(L, 2) != LUA_TNUMBER) {
-			val1 = lua_tointeger(L, 1);
-			if (val1 < 0 || val1>0xffffff)
-				return 0;
-			mode = 0;
+#define SEARCHMODE_FULL 0
+#define SEARCHMODE_PART 1
+#define SEARCHMODE_FORWARD 2
+#define SEARCHMODE_BACK 3
+
+enum Target {
+	color = 1<<0,
+	name = 1<<1,
+	japanese = 1<<2,
+	english = 1<<3
+};
+
+std::string get_colorlistmsg() {
+	std::string t = TEXTMODULE_COLORLIST;
+	t += " expected";
+	return t;
+}
+
+void getlist(std::string listname, ColorList* list) {
+	std::string dir = LIST_DIRECTORY + listname + ".csv";
+	io::CSVReader<4> ls(dir);
+
+	std::string color;
+	std::string name;
+	std::string japanese;
+	std::string english;
+
+	ls.read_header(io::ignore_extra_column, "color", "name", "japanese", "english");
+
+	while (ls.read_row(color, name, japanese, english)) {
+		ColorItem c;
+		c.color = StrToWstr(color);
+		c.name = StrToWstr(name);
+		c.japanese = StrToWstr(japanese);
+		c.english = StrToWstr(english);
+
+		list->push_back(c);
+	}
+}
+
+void search(ColorList* list, std::wstring searchWord, int searchMode, ColorList* ret, int searchTarget) {
+	std::wstring sw = searchWord;
+	int st = searchTarget;
+
+	if (sw == L"") {
+		return;
+	}
+
+	for (int i = 0; i < list->size(); i++) {
+		ColorItem p = list->at(i);
+		if (searchMode == SEARCHMODE_FULL) {
+			if (p.color == sw && (st & Target::color)
+				|| p.name == sw && (st & Target::name)
+				|| p.japanese == sw && (st & Target::japanese)
+				|| p.english == sw && (st & Target::english)
+			)
+				ret->push_back(p);
 		}
-		else if (lua_type(L, 1) == LUA_TSTRING) {
-			val1 = HexToDec(lua_towstring(L, 1));
-			if (val1 < 0 || val1>0xffffff)
-				return 0;
-			mode = 0;
+		else if (searchMode == SEARCHMODE_PART) {
+			if (p.color.find(sw) != std::string::npos && (st & Target::color)
+				|| p.name.find(sw) != std::string::npos && (st & Target::name)
+				|| p.japanese.find(sw) != std::string::npos && (st & Target::japanese)
+				|| p.english.find(sw) != std::string::npos && (st & Target::english)
+			)
+				ret->push_back(p);
 		}
-		else if (lua_type(L, 1) == LUA_TNUMBER && lua_type(L, 2) == LUA_TNUMBER && lua_type(L, 3) == LUA_TNUMBER) {
-			val1 = lua_tointeger(L, 1);
-			val2 = lua_tointeger(L, 2);
-			val3 = lua_tointeger(L, 3);
-			mode = 1;
+		else if (searchMode == SEARCHMODE_FORWARD) {
+			if (p.color.find(sw) == 0 && (st & Target::color)
+				|| p.name.find(sw)==0 && (st & Target::name)
+				|| p.japanese.find(sw)==0 && (st & Target::japanese)
+				|| p.english.find(sw)==0 && (st & Target::english)
+			)
+				ret->push_back(p);
+		}
+		else if (searchMode == SEARCHMODE_BACK) {
+			if( (p.color.rfind(sw) == (p.color.length() - sw.length()) && sw.length() <= p.color.length() && (st & Target::color))
+				|| (p.name.rfind(sw)==(p.name.length()-sw.length()) && sw.length()<=p.name.length() && (st & Target::name))
+				|| (p.japanese.rfind(sw) == (p.japanese.length() - sw.length()) && sw.length() <= p.japanese.length() && (st & Target::japanese))
+				|| (p.english.rfind(sw) == (p.english.length() - sw.length()) && sw.length() <= p.english.length() && (st & Target::english))
+			)
+				ret->push_back(p);
 		}
 		else {
-			return 0;
+			throw std::invalid_argument("invalid search mode");
+		}
+	}
+}
+
+void set_colorlist_table(lua_State* L, ColorList* val) {
+	lua_newtable(L);
+	for (int i = 0; i < val->size(); i++) {
+		lua_pushinteger(L, i + 1);
+		lua_newtable(L);
+
+		{
+			RGB* ret = reinterpret_cast<RGB*>(lua_newuserdata(L, sizeof(RGB)));
+			luaL_getmetatable(L, TEXTMODULE_RGB);
+			lua_setmetatable(L, -2);
+			getRGBhex(HexToDec(val->at(i).color), ret);
+			lua_setfield(L, -2, "color");
+
+			lua_pushwstring(L, val->at(i).name);
+			lua_setfield(L, -2, "name");
+
+			lua_pushwstring(L, val->at(i).japanese);
+			lua_setfield(L, -2, "japanese");
+
+			lua_pushwstring(L, val->at(i).english);
+			lua_setfield(L, -2, "english");
 		}
 
-		if (mode == 0) {
-			lua_pushinteger(L, getRGBhex(val1, L'r'));
-			lua_pushinteger(L, getRGBhex(val1, L'g'));
-			lua_pushinteger(L, getRGBhex(val1, L'b'));
+		lua_settable(L, -3);
+	}
 
-			return 3;
-		}
-		else if (mode == 1) {
-			lua_pushwstring(L, getRGBhex(val1, val2, val3));
-			return 1;
-		}
+	luaL_getmetatable(L, TEXTMODULE_COLORLIST);
+	lua_setmetatable(L, -2);
+}
+
+void get_colorlist_table(lua_State* L, int idx, ColorList* ret) {
+	luaL_argcheck(L, lua_type(L, idx) == LUA_TTABLE && luaL_checkmetatable(L, idx, TEXTMODULE_COLORLIST), idx, get_colorlistmsg().c_str());
+
+	lua_pushnil(L);
+	while (lua_next(L, idx)) {
+		lua_getfield(L, -1, "english");
+		lua_getfield(L, -2, "japanese");
+		lua_getfield(L, -3, "name");
+		lua_getfield(L, -4, "color");
+
+		ColorItem c;
+		c.english = tm_towstring(L, -4);
+		c.japanese = tm_towstring(L, -3);
+		c.name = tm_towstring(L, -2);
+		c.color = getRGBhex(rgb_check(L, -1));
+		ret->push_back(c);
+
+		lua_pop(L, 5);
+	}
+}
+
+
+int color_getlist(lua_State* L) {
+	try {
+		ColorList list;
+		getlist(tm_tostring(L, 1), &list);
+		set_colorlist_table(L, &list);
+		return 1;
 	}
 	catch (std::exception& e) {
 		luaL_error(L, e.what());
 		return 1;
 	}
-	return 0;
 }
 
-int color_HSV(lua_State* L) {
+int color_search(lua_State* L) {
 	try {
-		int val1 = 0;
-		int val2 = 0;
-		int val3 = 0;
-		int mode = 0;
+		ColorList list;
+		get_colorlist_table(L, 1, &list);
 
-		if (lua_type(L, 1) == LUA_TNUMBER && lua_type(L, 2) != LUA_TNUMBER) {
-			val1 = lua_tointeger(L, 1);
-			if (val1 < 0 || val1>0xffffff)
-				return 0;
-			mode = 0;
-		}
-		else if (lua_type(L, 1) == LUA_TSTRING) {
-			val1 = HexToDec(lua_towstring(L, 1));
-			if (val1 < 0 || val1>0xffffff)
-				return 0;
-			mode = 0;
-		}
-		else if (lua_type(L, 1) == LUA_TNUMBER && lua_type(L, 2) == LUA_TNUMBER && lua_type(L, 3) == LUA_TNUMBER) {
-			val1 = lua_tointeger(L, 1);
-			val2 = lua_tointeger(L, 2);
-			val3 = lua_tointeger(L, 3);
-			mode = 1;
-		}
-		else {
-			return 0;
-		}
-
-		if (mode == 0) { //col(hex) --> h, s, v
-			int _r = getRGBhex(val1, L'r');
-			int _g = getRGBhex(val1, L'g');
-			int _b = getRGBhex(val1, L'b');
-
-			int h = RGBtoHSV(_r, _g, _b, L'h');
-			int s = RGBtoHSV(_r, _g, _b, L's');
-			int v = RGBtoHSV(_r, _g, _b, L'v');
-
-			if (h == -1 || s == -1 || v == -1)
-				return 0;
-
-			lua_pushnumber(L, h);
-			lua_pushnumber(L, s);
-			lua_pushnumber(L, v);
-			
-			return 3;
-		}
-		else if (mode == 1) { //h, s, v --> col(hex)
-			int r = HSVtoRGB(val1, val2, val3, L'r');
-			int g = HSVtoRGB(val1, val2, val3, L'g');
-			int b = HSVtoRGB(val1, val2, val3, L'b');
-
-			if (r == -1 || g == -1 || b == -1)
-				return 0;
-
-			std::wstring c = getRGBhex(r, g, b);
-			if (c == L"")
-				return 0;
-			lua_pushwstring(L, c);
-			return 1;
-		}
-
+		ColorList ret;
+		search(&list, tm_towstring(L, 2), tm_tointeger_s(L, 3, 0), &ret, tm_tointeger_s(L, 4, Target::color | Target::name | Target::japanese | Target::english));
+		set_colorlist_table(L, &ret);
+		return 1;
 	}
 	catch (std::exception& e) {
 		luaL_error(L, e.what());
 		return 1;
 	}
-	return 0;
 }
 
-int color_convert(lua_State* L) {
-	try {
-		std::wstring from;
-		std::wstring to;
-		if (lua_type(L, 1) == LUA_TSTRING) {
-			from = lua_towstring(L, 1);
-		}
-		else {
-			return 0;
-		}
-		if (lua_type(L, 2) == LUA_TSTRING) {
-			to = lua_towstring(L, 2);
-		}
-		else {
-			return 0;
-		}
 
-		int R = 0;
-		int G = 0;
-		int B = 0;
-
-		if (from == L"RGB" || from == L"color" || from == L"color_string") {
-			int val1;
-			if (lua_type(L, 3) == LUA_TNUMBER && lua_type(L, 4) != LUA_TNUMBER) {
-				val1 = lua_tointeger(L, 3);
-				R = getRGBhex(val1, L'r');
-				G = getRGBhex(val1, L'g');
-				B = getRGBhex(val1, L'b');
-			}
-			else if (lua_type(L, 3) == LUA_TSTRING) {
-				val1 = HexToDec(StrToWstr(lua_tostring(L, 3)));
-				R = getRGBhex(val1, L'r');
-				G = getRGBhex(val1, L'g');
-				B = getRGBhex(val1, L'b');
-			}
-			else if (lua_type(L, 3) == LUA_TNUMBER && lua_type(L, 4) == LUA_TNUMBER && lua_type(L, 5) == LUA_TNUMBER) {
-				R = lua_tointeger(L, 3);
-				G = lua_tointeger(L, 4);
-				B = lua_tointeger(L, 5);
-			}
-			else
-				return 0;
-		}
-		else if (from == L"HSV" || from == L"HSB") {
-			if (lua_type(L, 3) == LUA_TNUMBER && lua_type(L, 4) == LUA_TNUMBER && lua_type(L, 5) == LUA_TNUMBER) {
-				int h = lua_tointeger(L, 3);
-				int s = lua_tointeger(L, 4);
-				int v = lua_tointeger(L, 5);
-
-				R = HSVtoRGB(h, s, v, L'r');
-				G = HSVtoRGB(h, s, v, L'g');
-				B = HSVtoRGB(h, s, v, L'b');
-			}
-			else
-				return 0;
-		}
-		else if (from == L"HSL") {
-			if (lua_type(L, 3) == LUA_TNUMBER && lua_type(L, 4) == LUA_TNUMBER && lua_type(L, 5) == LUA_TNUMBER) {
-				int h = lua_tointeger(L, 3);
-				int s = lua_tointeger(L, 4);
-				int l = lua_tointeger(L, 5);
-
-				R = HSLtoRGB(h, s, l, L'r');
-				G = HSLtoRGB(h, s, l, L'g');
-				B = HSLtoRGB(h, s, l, L'b');
-			}
-			else
-				return 0;
-		}
-		else if (from == L"CMYK") {
-			if (lua_type(L, 3) == LUA_TNUMBER && lua_type(L, 4) == LUA_TNUMBER && lua_type(L, 5) == LUA_TNUMBER && lua_type(L, 6) == LUA_TNUMBER) {
-				double c = lua_tonumber(L, 3);
-				double m = lua_tonumber(L, 4);
-				double y = lua_tonumber(L, 5);
-				double k = lua_tonumber(L, 6);
-
-				R = CMYKtoRGB(c, m, y, k, L'r');
-				G = CMYKtoRGB(c, m, y, k, L'g');
-				B = CMYKtoRGB(c, m, y, k, L'b');
-			}
-			else
-				return 0;
-		}
-		else {
-			return 0;
-		}
-
-
-		if (R < 0 || R>255)
-			return 0;
-		if (G < 0 || G>255)
-			return 0;
-		if (B < 0 || B>255)
-			return 0;
-
-		if (to == L"RGB") {
-			lua_pushnumber(L, R);
-			lua_pushnumber(L, G);
-			lua_pushnumber(L, B);
-			return 3;
-		}
-		else if (to == L"color") {
-			std::wstring c = getRGBhex(R, G, B);
-			if (c == L"")
-				return 0;
-			int n = HexToDec(c);
-			lua_pushnumber(L, n);
-		}
-		else if (to == L"color_string") {
-			std::wstring c = getRGBhex(R, G, B);
-			if (c == L"")
-				return 0;
-			lua_pushstring(L, WstrToStr(c).c_str());
-			return 1;
-		}
-		else if (to == L"HSV" || to == L"HSB") {
-			int h = RGBtoHSV(R, G, B, L'h');
-			int s = RGBtoHSV(R, G, B, L's');
-			int v = RGBtoHSV(R, G, B, L'v');
-
-			if (h == -1 || s == -1 || v == -1)
-				return 0;
-			lua_pushnumber(L, h);
-			lua_pushnumber(L, s);
-			lua_pushnumber(L, v);
-			return 3;
-		}
-		else if (to == L"HSL") {
-			int h = RGBtoHSL(R, G, B, L'h');
-			int s = RGBtoHSL(R, G, B, L's');
-			int l = RGBtoHSL(R, G, B, L'l');
-
-			if (h == -1 || s == -1 || l == -1)
-				return 0;
-			lua_pushnumber(L, h);
-			lua_pushnumber(L, s);
-			lua_pushnumber(L, l);
-			return 3;
-		}
-		else if (to == L"CMYK") {
-			double c = RGBtoCMYK(R, G, B, L'c');
-			double m = RGBtoCMYK(R, G, B, L'm');
-			double y = RGBtoCMYK(R, G, B, L'y');
-			double k = RGBtoCMYK(R, G, B, L'k');
-
-			if (c == -1 || m == -1 || y == -1 || k == -1)
-				return 0;
-			lua_pushnumber(L, c);
-			lua_pushnumber(L, m);
-			lua_pushnumber(L, y);
-			lua_pushnumber(L, k);
-			return 4;
-		}
-		else {
-			return 0;
-		}
-	}
-	catch (std::exception& e) {
-		luaL_error(L, e.what());
-		return 1;
-	}
-	return 0;
-}
-*/
 void luaReg_color(lua_State* L, const char* name, bool reg) {
 	if (reg) {
 		lua_newtable(L);
 		luaL_register(L, NULL, TEXTMODULE_COLOR_REG);
 		lua_setfield(L, -2, name);
+
+		luaL_newmetatable(L, TEXTMODULE_COLORLIST); //add metatable
+		luaL_register(L, NULL, TEXTMODULE_COLOR_META_REG);
+
+		lua_pushstring(L, "__index"); //add __index
+		lua_newtable(L);
+		luaL_register(L, NULL, TEXTMODULE_COLOR_META_REG);
+		lua_settable(L, -3);
+
+		lua_pop(L, 1); //remove metatable
 	}
 }

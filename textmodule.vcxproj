@@ -87,11 +87,12 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\Visual Studio 2019\source\repos\textmodule\lua\include;D:\Visual Studio 2019\source\repos\textmodule\eigen;D:\Visual Studio 2019\source\repos\textmodule\MeCab\sdk;D:\Visual Studio 2019\source\repos\textmodule\cpprestsdk.v142.2.10.15\include;D:\Visual Studio 2019\source\repos\textmodule\json\single_include;D:\Visual Studio 2019\source\repos\textmodule\icu\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Visual Studio 2019\source\repos\textmodule\lua\include;D:\Visual Studio 2019\source\repos\textmodule\eigen;D:\Visual Studio 2019\source\repos\textmodule\MeCab\sdk;D:\Visual Studio 2019\source\repos\textmodule\cpprestsdk.v142.2.10.15\include;D:\Visual Studio 2019\source\repos\textmodule\fast-cpp-csv-parser;D:\Visual Studio 2019\source\repos\textmodule\json\single_include;D:\Visual Studio 2019\source\repos\textmodule\icu\include</AdditionalIncludeDirectories>
       <ExceptionHandling>Async</ExceptionHandling>
       <AssemblerOutput>All</AssemblerOutput>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -119,10 +120,11 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\Visual Studio 2019\source\repos\textmodule\lua\include;D:\Visual Studio 2019\source\repos\textmodule\eigen;D:\Visual Studio 2019\source\repos\textmodule\MeCab\sdk;D:\Visual Studio 2019\source\repos\textmodule\cpprestsdk.v142.2.10.15\include;D:\Visual Studio 2019\source\repos\textmodule\json\single_include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Visual Studio 2019\source\repos\textmodule\lua\include;D:\Visual Studio 2019\source\repos\textmodule\eigen;D:\Visual Studio 2019\source\repos\textmodule\MeCab\sdk;D:\Visual Studio 2019\source\repos\textmodule\cpprestsdk.v142.2.10.15\include;D:\Visual Studio 2019\source\repos\textmodule\fast-cpp-csv-parser;D:\Visual Studio 2019\source\repos\textmodule\json\single_include;</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <ExceptionHandling>Async</ExceptionHandling>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -181,6 +183,8 @@
     <ClCompile Include="tmstring.cpp" />
     <ClCompile Include="utf8.cpp" />
     <ClCompile Include="textmodule_exception.cpp" />
+    <ClCompile Include="vector2.cpp" />
+    <ClCompile Include="vector3.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="clipboard.h" />
@@ -214,6 +218,8 @@
     <ClInclude Include="os.h" />
     <ClInclude Include="tmstring.h" />
     <ClInclude Include="utf8.h" />
+    <ClInclude Include="vector2.h" />
+    <ClInclude Include="vector3.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

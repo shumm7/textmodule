@@ -372,6 +372,7 @@ json/
 eigen/
 hash-library/
 color/
+fast-cpp-csv-parser/
 
 # Package
 Package/cpprest142_2_10.dll

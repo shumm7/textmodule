@@ -33,25 +33,12 @@ int os_time(lua_State* L) {
 			struct tm Time = { 0, 0, 0, 1, 0, 0 };
 			__time64_t res;
 
-			if (lua_type(L, -6) == LUA_TNUMBER) //year
-				Time.tm_year = luaL_checkinteger(L, -6) - 1900;
-			else
-				return 0;
-			if (lua_type(L, -5) == LUA_TNUMBER) //month
-				Time.tm_mon = luaL_checkinteger(L, -5) - 1;
-			else
-				return 0;
-			if (lua_type(L, -4) == LUA_TNUMBER) //day
-				Time.tm_mday = luaL_checkinteger(L, -4);
-			else
-				return 0;
-
-			if (lua_type(L, -3) == LUA_TNUMBER) //hour
-				Time.tm_hour = luaL_checkinteger(L, -3);
-			if (lua_type(L, -2) == LUA_TNUMBER) //min
-				Time.tm_min = luaL_checkinteger(L, -2);
-			if (lua_type(L, -1) == LUA_TNUMBER) //sec
-				Time.tm_sec = luaL_checkinteger(L, -1);
+			Time.tm_year = tm_tointeger(L, -6) - 1900;
+			Time.tm_mon = tm_tointeger(L, -5) - 1;
+			Time.tm_mday = tm_tointeger(L, -4);
+			Time.tm_hour = tm_tointeger(L, -3);
+			Time.tm_min = tm_tointeger(L, -2);
+			Time.tm_sec = tm_tointeger(L, -1);
 
 			res = _mktime64(&Time);
 			lua_pushnumber(L, static_cast<double>(res));

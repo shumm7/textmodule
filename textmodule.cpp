@@ -23,6 +23,7 @@ std::wstring getVersionNum(int num) {
 	case 19: return L"1.2.4";
 	case 20: return L"1.2.5";
 	case 21: return L"1.2.6";
+	case 22: return L"1.2.7";
 
 	default: return L"";
 	}
