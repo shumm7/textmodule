@@ -1,0 +1,980 @@
+color,name,japanese,english
+0x0048ba,Absolute Zero,,absolute zero
+0xb0bf1a,Acid green,,acid green
+0x7cb9e8,Aero,,aero
+0xc0e8d5,Aero blue,,aero blue
+0xb284be,African violet,,african violet
+0x72a0c1,Air superiority blue,,air superiority blue
+0xedeae0,Alabaster,,alabaster
+0xdb2d43,Alizarin,,alizarin
+0xf0f8ff,Alice blue,,alice blue
+0xc46210,Alloy orange,,alloy orange
+0xefdecd,Almond,,almond
+0xe52b50,Amaranth,,amaranth
+0x9f2b68,Amaranth (M&P),,amaranth (m&p)
+0xf19cbb,Amaranth pink,,amaranth pink
+0xab274f,Amaranth purple,,amaranth purple
+0xd3212d,Amaranth red,,amaranth red
+0x3b7a57,Amazon,,amazon
+0xffbf00,Amber,,amber
+0xff7e00,Amber (SAE/ECE),,amber (sae/ece)
+0x9966cc,Amethyst,,amethyst
+0x3ddc84,Android green,,android green
+0xcd9575,Antique brass,,antique brass
+0x665d1e,Antique bronze,,antique bronze
+0x915c83,Antique fuchsia,,antique fuchsia
+0x841b2d,Antique ruby,,antique ruby
+0xfaebd7,Antique white,,antique white
+0x008000,Ao (English),,ao (english)
+0x8db600,Apple green,,apple green
+0xfbceb1,Apricot,,apricot
+0x00ffff,Aqua,,aqua
+0x7fffd4,Aquamarine,,aquamarine
+0xd0ff14,Arctic lime,,arctic lime
+0x4b5320,Army green,,army green
+0x8f9779,Artichoke,,artichoke
+0xe9d66b,Arylide yellow,,arylide yellow
+0xb2beb5,Ash gray,,ash gray
+0x87a96b,Asparagus,,asparagus
+0x27346f,Astronaut,,astronaut
+0xff9966,Atomic tangerine,,atomic tangerine
+0xa52a2a,Auburn,,auburn
+0xfdee00,Aureolin,,aureolin
+0x568203,Avocado,,avocado
+0x007fff,Azure,,azure
+0xf0ffff,Azure (X11/web color),,azure (x11/web color)
+0x89cff0,Baby blue,,baby blue
+0xa1caf1,Baby blue eyes,,baby blue eyes
+0xf4c2c2,Baby pink,,baby pink
+0xfefefa,Baby powder,,baby powder
+0xff91af,Baker-Miller pink,,baker-miller pink
+0xfae7b5,Banana Mania,,banana mania
+0xda1884,Barbie Pink,,barbie pink
+0x7c0a02,Barn red,,barn red
+0x848482,Battleship grey,,battleship grey
+0xbcd4e6,Beau blue,,beau blue
+0x9f8170,Beaver,,beaver
+0xf5f5dc,Beige,,beige
+0x2e5894,B'dazzled blue,,b'dazzled blue
+0x9c2542,Big dip oÅfruby,,big dip oÅfruby
+0xffe4c4,Bisque,,bisque
+0x3d2b1f,Bistre,,bistre
+0x967117,Bistre brown,,bistre brown
+0xcae00d,Bitter lemon,,bitter lemon
+0xbfff00,Bitter lime,,bitter lime
+0xfe6f5e,Bittersweet,,bittersweet
+0xbf4f51,Bittersweet shimmer,,bittersweet shimmer
+0x000000,Black,,black
+0x3d0c02,Black bean,,black bean
+0x1b1811,Black chocolate,,black chocolate
+0x3b2f2f,Black coffee,,black coffee
+0x54626f,Black coral,,black coral
+0x3b3c36,Black olive,,black olive
+0xbfafb2,Black Shadows,,black shadows
+0xffebcd,Blanched almond,,blanched almond
+0xa57164,Blast-off bronze,,blast-off bronze
+0x318ce7,Bleu de France,,bleu de france
+0xace5ee,Blizzard blue,,blizzard blue
+0xfaf0be,Blond,,blond
+0x660000,Blood red,,blood red
+0x0000ff,Blue,,blue
+0x1f75fe,Blue (Crayola),,blue (crayola)
+0x0093af,Blue (Munsell),,blue (munsell)
+0x0087bd,Blue (NCS),,blue (ncs)
+0x0018a8,Blue (Pantone),,blue (pantone)
+0x333399,Blue (pigment),,blue (pigment)
+0x0247fe,Blue (RYB),,blue (ryb)
+0xa2a2d0,Blue bell,,blue bell
+0x6699cc,Blue-gray,,blue-gray
+0x0d98ba,Blue-green,,blue-green
+0x064e40,Blue-green (color wheel),,blue-green (color wheel)
+0x5dadec,Blue jeans,,blue jeans
+0x126180,Blue sapphire,,blue sapphire
+0x8a2be2,Blue-violet,,blue-violet
+0x7366bd,Blue-violet (Crayola),,blue-violet (crayola)
+0x4d1a7f,Blue-violet (color wheel),,blue-violet (color wheel)
+0x5072a7,Blue yonder,,blue yonder
+0x3c69e7,Bluetiful,,bluetiful
+0xde5d83,Blush,,blush
+0x79443b,Bole,,bole
+0xe3dac9,Bone,,bone
+0x006a4e,Bottle green,,bottle green
+0x87413f,Brandy,,brandy
+0xcb4154,Brick red,,brick red
+0x66ff00,Bright green,,bright green
+0xd891ef,Bright lilac,,bright lilac
+0xc32148,Bright maroon,,bright maroon
+0x1974d2,Bright navy blue,,bright navy blue
+0xffaa1d,Bright yellow (Crayola),,bright yellow (crayola)
+0xff55a3,Brilliant rose,,brilliant rose
+0xfb607f,Brink pink,,brink pink
+0x004225,British racing green,,british racing green
+0xcd7f32,Bronze,,bronze
+0x88540b,Brown,,brown
+0xaf6e4d,Brown sugar,,brown sugar
+0x1b4d3e,Brunswick green,,brunswick green
+0x7bb661,Bud green,,bud green
+0xffc680,Buff,,buff
+0x800020,Burgundy,,burgundy
+0xdeb887,Burlywood,,burlywood
+0xa17a74,Burnished brown,,burnished brown
+0xcc5500,Burnt orange,,burnt orange
+0xe97451,Burnt sienna,,burnt sienna
+0x8a3324,Burnt umber,,burnt umber
+0xbd33a4,Byzantine,,byzantine
+0x702963,Byzantium,,byzantium
+0x536872,Cadet,,cadet
+0x5f9ea0,Cadet blue,,cadet blue
+0xa9b2c3,Cadet blue (Crayola),,cadet blue (crayola)
+0x91a3b0,Cadet grey,,cadet grey
+0x006b3c,Cadmium green,,cadmium green
+0xed872d,Cadmium orange,,cadmium orange
+0xe30022,Cadmium red,,cadmium red
+0xfff600,Cadmium yellow,,cadmium yellow
+0xa67b5b,Caf? au lait,,caf? au lait
+0x4b3621,Caf? noir,,caf? noir
+0xa3c1ad,Cambridge blue,,cambridge blue
+0xc19a6b,Camel,,camel
+0xefbbcc,Cameo pink,,cameo pink
+0xffff99,Canary,,canary
+0xffef00,Canary yellow,,canary yellow
+0xff0800,Candy apple red,,candy apple red
+0xe4717a,Candy pink,,candy pink
+0x00bfff,Capri,,capri
+0x592720,Caput mortuum,,caput mortuum
+0xc41e3a,Cardinal,,cardinal
+0x00cc99,Caribbean green,,caribbean green
+0x960018,Carmine,,carmine
+0xd70040,Carmine (M&P),,carmine (m&p)
+0xffa6c9,Carnation pink,,carnation pink
+0xb31b1b,Carnelian,,carnelian
+0x56a0d3,Carolina blue,,carolina blue
+0xed9121,Carrot orange,,carrot orange
+0x00563f,Castleton green,,castleton green
+0x703642,Catawba,,catawba
+0xc95a49,Cedar Chest,,cedar chest
+0xace1af,Celadon,,celadon
+0x007ba7,Celadon blue,,celadon blue
+0x2f847c,Celadon green,,celadon green
+0xb2ffff,Celeste,,celeste
+0x246bce,Celtic blue,,celtic blue
+0xde3163,Cerise,,cerise
+0x007ba7,Cerulean,,cerulean
+0x2a52be,Cerulean blue,,cerulean blue
+0x6d9bc3,Cerulean frost,,cerulean frost
+0x1dacd6,Cerulean (Crayola),,cerulean (crayola)
+0x007aa5,CG blue,,cg blue
+0xe03c31,CG red,,cg red
+0xf7e7ce,Champagne,,champagne
+0xf1ddcf,Champagne pink,,champagne pink
+0x36454f,Charcoal,,charcoal
+0x232b2b,Charleston green,,charleston green
+0xe68fac,Charm pink,,charm pink
+0xdfff00,Chartreuse (traditional),,chartreuse (traditional)
+0x7fff00,Chartreuse (web),,chartreuse (web)
+0xffb7c5,Cherry blossom pink,,cherry blossom pink
+0x954535,Chestnut,,chestnut
+0xe23d28,Chili red,,chili red
+0xde6fa1,China pink,,china pink
+0xa8516e,China rose,,china rose
+0xaa381e,Chinese red,,chinese red
+0x856088,Chinese violet,,chinese violet
+0xffb200,Chinese yellow,,chinese yellow
+0x7b3f00,Chocolate (traditional),,chocolate (traditional)
+0xd2691e,Chocolate (web),,chocolate (web)
+0x58111a,Chocolate Cosmos,,chocolate cosmos
+0xffa700,Chrome yellow,,chrome yellow
+0x98817b,Cinereous,,cinereous
+0xe34234,Cinnabar,,cinnabar
+0xcd607e,Cinnamon Satin,,cinnamon satin
+0xe4d00a,Citrine,,citrine
+0x9fa91f,Citron,,citron
+0x7f1734,Claret,,claret
+0x0047ab,Cobalt blue,,cobalt blue
+0xd2691e,Cocoa brown,,cocoa brown
+0x6f4e37,Coffee,,coffee
+0xb9d9eb,Columbia Blue,,columbia blue
+0xf88379,Congo pink,,congo pink
+0x8c92ac,Cool grey,,cool grey
+0xb87333,Copper,,copper
+0xda8a67,Copper (Crayola),,copper (crayola)
+0xad6f69,Copper penny,,copper penny
+0xcb6d51,Copper red,,copper red
+0x996666,Copper rose,,copper rose
+0xff3800,Coquelicot,,coquelicot
+0xff7f50,Coral,,coral
+0xf88379,Coral pink,,coral pink
+0x893f45,Cordovan,,cordovan
+0xfbec5d,Corn,,corn
+0xb31b1b,Cornell red,,cornell red
+0x6495ed,Cornflower blue,,cornflower blue
+0xfff8dc,Cornsilk,,cornsilk
+0x2e2d88,Cosmic cobalt,,cosmic cobalt
+0xfff8e7,Cosmic latte,,cosmic latte
+0x81613c,Coyote brown,,coyote brown
+0xffbcd9,Cotton candy,,cotton candy
+0xfffdd0,Cream,,cream
+0xdc143c,Crimson,,crimson
+0x9e1b32,Crimson (UA),,crimson (ua)
+0xa7d8de,Crystal,,crystal
+0xf5f5f5,Cultured,,cultured
+0x00ffff,Cyan,,cyan
+0x00b7eb,Cyan (process),,cyan (process)
+0x58427c,Cyber grape,,cyber grape
+0xffd300,Cyber yellow,,cyber yellow
+0xf56fa1,Cyclamen,,cyclamen
+0x666699,Dark blue-gray,,dark blue-gray
+0x654321,Dark brown,,dark brown
+0x5d3954,Dark byzantium,,dark byzantium
+0x26428b,Dark cornflower blue,,dark cornflower blue
+0x008b8b,Dark cyan,,dark cyan
+0x536878,Dark electric blue,,dark electric blue
+0xb8860b,Dark goldenrod,,dark goldenrod
+0x013220,Dark green,,dark green
+0x006400,Dark green (X11),,dark green (x11)
+0x1a2421,Dark jungle green,,dark jungle green
+0xbdb76b,Dark khaki,,dark khaki
+0x483c32,Dark lava,,dark lava
+0x534b4f,Dark liver,,dark liver
+0x543d37,Dark liver (horses),,dark liver (horses)
+0x8b008b,Dark magenta,,dark magenta
+0x4a5d23,Dark moss green,,dark moss green
+0x556b2f,Dark olive green,,dark olive green
+0xff8c00,Dark orange,,dark orange
+0x9932cc,Dark orchid,,dark orchid
+0x03c03c,Dark pastel green,,dark pastel green
+0x301934,Dark purple,,dark purple
+0x8b0000,Dark red,,dark red
+0xe9967a,Dark salmon,,dark salmon
+0x8fbc8f,Dark sea green,,dark sea green
+0x3c1414,Dark sienna,,dark sienna
+0x8cbed6,Dark sky blue,,dark sky blue
+0x483d8b,Dark slate blue,,dark slate blue
+0x2f4f4f,Dark slate gray,,dark slate gray
+0x177245,Dark spring green,,dark spring green
+0x00ced1,Dark turquoise,,dark turquoise
+0x9400d3,Dark violet,,dark violet
+0x00703c,Dartmouth green,,dartmouth green
+0x555555,Davy's grey,,davy's grey
+0xda3287,Deep cerise,,deep cerise
+0xfad6a5,Deep champagne,,deep champagne
+0xb94e48,Deep chestnut,,deep chestnut
+0x004b49,Deep jungle green,,deep jungle green
+0xff1493,Deep pink,,deep pink
+0xff9933,Deep saffron,,deep saffron
+0x00bfff,Deep sky blue,,deep sky blue
+0x4a646c,Deep Space Sparkle,,deep space sparkle
+0x7e5e60,Deep taupe,,deep taupe
+0x1560bd,Denim,,denim
+0x2243b6,Denim blue,,denim blue
+0xc19a6b,Desert,,desert
+0xedc9af,Desert sand,,desert sand
+0x696969,Dim gray,,dim gray
+0x1e90ff,Dodger blue,,dodger blue
+0xd71868,Dogwood rose,,dogwood rose
+0x967117,Drab,,drab
+0x00009c,Duke blue,,duke blue
+0xefdfbb,Dutch white,,dutch white
+0xe1a95f,Earth yellow,,earth yellow
+0x555d50,Ebony,,ebony
+0xc2b280,Ecru,,ecru
+0x1b1b1b,Eerie black,,eerie black
+0x614051,Eggplant,,eggplant
+0xf0ead6,Eggshell,,eggshell
+0x1034a6,Egyptian blue,,egyptian blue
+0x16161d,Eigengrau,,eigengrau
+0x7df9ff,Electric blue,,electric blue
+0x00ff00,Electric green,,electric green
+0x6f00ff,Electric indigo,,electric indigo
+0xccff00,Electric lime,,electric lime
+0xbf00ff,Electric purple,,electric purple
+0x8f00ff,Electric violet,,electric violet
+0x50c878,Emerald,,emerald
+0x6c3082,Eminence,,eminence
+0x1b4d3e,English green,,english green
+0xb48395,English lavender,,english lavender
+0xab4b52,English red,,english red
+0xcc474b,English vermillion,,english vermillion
+0x563c5c,English violet,,english violet
+0x00ff40,Erin,,erin
+0x96c8a2,Eton blue,,eton blue
+0xc19a6b,Fallow,,fallow
+0x801818,Falu red,,falu red
+0xb53389,Fandango,,fandango
+0xde5285,Fandango pink,,fandango pink
+0xf400a1,Fashion fuchsia,,fashion fuchsia
+0xe5aa70,Fawn,,fawn
+0x4d5d53,Feldgrau,,feldgrau
+0x4f7942,Fern green,,fern green
+0x6c541e,Field drab,,field drab
+0xff5470,Fiery rose,,fiery rose
+0xb22222,Firebrick,,firebrick
+0xce2029,Fire engine red,,fire engine red
+0xe95c4b,Fire opal,,fire opal
+0xe25822,Flame,,flame
+0xeedc82,Flax,,flax
+0xa2006d,Flirt,,flirt
+0xfffaf0,Floral white,,floral white
+0x15f4ee,Fluorescent blue,,fluorescent blue
+0x5fa777,Forest green (Crayola),,forest green (crayola)
+0x014421,Forest green (traditional),,forest green (traditional)
+0x228b22,Forest green (web),,forest green (web)
+0xa67b5b,French beige,,french beige
+0x856d4d,French bistre,,french bistre
+0x0072bb,French blue,,french blue
+0xfd3f92,French fuchsia,,french fuchsia
+0x86608e,French lilac,,french lilac
+0x9efd38,French lime,,french lime
+0xd473d4,French mauve,,french mauve
+0xfd6c9e,French pink,,french pink
+0xc72c48,French raspberry,,french raspberry
+0xf64a8a,French rose,,french rose
+0x77b5fe,French sky blue,,french sky blue
+0x8806ce,French violet,,french violet
+0xe936a7,Frostbite,,frostbite
+0xff00ff,Fuchsia,,fuchsia
+0xc154c1,Fuchsia (Crayola),,fuchsia (crayola)
+0xcc397b,Fuchsia purple,,fuchsia purple
+0xc74375,Fuchsia rose,,fuchsia rose
+0xe48400,Fulvous,,fulvous
+0x87421f,Fuzzy Wuzzy,,fuzzy wuzzy
+0xdcdcdc,Gainsboro,,gainsboro
+0xe49b0f,Gamboge,,gamboge
+0x007f66,Generic viridian,,generic viridian
+0xf8f8ff,Ghost white,,ghost white
+0x6082b6,Glaucous,,glaucous
+0xab92b3,Glossy grape,,glossy grape
+0x00ab66,GO green,,go green
+0xa57c00,Gold,,gold
+0xd4af37,Gold (metallic),,gold (metallic)
+0xffd700,Gold (web) (Golden),,gold (web) (golden)
+0xe6be8a,Gold (Crayola),,gold (crayola)
+0x85754e,Gold Fusion,,gold fusion
+0x996515,Golden brown,,golden brown
+0xfcc200,Golden poppy,,golden poppy
+0xffdf00,Golden yellow,,golden yellow
+0xdaa520,Goldenrod,,goldenrod
+0x00573f,Gotham green,,gotham green
+0x676767,Granite gray,,granite gray
+0xa8e4a0,Granny Smith apple,,granny smith apple
+0x808080,Gray (web),,gray (web)
+0xbebebe,Gray (X11 gray),,gray (x11 gray)
+0x00ff00,Green,,green
+0x1cac78,Green (Crayola),,green (crayola)
+0x008000,Green (web),,green (web)
+0x00a877,Green (Munsell),,green (munsell)
+0x009f6b,Green (NCS),,green (ncs)
+0x00ad43,Green (Pantone),,green (pantone)
+0x00a550,Green (pigment),,green (pigment)
+0x66b032,Green (RYB),,green (ryb)
+0x1164b4,Green-blue,,green-blue
+0x2887c8,Green-blue (Crayola),,green-blue (crayola)
+0x009966,Green-cyan,,green-cyan
+0xa7f432,Green Lizard,,green lizard
+0x6eaea1,Green Sheen,,green sheen
+0xadff2f,Green-yellow,,green-yellow
+0xf0e891,Green-yellow (Crayola),,green-yellow (crayola)
+0xa99a86,Grullo,,grullo
+0x2a3439,Gunmetal,,gunmetal
+0x446ccf,Han blue,,han blue
+0x5218fa,Han purple,,han purple
+0xe9d66b,Hansa yellow,,hansa yellow
+0x3fff00,Harlequin,,harlequin
+0xda9100,Harvest gold,,harvest gold
+0xff7a00,Heat Wave,,heat wave
+0xdf73ff,Heliotrope,,heliotrope
+0xaa98a9,Heliotrope gray,,heliotrope gray
+0xf400a1,Hollywood cerise,,hollywood cerise
+0xf0fff0,Honeydew,,honeydew
+0x006db0,Honolulu blue,,honolulu blue
+0x49796b,Hooker's green,,hooker's green
+0xff1dce,Hot magenta,,hot magenta
+0xff69b4,Hot pink,,hot pink
+0x355e3b,Hunter green,,hunter green
+0x71a6d2,Iceberg,,iceberg
+0xfcf75e,Icterine,,icterine
+0x319177,Illuminating emerald,,illuminating emerald
+0xed2939,Imperial red,,imperial red
+0xb2ec5d,Inchworm,,inchworm
+0x4c516d,Independence,,independence
+0x138808,India green,,india green
+0xcd5c5c,Indian red,,indian red
+0xe3a857,Indian yellow,,indian yellow
+0x4b0082,Indigo,,indigo
+0x00416a,Indigo dye,,indigo dye
+0xff496c,Infrared,,infrared
+0x130a8f,International Klein Blue,,international klein blue
+0xff4f00,International orange (aerospace),,international orange (aerospace)
+0xba160c,International orange (engineering),,international orange (engineering)
+0xc0362c,International orange (Golden Gate Bridge),,international orange (golden gate bridge)
+0x5a4fcf,Iris,,iris
+0xb3446c,Irresistible,,irresistible
+0xf4f0ec,Isabelline,,isabelline
+0xb2ffff,Italian sky blue,,italian sky blue
+0xfffff0,Ivory,,ivory
+0x00a86b,Jade,,jade
+0x9d2933,Japanese carmine,,japanese carmine
+0x5b3256,Japanese violet,,japanese violet
+0xf8de7e,Jasmine,,jasmine
+0xa50b5e,Jazzberry jam,,jazzberry jam
+0x343434,Jet,,jet
+0xf4ca16,Jonquil,,jonquil
+0xbdda57,June bud,,june bud
+0x29ab87,Jungle green,,jungle green
+0x4cbb17,Kelly green,,kelly green
+0x3ab09e,Keppel,,keppel
+0xe8f48c,Key lime,,key lime
+0xc3b091,Khaki (web),,khaki (web)
+0xf0e68c,Khaki (X11) (Light khaki),,khaki (x11) (light khaki)
+0x882d17,Kobe,,kobe
+0xe79fc4,Kobi,,kobi
+0x6b4423,Kobicha,,kobicha
+0x354230,Kombu green,,kombu green
+0x512888,KSU purple,,ksu purple
+0xd6cadd,Languid lavender,,languid lavender
+0x26619c,Lapis lazuli,,lapis lazuli
+0xffff66,Laser lemon,,laser lemon
+0xa9ba9d,Laurel green,,laurel green
+0xcf1020,Lava,,lava
+0xb57edc,Lavender (floral),,lavender (floral)
+0xe6e6fa,Lavender (web),,lavender (web)
+0xccccff,Lavender blue,,lavender blue
+0xfff0f5,Lavender blush,,lavender blush
+0xc4c3d0,Lavender gray,,lavender gray
+0x7cfc00,Lawn green,,lawn green
+0xfff700,Lemon,,lemon
+0xfffacd,Lemon chiffon,,lemon chiffon
+0xcca01d,Lemon curry,,lemon curry
+0xfdff00,Lemon glacier,,lemon glacier
+0xf6eabe,Lemon meringue,,lemon meringue
+0xfff44f,Lemon yellow,,lemon yellow
+0xffff9f,Lemon yellow (Crayola),,lemon yellow (crayola)
+0x545aa7,Liberty,,liberty
+0xadd8e6,Light blue,,light blue
+0xf08080,Light coral,,light coral
+0x93ccea,Light cornflower blue,,light cornflower blue
+0xe0ffff,Light cyan,,light cyan
+0xc8ad7f,Light French beige,,light french beige
+0xfafad2,Light goldenrod yellow,,light goldenrod yellow
+0xd3d3d3,Light gray,,light gray
+0x90ee90,Light green,,light green
+0xfed8b1,Light orange,,light orange
+0xc5cbe1,Light periwinkle,,light periwinkle
+0xffb6c1,Light pink,,light pink
+0xffa07a,Light salmon,,light salmon
+0x20b2aa,Light sea green,,light sea green
+0x87cefa,Light sky blue,,light sky blue
+0x778899,Light slate gray,,light slate gray
+0xb0c4de,Light steel blue,,light steel blue
+0xffffe0,Light yellow,,light yellow
+0xc8a2c8,Lilac,,lilac
+0xae98aa,Lilac Luster,,lilac luster
+0xbfff00,Lime (color wheel),,lime (color wheel)
+0x00ff00,Lime (web) (X11 green),,lime (web) (x11 green)
+0x32cd32,Lime green,,lime green
+0x195905,Lincoln green,,lincoln green
+0xfaf0e6,Linen,,linen
+0xc19a6b,Lion,,lion
+0xde6fa1,Liseran purple,,liseran purple
+0x6ca0dc,Little boy blue,,little boy blue
+0x674c47,Liver,,liver
+0xb86d29,Liver (dogs),,liver (dogs)
+0x6c2e1f,Liver (organ),,liver (organ)
+0x987456,Liver chestnut,,liver chestnut
+0x6699cc,Livid,,livid
+0xffbd88,Macaroni and Cheese,,macaroni and cheese
+0xcc3336,Madder Lake,,madder lake
+0xff00ff,Magenta,,magenta
+0xf653a6,Magenta (Crayola),,magenta (crayola)
+0xca1f7b,Magenta (dye),,magenta (dye)
+0xd0417e,Magenta (Pantone),,magenta (pantone)
+0xff0090,Magenta (process),,magenta (process)
+0x9f4576,Magenta haze,,magenta haze
+0xaaf0d1,Magic mint,,magic mint
+0xf2e8d7,Magnolia,,magnolia
+0xc04000,Mahogany,,mahogany
+0xfbec5d,Maize,,maize
+0xf2c649,Maize (Crayola),,maize (crayola)
+0x6050dc,Majorelle blue,,majorelle blue
+0x0bda51,Malachite,,malachite
+0x979aaa,Manatee,,manatee
+0xf37a48,Mandarin,,mandarin
+0xfdbe02,Mango,,mango
+0xff8243,Mango Tango,,mango tango
+0x74c365,Mantis,,mantis
+0x880085,Mardi Gras,,mardi gras
+0xeaa221,Marigold,,marigold
+0xc32148,Maroon (Crayola),,maroon (crayola)
+0x800000,Maroon (web),,maroon (web)
+0xb03060,Maroon (X11),,maroon (x11)
+0xe0b0ff,Mauve,,mauve
+0x915f6d,Mauve taupe,,mauve taupe
+0xef98aa,Mauvelous,,mauvelous
+0x47abcc,Maximum blue,,maximum blue
+0x30bfbf,Maximum blue green,,maximum blue green
+0xacace6,Maximum blue purple,,maximum blue purple
+0x5e8c31,Maximum green,,maximum green
+0xd9e650,Maximum green yellow,,maximum green yellow
+0x733380,Maximum purple,,maximum purple
+0xd92121,Maximum red,,maximum red
+0xa63a79,Maximum red purple,,maximum red purple
+0xfafa37,Maximum yellow,,maximum yellow
+0xf2ba49,Maximum yellow red,,maximum yellow red
+0x4c9141,May green,,may green
+0x73c2fb,Maya blue,,maya blue
+0x66ddaa,Medium aquamarine,,medium aquamarine
+0x0000cd,Medium blue,,medium blue
+0xe2062c,Medium candy apple red,,medium candy apple red
+0xaf4035,Medium carmine,,medium carmine
+0xf3e5ab,Medium champagne,,medium champagne
+0xba55d3,Medium orchid,,medium orchid
+0x9370db,Medium purple,,medium purple
+0x3cb371,Medium sea green,,medium sea green
+0x7b68ee,Medium slate blue,,medium slate blue
+0x00fa9a,Medium spring green,,medium spring green
+0x48d1cc,Medium turquoise,,medium turquoise
+0xc71585,Medium violet-red,,medium violet-red
+0xf8b878,Mellow apricot,,mellow apricot
+0xf8de7e,Mellow yellow,,mellow yellow
+0xfebaad,Melon,,melon
+0xd3af37,Metallic gold,,metallic gold
+0x0a7e8c,Metallic Seaweed,,metallic seaweed
+0x9c7c38,Metallic Sunburst,,metallic sunburst
+0xe4007c,Mexican pink,,mexican pink
+0x7ed4e6,Middle blue,,middle blue
+0x8dd9cc,Middle blue green,,middle blue green
+0x8b72be,Middle blue purple,,middle blue purple
+0x8b8680,Middle grey,,middle grey
+0x4d8c57,Middle green,,middle green
+0xacbf60,Middle green yellow,,middle green yellow
+0xd982b5,Middle purple,,middle purple
+0xe58e73,Middle red,,middle red
+0xa55353,Middle red purple,,middle red purple
+0xffeb00,Middle yellow,,middle yellow
+0xecb176,Middle yellow red,,middle yellow red
+0x702670,Midnight,,midnight
+0x191970,Midnight blue,,midnight blue
+0x004953,Midnight green (eagle green),,midnight green (eagle green)
+0xffc40c,Mikado yellow,,mikado yellow
+0xffdae9,Mimi pink,,mimi pink
+0xe3f988,Mindaro,,mindaro
+0x36747d,Ming,,ming
+0xf5e050,Minion yellow,,minion yellow
+0x3eb489,Mint,,mint
+0xf5fffa,Mint cream,,mint cream
+0x98ff98,Mint green,,mint green
+0xbbb477,Misty moss,,misty moss
+0xffe4e1,Misty rose,,misty rose
+0x967117,Mode beige,,mode beige
+0x8da399,Morning blue,,morning blue
+0x8a9a5b,Moss green,,moss green
+0x30ba8f,Mountain Meadow,,mountain meadow
+0x997a8d,Mountbatten pink,,mountbatten pink
+0x18453b,MSU green,,msu green
+0xc54b8c,Mulberry,,mulberry
+0xc8509b,Mulberry (Crayola),,mulberry (crayola)
+0xffdb58,Mustard,,mustard
+0x317873,Myrtle green,,myrtle green
+0xd65282,Mystic,,mystic
+0xad4379,Mystic maroon,,mystic maroon
+0xf6adc6,Nadeshiko pink,,nadeshiko pink
+0xfada5e,Naples yellow,,naples yellow
+0xffdead,Navajo white,,navajo white
+0x000080,Navy blue,,navy blue
+0x1974d2,Navy blue (Crayola),,navy blue (crayola)
+0x4666ff,Neon blue,,neon blue
+0xffa343,Neon Carrot,,neon carrot
+0x39ff14,Neon green,,neon green
+0xfe4164,Neon fuchsia,,neon fuchsia
+0xd7837f,New York pink,,new york pink
+0x727472,Nickel,,nickel
+0xa4dded,Non-photo blue,,non-photo blue
+0xe9ffdb,Nyanza,,nyanza
+0x4f42b5,Ocean Blue,,ocean blue
+0x48bf91,Ocean green,,ocean green
+0xcc7722,Ochre,,ochre
+0x43302e,Old burgundy,,old burgundy
+0xcfb53b,Old gold,,old gold
+0xfdf5e6,Old lace,,old lace
+0x796878,Old lavender,,old lavender
+0x673147,Old mauve,,old mauve
+0xc08081,Old rose,,old rose
+0x848482,Old silver,,old silver
+0x808000,Olive,,olive
+0x6b8e23,Olive Drab (#3),,olive drab (#3)
+0x3c341f,Olive Drab #7,,olive drab #7
+0xb5b35c,Olive green,,olive green
+0x9ab973,Olivine,,olivine
+0x353839,Onyx,,onyx
+0xa8c3bc,Opal,,opal
+0xb784a7,Opera mauve,,opera mauve
+0xff7f00,Orange,,orange
+0xff7538,Orange (Crayola),,orange (crayola)
+0xff5800,Orange (Pantone),,orange (pantone)
+0xffa500,Orange (web),,orange (web)
+0xff9f00,Orange peel,,orange peel
+0xff681f,Orange-red,,orange-red
+0xff5349,Orange-red (Crayola),,orange-red (crayola)
+0xfa5b3d,Orange soda,,orange soda
+0xf5bd1f,Orange-yellow,,orange-yellow
+0xf8d568,Orange-yellow (Crayola),,orange-yellow (crayola)
+0xda70d6,Orchid,,orchid
+0xf2bdcd,Orchid pink,,orchid pink
+0xe29cd2,Orchid (Crayola),,orchid (crayola)
+0x2d383a,Outer space (Crayola),,outer space (crayola)
+0xff6e4a,Outrageous Orange,,outrageous orange
+0x4a0000,Oxblood,,oxblood
+0x002147,Oxford blue,,oxford blue
+0x841617,OU Crimson red,,ou crimson red
+0x1ca9c9,Pacific blue,,pacific blue
+0x006600,Pakistan green,,pakistan green
+0x682860,Palatinate purple,,palatinate purple
+0xbcd4e6,Pale aqua,,pale aqua
+0x9bc4e2,Pale cerulean,,pale cerulean
+0xed7a9b,Pale Dogwood,,pale dogwood
+0xfadadd,Pale pink,,pale pink
+0xfae6fa,Pale purple (Pantone),,pale purple (pantone)
+0xc9c0bb,Pale silver,,pale silver
+0xecebbd,Pale spring bud,,pale spring bud
+0x78184a,Pansy purple,,pansy purple
+0x009b7d,Paolo Veronese green,,paolo veronese green
+0xffefd5,Papaya whip,,papaya whip
+0xe63e62,Paradise pink,,paradise pink
+0xf1e9d2,Parchment,,parchment
+0x50c878,Paris Green,,paris green
+0xdea5a4,Pastel pink,,pastel pink
+0x800080,Patriarch,,patriarch
+0x536878,Payne's grey,,payne's grey
+0xffe5b4,Peach,,peach
+0xffcba4,Peach (Crayola),,peach (crayola)
+0xffdab9,Peach puff,,peach puff
+0xd1e231,Pear,,pear
+0xb768a2,Pearly purple,,pearly purple
+0xccccff,Periwinkle,,periwinkle
+0xc3cde6,Periwinkle (Crayola),,periwinkle (crayola)
+0xe12c2c,Permanent Geranium Lake,,permanent geranium lake
+0x1c39bb,Persian blue,,persian blue
+0x00a693,Persian green,,persian green
+0x32127a,Persian indigo,,persian indigo
+0xd99058,Persian orange,,persian orange
+0xf77fbe,Persian pink,,persian pink
+0x701c1c,Persian plum,,persian plum
+0xcc3333,Persian red,,persian red
+0xfe28a2,Persian rose,,persian rose
+0xec5800,Persimmon,,persimmon
+0x8ba8b7,Pewter Blue,,pewter blue
+0xdf00ff,Phlox,,phlox
+0x000f89,Phthalo blue,,phthalo blue
+0x123524,Phthalo green,,phthalo green
+0x2e2787,Picotee blue,,picotee blue
+0xc30b4e,Pictorial carmine,,pictorial carmine
+0xfddde6,Piggy pink,,piggy pink
+0x01796f,Pine green,,pine green
+0x2a2f23,Pine tree,,pine tree
+0xffc0cb,Pink,,pink
+0xd74894,Pink (Pantone),,pink (pantone)
+0xfc74fd,Pink flamingo,,pink flamingo
+0xffddf4,Pink lace,,pink lace
+0xd8b2d1,Pink lavender,,pink lavender
+0xf78fa7,Pink Sherbet,,pink sherbet
+0x93c572,Pistachio,,pistachio
+0xe5e4e2,Platinum,,platinum
+0x8e4585,Plum,,plum
+0xdda0dd,Plum (web),,plum (web)
+0x5946b2,Plump Purple,,plump purple
+0x5da493,Polished Pine,,polished pine
+0x86608e,Pomp and Power,,pomp and power
+0xbe4f62,Popstar,,popstar
+0xff5a36,Portland Orange,,portland orange
+0xb0e0e6,Powder blue,,powder blue
+0xf58025,Princeton orange,,princeton orange
+0xffef00,Process yellow,,process yellow
+0x701c1c,Prune,,prune
+0x003153,Prussian blue,,prussian blue
+0xdf00ff,Psychedelic purple,,psychedelic purple
+0xcc8899,Puce,,puce
+0x644117,Pullman Brown (UPS Brown),,pullman brown (ups brown)
+0xff7518,Pumpkin,,pumpkin
+0x6a0dad,Purple,,purple
+0x800080,Purple (web),,purple (web)
+0x9f00c5,Purple (Munsell),,purple (munsell)
+0xa020f0,Purple (X11),,purple (x11)
+0x9678b6,Purple mountain majesty,,purple mountain majesty
+0x4e5180,Purple navy,,purple navy
+0xfe4eda,Purple pizzazz,,purple pizzazz
+0x9c51b6,Purple Plum,,purple plum
+0x9a4eae,Purpureus,,purpureus
+0x436b95,Queen blue,,queen blue
+0xe8ccd7,Queen pink,,queen pink
+0xa6a6a6,Quick Silver,,quick silver
+0x8e3a59,Quinacridone magenta,,quinacridone magenta
+0xff355e,Radical Red,,radical red
+0x242124,Raisin black,,raisin black
+0xfbab60,Rajah,,rajah
+0xe30b5d,Raspberry,,raspberry
+0x915f6d,Raspberry glace,,raspberry glace
+0xb3446c,Raspberry rose,,raspberry rose
+0xd68a59,Raw sienna,,raw sienna
+0x826644,Raw umber,,raw umber
+0xff33cc,Razzle dazzle rose,,razzle dazzle rose
+0xe3256b,Razzmatazz,,razzmatazz
+0x8d4e85,Razzmic Berry,,razzmic berry
+0x663399,Rebecca Purple,,rebecca purple
+0xff0000,Red,,red
+0xee204d,Red (Crayola),,red (crayola)
+0xf2003c,Red (Munsell),,red (munsell)
+0xc40233,Red (NCS),,red (ncs)
+0xed2939,Red (Pantone),,red (pantone)
+0xed1c24,Red (pigment),,red (pigment)
+0xfe2712,Red (RYB),,red (ryb)
+0xff5349,Red-orange,,red-orange
+0xff681f,Red-orange (Crayola),,red-orange (crayola)
+0xff4500,Red-orange (Color wheel),,red-orange (color wheel)
+0xe40078,Red-purple,,red-purple
+0xfd3a4a,Red Salsa,,red salsa
+0xc71585,Red-violet,,red-violet
+0xc0448f,Red-violet (Crayola),,red-violet (crayola)
+0x922b3e,Red-violet (Color wheel),,red-violet (color wheel)
+0xa45a52,Redwood,,redwood
+0x002387,Resolution blue,,resolution blue
+0x777696,Rhythm,,rhythm
+0x004040,Rich black,,rich black
+0x010b13,Rich black (FOGRA29),,rich black (fogra29)
+0x010203,Rich black (FOGRA39),,rich black (fogra39)
+0x444c38,Rifle green,,rifle green
+0x00cccc,Robin egg blue,,robin egg blue
+0x8a7f80,Rocket metallic,,rocket metallic
+0xa91101,Rojo Spanish red,,rojo spanish red
+0x838996,Roman silver,,roman silver
+0xff007f,Rose,,rose
+0xf9429e,Rose bonbon,,rose bonbon
+0x9e5e6f,Rose Dust,,rose dust
+0x674846,Rose ebony,,rose ebony
+0xe32636,Rose madder,,rose madder
+0xff66cc,Rose pink,,rose pink
+0xed7a9b,Rose Pompadour,,rose pompadour
+0xaa98a9,Rose quartz,,rose quartz
+0xc21e56,Rose red,,rose red
+0x905d5d,Rose taupe,,rose taupe
+0xab4e52,Rose vale,,rose vale
+0x65000b,Rosewood,,rosewood
+0xd40000,Rosso corsa,,rosso corsa
+0xbc8f8f,Rosy brown,,rosy brown
+0x002366,Royal blue (dark),,royal blue (dark)
+0x4169e1,Royal blue (light),,royal blue (light)
+0x7851a9,Royal purple,,royal purple
+0xfada5e,Royal yellow,,royal yellow
+0xce4676,Ruber,,ruber
+0xd10056,Rubine red,,rubine red
+0xe0115f,Ruby,,ruby
+0x9b111e,Ruby red,,ruby red
+0xa81c07,Rufous,,rufous
+0x80461b,Russet,,russet
+0x679267,Russian green,,russian green
+0x32174d,Russian violet,,russian violet
+0xb7410e,Rust,,rust
+0xda2c43,Rusty red,,rusty red
+0x043927,Sacramento State green,,sacramento state green
+0x8b4513,Saddle brown,,saddle brown
+0xff7800,Safety orange,,safety orange
+0xff6700,Safety orange (blaze orange),,safety orange (blaze orange)
+0xeed202,Safety yellow,,safety yellow
+0xf4c430,Saffron,,saffron
+0xbcb88a,Sage,,sage
+0x23297a,St. Patrick's blue,,st. patrick's blue
+0xfa8072,Salmon,,salmon
+0xff91a4,Salmon pink,,salmon pink
+0xc2b280,Sand,,sand
+0x967117,Sand dune,,sand dune
+0xf4a460,Sandy brown,,sandy brown
+0x507d2a,Sap green,,sap green
+0x0f52ba,Sapphire,,sapphire
+0x0067a5,Sapphire blue,,sapphire blue
+0x2d5da1,Sapphire (Crayola),,sapphire (crayola)
+0xcba135,Satin sheen gold,,satin sheen gold
+0xff2400,Scarlet,,scarlet
+0xff91af,Schauss pink,,schauss pink
+0xffd800,School bus yellow,,school bus yellow
+0x66ff66,Screamin' Green,,screamin' green
+0x2e8b57,Sea green,,sea green
+0x00ffcd,Sea green (Crayola),,sea green (crayola)
+0x612086,Seance,,seance
+0x59260b,Seal brown,,seal brown
+0xfff5ee,Seashell,,seashell
+0xffba00,Selective yellow,,selective yellow
+0x704214,Sepia,,sepia
+0x8a795d,Shadow,,shadow
+0x778ba5,Shadow blue,,shadow blue
+0x009e60,Shamrock green,,shamrock green
+0x8fd400,Sheen green,,sheen green
+0xd98695,Shimmering Blush,,shimmering blush
+0x5fa778,Shiny Shamrock,,shiny shamrock
+0xfc0fc0,Shocking pink,,shocking pink
+0xff6fff,Shocking pink (Crayola),,shocking pink (crayola)
+0x882d17,Sienna,,sienna
+0xc0c0c0,Silver,,silver
+0xc9c0bb,Silver (Crayola),,silver (crayola)
+0xaaa9ad,Silver (Metallic),,silver (metallic)
+0xacacac,Silver chalice,,silver chalice
+0xc4aead,Silver pink,,silver pink
+0xbfc1c2,Silver sand,,silver sand
+0xcb410b,Sinopia,,sinopia
+0xff3855,Sizzling Red,,sizzling red
+0xffdb00,Sizzling Sunrise,,sizzling sunrise
+0x007474,Skobeloff,,skobeloff
+0x87ceeb,Sky blue,,sky blue
+0x76d7ea,Sky blue (Crayola),,sky blue (crayola)
+0xcf71af,Sky magenta,,sky magenta
+0x6a5acd,Slate blue,,slate blue
+0x708090,Slate gray,,slate gray
+0x299617,Slimy green,,slimy green
+0xc84186,Smitten,,smitten
+0x100c08,Smoky black,,smoky black
+0xfffafa,Snow,,snow
+0x893843,Solid pink,,solid pink
+0x757575,Sonic silver,,sonic silver
+0x1d2951,Space cadet,,space cadet
+0x807532,Spanish bistre,,spanish bistre
+0x0070b8,Spanish blue,,spanish blue
+0xd10047,Spanish carmine,,spanish carmine
+0x989898,Spanish gray,,spanish gray
+0x009150,Spanish green,,spanish green
+0xe86100,Spanish orange,,spanish orange
+0xf7bfbe,Spanish pink,,spanish pink
+0xe60026,Spanish red,,spanish red
+0x00ffff,Spanish sky blue,,spanish sky blue
+0x4c2882,Spanish violet,,spanish violet
+0x007f5c,Spanish viridian,,spanish viridian
+0xa7fc00,Spring bud,,spring bud
+0x87ff2a,Spring Frost,,spring frost
+0x00ff7f,Spring green,,spring green
+0xecebbd,Spring green (Crayola),,spring green (crayola)
+0x007bb8,Star command blue,,star command blue
+0x4682b4,Steel blue,,steel blue
+0xcc33cc,Steel pink,,steel pink
+0x5f8a8b,Steel Teal,,steel teal
+0xfada5e,Stil de grain yellow,,stil de grain yellow
+0xe4d96f,Straw,,straw
+0xfa5053,Strawberry,,strawberry
+0xff9361,Strawberry Blonde,,strawberry blonde
+0x914e75,Sugar Plum,,sugar plum
+0xffcc33,Sunglow,,sunglow
+0xe3ab57,Sunray,,sunray
+0xfad6a5,Sunset,,sunset
+0xcf6ba9,Super pink,,super pink
+0xa83731,Sweet Brown,,sweet brown
+0xd44500,Syracuse Orange,,syracuse orange
+0xd2b48c,Tan,,tan
+0xd99a6c,Tan (Crayola),,tan (crayola)
+0xf28500,Tangerine,,tangerine
+0xe4717a,Tango pink,,tango pink
+0xfb4d46,Tart Orange,,tart orange
+0x483c32,Taupe,,taupe
+0x8b8589,Taupe gray,,taupe gray
+0xd0f0c0,Tea green,,tea green
+0xf4c2c2,Tea rose,,tea rose
+0x008080,Teal,,teal
+0x367588,Teal blue,,teal blue
+0xcf3476,Telemagenta,,telemagenta
+0xcd5700,Tenn? (tawny),,tenn? (tawny)
+0xe2725b,Terra cotta,,terra cotta
+0xd8bfd8,Thistle,,thistle
+0xde6fa1,Thulian pink,,thulian pink
+0xfc89ac,Tickle Me Pink,,tickle me pink
+0x0abab5,Tiffany Blue,,tiffany blue
+0xdbd7d2,Timberwolf,,timberwolf
+0xeee600,Titanium yellow,,titanium yellow
+0xff6347,Tomato,,tomato
+0x86a1a9,Tourmaline,,tourmaline
+0x00755e,Tropical rainforest,,tropical rainforest
+0x2d68c4,True Blue,,true blue
+0x1c05b3,Trypan Blue,,trypan blue
+0x3e8ede,Tufts blue,,tufts blue
+0xdeaa88,Tumbleweed,,tumbleweed
+0x40e0d0,Turquoise,,turquoise
+0x00ffef,Turquoise blue,,turquoise blue
+0xa0d6b4,Turquoise green,,turquoise green
+0x8a9a5b,Turtle green,,turtle green
+0xfad6a5,Tuscan,,tuscan
+0x6f4e37,Tuscan brown,,tuscan brown
+0x7c4848,Tuscan red,,tuscan red
+0xa67b5b,Tuscan tan,,tuscan tan
+0xc09999,Tuscany,,tuscany
+0x8a496b,Twilight lavender,,twilight lavender
+0x66023c,Tyrian purple,,tyrian purple
+0x0033aa,UA blue,,ua blue
+0xd9004c,UA red,,ua red
+0x3f00ff,Ultramarine,,ultramarine
+0x4166f5,Ultramarine blue,,ultramarine blue
+0xff6fff,Ultra pink,,ultra pink
+0xfc6c85,Ultra red,,ultra red
+0x635147,Umber,,umber
+0xffddca,Unbleached silk,,unbleached silk
+0x5b92e5,United Nations blue,,united nations blue
+0xa50021,University of Pennsylvania red,,university of pennsylvania red
+0xffff66,Unmellow yellow,,unmellow yellow
+0x014421,UP Forest green,,up forest green
+0x7b1113,UP maroon,,up maroon
+0xae2029,Upsdell red,,upsdell red
+0xafdbf5,Uranian blue,,uranian blue
+0x004f98,USAFA blue,,usafa blue
+0x664228,Van Dyke brown,,van dyke brown
+0xf3e5ab,Vanilla,,vanilla
+0xf38fa9,Vanilla ice,,vanilla ice
+0xc5b358,Vegas gold,,vegas gold
+0xc80815,Venetian red,,venetian red
+0x43b3ae,Verdigris,,verdigris
+0xe34234,Vermilion,,vermilion
+0xd9381e,Vermilion,,vermilion
+0xa020f0,Veronica,,veronica
+0x8f00ff,Violet,,violet
+0x7f00ff,Violet (color wheel),,violet (color wheel)
+0x963d7f,Violet (crayola),,violet (crayola)
+0x8601af,Violet (RYB),,violet (ryb)
+0xee82ee,Violet (web),,violet (web)
+0x324ab2,Violet-blue,,violet-blue
+0x766ec8,Violet-blue (Crayola),,violet-blue (crayola)
+0xf75394,Violet-red,,violet-red
+0xf0599c,Violet-red(PerBang),,violet-red(perbang)
+0x40826d,Viridian,,viridian
+0x009698,Viridian green,,viridian green
+0x9f1d35,Vivid burgundy,,vivid burgundy
+0x00ccff,Vivid sky blue,,vivid sky blue
+0xffa089,Vivid tangerine,,vivid tangerine
+0x9f00ff,Vivid violet,,vivid violet
+0xceff00,Volt,,volt
+0x004242,Warm black,,warm black
+0x189bcc,Weezy Blue,,weezy blue
+0xf5deb3,Wheat,,wheat
+0xffffff,White,,white
+0xa2add0,Wild blue yonder,,wild blue yonder
+0xd470a2,Wild orchid,,wild orchid
+0xff43a4,Wild Strawberry,,wild strawberry
+0xfc6c85,Wild watermelon,,wild watermelon
+0xa75502,Windsor tan,,windsor tan
+0x722f37,Wine,,wine
+0x673147,Wine dregs,,wine dregs
+0xff007c,Winter Sky,,winter sky
+0x56887d,Wintergreen Dream,,wintergreen dream
+0xc9a0dc,Wisteria,,wisteria
+0xc19a6b,Wood brown,,wood brown
+0x738678,Xanadu,,xanadu
+0xeeed09,Xanthic,,xanthic
+0xf1b42f,Xanthous,,xanthous
+0x00356b,Yale Blue,,yale blue
+0xffff00,Yellow,,yellow
+0xfce883,Yellow (Crayola),,yellow (crayola)
+0xefcc00,Yellow (Munsell),,yellow (munsell)
+0xffd300,Yellow (NCS),,yellow (ncs)
+0xfedf00,Yellow (Pantone),,yellow (pantone)
+0xffef00,Yellow (process),,yellow (process)
+0xfefe33,Yellow (RYB),,yellow (ryb)
+0x9acd32,Yellow-green,,yellow-green
+0xc5e384,Yellow-green (Crayola),,yellow-green (crayola)
+0x30b21a,Yellow-green (Color Wheel),,yellow-green (color wheel)
+0xffae42,Yellow Orange,,yellow orange
+0xff9505,Yellow Orange (Color Wheel),,yellow orange (color wheel)
+0xfff700,Yellow Sunshine,,yellow sunshine
+0x2e5090,YInMn Blue,,yinmn blue
+0x0014a8,Zaffre,,zaffre
+0x39a78e,Zomp,,zomp

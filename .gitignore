@@ -363,21 +363,12 @@ MigrationBackup/
 FodyWeavers.xsd
 
 # Modules
-bin/
-lib/
-include/
-MeCab/
-icu/
-json/
-eigen/
-hash-library/
-color/
-fast-cpp-csv-parser/
-
-# Package
-Package/cpprest142_2_10.dll
-Package/cpprest142_2_10d.dll
-Package/libmecab.dll
-Package/LICENSE
-Package/README.md
-Package/textmodule/MeCab
+/MeCab
+/icu
+/json
+/eigen
+/hash-library
+/color
+/fast-cpp-csv-parser
+/lua
+/cpprestsdk.v142.2.10.15
