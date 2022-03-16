@@ -15,6 +15,8 @@
 #include "hash.h"
 #include "http.h"
 #include "cmath.h"
+#include "random.h"
+#include "bit.h"
 
 #include "complex.h"
 #include "vector2.h"
@@ -63,11 +65,17 @@ void luaReg(lua_State* L, nlohmann::json o) {
 	//hash
 	luaReg_hash(L, API_HASH, getOptionParamB(o, OPTION_VAPI, API_HASH));
 
-	//hash
+	//http
 	luaReg_http(L, API_HTTP, getOptionParamB(o, OPTION_VAPI, API_HTTP));
 
 	//math
 	luaReg_cmath(L, API_CMATH, getOptionParamB(o, OPTION_VAPI, API_CMATH));
+
+	//random
+	luaReg_random(L, API_RANDOM, getOptionParamB(o, OPTION_VAPI, API_RANDOM));
+
+	//bit
+	luaReg_bit(L, API_BIT, getOptionParamB(o, OPTION_VAPI, API_BIT));
 }
 
 void luaAlias(lua_State* L, nlohmann::json o) {
@@ -80,6 +88,11 @@ void luaAlias(lua_State* L, nlohmann::json o) {
 		ALIAS_API_FILESYSTEM,
 		getOptionParamB(o, OPTION_VAPI_ALIAS, API_FILESYSTEM) && getOptionParamB(o, OPTION_VAPI, API_FILESYSTEM)
 	);
+
+	luaReg_random(L,
+		ALIAS_API_RANDOM,
+		getOptionParamB(o, OPTION_VAPI_ALIAS, API_RANDOM) && getOptionParamB(o, OPTION_VAPI, API_RANDOM)
+	);
 }
 
 void luaGlobal(lua_State* L, nlohmann::json o) {
@@ -89,6 +102,7 @@ void luaGlobal(lua_State* L, nlohmann::json o) {
 
 	//geometry
 	luaGlobal_complex(L, API_COMPLEX, getOptionParamB(o, OPTION_VAPI_GLOBAL, API_GEOMETRY, API_COMPLEX));
+	luaGlobal_vector2(L, API_VECTOR2, getOptionParamB(o, OPTION_VAPI_GLOBAL, API_GEOMETRY, API_VECTOR2));
 	luaGlobal_vector3(L, API_VECTOR3, getOptionParamB(o, OPTION_VAPI_GLOBAL, API_GEOMETRY, API_VECTOR3));
 	luaGlobal_quaternion(L, API_QUATERNION, getOptionParamB(o, OPTION_VAPI_GLOBAL, API_GEOMETRY, API_QUATERNION));
 }

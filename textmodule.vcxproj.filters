@@ -144,6 +144,12 @@
     <ClCompile Include="vector2.cpp">
       <Filter>ソース ファイル\function\geometry</Filter>
     </ClCompile>
+    <ClCompile Include="bit.cpp">
+      <Filter>ソース ファイル\function</Filter>
+    </ClCompile>
+    <ClCompile Include="random.cpp">
+      <Filter>ソース ファイル\function</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="string.h">
@@ -244,6 +250,12 @@
     </ClInclude>
     <ClInclude Include="vector2.h">
       <Filter>ヘッダー ファイル\function\geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="bit.h">
+      <Filter>ヘッダー ファイル\function</Filter>
+    </ClInclude>
+    <ClInclude Include="random.h">
+      <Filter>ヘッダー ファイル\function</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

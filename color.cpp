@@ -1,6 +1,7 @@
 #include <lua.hpp>
 #include <csv.h>
 #include <vector>
+#include <fstream>
 
 #include "color.h"
 #include "rgb.h"
@@ -171,6 +172,52 @@ int color_search(lua_State* L) {
 		ColorList ret;
 		search(&list, tm_towstring(L, 2), tm_tointeger_s(L, 3, 0), &ret, tm_tointeger_s(L, 4, Target::color | Target::name | Target::japanese | Target::english));
 		set_colorlist_table(L, &ret);
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int color_getpalette(lua_State* L) {
+	try {
+		ColorList list;
+		get_colorlist_table(L, 1, &list);
+
+		std::wstring ret;
+		std::wstring color;
+		std::wstring name;
+		int r = 0;
+
+		for (int i = 0; i < 32; i++) {
+			r++;
+			if (i < list.size()) {
+				color = upperString(list[i].color.substr(2));
+				name = list[i].name;
+			}
+			else {
+				color = L"FFFFFF";
+				name = L"";
+			}
+
+			if (r == 4) {
+				if (name == L"")
+					ret += color + L"\n";
+				else
+					ret += color + L";" + name + L"\n";
+
+				r = 0;
+			}
+			else {
+				if (name == L"")
+					ret += color + L",";
+				else
+					ret += color + L";" + name + L",";
+			}
+		}
+
+		lua_pushwstring(L, ret);
 		return 1;
 	}
 	catch (std::exception& e) {

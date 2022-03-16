@@ -31,6 +31,10 @@ double tm_tonumber(lua_State* L, int idx) {
 	return tm_todouble(L, idx);
 }
 
+unsigned long tm_tounsigned(lua_State* L, int idx) {
+	return static_cast<unsigned long>(luaL_checkinteger(L, idx));
+}
+
 
 void lua_pushwstring(lua_State* L, std::wstring s) {
 	lua_pushstring(L, WstrToStr(s).c_str());

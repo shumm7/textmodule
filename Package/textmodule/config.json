@@ -6,6 +6,8 @@
     "string": true,
     "tmstring": true,
     "math": true,
+    "random": true,
+    "bit": true,
     "os": true,
     "utf8": true,
     "color": {
@@ -27,7 +29,8 @@
   },
   "api-alias": {
     "tmstring": true,
-    "filesystem": true
+    "filesystem": true,
+    "random": true
   },
   "api-global": {
     "clipboard": true,

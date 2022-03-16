@@ -9,6 +9,7 @@ int tm_tointeger(lua_State* L, int idx);
 float tm_tofloat(lua_State* L, int idx);
 double tm_todouble(lua_State* L, int idx);
 double tm_tonumber(lua_State* L, int idx);
+unsigned long tm_tounsigned(lua_State* L, int idx);
 
 void lua_pushwstring(lua_State* L, std::wstring s);
 void lua_pushsstring(lua_State* L, std::string s);

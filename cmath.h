@@ -11,6 +11,8 @@ int cmath_erf(lua_State* L);
 int cmath_erfc(lua_State* L);
 int cmath_hypot(lua_State* L);
 int cmath_copysign(lua_State* L);
+int cmath_gcd(lua_State*);
+int cmath_lcm(lua_State*);
 
 int cmath_assoc_laguerre(lua_State* L);
 int cmath_assoc_legendre(lua_State* L);
@@ -34,8 +36,6 @@ int cmath_sph_bessel(lua_State* L);
 int cmath_sph_legendre(lua_State* L);
 int cmath_sph_neumann(lua_State* L);
 
-int cmath_uniform_distribution(lua_State* L);
-
 void luaReg_cmath(lua_State* L, const char* name, bool reg);
 
 static luaL_Reg TEXTMODULE_CMATH_REG[] = {
@@ -50,6 +50,8 @@ static luaL_Reg TEXTMODULE_CMATH_REG[] = {
 	{"erfc", cmath_erfc},
 	{"hypot", cmath_hypot},
 	{"copysign", cmath_copysign},
+	{"gcd", cmath_gcd},
+	{"lcm", cmath_lcm},
 
 	{"assoc_laguerre", cmath_assoc_laguerre},
 	{"assoc_legendre", cmath_assoc_legendre},
@@ -72,7 +74,5 @@ static luaL_Reg TEXTMODULE_CMATH_REG[] = {
 	{"sph_bessel", cmath_sph_bessel},
 	{"sph_legendre", cmath_sph_legendre},
 	{"sph_neumann", cmath_sph_neumann},
-
-	//{"uniform_distribution", cmath_uniform_distribution},
 	{ nullptr, nullptr }
 };

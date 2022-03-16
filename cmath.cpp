@@ -2,7 +2,7 @@
 #include <iostream>
 #include <cmath>
 #include <numbers>
-#include <random>
+#include <numeric>
 
 #include "cmath.h"
 #include "textmodule_lua.h"
@@ -189,6 +189,36 @@ int cmath_copysign(lua_State* L) {
 		double y = tm_tonumber(L, 2);
 
 		lua_pushnumber(L, std::copysign(x, y));
+
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int cmath_gcd(lua_State* L) {
+	try {
+		int x = tm_tointeger(L, 1);
+		int y = tm_tointeger(L, 2);
+
+		lua_pushnumber(L, std::gcd(x, y));
+
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int cmath_lcm(lua_State* L) {
+	try {
+		int x = tm_tointeger(L, 1);
+		int y = tm_tointeger(L, 2);
+
+		lua_pushnumber(L, std::lcm(x, y));
 
 		return 1;
 	}
@@ -513,30 +543,6 @@ int cmath_sph_neumann(lua_State* L) {
 	}
 }
 
-
-int cmath_uniform_distribution(lua_State* L) {
-	double m = 0;
-	double n = 0;
-	if (lua_type(L, 1) == LUA_TNONE && lua_type(L, 2) == LUA_TNONE) {
-		m = 0;
-		n = 1;
-	}
-	else if (lua_type(L, 1) == LUA_TNUMBER && lua_type(L, 2) == LUA_TNONE) {
-		m = 1;
-		n = lua_tonumber(L, 1);
-	}
-	else if (lua_type(L, 1) == LUA_TNUMBER && lua_type(L, 2) == LUA_TNUMBER) {
-		m = lua_tonumber(L, 1);
-		n = lua_tonumber(L, 2);
-	}
-
-	std::random_device seed_gen;
-	std::default_random_engine engine(seed_gen());
-	std::uniform_real_distribution<> dist(m, n);
-
-	lua_pushnumber(L, dist(engine));
-	return 1;
-}
 
 void luaReg_cmath(lua_State* L, const char* name, bool reg) {
 	if (reg) {

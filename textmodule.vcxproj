@@ -152,6 +152,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="bit.cpp" />
     <ClCompile Include="clipboard.cpp" />
     <ClCompile Include="color.cpp" />
     <ClCompile Include="complex.cpp" />
@@ -172,6 +173,7 @@
     <ClCompile Include="cmath.cpp" />
     <ClCompile Include="mecab.cpp" />
     <ClCompile Include="quaternion.cpp" />
+    <ClCompile Include="random.cpp" />
     <ClCompile Include="rgb.cpp" />
     <ClCompile Include="string.cpp" />
     <ClCompile Include="textmodule.cpp" />
@@ -187,6 +189,7 @@
     <ClCompile Include="vector3.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="bit.h" />
     <ClInclude Include="clipboard.h" />
     <ClInclude Include="cmath.h" />
     <ClInclude Include="color.h" />
@@ -207,6 +210,7 @@
     <ClInclude Include="http.h" />
     <ClInclude Include="mecab.h" />
     <ClInclude Include="quaternion.h" />
+    <ClInclude Include="random.h" />
     <ClInclude Include="rgb.h" />
     <ClInclude Include="string.h" />
     <ClInclude Include="textmodule.h" />
