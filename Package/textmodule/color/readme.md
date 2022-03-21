@@ -1,5 +1,5 @@
 # リストについて
-`/color_lib/color_list/`に色のリストを保存すると、`color_lib.dll`から使用できるようになります。  
+`color`テーブルの関数で使用できる色リストです。  
 
 ## フォーマット
 CSVファイルで保存、文字コードはShift JISに設定してください。  
@@ -44,3 +44,7 @@ https://ja.wikipedia.org/wiki/%E8%89%B2%E5%90%8D%E4%B8%80%E8%A6%A7
 ## wikipedia_en
 Wikipedia: List of colors（2022年3月14日閲覧）
 https://en.wikipedia.org/wiki/List_of_colors:_A%E2%80%93F
+
+## universal
+カラーユニバーサルデザイン推奨配色セット ver.4（2022年3月18日閲覧）
+https://jfly.uni-koeln.de/colorset/

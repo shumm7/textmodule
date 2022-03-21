@@ -64,8 +64,8 @@ int string_gsub(lua_State* L) {
 			else {
 				break;
 			}
-			lua_pushwstring(L, text);
 		}
+		lua_pushwstring(L, text);
 		return 1;
 	}
 	catch (std::exception& e) {

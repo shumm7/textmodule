@@ -36,6 +36,7 @@ int tmstring_capitalize(lua_State* L);
 int tmstring_capitalize_words(lua_State* L);
 int tmstring_random(lua_State* L);
 int tmstring_roundnumber(lua_State* L);
+int tmstring_anagram(lua_State* L);
 
 void luaReg_tmstring(lua_State* L, const char* name, bool reg);
 
@@ -55,5 +56,6 @@ static luaL_Reg TEXTMODULE_TMSTRING_REG[] = {
 	{"capitalize_words", tmstring_capitalize_words},
 	{"random", tmstring_random},
 	{"roundnumber",  tmstring_roundnumber},
+	{"anagram", tmstring_anagram},
 	{ nullptr, nullptr }
 };

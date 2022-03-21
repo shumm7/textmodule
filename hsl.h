@@ -26,10 +26,10 @@ static luaL_Reg TEXTMODULE_HSL_REG[] = {
 
 	{"h", hsl_h},
 	{"s", hsl_s},
-	{"v", hsl_l},
+	{"l", hsl_l},
 	{"hsl", hsl_hsl},
 	{"rgb", hsl_rgb},
-	{"hsv", hsl_hsv},
+	//{"hsv", hsl_hsv},
 	{ nullptr, nullptr }
 };
 
@@ -42,8 +42,8 @@ static luaL_Reg TEXTMODULE_HSL_META_REG[] = {
 	{"h", hsl_h},
 	{"s", hsl_s},
 	{"v", hsl_l},
-	{"hsv", hsl_hsl},
+	{"hsl", hsl_hsl},
 	{"rgb", hsl_rgb},
-	{"hsv", hsl_hsv},
+	//{"hsv", hsl_hsv},
 	{ nullptr, nullptr }
 };

@@ -109,15 +109,61 @@ int quaternion_twovectors(lua_State* L) {
 	}
 }
 
+int quaternion_lookrot(lua_State* L) {
+	try {
+		Vector3* v1;
+		Vector3* v2;
+
+		if (lua_type(L, 1) == LUA_TNONE) {
+			v1 = new Vector3(0, 0, 1);
+		}
+		else {
+			v1 = vector3_check(L, 1);
+		}
+
+		if (lua_type(L, 2) == LUA_TNONE) {
+			v2 = new Vector3(0, 1, 0);
+		}
+		else {
+			v2 = vector3_check(L, 2);
+		}
+
+
+		Quat* ret = reinterpret_cast<Quat*>(lua_newuserdata(L, sizeof(Quat)));
+		luaL_getmetatable(L, TEXTMODULE_QUATERNION);
+		lua_setmetatable(L, -2);
+
+		if (v1->norm() == 0) {
+			*ret = ret->Identity();
+			return 1;
+		}
+
+		if (v1 != v2) {
+			v2->normalize();
+			auto v = (*v1) + (*v2) * (- v1->dot(*v2));
+			auto q = Quat::FromTwoVectors(Vector3(0,0,1), v);
+
+			*ret = Quat::FromTwoVectors(v, *v1) * q;
+			return 1;
+		}
+		else {
+			*ret = Quat::FromTwoVectors(Vector3(0, 0, 1), *v1);
+			return 1;
+		}
+
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
 int quaternion_identity(lua_State* L) {
 	Quat* ret = reinterpret_cast<Quat*>(lua_newuserdata(L, sizeof(Quat)));
 	luaL_getmetatable(L, TEXTMODULE_QUATERNION);
 	lua_setmetatable(L, -2);
 
-	ret->w() = 1;
-	ret->x() = 0;
-	ret->y() = 0;
-	ret->z() = 0;
+	*ret = ret->Identity();
 
 	return 1;
 }
@@ -939,6 +985,7 @@ int quaternion__cross(lua_State* L) {
 		return 1;
 	}
 }
+
 
 void luaReg_quaternion(lua_State* L, const char* name, bool reg) {
 	if (reg) {

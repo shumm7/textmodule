@@ -1,7 +1,7 @@
 #include <iostream>
 
 #define MODULE_NAME "textmodule"
-#define MODULE_VERSION 23
+#define MODULE_VERSION 24
 
 //API
 #define API_BASE "base"

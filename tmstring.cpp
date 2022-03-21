@@ -354,6 +354,45 @@ int tmstring_roundnumber(lua_State* L) {
 	}
 }
 
+int tmstring_anagram(lua_State* L) {
+	try {
+		std::wstring str = tm_towstring(L, 1);
+		std::wstring ret = L"";
+
+		int tp = lua_type(L, 2);
+		luaL_argcheck(L, tp == LUA_TNONE || tp == LUA_TNUMBER, 2, "number/none expected");
+
+		if (tp == LUA_TNONE) {
+			std::random_device seed_gen;
+			std::default_random_engine engine(seed_gen());
+
+			while (str.length() > 0) {
+				std::uniform_int_distribution<> dist(0, str.length() - 1);
+				int key = dist(engine);
+				ret += str.at(key);
+				str.erase(key, 1);
+			}
+		}
+		else if (tp == LUA_TNUMBER) {
+			std::default_random_engine engine(tm_tointeger(L, 2));
+
+			while (str.length() > 0) {
+				std::uniform_int_distribution<> dist(0, str.length() - 1);
+				int key = dist(engine);
+				ret += str.at(key);
+				str.erase(key, 1);
+			}
+		}
+
+		lua_pushwstring(L, ret);
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
 void luaReg_tmstring(lua_State* L, const char* name, bool reg) {
 	if (reg) {
 		lua_newtable(L);

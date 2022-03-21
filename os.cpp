@@ -10,6 +10,20 @@
 
 using namespace std::chrono;
 
+int getfield(lua_State* L, const char* key, int d) {
+	int res;
+	lua_getfield(L, -1, key);
+	if (lua_isnumber(L, -1))
+		res = (int)lua_tointeger(L, -1);
+	else {
+		if (d < 0)
+			return luaL_error(L, "field " LUA_QS " missing in date table", key);
+		res = d;
+	}
+	lua_pop(L, 1);
+	return res;
+}
+
 int os_time(lua_State* L) {
 	try {
 		int tp = lua_type(L, 1);
@@ -23,22 +37,16 @@ int os_time(lua_State* L) {
 			return 1;
 		}
 		else if (tp == LUA_TTABLE) {
-			lua_getfield(L, 1, "year");
-			lua_getfield(L, 1, "month");
-			lua_getfield(L, 1, "day");
-			lua_getfield(L, 1, "hour");
-			lua_getfield(L, 1, "min");
-			lua_getfield(L, 1, "sec");
-
-			struct tm Time = { 0, 0, 0, 1, 0, 0 };
+			struct tm Time;
 			__time64_t res;
 
-			Time.tm_year = tm_tointeger(L, -6) - 1900;
-			Time.tm_mon = tm_tointeger(L, -5) - 1;
-			Time.tm_mday = tm_tointeger(L, -4);
-			Time.tm_hour = tm_tointeger(L, -3);
-			Time.tm_min = tm_tointeger(L, -2);
-			Time.tm_sec = tm_tointeger(L, -1);
+			Time.tm_isdst = getfield(L, "isdst", false);
+			Time.tm_year = getfield(L, "year", -1) - 1900;
+			Time.tm_mon = getfield(L, "month", -1) - 1;
+			Time.tm_mday = getfield(L, "day", -1);
+			Time.tm_hour = getfield(L, "hour", 12);
+			Time.tm_min = getfield(L, "min", 0);
+			Time.tm_sec = getfield(L, "sec", 0);
 
 			res = _mktime64(&Time);
 			lua_pushnumber(L, static_cast<double>(res));
