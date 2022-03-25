@@ -368,7 +368,6 @@ FodyWeavers.xsd
 /json
 /eigen
 /hash-library
-/color
 /fast-cpp-csv-parser
 /lua
 /cpprestsdk.v142.2.10.15
