@@ -7,9 +7,10 @@
 #include "textmodule.h"
 #include "textmodule_string.h"
 #include "textmodule_exception.h"
+#include "textmodule_option.h"
 #include "textmodule_lua.h"
 
-int main_getinfo(lua_State* L) {
+int base_getinfo(lua_State* L) {
 	try {
 		std::wstring t = tm_towstring(L, 1);
 		int i = tm_tointeger_s(L, 2, 1);
@@ -48,7 +49,7 @@ int main_getinfo(lua_State* L) {
 	}
 }
 
-int main_debug_print(lua_State* L) {
+int base_debug_print(lua_State* L) {
 	try {
 		int i = 1;
 		std::wstring ret = L"";
@@ -109,7 +110,7 @@ int main_debug_print(lua_State* L) {
 	return 0;
 }
 
-int main_exception(lua_State* L) {
+int base_exception(lua_State* L) {
 	if (lua_type(L, 1) == LUA_TSTRING) {
 		throw std::exception(lua_tostring(L, 1));
 	}
@@ -118,6 +119,31 @@ int main_exception(lua_State* L) {
 	}
 	return 0;
 }
+
+int base_versioncheck(lua_State* L) {
+	try {
+		int res = versionCheck();
+		switch (res)
+		{
+		case VERSION_CHECK_LATEST:
+			lua_pushboolean(L, true);
+			break;
+		case VERSION_CHECK_OUTDATED:
+			lua_pushboolean(L, false);
+		case VERSION_CHECK_ERROR:
+		default:
+			lua_pushnil(L);
+			break;
+		}
+
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
 
 void luaReg_base(lua_State* L, bool reg) {
 	static luaL_Reg none[] = {

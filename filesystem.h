@@ -23,6 +23,10 @@ int fs_rename(lua_State* L);
 int fs_type(lua_State* L);
 int fs_size(lua_State* L);
 
+int fs_read(lua_State* L);
+int fs_write(lua_State* L);
+int fs_append(lua_State* L);
+
 void luaReg_filesystem(lua_State* L, const char* name, bool reg);
 
 static luaL_Reg TEXTMODULE_FILESYSTEM_REG[] = {
@@ -41,5 +45,8 @@ static luaL_Reg TEXTMODULE_FILESYSTEM_REG[] = {
 	{"rename", fs_rename},
 	{"type", fs_type},
 	{"size", fs_size},
+	{"read", fs_read},
+	{"write", fs_write},
+	{"append", fs_append},
 	{ nullptr, nullptr }
 };

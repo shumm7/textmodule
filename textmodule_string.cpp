@@ -449,18 +449,7 @@ std::wstring DecToHex(int num) {
 }
 
 int HexToDec(std::wstring num) {
-	double minus = 1;
-	if (num.substr(0, 1) == L"-") {
-		minus = -1;
-		num = num.substr(1);
-	}
-
-	if (num.substr(0, 2) == L"0x") {
-		return strtod(WstrToStr(num).c_str(), NULL) * minus;
-	}
-	else {
-		return strtod(WstrToStr(L"0x" + num).c_str(), NULL) * minus;
-	}
+	return std::stoi(num, nullptr, 16);
 }
 
 std::wstring tostring(double num) {

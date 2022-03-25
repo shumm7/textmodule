@@ -2,6 +2,8 @@
 
 #include <filesystem>
 #include <iostream>
+#include <string>
+#include <fstream>
 #include <direct.h>
 
 #include "filesystem.h"
@@ -324,6 +326,46 @@ int fs_size(lua_State* L) {
 		int size = (int)std::filesystem::file_size(dir);
 		lua_pushinteger(L, size);
 		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int fs_read(lua_State* L) {
+	try {
+		std::ifstream fs(tm_towstring(L, 1));
+		std::string str((std::istreambuf_iterator<char>(fs)), std::istreambuf_iterator<char>());
+		fs.close();
+		lua_pushsstring(L, str);
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int fs_write(lua_State* L) {
+	try {
+		std::ofstream fs(tm_towstring(L, 1));
+		fs << tm_tostring(L, 2);
+		fs.close();
+		return 0;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int fs_append(lua_State* L) {
+	try {
+		std::ofstream fs(tm_towstring(L, 1), std::ios::app);
+		fs << tm_tostring(L, 2);
+		fs.close();
+		return 0;
 	}
 	catch (std::exception& e) {
 		luaL_error(L, e.what());

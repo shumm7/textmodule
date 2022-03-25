@@ -43,6 +43,12 @@
     <Filter Include="ヘッダー ファイル\function\geometry">
       <UniqueIdentifier>{c87bda3b-b224-4f11-a8c5-fa3987aa91ca}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\lib\qr-code-generator">
+      <UniqueIdentifier>{41810f70-e9f2-45da-aea6-d1296e65df8e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\lib\qr-code-generator">
+      <UniqueIdentifier>{4844f0f9-f7f3-4e38-b6f2-b88f1f116a3b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="lua.cpp">
@@ -150,12 +156,18 @@
     <ClCompile Include="random.cpp">
       <Filter>ソース ファイル\function</Filter>
     </ClCompile>
+    <ClCompile Include="debug.cpp">
+      <Filter>ソース ファイル\function</Filter>
+    </ClCompile>
+    <ClCompile Include="QR-Code-generator\qrcodegen.cpp">
+      <Filter>ソース ファイル\lib\qr-code-generator</Filter>
+    </ClCompile>
+    <ClCompile Include="qrcode.cpp">
+      <Filter>ソース ファイル\function</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="string.h">
-      <Filter>ヘッダー ファイル\function</Filter>
-    </ClInclude>
-    <ClInclude Include="base.h">
       <Filter>ヘッダー ファイル\function</Filter>
     </ClInclude>
     <ClInclude Include="utf8.h">
@@ -255,6 +267,18 @@
       <Filter>ヘッダー ファイル\function</Filter>
     </ClInclude>
     <ClInclude Include="random.h">
+      <Filter>ヘッダー ファイル\function</Filter>
+    </ClInclude>
+    <ClInclude Include="debug.h">
+      <Filter>ヘッダー ファイル\function</Filter>
+    </ClInclude>
+    <ClInclude Include="QR-Code-generator\qrcodegen.hpp">
+      <Filter>ヘッダー ファイル\lib\qr-code-generator</Filter>
+    </ClInclude>
+    <ClInclude Include="base.h">
+      <Filter>ヘッダー ファイル\function</Filter>
+    </ClInclude>
+    <ClInclude Include="qrcode.h">
       <Filter>ヘッダー ファイル\function</Filter>
     </ClInclude>
   </ItemGroup>

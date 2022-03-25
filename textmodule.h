@@ -1,10 +1,11 @@
 #include <iostream>
 
 #define MODULE_NAME "textmodule"
-#define MODULE_VERSION 24
+#define MODULE_VERSION 25
 
 //API
 #define API_BASE "base"
+#define API_DEBUG "debug"
 #define API_STRING "string"
 #define API_TMSTRING "tmstring"
 #define API_CMATH "math"
@@ -18,6 +19,7 @@
 #define API_HASH "hash"
 #define API_HTTP "http"
 #define API_BIT "bit"
+#define API_QRCODE "qrcode"
 
 //API_COLOR
 #define API_COLOR_BASE "color"

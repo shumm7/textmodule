@@ -72,13 +72,13 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <TargetExt>.dll</TargetExt>
-    <IncludePath>D:\Visual Studio 2019\source\repos\textmodule\MeCab\sdk;$(IncludePath)</IncludePath>
-    <LibraryPath>D:\Visual Studio 2019\source\repos\textmodule\MeCab\sdk;$(LibraryPath)</LibraryPath>
+    <IncludePath>D:\Visual Studio 2019\source\repos\textmodule\MeCab\sdk;D:\Visual Studio 2019\source\repos\textmodule\cpprestsdk.v142.2.10.15\include\cpprest;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\Visual Studio 2019\source\repos\textmodule\MeCab\sdk;D:\Visual Studio 2019\source\repos\textmodule\cpprestsdk.v142.2.10.15\x86\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <TargetExt>.dll</TargetExt>
-    <IncludePath>D:\Visual Studio 2019\source\repos\textmodule\MeCab\sdk;$(IncludePath)</IncludePath>
-    <LibraryPath>D:\Visual Studio 2019\source\repos\textmodule\MeCab\sdk;$(LibraryPath)</LibraryPath>
+    <IncludePath>D:\Visual Studio 2019\source\repos\textmodule\MeCab\sdk;D:\Visual Studio 2019\source\repos\textmodule\cpprestsdk.v142.2.10.15\include\cpprest;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\Visual Studio 2019\source\repos\textmodule\MeCab\sdk;D:\Visual Studio 2019\source\repos\textmodule\cpprestsdk.v142.2.10.15\x86\lib;$(LibraryPath)</LibraryPath>
     <GenerateManifest>false</GenerateManifest>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -97,7 +97,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <AdditionalLibraryDirectories>D:\Visual Studio 2019\source\repos\textmodule\lua\lib;D:\Visual Studio 2019\source\repos\textmodule\cpprestsdk.v142.2.10.15\x86\lib;D:\Visual Studio 2019\source\repos\textmodule\MeCab\sdk;D:\Visual Studio 2019\source\repos\textmodule\icu\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>lua51.lib;libmecab.lib;cpprest142_2_10.lib;cpprest142_2_10d.lib;icudt.lib;icuin.lib;icuio.lib;icutest.lib;icutu.lib;icuuc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>lua51.lib;libmecab.lib;icudt.lib;icuin.lib;icuio.lib;icutest.lib;icutu.lib;icuuc.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateMapFile>true</GenerateMapFile>
     </Link>
   </ItemDefinitionGroup>
@@ -131,7 +131,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>D:\Visual Studio 2019\source\repos\textmodule\lua\lib;D:\Visual Studio 2019\source\repos\textmodule\cpprestsdk.v142.2.10.15\x86\lib;D:\Visual Studio 2019\source\repos\textmodule\MeCab\sdk;</AdditionalLibraryDirectories>
-      <AdditionalDependencies>lua51.lib;libmecab.lib;cpprest142_2_10.lib;cpprest142_2_10d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>lua51.lib;libmecab.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateMapFile>false</GenerateMapFile>
       <GenerateDebugInformation>false</GenerateDebugInformation>
     </Link>
@@ -157,6 +157,7 @@
     <ClCompile Include="color.cpp" />
     <ClCompile Include="complex.cpp" />
     <ClCompile Include="base.cpp" />
+    <ClCompile Include="debug.cpp" />
     <ClCompile Include="filesystem.cpp" />
     <ClCompile Include="hash-library\crc32.cpp" />
     <ClCompile Include="hash-library\digest.cpp" />
@@ -172,6 +173,8 @@
     <ClCompile Include="lua.cpp" />
     <ClCompile Include="cmath.cpp" />
     <ClCompile Include="mecab.cpp" />
+    <ClCompile Include="QR-Code-generator\qrcodegen.cpp" />
+    <ClCompile Include="qrcode.cpp" />
     <ClCompile Include="quaternion.cpp" />
     <ClCompile Include="random.cpp" />
     <ClCompile Include="rgb.cpp" />
@@ -189,12 +192,13 @@
     <ClCompile Include="vector3.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="base.h" />
     <ClInclude Include="bit.h" />
     <ClInclude Include="clipboard.h" />
     <ClInclude Include="cmath.h" />
     <ClInclude Include="color.h" />
     <ClInclude Include="complex.h" />
-    <ClInclude Include="base.h" />
+    <ClInclude Include="debug.h" />
     <ClInclude Include="filesystem.h" />
     <ClInclude Include="hash-library\crc32.h" />
     <ClInclude Include="hash-library\hash.h" />
@@ -209,6 +213,8 @@
     <ClInclude Include="hsv.h" />
     <ClInclude Include="http.h" />
     <ClInclude Include="mecab.h" />
+    <ClInclude Include="QR-Code-generator\qrcodegen.hpp" />
+    <ClInclude Include="qrcode.h" />
     <ClInclude Include="quaternion.h" />
     <ClInclude Include="random.h" />
     <ClInclude Include="rgb.h" />

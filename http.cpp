@@ -6,33 +6,38 @@
 #include "textmodule_lua.h"
 #include "textmodule_string.h"
 
+#ifdef _DEBUG
+#pragma comment(lib, "cpprest142_2_10d.lib")
+#else
+#pragma comment(lib, "cpprest142_2_10.lib")
+#endif
+
 using namespace web;
 using namespace web::http;
 using namespace web::http::client;
 using namespace std;
 
+web::http::http_request set_header(lua_State* L, int idx, web::http::http_request request) {
+	int type = lua_type(L, idx);
+	luaL_argcheck(L,  type == LUA_TNONE || type == LUA_TNIL|| type== LUA_TTABLE, idx, "table/nil/none expected");
+	if (type == LUA_TTABLE) {
+		lua_pushnil(L);
+		while (lua_next(L, idx) != 0) {
+			std::wstring key = tm_towstring(L, -2);
+			std::wstring value = tm_towstring(L, -1);
+			request.headers().add(key, value);
+			lua_pop(L, 1);
+		}
+	}
+	return request;
+}
+
 int http_get(lua_State* L) {
 	try {
 		std::wstring url = tm_towstring(L, 1);
-		std::wstring body = tm_towstring(L, 2);
 
 		web::http::http_request request(methods::GET);
-		request.set_body(body);
-
-		int i = 3;
-		while (true) {
-			std::wstring key;
-			std::wstring value;
-			if (lua_type(L, i) == LUA_TSTRING && lua_type(L, i+1) == LUA_TSTRING) {
-				key = lua_towstring(L, i);
-				value = lua_towstring(L, i+1);
-				request.headers().add(key, value);
-			}
-			else {
-				break;
-			}
-			i += 2;
-		}
+		request = set_header(L, 2, request);
 
 		web::http::client::http_client client(url);
 		web::http::http_response response = client.request(request).get();
@@ -55,20 +60,7 @@ int http_post(lua_State* L) {
 		web::http::http_request request(methods::POST);
 		request.set_body(body);
 
-		int i = 3;
-		while (true) {
-			std::wstring key;
-			std::wstring value;
-			if (lua_type(L, i) == LUA_TSTRING && lua_type(L, i + 1) == LUA_TSTRING) {
-				key = lua_towstring(L, i);
-				value = lua_towstring(L, i + 1);
-				request.headers().add(key, value);
-			}
-			else {
-				break;
-			}
-			i += 2;
-		}
+		request = set_header(L, 3, request);
 
 		web::http::client::http_client client(url);
 		web::http::http_response response = client.request(request).get();

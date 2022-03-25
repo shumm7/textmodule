@@ -180,7 +180,7 @@ int color_search(lua_State* L) {
 	}
 }
 
-int color_getpalette(lua_State* L) {
+int color_makepalette(lua_State* L) {
 	try {
 		ColorList list;
 		get_colorlist_table(L, 1, &list);
@@ -218,6 +218,39 @@ int color_getpalette(lua_State* L) {
 		}
 
 		lua_pushwstring(L, ret);
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int color_loadpalette(lua_State* L) {
+	try {
+		std::wstring palette = lua_towstring(L, 1);
+		std::vector<std::wstring> lines = split(palette, L'\n');
+		ColorList ret;
+
+		for (int i = 0; i < 8; i++) {
+			std::vector<std::wstring> colors = split(lines.at(i), L',');
+			for (int j = 0; j < 4; j++) {
+				std::wstring n_color = colors.at(j);
+				ColorItem p;
+
+				if (n_color.find(L";") != std::string::npos) { //色名を記載している
+					std::vector<std::wstring> n = split(n_color, L';');
+					p.color = DecToHex(HexToDec(L"0x" + lowerString(n.at(0))));
+					p.name = n.at(1);
+				}
+				else { //色名を記載していない
+					p.color = DecToHex(HexToDec(L"0x" + lowerString(n_color)));
+					p.name = L"";
+				}
+				ret.push_back(p);
+			}
+		}
+		set_colorlist_table(L, &ret);
 		return 1;
 	}
 	catch (std::exception& e) {

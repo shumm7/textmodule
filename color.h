@@ -15,20 +15,23 @@ typedef std::vector<ColorItem> ColorList;
 
 int color_getlist(lua_State* L);
 int color_search(lua_State* L);
-int color_getpalette(lua_State* L);
+int color_makepalette(lua_State* L);
+int color_loadpalette(lua_State* L);
 
 void luaReg_color(lua_State* L, const char* name, bool reg);
 
 static luaL_Reg TEXTMODULE_COLOR_REG[] = {
 	{"getlist", color_getlist},
 	{"search", color_search},
-	{"getpalette", color_getpalette},
+	{"makepalette", color_makepalette},
+	{"loadpalette", color_loadpalette},
 	{ nullptr, nullptr }
 };
 
 static luaL_Reg TEXTMODULE_COLOR_META_REG[] = {
 	{"search", color_search},
-	{"getpalette", color_getpalette},
+	{"makepalette", color_makepalette},
+	{"loadpalette", color_loadpalette},
 	{ nullptr, nullptr }
 };
 

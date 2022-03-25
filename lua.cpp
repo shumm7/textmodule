@@ -5,8 +5,9 @@
 #include "textmodule_string.h"
 #include "textmodule_option.h"
 
-#include "string.h"
 #include "base.h"
+#include "string.h"
+#include "debug.h"
 #include "utf8.h"
 #include "os.h"
 #include "tmstring.h"
@@ -17,6 +18,7 @@
 #include "cmath.h"
 #include "random.h"
 #include "bit.h"
+#include "qrcode.h"
 
 #include "complex.h"
 #include "vector2.h"
@@ -31,6 +33,9 @@
 void luaReg(lua_State* L, nlohmann::json o) {
 	//base
 	luaReg_base(L, getOptionParamB(o, OPTION_VAPI, API_BASE));
+
+	//debug
+	luaReg_debug(L, API_DEBUG, true);
 
 	//string
 	luaReg_string(L, API_STRING, getOptionParamB(o, OPTION_VAPI, API_STRING));
@@ -76,6 +81,9 @@ void luaReg(lua_State* L, nlohmann::json o) {
 
 	//bit
 	luaReg_bit(L, API_BIT, getOptionParamB(o, OPTION_VAPI, API_BIT));
+
+	//qrcode
+	luaReg_qrcode(L, API_QRCODE, getOptionParamB(o, OPTION_VAPI, API_QRCODE));
 }
 
 void luaAlias(lua_State* L, nlohmann::json o) {

@@ -25,7 +25,8 @@
     "clipboard": true,
     "filesystem": true,
     "hash": true,
-    "http": false
+    "http": true,
+    "qrcode": true
   },
   "api-alias": {
     "tmstring": true,
@@ -41,6 +42,6 @@
        "quaternion": true
     },
     "hash": true,
-    "http": false
+    "http": true
   }
 }
