@@ -50,3 +50,8 @@ This library is licensed under the MIT License.
 https://github.com/ben-strasser/fast-cpp-csv-parser
 Copyright (c) 2015, ben-strasser. All rights reserved.
 This library is licensed under the BSD 3-Clause "New" or "Revised" License.
+
+### QR Code generator
+https://github.com/nayuki/QR-Code-generator
+Copyright (c) 2022, Project Nayuki. All rights reserved.
+This library is licensed under the MIT License.
