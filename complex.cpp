@@ -3,24 +3,15 @@
 #include <complex>
 #include <cmath>
 
-#include "complex.h"
 #include "textmodule_lua.h"
 #include "textmodule_string.h"
 #include "textmodule_exception.h"
-#include "vector2.h"
-
-std::string get_cargmsg() {
-	std::string m = "number/";
-	m.append(TEXTMODULE_COMPLEX);
-	m.append(" expected");
-
-	return m;
-}
+#include "textmodule_geometry.h"
 
 int complex_new(lua_State* L) {
 	try {
 		int tp = lua_type(L, 1);
-		luaL_argcheck(L, tp == LUA_TNUMBER || tp == LUA_TUSERDATA || tp==LUA_TNONE, 1, "number/userdata/none expected");
+		luaL_argcheck(L, tp == LUA_TNUMBER || tp == LUA_TUSERDATA || tp==LUA_TNONE, 1, "number/" TEXTMODULE_VECTOR2 "/none expected");
 
 		double r;
 		double i;
@@ -38,13 +29,7 @@ int complex_new(lua_State* L) {
 			return 0;
 		}
 		
-
-		std::complex<double>* ret = reinterpret_cast<std::complex<double>*>(lua_newuserdata(L, sizeof(std::complex<double>)));
-		luaL_getmetatable(L, TEXTMODULE_COMPLEX);
-		lua_setmetatable(L, -2);
-		ret->real(r);
-		ret->imag(i);
-
+		lua_pushcomplex(L, r, i);
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -55,13 +40,10 @@ int complex_new(lua_State* L) {
 
 int complex_polar_new(lua_State* L) {
 	try {
-		double d = tm_tonumber_s(L, 1, 0);
-		double r = tm_tonumber_s(L, 2, 0);
+		double r = tm_tonumber_s(L, 1, 0);
+		double s = tm_tonumber_s(L, 2, 0);
 
-		std::complex<double>* ret = reinterpret_cast<std::complex<double>*>(lua_newuserdata(L, sizeof(std::complex<double>)));
-		luaL_getmetatable(L, TEXTMODULE_COMPLEX);
-		lua_setmetatable(L, -2);
-		*ret = std::polar(d, r);
+		lua_pushcomplex(L, std::polar(r, s));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -147,37 +129,10 @@ int complex____gc(lua_State* L) {
 
 int complex____add(lua_State* L) {
 	try {
-		std::complex<double>* val1 = new std::complex<double>;
-		std::complex<double>* val2 = new std::complex<double>;
+		std::complex<double>* val1 = tm_tocomplex_s(L, 1);
+		std::complex<double>* val2 = tm_tocomplex_s(L, 2);
 
-		int tp = lua_type(L, 1);
-		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 1, get_cargmsg().c_str());
-
-		if (tp == LUA_TUSERDATA) {
-			val1 = complex_check(L, 1);
-		}
-		else if (tp == LUA_TNUMBER) {
-			val1->real(lua_tonumber(L, 1));
-			val1->imag(0);
-		}
-
-		tp = lua_type(L, 2);
-		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 2, get_cargmsg().c_str());
-
-		if (tp == LUA_TUSERDATA) {
-			val2 = complex_check(L, 2);
-		}
-		else if (tp == LUA_TNUMBER) {
-			val2->real(lua_tonumber(L, 2));
-			val2->imag(0);
-		}
-
-		std::complex<double>* vret = reinterpret_cast<std::complex<double>*>(lua_newuserdata(L, sizeof(std::complex<double>)));
-		vret->real(0);
-		vret->imag(0);
-		luaL_getmetatable(L, TEXTMODULE_COMPLEX);
-		lua_setmetatable(L, -2);
-		*vret = *val1 + *val2;
+		lua_pushcomplex(L, *val1 + *val2);
 
 		return 1;
 	}
@@ -189,38 +144,10 @@ int complex____add(lua_State* L) {
 
 int complex____sub(lua_State* L) {
 	try {
-		std::complex<double>* val1 = new std::complex<double>;
-		std::complex<double>* val2 = new std::complex<double>;
+		std::complex<double>* val1 = tm_tocomplex_s(L, 1);
+		std::complex<double>* val2 = tm_tocomplex_s(L, 2);
 
-		int tp = lua_type(L, 1);
-		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 1, get_cargmsg().c_str());
-
-		if (tp == LUA_TUSERDATA) {
-			val1 = complex_check(L, 1);
-		}
-		else if (tp == LUA_TNUMBER) {
-			val1->real(lua_tonumber(L, 1));
-			val1->imag(0);
-		}
-
-		tp = lua_type(L, 2);
-		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 2, get_cargmsg().c_str());
-
-		if (tp == LUA_TUSERDATA) {
-			val2 = complex_check(L, 2);
-		}
-		else if (tp == LUA_TNUMBER) {
-			val2->real(lua_tonumber(L, 2));
-			val2->imag(0);
-		}
-
-		std::complex<double>* vret = reinterpret_cast<std::complex<double>*>(lua_newuserdata(L, sizeof(std::complex<double>)));
-		vret->real(0);
-		vret->imag(0);
-		luaL_getmetatable(L, TEXTMODULE_COMPLEX);
-		lua_setmetatable(L, -2);
-		*vret = *val1 - *val2;
-
+		lua_pushcomplex(L, *val1 - *val2);
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -231,38 +158,10 @@ int complex____sub(lua_State* L) {
 
 int complex____mul(lua_State* L) {
 	try {
-		std::complex<double>* val1 = new std::complex<double>;
-		std::complex<double>* val2 = new std::complex<double>;
+		std::complex<double>* val1 = tm_tocomplex_s(L, 1);
+		std::complex<double>* val2 = tm_tocomplex_s(L, 2);
 
-		int tp = lua_type(L, 1);
-		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 1, get_cargmsg().c_str());
-
-		if (tp == LUA_TUSERDATA) {
-			val1 = complex_check(L, 1);
-		}
-		else if (tp == LUA_TNUMBER) {
-			val1->real(lua_tonumber(L, 1));
-			val1->imag(0);
-		}
-
-		tp = lua_type(L, 2);
-		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 2, get_cargmsg().c_str());
-
-		if (tp == LUA_TUSERDATA) {
-			val2 = complex_check(L, 2);
-		}
-		else if (tp == LUA_TNUMBER) {
-			val2->real(lua_tonumber(L, 2));
-			val2->imag(0);
-		}
-
-		std::complex<double>* vret = reinterpret_cast<std::complex<double>*>(lua_newuserdata(L, sizeof(std::complex<double>)));
-		vret->real(0);
-		vret->imag(0);
-		luaL_getmetatable(L, TEXTMODULE_COMPLEX);
-		lua_setmetatable(L, -2);
-		*vret = (*val1) * (*val2);
-
+		lua_pushcomplex(L, (*val1) * (*val2));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -273,38 +172,10 @@ int complex____mul(lua_State* L) {
 
 int complex____div(lua_State* L) {
 	try {
-		std::complex<double>* val1 = new std::complex<double>;
-		std::complex<double>* val2 = new std::complex<double>;
+		std::complex<double>* val1 = tm_tocomplex_s(L, 1);
+		std::complex<double>* val2 = tm_tocomplex_s(L, 2);
 
-		int tp = lua_type(L, 1);
-		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 1, get_cargmsg().c_str());
-
-		if (tp == LUA_TUSERDATA) {
-			val1 = complex_check(L, 1);
-		}
-		else if (tp == LUA_TNUMBER) {
-			val1->real(lua_tonumber(L, 1));
-			val1->imag(0);
-		}
-
-		tp = lua_type(L, 2);
-		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 2, get_cargmsg().c_str());
-
-		if (tp == LUA_TUSERDATA) {
-			val2 = complex_check(L, 2);
-		}
-		else if (tp == LUA_TNUMBER) {
-			val2->real(lua_tonumber(L, 2));
-			val2->imag(0);
-		}
-
-		std::complex<double>* vret = reinterpret_cast<std::complex<double>*>(lua_newuserdata(L, sizeof(std::complex<double>)));
-		vret->real(0);
-		vret->imag(0);
-		luaL_getmetatable(L, TEXTMODULE_COMPLEX);
-		lua_setmetatable(L, -2);
-		*vret = (*val1) / (*val2);
-
+		lua_pushcomplex(L, (*val1) / (*val2));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -315,38 +186,10 @@ int complex____div(lua_State* L) {
 
 int complex____pow(lua_State* L) {
 	try {
-		std::complex<double>* val1 = new std::complex<double>;
-		std::complex<double>* val2 = new std::complex<double>;
+		std::complex<double>* val1 = tm_tocomplex_s(L, 1);
+		std::complex<double>* val2 = tm_tocomplex_s(L, 2);
 
-		int tp = lua_type(L, 1);
-		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 1, get_cargmsg().c_str());
-
-		if (tp == LUA_TUSERDATA) {
-			val1 = complex_check(L, 1);
-		}
-		else if (tp == LUA_TNUMBER) {
-			val1->real(lua_tonumber(L, 1));
-			val1->imag(0);
-		}
-
-		tp = lua_type(L, 2);
-		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 2, get_cargmsg().c_str());
-
-		if (tp == LUA_TUSERDATA) {
-			val2 = complex_check(L, 2);
-		}
-		else if (tp == LUA_TNUMBER) {
-			val2->real(lua_tonumber(L, 2));
-			val2->imag(0);
-		}
-
-		std::complex<double>* vret = reinterpret_cast<std::complex<double>*>(lua_newuserdata(L, sizeof(std::complex<double>)));
-		vret->real(0);
-		vret->imag(0);
-		luaL_getmetatable(L, TEXTMODULE_COMPLEX);
-		lua_setmetatable(L, -2);
-		*vret = std::pow(*val1, *val2);
-
+		lua_pushcomplex(L, std::pow(*val1, *val2));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -357,26 +200,9 @@ int complex____pow(lua_State* L) {
 
 int complex____unm(lua_State* L) {
 	try {
-		std::complex<double>* val1 = new std::complex<double>;
+		std::complex<double>* val1 = tm_tocomplex_s(L, 1);
 
-		int tp = lua_type(L, 1);
-		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 1, get_cargmsg().c_str());
-
-		if (tp == LUA_TUSERDATA) {
-			val1 = complex_check(L, 1);
-		}
-		else if (tp == LUA_TNUMBER) {
-			val1->real(lua_tonumber(L, 1));
-			val1->imag(0);
-		}
-
-		std::complex<double>* vret = reinterpret_cast<std::complex<double>*>(lua_newuserdata(L, sizeof(std::complex<double>)));
-		vret->real(0);
-		vret->imag(0);
-		luaL_getmetatable(L, TEXTMODULE_COMPLEX);
-		lua_setmetatable(L, -2);
-		*vret = - *val1;
-
+		lua_pushcomplex(L, -*val1);
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -387,32 +213,10 @@ int complex____unm(lua_State* L) {
 
 int complex____lt(lua_State* L) {
 	try {
-		std::complex<double>* val1 = new std::complex<double>;
-		std::complex<double>* val2 = new std::complex<double>;
+		std::complex<double>* val1 = tm_tocomplex_s(L, 1);
+		std::complex<double>* val2 = tm_tocomplex_s(L, 2);
 
-		int tp = lua_type(L, 1);
-		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 1, get_cargmsg().c_str());
-
-		if (lua_type(L, 1) == LUA_TUSERDATA) {
-			val1 = complex_check(L, 1);
-		}
-		else if (lua_type(L, 1) == LUA_TNUMBER) {
-			val1->real(lua_tonumber(L, 1));
-			val1->imag(0);
-		}
-
-		tp = lua_type(L, 2);
-		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 2, get_cargmsg().c_str());
-
-		if (tp == LUA_TUSERDATA) {
-			val2 = complex_check(L, 2);
-		}
-		else if (tp == LUA_TNUMBER) {
-			val2->real(lua_tonumber(L, 2));
-			val2->imag(0);
-		}
-
-		lua_pushboolean(L, std::norm(*val1) < std::norm(*val2));
+		lua_pushboolean(L, geometry_norm(*val1) < geometry_norm(*val2));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -423,32 +227,10 @@ int complex____lt(lua_State* L) {
 
 int complex____le(lua_State* L) {
 	try {
-		std::complex<double>* val1 = new std::complex<double>;
-		std::complex<double>* val2 = new std::complex<double>;
+		std::complex<double>* val1 = tm_tocomplex_s(L, 1);
+		std::complex<double>* val2 = tm_tocomplex_s(L, 2);
 
-		int tp = lua_type(L, 1);
-		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 1, get_cargmsg().c_str());
-
-		if (tp == LUA_TUSERDATA) {
-			val1 = complex_check(L, 1);
-		}
-		else if (tp == LUA_TNUMBER) {
-			val1->real(lua_tonumber(L, 1));
-			val1->imag(0);
-		}
-
-		tp = lua_type(L, 2);
-		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 2, get_cargmsg().c_str());
-
-		if (tp == LUA_TUSERDATA) {
-			val2 = complex_check(L, 2);
-		}
-		else if (tp == LUA_TNUMBER) {
-			val2->real(lua_tonumber(L, 2));
-			val2->imag(0);
-		}
-
-		lua_pushboolean(L, std::norm(*val1) <= std::norm(*val2));
+		lua_pushboolean(L, geometry_norm(*val1) <= geometry_norm(*val2));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -531,11 +313,7 @@ int complex____newindex(lua_State* L) {
 			}
 		}
 
-		std::complex<double>* vret = reinterpret_cast<std::complex<double>*>(lua_newuserdata(L, sizeof(std::complex<double>)));
-		luaL_getmetatable(L, TEXTMODULE_COMPLEX);
-		lua_setmetatable(L, -2);
-		*vret = *val1;
-
+		lua_pushcomplex(L, *val1);
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -546,20 +324,9 @@ int complex____newindex(lua_State* L) {
 
 int complex__abs(lua_State* L) {
 	try {
-		std::complex<double>* val1 = new std::complex<double>;
+		std::complex<double>* val1 = tm_tocomplex_s(L, 1);
 
-		int tp = lua_type(L, 1);
-		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 1, get_cargmsg().c_str());
-
-		if (tp == LUA_TUSERDATA) {
-			val1 = complex_check(L, 1);
-		}
-		else if (tp == LUA_TNUMBER) {
-			val1->real(lua_tonumber(L, 1));
-			val1->imag(0);
-		}
-
-		lua_pushnumber(L, std::abs(*val1));
+		lua_pushnumber(L, geometry_abs(*val1));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -570,18 +337,7 @@ int complex__abs(lua_State* L) {
 
 int complex__arg(lua_State* L) {
 	try {
-		std::complex<double>* val1 = new std::complex<double>;
-
-		int tp = lua_type(L, 1);
-		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 1, get_cargmsg().c_str());
-
-		if (tp == LUA_TUSERDATA) {
-			val1 = complex_check(L, 1);
-		}
-		else if (tp == LUA_TNUMBER) {
-			val1->real(lua_tonumber(L, 1));
-			val1->imag(0);
-		}
+		std::complex<double>* val1 = tm_tocomplex_s(L, 1);
 
 		lua_pushnumber(L, std::arg(*val1));
 		return 1;
@@ -594,20 +350,9 @@ int complex__arg(lua_State* L) {
 
 int complex__norm(lua_State* L) {
 	try {
-		std::complex<double>* val1 = new std::complex<double>;
+		std::complex<double>* val1 = tm_tocomplex_s(L, 1);
 
-		int tp = lua_type(L, 1);
-		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 1, get_cargmsg().c_str());
-
-		if (tp == LUA_TUSERDATA) {
-			val1 = complex_check(L, 1);
-		}
-		else if (tp == LUA_TNUMBER) {
-			val1->real(lua_tonumber(L, 1));
-			val1->imag(0);
-		}
-
-		lua_pushnumber(L, std::norm(*val1));
+		lua_pushnumber(L, geometry_norm(*val1));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -618,25 +363,9 @@ int complex__norm(lua_State* L) {
 
 int complex__conj(lua_State* L) {
 	try {
-		std::complex<double>* val1 = new std::complex<double>;
+		std::complex<double>* val1 = tm_tocomplex_s(L, 1);
 
-		int tp = lua_type(L, 1);
-		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 1, get_cargmsg().c_str());
-
-		if (tp == LUA_TUSERDATA) {
-			val1 = complex_check(L, 1);
-		}
-		else if (tp == LUA_TNUMBER) {
-			val1->real(lua_tonumber(L, 1));
-			val1->imag(0);
-		}
-
-		std::complex<double>* vret = reinterpret_cast<std::complex<double>*>(lua_newuserdata(L, sizeof(std::complex<double>)));
-		vret->real(0);
-		vret->imag(0);
-		luaL_getmetatable(L, TEXTMODULE_COMPLEX);
-		lua_setmetatable(L, -2);
-		*vret = std::conj(*val1);
+		lua_pushcomplex(L, std::conj(*val1));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -647,25 +376,9 @@ int complex__conj(lua_State* L) {
 
 int complex__proj(lua_State* L) {
 	try {
-		std::complex<double>* val1 = new std::complex<double>;
+		std::complex<double>* val1 = tm_tocomplex_s(L, 1);
 
-		int tp = lua_type(L, 1);
-		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 1, get_cargmsg().c_str());
-
-		if (tp == LUA_TUSERDATA) {
-			val1 = complex_check(L, 1);
-		}
-		else if (tp == LUA_TNUMBER) {
-			val1->real(lua_tonumber(L, 1));
-			val1->imag(0);
-		}
-
-		std::complex<double>* vret = reinterpret_cast<std::complex<double>*>(lua_newuserdata(L, sizeof(std::complex<double>)));
-		vret->real(0);
-		vret->imag(0);
-		luaL_getmetatable(L, TEXTMODULE_COMPLEX);
-		lua_setmetatable(L, -2);
-		*vret = std::proj(*val1);
+		lua_pushcomplex(L, std::proj(*val1));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -676,24 +389,10 @@ int complex__proj(lua_State* L) {
 
 int complex__polar(lua_State* L) {
 	try {
-		std::complex<double>* val1 = new std::complex<double>;
+		std::complex<double>* val1 = tm_tocomplex_s(L, 1);
 
-		int tp = lua_type(L, 1);
-		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 1, get_cargmsg().c_str());
-
-		if (tp == LUA_TUSERDATA) {
-			val1 = complex_check(L, 1);
-		}
-		else if (tp == LUA_TNUMBER) {
-			val1->real(lua_tonumber(L, 1));
-			val1->imag(0);
-		}
-
-		double d = std::abs(*val1);
-		double r = std::atan(val1->imag() / val1->real());
-
-		lua_pushnumber(L, d);
-		lua_pushnumber(L, r);
+		lua_pushnumber(L, geometry_abs(*val1));
+		lua_pushnumber(L, std::atan(val1->imag() / val1->real()));
 		return 2;
 	}
 	catch (std::exception& e) {
@@ -704,26 +403,9 @@ int complex__polar(lua_State* L) {
 
 int complex__acos(lua_State* L) {
 	try {
-		std::complex<double>* val1 = new std::complex<double>;
+		std::complex<double>* val1 = tm_tocomplex_s(L, 1);
 
-		int tp = lua_type(L, 1);
-		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 1, get_cargmsg().c_str());
-
-		if (tp == LUA_TUSERDATA) {
-			val1 = complex_check(L, 1);
-		}
-		else if (tp == LUA_TNUMBER) {
-			val1->real(lua_tonumber(L, 1));
-			val1->imag(0);
-		}
-
-		std::complex<double>* vret = reinterpret_cast<std::complex<double>*>(lua_newuserdata(L, sizeof(std::complex<double>)));
-		vret->real(0);
-		vret->imag(0);
-		luaL_getmetatable(L, TEXTMODULE_COMPLEX);
-		lua_setmetatable(L, -2);
-		*vret = std::acos(*val1);
-
+		lua_pushcomplex(L, std::acos(*val1));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -734,26 +416,9 @@ int complex__acos(lua_State* L) {
 
 int complex__asin(lua_State* L) {
 	try {
-		std::complex<double>* val1 = new std::complex<double>;
+		std::complex<double>* val1 = tm_tocomplex_s(L, 1);
 
-		int tp = lua_type(L, 1);
-		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 1, get_cargmsg().c_str());
-
-		if (tp == LUA_TUSERDATA) {
-			val1 = complex_check(L, 1);
-		}
-		else if (tp == LUA_TNUMBER) {
-			val1->real(lua_tonumber(L, 1));
-			val1->imag(0);
-		}
-
-		std::complex<double>* vret = reinterpret_cast<std::complex<double>*>(lua_newuserdata(L, sizeof(std::complex<double>)));
-		vret->real(0);
-		vret->imag(0);
-		luaL_getmetatable(L, TEXTMODULE_COMPLEX);
-		lua_setmetatable(L, -2);
-		*vret = std::asin(*val1);
-
+		lua_pushcomplex(L, std::asin(*val1));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -764,26 +429,9 @@ int complex__asin(lua_State* L) {
 
 int complex__atan(lua_State* L) {
 	try {
-		std::complex<double>* val1 = new std::complex<double>;
+		std::complex<double>* val1 = tm_tocomplex_s(L, 1);
 
-		int tp = lua_type(L, 1);
-		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 1, get_cargmsg().c_str());
-
-		if (tp == LUA_TUSERDATA) {
-			val1 = complex_check(L, 1);
-		}
-		else if (tp == LUA_TNUMBER) {
-			val1->real(lua_tonumber(L, 1));
-			val1->imag(0);
-		}
-
-		std::complex<double>* vret = reinterpret_cast<std::complex<double>*>(lua_newuserdata(L, sizeof(std::complex<double>)));
-		vret->real(0);
-		vret->imag(0);
-		luaL_getmetatable(L, TEXTMODULE_COMPLEX);
-		lua_setmetatable(L, -2);
-		*vret = std::atan(*val1);
-
+		lua_pushcomplex(L, std::atan(*val1));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -794,26 +442,9 @@ int complex__atan(lua_State* L) {
 
 int complex__acosh(lua_State* L) {
 	try {
-		std::complex<double>* val1 = new std::complex<double>;
+		std::complex<double>* val1 = tm_tocomplex_s(L, 1);
 
-		int tp = lua_type(L, 1);
-		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 1, get_cargmsg().c_str());
-
-		if (tp == LUA_TUSERDATA) {
-			val1 = complex_check(L, 1);
-		}
-		else if (tp == LUA_TNUMBER) {
-			val1->real(lua_tonumber(L, 1));
-			val1->imag(0);
-		}
-
-		std::complex<double>* vret = reinterpret_cast<std::complex<double>*>(lua_newuserdata(L, sizeof(std::complex<double>)));
-		vret->real(0);
-		vret->imag(0);
-		luaL_getmetatable(L, TEXTMODULE_COMPLEX);
-		lua_setmetatable(L, -2);
-		*vret = std::acosh(*val1);
-
+		lua_pushcomplex(L, std::acosh(*val1));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -824,26 +455,9 @@ int complex__acosh(lua_State* L) {
 
 int complex__asinh(lua_State* L) {
 	try {
-		std::complex<double>* val1 = new std::complex<double>;
+		std::complex<double>* val1 = tm_tocomplex_s(L, 1);
 
-		int tp = lua_type(L, 1);
-		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 1, get_cargmsg().c_str());
-
-		if (tp == LUA_TUSERDATA) {
-			val1 = complex_check(L, 1);
-		}
-		else if (tp == LUA_TNUMBER) {
-			val1->real(lua_tonumber(L, 1));
-			val1->imag(0);
-		}
-
-		std::complex<double>* vret = reinterpret_cast<std::complex<double>*>(lua_newuserdata(L, sizeof(std::complex<double>)));
-		vret->real(0);
-		vret->imag(0);
-		luaL_getmetatable(L, TEXTMODULE_COMPLEX);
-		lua_setmetatable(L, -2);
-		*vret = std::asinh(*val1);
-
+		lua_pushcomplex(L, std::asinh(*val1));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -854,26 +468,9 @@ int complex__asinh(lua_State* L) {
 
 int complex__atanh(lua_State* L) {
 	try {
-		std::complex<double>* val1 = new std::complex<double>;
+		std::complex<double>* val1 = tm_tocomplex_s(L, 1);
 
-		int tp = lua_type(L, 1);
-		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 1, get_cargmsg().c_str());
-
-		if (tp == LUA_TUSERDATA) {
-			val1 = complex_check(L, 1);
-		}
-		else if (tp == LUA_TNUMBER) {
-			val1->real(lua_tonumber(L, 1));
-			val1->imag(0);
-		}
-
-		std::complex<double>* vret = reinterpret_cast<std::complex<double>*>(lua_newuserdata(L, sizeof(std::complex<double>)));
-		vret->real(0);
-		vret->imag(0);
-		luaL_getmetatable(L, TEXTMODULE_COMPLEX);
-		lua_setmetatable(L, -2);
-		*vret = std::atanh(*val1);
-
+		lua_pushcomplex(L, std::atanh(*val1));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -884,26 +481,9 @@ int complex__atanh(lua_State* L) {
 
 int complex__cos(lua_State* L) {
 	try {
-		std::complex<double>* val1 = new std::complex<double>;
+		std::complex<double>* val1 = tm_tocomplex_s(L, 1);
 
-		int tp = lua_type(L, 1);
-		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 1, get_cargmsg().c_str());
-
-		if (tp == LUA_TUSERDATA) {
-			val1 = complex_check(L, 1);
-		}
-		else if (tp == LUA_TNUMBER) {
-			val1->real(lua_tonumber(L, 1));
-			val1->imag(0);
-		}
-
-		std::complex<double>* vret = reinterpret_cast<std::complex<double>*>(lua_newuserdata(L, sizeof(std::complex<double>)));
-		vret->real(0);
-		vret->imag(0);
-		luaL_getmetatable(L, TEXTMODULE_COMPLEX);
-		lua_setmetatable(L, -2);
-		*vret = std::cos(*val1);
-
+		lua_pushcomplex(L, std::cos(*val1));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -914,26 +494,9 @@ int complex__cos(lua_State* L) {
 
 int complex__sin(lua_State* L) {
 	try {
-		std::complex<double>* val1 = new std::complex<double>;
+		std::complex<double>* val1 = tm_tocomplex_s(L, 1);
 
-		int tp = lua_type(L, 1);
-		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 1, get_cargmsg().c_str());
-
-		if (tp == LUA_TUSERDATA) {
-			val1 = complex_check(L, 1);
-		}
-		else if (tp == LUA_TNUMBER) {
-			val1->real(lua_tonumber(L, 1));
-			val1->imag(0);
-		}
-
-		std::complex<double>* vret = reinterpret_cast<std::complex<double>*>(lua_newuserdata(L, sizeof(std::complex<double>)));
-		vret->real(0);
-		vret->imag(0);
-		luaL_getmetatable(L, TEXTMODULE_COMPLEX);
-		lua_setmetatable(L, -2);
-		*vret = std::sin(*val1);
-
+		lua_pushcomplex(L, std::sin(*val1));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -944,26 +507,9 @@ int complex__sin(lua_State* L) {
 
 int complex__tan(lua_State* L) {
 	try {
-		std::complex<double>* val1 = new std::complex<double>;
+		std::complex<double>* val1 = tm_tocomplex_s(L, 1);
 
-		int tp = lua_type(L, 1);
-		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 1, get_cargmsg().c_str());
-
-		if (tp == LUA_TUSERDATA) {
-			val1 = complex_check(L, 1);
-		}
-		else if (tp == LUA_TNUMBER) {
-			val1->real(lua_tonumber(L, 1));
-			val1->imag(0);
-		}
-
-		std::complex<double>* vret = reinterpret_cast<std::complex<double>*>(lua_newuserdata(L, sizeof(std::complex<double>)));
-		vret->real(0);
-		vret->imag(0);
-		luaL_getmetatable(L, TEXTMODULE_COMPLEX);
-		lua_setmetatable(L, -2);
-		*vret = std::tan(*val1);
-
+		lua_pushcomplex(L, std::tan(*val1));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -974,26 +520,9 @@ int complex__tan(lua_State* L) {
 
 int complex__cosh(lua_State* L) {
 	try {
-		std::complex<double>* val1 = new std::complex<double>;
+		std::complex<double>* val1 = tm_tocomplex_s(L, 1);
 
-		int tp = lua_type(L, 1);
-		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 1, get_cargmsg().c_str());
-
-		if (tp == LUA_TUSERDATA) {
-			val1 = complex_check(L, 1);
-		}
-		else if (tp == LUA_TNUMBER) {
-			val1->real(lua_tonumber(L, 1));
-			val1->imag(0);
-		}
-
-		std::complex<double>* vret = reinterpret_cast<std::complex<double>*>(lua_newuserdata(L, sizeof(std::complex<double>)));
-		vret->real(0);
-		vret->imag(0);
-		luaL_getmetatable(L, TEXTMODULE_COMPLEX);
-		lua_setmetatable(L, -2);
-		*vret = std::cosh(*val1);
-
+		lua_pushcomplex(L, std::cosh(*val1));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -1004,26 +533,9 @@ int complex__cosh(lua_State* L) {
 
 int complex__sinh(lua_State* L) {
 	try {
-		std::complex<double>* val1 = new std::complex<double>;
+		std::complex<double>* val1 = tm_tocomplex_s(L, 1);
 
-		int tp = lua_type(L, 1);
-		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 1, get_cargmsg().c_str());
-
-		if (tp == LUA_TUSERDATA) {
-			val1 = complex_check(L, 1);
-		}
-		else if (tp == LUA_TNUMBER) {
-			val1->real(lua_tonumber(L, 1));
-			val1->imag(0);
-		}
-
-		std::complex<double>* vret = reinterpret_cast<std::complex<double>*>(lua_newuserdata(L, sizeof(std::complex<double>)));
-		vret->real(0);
-		vret->imag(0);
-		luaL_getmetatable(L, TEXTMODULE_COMPLEX);
-		lua_setmetatable(L, -2);
-		*vret = std::sinh(*val1);
-
+		lua_pushcomplex(L, std::sinh(*val1));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -1034,26 +546,9 @@ int complex__sinh(lua_State* L) {
 
 int complex__tanh(lua_State* L) {
 	try {
-		std::complex<double>* val1 = new std::complex<double>;
+		std::complex<double>* val1 = tm_tocomplex_s(L, 1);
 
-		int tp = lua_type(L, 1);
-		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 1, get_cargmsg().c_str());
-
-		if (tp == LUA_TUSERDATA) {
-			val1 = complex_check(L, 1);
-		}
-		else if (tp == LUA_TNUMBER) {
-			val1->real(lua_tonumber(L, 1));
-			val1->imag(0);
-		}
-
-		std::complex<double>* vret = reinterpret_cast<std::complex<double>*>(lua_newuserdata(L, sizeof(std::complex<double>)));
-		vret->real(0);
-		vret->imag(0);
-		luaL_getmetatable(L, TEXTMODULE_COMPLEX);
-		lua_setmetatable(L, -2);
-		*vret = std::tanh(*val1);
-
+		lua_pushcomplex(L, std::tanh(*val1));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -1064,26 +559,9 @@ int complex__tanh(lua_State* L) {
 
 int complex__exp(lua_State* L) {
 	try {
-		std::complex<double>* val1 = new std::complex<double>;
+		std::complex<double>* val1 = tm_tocomplex_s(L, 1);
 
-		int tp = lua_type(L, 1);
-		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 1, get_cargmsg().c_str());
-
-		if (tp == LUA_TUSERDATA) {
-			val1 = complex_check(L, 1);
-		}
-		else if (tp == LUA_TNUMBER) {
-			val1->real(lua_tonumber(L, 1));
-			val1->imag(0);
-		}
-
-		std::complex<double>* vret = reinterpret_cast<std::complex<double>*>(lua_newuserdata(L, sizeof(std::complex<double>)));
-		vret->real(0);
-		vret->imag(0);
-		luaL_getmetatable(L, TEXTMODULE_COMPLEX);
-		lua_setmetatable(L, -2);
-		*vret = std::exp(*val1);
-
+		lua_pushcomplex(L, std::exp(*val1));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -1094,26 +572,9 @@ int complex__exp(lua_State* L) {
 
 int complex__log(lua_State* L) {
 	try {
-		std::complex<double>* val1 = new std::complex<double>;
+		std::complex<double>* val1 = tm_tocomplex_s(L, 1);
 
-		int tp = lua_type(L, 1);
-		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 1, get_cargmsg().c_str());
-
-		if (tp == LUA_TUSERDATA) {
-			val1 = complex_check(L, 1);
-		}
-		else if (tp == LUA_TNUMBER) {
-			val1->real(lua_tonumber(L, 1));
-			val1->imag(0);
-		}
-
-		std::complex<double>* vret = reinterpret_cast<std::complex<double>*>(lua_newuserdata(L, sizeof(std::complex<double>)));
-		vret->real(0);
-		vret->imag(0);
-		luaL_getmetatable(L, TEXTMODULE_COMPLEX);
-		lua_setmetatable(L, -2);
-		*vret = std::log(*val1);
-
+		lua_pushcomplex(L, std::log(*val1));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -1124,26 +585,9 @@ int complex__log(lua_State* L) {
 
 int complex__log10(lua_State* L) {
 	try {
-		std::complex<double>* val1 = new std::complex<double>;
+		std::complex<double>* val1 = tm_tocomplex_s(L, 1);
 
-		int tp = lua_type(L, 1);
-		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 1, get_cargmsg().c_str());
-
-		if (tp == LUA_TUSERDATA) {
-			val1 = complex_check(L, 1);
-		}
-		else if (tp == LUA_TNUMBER) {
-			val1->real(lua_tonumber(L, 1));
-			val1->imag(0);
-		}
-
-		std::complex<double>* vret = reinterpret_cast<std::complex<double>*>(lua_newuserdata(L, sizeof(std::complex<double>)));
-		vret->real(0);
-		vret->imag(0);
-		luaL_getmetatable(L, TEXTMODULE_COMPLEX);
-		lua_setmetatable(L, -2);
-		*vret = std::log10(*val1);
-
+		lua_pushcomplex(L, std::log10(*val1));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -1154,26 +598,9 @@ int complex__log10(lua_State* L) {
 
 int complex__sqrt(lua_State* L) {
 	try {
-		std::complex<double>* val1 = new std::complex<double>;
+		std::complex<double>* val1 = tm_tocomplex_s(L, 1);
 
-		int tp = lua_type(L, 1);
-		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 1, get_cargmsg().c_str());
-
-		if (tp == LUA_TUSERDATA) {
-			val1 = complex_check(L, 1);
-		}
-		else if (tp == LUA_TNUMBER) {
-			val1->real(lua_tonumber(L, 1));
-			val1->imag(0);
-		}
-
-		std::complex<double>* vret = reinterpret_cast<std::complex<double>*>(lua_newuserdata(L, sizeof(std::complex<double>)));
-		vret->real(0);
-		vret->imag(0);
-		luaL_getmetatable(L, TEXTMODULE_COMPLEX);
-		lua_setmetatable(L, -2);
-		*vret = std::sqrt(*val1);
-
+		lua_pushcomplex(L, std::sqrt(*val1));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -1184,27 +611,24 @@ int complex__sqrt(lua_State* L) {
 
 int complex__table(lua_State* L) {
 	try {
-		std::complex<double>* val1 = new std::complex<double>;
-
-		int tp = lua_type(L, 1);
-		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 1, get_cargmsg().c_str());
-
-		if (tp == LUA_TUSERDATA) {
-			val1 = complex_check(L, 1);
-		}
-		else if (tp == LUA_TNUMBER) {
-			val1->real(lua_tonumber(L, 1));
-			val1->imag(0);
-		}
+		std::complex<double>* val1 = tm_tocomplex_s(L, 1);
 
 		lua_newtable(L);
-		lua_pushinteger(L, 1);
-		lua_pushnumber(L, val1->real());
-		lua_settable(L, -3);
+		lua_settablevalue(L, 1, val1->real());
+		lua_settablevalue(L, 2, val1->real());
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
 
-		lua_pushinteger(L, 2);
-		lua_pushnumber(L, val1->imag());
-		lua_settable(L, -3);
+int complex_vector2(lua_State* L) {
+	try {
+		std::complex<double>* val1 = tm_tocomplex_s(L, 1);
+
+		lua_pushvector2(L, val1->real(), val1->imag());
 		return 1;
 	}
 	catch (std::exception& e) {

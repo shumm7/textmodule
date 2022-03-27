@@ -7,7 +7,7 @@ int base_exception(lua_State* L);
 int base_versioncheck(lua_State* L);
 void luaReg_base(lua_State* L, bool reg);
 
-static luaL_Reg TEXTMODULE_MAIN_REG[] = {
+static luaL_Reg TEXTMODULE_BASE_REG[] = {
 	{"getinfo", base_getinfo},
 	{"debug_print", base_debug_print},
 	{"exception", base_exception},

@@ -131,6 +131,8 @@ int base_versioncheck(lua_State* L) {
 		case VERSION_CHECK_OUTDATED:
 			lua_pushboolean(L, false);
 		case VERSION_CHECK_ERROR:
+			lua_pushnil(L);
+			break;
 		default:
 			lua_pushnil(L);
 			break;
@@ -152,7 +154,7 @@ void luaReg_base(lua_State* L, bool reg) {
 
 	luaL_register(L, MODULE_NAME, none);
 	if (reg) {
-		luaL_register(L, NULL, TEXTMODULE_MAIN_REG);
+		luaL_register(L, NULL, TEXTMODULE_BASE_REG);
 		luaL_register(L, NULL, TEXTMODULE_COLOR_MAIN_REG);
 	}
 }

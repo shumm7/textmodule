@@ -134,8 +134,7 @@ int rgb_new(lua_State* L) {
 
 int rgb_comp(lua_State* L) {
 	try {
-		RGB* val = new RGB;
-		get_tvalue(L, 1, val);
+		RGB* val = rgb_check(L, 1);
 
 		int max = std::max({ val->r, val->g, val->b });
 		int min = std::min({ val->r, val->g, val->b });
@@ -158,8 +157,7 @@ int rgb_comp(lua_State* L) {
 
 int rgb_opposite(lua_State* L) {
 	try {
-		RGB* val = new RGB;
-		get_tvalue(L, 1, val);
+		RGB* val = rgb_check(L, 1);
 
 		RGB* ret = reinterpret_cast<RGB*>(lua_newuserdata(L, sizeof(RGB)));
 		luaL_getmetatable(L, TEXTMODULE_RGB);

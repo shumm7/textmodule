@@ -1,5 +1,6 @@
 #pragma once
 #include <lua.hpp>
+
 #define TEXTMODULE_COMPLEX "std::complex<double>*"
 #define complex_check(L, n) (reinterpret_cast<std::complex<double>*>(luaL_checkudata(L, n, TEXTMODULE_COMPLEX)))
 
@@ -48,6 +49,7 @@ int complex__log10(lua_State* L);
 int complex__sqrt(lua_State* L);
 
 int complex__table(lua_State* L);
+int complex_vector2(lua_State* L);
 
 void luaReg_complex(lua_State* L, const char* name, bool reg);
 void luaGlobal_complex(lua_State* L, const char* name, bool reg);
@@ -87,6 +89,7 @@ static luaL_Reg TEXTMODULE_COMPLEX_REG[] = {
 	{"sqrt", complex__sqrt},
 
 	{"table", complex__table},
+	{"vector2", complex_vector2},
 
 	{ nullptr, nullptr }
 };
@@ -134,5 +137,6 @@ static luaL_Reg TEXTMODULE_COMPLEX_META_REG[] = {
 	{"sqrt", complex__sqrt},
 
 	{"table", complex__table},
+	{"vector2", complex_vector2},
 	{nullptr, nullptr}
 };

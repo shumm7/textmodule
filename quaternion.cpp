@@ -7,25 +7,7 @@
 #include "textmodule_lua.h"
 #include "textmodule_string.h"
 #include "textmodule_exception.h"
-#include "quaternion.h"
-#include "vector3.h"
-
-double q_norm(Quat* q) {
-	return std::pow(q->w(), 2) + std::pow(q->x(), 2) + std::pow(q->y(), 2) + std::pow(q->z(), 2);
-}
-
-double q_abs(Quat* q) {
-	return std::sqrt(q_norm(q));
-}
-
-std::string get_qargmsg() {
-	std::string m = "number/";
-	m.append(TEXTMODULE_QUATERNION);
-	m.append(" expected");
-
-	return m;
-}
-
+#include "textmodule_geometry.h"
 
 int quaternion_new(lua_State* L) {
 	try {
@@ -34,15 +16,7 @@ int quaternion_new(lua_State* L) {
 		double y = tm_tonumber_s(L, 3, 0);
 		double z = tm_tonumber_s(L, 4, 0);
 
-		Quat* ret = reinterpret_cast<Quat*>(lua_newuserdata(L, sizeof(Quat)));
-		luaL_getmetatable(L, TEXTMODULE_QUATERNION);
-		lua_setmetatable(L, -2);
-
-		ret->w() = w;
-		ret->x() = x;
-		ret->y() = y;
-		ret->z() = z;
-
+		Quat* ret = lua_pushquaternion(L, w, x, y, z);
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -57,12 +31,8 @@ int quaternion_euler_new(lua_State* L) {
 		double x = tm_tonumber_s(L, 2, 0);
 		double y = tm_tonumber_s(L, 3, 0);
 
-		Quat* ret = reinterpret_cast<Quat*>(lua_newuserdata(L, sizeof(Quat)));
-		luaL_getmetatable(L, TEXTMODULE_QUATERNION);
-		lua_setmetatable(L, -2);
-
+		Quat* ret = lua_pushquaternion(L);
 		*ret = AngleAxis(w, Vector3::UnitX()) * AngleAxis(x, Vector3::UnitY()) * AngleAxis(y, Vector3::UnitZ());
-
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -73,13 +43,10 @@ int quaternion_euler_new(lua_State* L) {
 
 int quaternion_angleaxis(lua_State* L) {
 	try {
-		double r = tm_tonumber_s(L, 1, 0);
+		double r = tm_tonumber(L, 1);
 		Vector3* axis = vector3_check(L, 2);
 
-		Quat* ret = reinterpret_cast<Quat*>(lua_newuserdata(L, sizeof(Quat)));
-		luaL_getmetatable(L, TEXTMODULE_QUATERNION);
-		lua_setmetatable(L, -2);
-
+		Quat* ret = lua_pushquaternion(L);
 		*ret = AngleAxis(r, axis->normalized());
 
 		return 1;
@@ -95,12 +62,7 @@ int quaternion_twovectors(lua_State* L) {
 		Vector3* v1 = vector3_check(L, 1);
 		Vector3* v2 = vector3_check(L, 2);
 
-		Quat* ret = reinterpret_cast<Quat*>(lua_newuserdata(L, sizeof(Quat)));
-		luaL_getmetatable(L, TEXTMODULE_QUATERNION);
-		lua_setmetatable(L, -2);
-
-		*ret = Quat::FromTwoVectors(*v1, *v2);
-
+		lua_pushquaternion(L, Quat::FromTwoVectors(*v1, *v2));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -114,24 +76,18 @@ int quaternion_lookrot(lua_State* L) {
 		Vector3* v1;
 		Vector3* v2;
 
-		if (lua_type(L, 1) == LUA_TNONE) {
+		if (lua_type(L, 1) == LUA_TNONE)
 			v1 = new Vector3(0, 0, 1);
-		}
-		else {
+		else
 			v1 = vector3_check(L, 1);
-		}
 
-		if (lua_type(L, 2) == LUA_TNONE) {
+		if (lua_type(L, 2) == LUA_TNONE)
 			v2 = new Vector3(0, 1, 0);
-		}
-		else {
+		else
 			v2 = vector3_check(L, 2);
-		}
 
 
-		Quat* ret = reinterpret_cast<Quat*>(lua_newuserdata(L, sizeof(Quat)));
-		luaL_getmetatable(L, TEXTMODULE_QUATERNION);
-		lua_setmetatable(L, -2);
+		Quat* ret = lua_pushquaternion(L);
 
 		if (v1->norm() == 0) {
 			*ret = ret->Identity();
@@ -159,12 +115,12 @@ int quaternion_lookrot(lua_State* L) {
 }
 
 int quaternion_identity(lua_State* L) {
-	Quat* ret = reinterpret_cast<Quat*>(lua_newuserdata(L, sizeof(Quat)));
-	luaL_getmetatable(L, TEXTMODULE_QUATERNION);
-	lua_setmetatable(L, -2);
+	lua_pushquaternion(L, Quat::Identity());
+	return 1;
+}
 
-	*ret = ret->Identity();
-
+int quaternion_zero(lua_State* L) {
+	lua_pushquaternion(L);
 	return 1;
 }
 
@@ -298,41 +254,15 @@ int quaternion____gc(lua_State* L) {
 
 int quaternion____add(lua_State* L) {
 	try {
-		Quat* val1 = new Quat(0, 0, 0, 0);
-		Quat* val2 = new Quat(0, 0, 0, 0);
+		Quat* val1 = tm_toquaternion_s(L, 1);
+		Quat* val2 = tm_toquaternion_s(L, 2);
 
-		int tp = lua_type(L, 1);
-		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 1, get_qargmsg().c_str());
-
-		if (tp == LUA_TUSERDATA) {
-			val1 = quaternion_check(L, 1);
-		}
-		else if (tp == LUA_TNUMBER) {
-			val1->w() = lua_tonumber(L, 1);
-		}
-
-		tp = lua_type(L, 2);
-		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 2, get_qargmsg().c_str());
-
-		if (tp == LUA_TUSERDATA) {
-			val2 = quaternion_check(L, 2);
-		}
-		else if (tp == LUA_TNUMBER) {
-			val2->w() = lua_tonumber(L, 2);
-		}
-
-		Quat* vret = reinterpret_cast<Quat*>(lua_newuserdata(L, sizeof(Quat)));
-		vret->w() = 0;
-		vret->x() = 0;
-		vret->y() = 0;
-		vret->z() = 0;
-		luaL_getmetatable(L, TEXTMODULE_QUATERNION);
-		lua_setmetatable(L, -2);
-		vret->w() = val1->w() + val2->w();
-		vret->x() = val1->x() + val2->x();
-		vret->y() = val1->y() + val2->y();
-		vret->z() = val1->z() + val2->z();
-
+		lua_pushquaternion(L,
+			val1->w() + val2->w(),
+			val1->x() + val2->x(),
+			val1->y() + val2->y(),
+			val1->z() + val2->z()
+		);
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -343,41 +273,15 @@ int quaternion____add(lua_State* L) {
 
 int quaternion____sub(lua_State* L) {
 	try {
-		Quat* val1 = new Quat(0, 0, 0, 0);
-		Quat* val2 = new Quat(0, 0, 0, 0);
+		Quat* val1 = tm_toquaternion_s(L, 1);
+		Quat* val2 = tm_toquaternion_s(L, 2);
 
-		int tp = lua_type(L, 1);
-		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 1, get_qargmsg().c_str());
-
-		if (tp == LUA_TUSERDATA) {
-			val1 = quaternion_check(L, 1);
-		}
-		else if (tp == LUA_TNUMBER) {
-			val1->w() = lua_tonumber(L, 1);
-		}
-
-		tp = lua_type(L, 2);
-		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 2, get_qargmsg().c_str());
-
-		if (tp == LUA_TUSERDATA) {
-			val2 = quaternion_check(L, 2);
-		}
-		else if (tp == LUA_TNUMBER) {
-			val2->w() = lua_tonumber(L, 2);
-		}
-
-		Quat* vret = reinterpret_cast<Quat*>(lua_newuserdata(L, sizeof(Quat)));
-		vret->w() = 0;
-		vret->x() = 0;
-		vret->y() = 0;
-		vret->z() = 0;
-		luaL_getmetatable(L, TEXTMODULE_QUATERNION);
-		lua_setmetatable(L, -2);
-		vret->w() = val1->w() - val2->w();
-		vret->x() = val1->x() - val2->x();
-		vret->y() = val1->y() - val2->y();
-		vret->z() = val1->z() - val2->z();
-
+		lua_pushquaternion(L,
+			val1->w() - val2->w(),
+			val1->x() - val2->x(),
+			val1->y() - val2->y(),
+			val1->z() - val2->z()
+		);
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -388,52 +292,26 @@ int quaternion____sub(lua_State* L) {
 
 int quaternion____mul(lua_State* L) {
 	try {
-		Quat* val1 = new Quat(0, 0, 0, 0);
+		Quat* val1 = tm_toquaternion_s(L, 1);
 
-		int tp = lua_type(L, 1);
-		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 1, get_qargmsg().c_str());
-
-		if (tp == LUA_TUSERDATA) {
-			val1 = quaternion_check(L, 1);
-		}
-		else if (tp == LUA_TNUMBER) {
-			val1->w() = lua_tonumber(L, 1);
-		}
-
-		tp = lua_type(L, 2);
-		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 2, get_qargmsg().c_str());
+		int tp = lua_type(L, 2);
+		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 2, "number/" TEXTMODULE_QUATERNION TEXTMODULE_VECTOR3 " expected");
 
 		if (tp == LUA_TUSERDATA) {
 			if (luaL_checkmetatable(L, 2, TEXTMODULE_QUATERNION)) {
 				Quat* val2 = quaternion_check(L, 2);
-
-				Quat* vret = reinterpret_cast<Quat*>(lua_newuserdata(L, sizeof(Quat)));
-				luaL_getmetatable(L, TEXTMODULE_QUATERNION);
-				lua_setmetatable(L, -2);
-				*vret = (*val1) * (*val2);
-
+				lua_pushquaternion(L, (*val1) * (*val2));
 				return 1;
 			}
 			else if (luaL_checkmetatable(L, 2, TEXTMODULE_VECTOR3)) {
 				Vector3* val2 = vector3_check(L, 2);
-
-				Vector3* vret = reinterpret_cast<Vector3*>(lua_newuserdata(L, sizeof(Vector3)));
-				luaL_getmetatable(L, TEXTMODULE_VECTOR3);
-				lua_setmetatable(L, -2);
-				*vret = (*val1) * (*val2);
-
+				lua_pushvector3(L, (*val1) * (*val2));
 				return 1;
 			}
 		}
 		else if (tp == LUA_TNUMBER) {
-			Quat* val2 = new Quat(0,0,0,0);
-			val2->w() = lua_tonumber(L, 2);
-
-			Quat* vret = reinterpret_cast<Quat*>(lua_newuserdata(L, sizeof(Quat)));
-			luaL_getmetatable(L, TEXTMODULE_QUATERNION);
-			lua_setmetatable(L, -2);
-			*vret = (*val1) * (*val2);
-
+			Quat* val2 = new Quat(lua_tonumber(L, 2),0,0,0);
+			lua_pushquaternion(L, (*val1) * (*val2));
 			return 1;
 		}
 		return 0;
@@ -446,41 +324,12 @@ int quaternion____mul(lua_State* L) {
 
 int quaternion____div(lua_State* L) {
 	try {
-		Quat* val1 = new Quat(0, 0, 0, 0);
-		Quat* val2 = new Quat(0, 0, 0, 0);
+		Quat* val1 = tm_toquaternion_s(L, 1);
+		Quat* val2 = tm_toquaternion_s(L, 2);
 
-		int tp = lua_type(L, 1);
-		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 1, get_qargmsg().c_str());
-
-		if (tp == LUA_TUSERDATA) {
-			val1 = quaternion_check(L, 1);
-		}
-		else if (tp == LUA_TNUMBER) {
-			val1->w() = lua_tonumber(L, 1);
-		}
-
-		tp = lua_type(L, 2);
-		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 2, get_qargmsg().c_str());
-
-		if (tp == LUA_TUSERDATA) {
-			val2 = quaternion_check(L, 2);
-		}
-		else if (tp == LUA_TNUMBER) {
-			val2->w() = lua_tonumber(L, 2);
-			val1->x() = 0;
-			val1->y() = 0;
-			val1->z() = 0;
-		}
-
-		Quat* vret = reinterpret_cast<Quat*>(lua_newuserdata(L, sizeof(Quat)));
-		vret->w() = 0;
-		vret->x() = 0;
-		vret->y() = 0;
-		vret->z() = 0;
-		luaL_getmetatable(L, TEXTMODULE_QUATERNION);
-		lua_setmetatable(L, -2);
+		Quat* vret = lua_pushquaternion(L);
 		*vret = (*val1) * ( val2->conjugate());
-		double d = q_norm(val2);
+		double d = geometry_norm(*val2);
 		vret->w() /= d;
 		vret->x() /= d;
 		vret->y() /= d;
@@ -496,25 +345,9 @@ int quaternion____div(lua_State* L) {
 
 int quaternion____unm(lua_State* L) {
 	try {
-		Quat* val1 = new Quat(0, 0, 0, 0);
+		Quat* val1 = tm_toquaternion_s(L, 1);
 
-		int tp = lua_type(L, 1);
-		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 1, get_qargmsg().c_str());
-
-		if (tp == LUA_TUSERDATA) {
-			val1 = quaternion_check(L, 1);
-		}
-		else if (tp == LUA_TNUMBER) {
-			val1->w() = lua_tonumber(L, 1);
-		}
-
-		Quat* vret = reinterpret_cast<Quat*>(lua_newuserdata(L, sizeof(Quat)));
-		vret->w() = 0;
-		vret->x() = 0;
-		vret->y() = 0;
-		vret->z() = 0;
-		luaL_getmetatable(L, TEXTMODULE_QUATERNION);
-		lua_setmetatable(L, -2);
+		Quat* vret = lua_pushquaternion(L);
 		vret->w() *= -1;
 		vret->x() *= -1;
 		vret->y() *= -1;
@@ -530,30 +363,10 @@ int quaternion____unm(lua_State* L) {
 
 int quaternion____lt(lua_State* L) {
 	try {
-		Quat* val1 = new Quat(0, 0, 0, 0);
-		Quat* val2 = new Quat(0, 0, 0, 0);
+		Quat* val1 = tm_toquaternion_s(L, 1);
+		Quat* val2 = tm_toquaternion_s(L, 2);
 
-		int tp = lua_type(L, 1);
-		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 1, get_qargmsg().c_str());
-
-		if (tp == LUA_TUSERDATA) {
-			val1 = quaternion_check(L, 1);
-		}
-		else if (tp == LUA_TNUMBER) {
-			val1->w() = lua_tonumber(L, 1);
-		}
-
-		tp = lua_type(L, 2);
-		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 2, get_qargmsg().c_str());
-
-		if (tp == LUA_TUSERDATA) {
-			val2 = quaternion_check(L, 2);
-		}
-		else if (tp == LUA_TNUMBER) {
-			val2->w() = lua_tonumber(L, 2);
-		}
-
-		lua_pushboolean(L, q_norm(val1) < q_norm(val2));
+		lua_pushboolean(L, geometry_norm(*val1) < geometry_norm(*val2));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -564,30 +377,10 @@ int quaternion____lt(lua_State* L) {
 
 int quaternion____le(lua_State* L) {
 	try {
-		Quat* val1 = new Quat(0,0,0,0);
-		Quat* val2 = new Quat(0, 0, 0, 0);
+		Quat* val1 = tm_toquaternion_s(L, 1);
+		Quat* val2 = tm_toquaternion_s(L, 2);
 
-		int tp = lua_type(L, 1);
-		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 1, get_qargmsg().c_str());
-
-		if (tp == LUA_TUSERDATA) {
-			val1 = quaternion_check(L, 1);
-		}
-		else if (tp == LUA_TNUMBER) {
-			val1->w() = lua_tonumber(L, 1);
-		}
-
-		tp = lua_type(L, 2);
-		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 2, get_qargmsg().c_str());
-
-		if (tp == LUA_TUSERDATA) {
-			val2 = quaternion_check(L, 2);
-		}
-		else if (tp == LUA_TNUMBER) {
-			val2->w() = lua_tonumber(L, 2);
-		}
-
-		lua_pushboolean(L, q_norm(val1) <= q_norm(val2));
+		lua_pushboolean(L, geometry_norm(*val1) <= geometry_norm(*val2));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -655,7 +448,7 @@ int quaternion____newindex(lua_State* L) {
 		Quat* val1 = quaternion_check(L, 1);
 
 		int tp = lua_type(L, 2);
-		luaL_argcheck(L, tp == LUA_TSTRING || tp == LUA_TNUMBER, 2, get_qargmsg().c_str());
+		luaL_argcheck(L, tp == LUA_TSTRING || tp == LUA_TNUMBER, 2, "string/number expected");
 		double value = tm_tonumber(L, 3);
 
 		if (tp == LUA_TNUMBER) {
@@ -695,11 +488,7 @@ int quaternion____newindex(lua_State* L) {
 			}
 		}
 
-		Quat* vret = reinterpret_cast<Quat*>(lua_newuserdata(L, sizeof(Quat)));
-		luaL_getmetatable(L, TEXTMODULE_QUATERNION);
-		lua_setmetatable(L, -2);
-		*vret = *val1;
-
+		lua_pushquaternion(L, *val1);
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -710,19 +499,9 @@ int quaternion____newindex(lua_State* L) {
 
 int quaternion__abs(lua_State* L) {
 	try {
-		Quat* val1 = new Quat(0,0,0,0);
+		Quat* val1 = tm_toquaternion_s(L, 1);
 
-		int tp = lua_type(L, 1);
-		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 1, get_qargmsg().c_str());
-
-		if (tp == LUA_TUSERDATA) {
-			val1 = quaternion_check(L, 1);
-		}
-		else if (tp == LUA_TNUMBER) {
-			val1->w() = lua_tonumber(L, 1);
-		}
-
-		lua_pushnumber(L, q_abs(val1));
+		lua_pushnumber(L, geometry_abs(*val1));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -733,19 +512,9 @@ int quaternion__abs(lua_State* L) {
 
 int quaternion__norm(lua_State* L) {
 	try {
-		Quat* val1 = new Quat(0, 0, 0, 0);
+		Quat* val1 = tm_toquaternion_s(L, 1);
 
-		int tp = lua_type(L, 1);
-		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 1, get_qargmsg().c_str());
-
-		if (tp == LUA_TUSERDATA) {
-			val1 = quaternion_check(L, 1);
-		}
-		else if (tp == LUA_TNUMBER) {
-			val1->w() = lua_tonumber(L, 1);
-		}
-
-		lua_pushnumber(L, q_norm(val1));
+		lua_pushnumber(L, geometry_norm(*val1));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -756,27 +525,9 @@ int quaternion__norm(lua_State* L) {
 
 int quaternion__conj(lua_State* L) {
 	try {
-		Quat* val1 = new Quat(0,0,0,0);
+		Quat* val1 = tm_toquaternion_s(L, 1);
 
-		int tp = lua_type(L, 1);
-		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 1, get_qargmsg().c_str());
-
-		if (tp == LUA_TUSERDATA) {
-			val1 = quaternion_check(L, 1);
-		}
-		else if (tp == LUA_TNUMBER) {
-			val1->w() = lua_tonumber(L, 1);
-		}
-
-		Quat* vret = reinterpret_cast<Quat*>(lua_newuserdata(L, sizeof(Quat)));
-		vret->w() = 0;
-		vret->x() = 0;
-		vret->y() = 0;
-		vret->z() = 0;
-		luaL_getmetatable(L, TEXTMODULE_QUATERNION);
-		lua_setmetatable(L, -2);
-		*vret = val1->conjugate();
-
+		lua_pushquaternion(L, val1->conjugate());
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -787,23 +538,9 @@ int quaternion__conj(lua_State* L) {
 
 int quaternion__euler(lua_State* L) {
 	try {
-		Quat* val1 = new Quat(0, 0, 0, 0);
+		Quat* val1 = tm_toquaternion_s(L, 1);
 
-		int tp = lua_type(L, 1);
-		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 1, get_qargmsg().c_str());
-
-		if (tp == LUA_TUSERDATA) {
-			val1 = quaternion_check(L, 1);
-		}
-		else if (tp == LUA_TNUMBER) {
-			val1->w() = lua_tonumber(L, 1);
-		}
-
-		Vector3 euler = (*val1).toRotationMatrix().eulerAngles(0, 1, 2);
-		lua_pushnumber(L, euler[0]);
-		lua_pushnumber(L, euler[1]);
-		lua_pushnumber(L, euler[2]);
-
+		lua_pushvector3(L, (*val1).toRotationMatrix().eulerAngles(0, 1, 2));
 		return 3;
 	}
 	catch (std::exception& e) {
@@ -814,27 +551,9 @@ int quaternion__euler(lua_State* L) {
 
 int quaternion__inverse(lua_State* L) {
 	try {
-		Quat* val1 = new Quat(0, 0, 0, 0);
-		int tp = lua_type(L, 1);
-		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 1, get_qargmsg().c_str());
+		Quat* val1 = tm_toquaternion_s(L, 1);
 
-		if (tp == LUA_TUSERDATA) {
-			val1 = quaternion_check(L, 1);
-		}
-		else if (tp == LUA_TNUMBER) {
-			val1->w() = lua_tonumber(L, 1);
-		}
-
-		Quat* vret = reinterpret_cast<Quat*>(lua_newuserdata(L, sizeof(Quat)));
-		vret->w() = 0;
-		vret->x() = 0;
-		vret->y() = 0;
-		vret->z() = 0;
-		luaL_getmetatable(L, TEXTMODULE_QUATERNION);
-		lua_setmetatable(L, -2);
-
-		*vret = val1->inverse();
-
+		lua_pushquaternion(L, val1->inverse());
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -845,27 +564,9 @@ int quaternion__inverse(lua_State* L) {
 
 int quaternion__normalize(lua_State* L) {
 	try {
-		Quat* val1 = new Quat(0, 0, 0, 0);
-		int tp = lua_type(L, 1);
-		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 1, get_qargmsg().c_str());
+		Quat* val1 = tm_toquaternion_s(L, 1);
 
-		if (tp == LUA_TUSERDATA) {
-			val1 = quaternion_check(L, 1);
-		}
-		else if (tp == LUA_TNUMBER) {
-			val1->w() = lua_tonumber(L, 1);
-		}
-
-		Quat* vret = reinterpret_cast<Quat*>(lua_newuserdata(L, sizeof(Quat)));
-		vret->w() = 0;
-		vret->x() = 0;
-		vret->y() = 0;
-		vret->z() = 0;
-		luaL_getmetatable(L, TEXTMODULE_QUATERNION);
-		lua_setmetatable(L, -2);
-
-		*vret = val1->normalized();
-
+		lua_pushquaternion(L, val1->normalized());
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -876,70 +577,10 @@ int quaternion__normalize(lua_State* L) {
 
 int quaternion__dot(lua_State* L) {
 	try {
-		Quat* val1 = new Quat(0, 0, 0, 0);
-		Quat* val2 = new Quat(0, 0, 0, 0);
+		Quat* val1 = tm_toquaternion_s(L, 1);
+		Quat* val2 = tm_toquaternion_s(L, 2);
 
-		int tp = lua_type(L, 1);
-		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 1, get_qargmsg().c_str());
-
-		if (tp == LUA_TUSERDATA) {
-			val1 = quaternion_check(L, 1);
-		}
-		else if (tp == LUA_TNUMBER) {
-			val1->w() = lua_tonumber(L, 1);
-		}
-
-		tp = lua_type(L, 2);
-		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 2, get_qargmsg().c_str());
-
-		if (tp == LUA_TUSERDATA) {
-			val2 = quaternion_check(L, 2);
-		}
-		else if (tp == LUA_TNUMBER) {
-			val2->w() = lua_tonumber(L, 2);
-		}
-
-		double a = val1->w() * val2->w() + val1->x() * val2->x() + val1->y() * val2->y() + val1->z() * val2->z();
-		lua_pushnumber(L, a);
-
-		return 1;
-	}
-	catch (std::exception& e) {
-		luaL_error(L, e.what());
-		return 1;
-	}
-}
-
-int quaternion__table(lua_State* L) {
-	try {
-		Quat* val1 = new Quat(0, 0, 0, 0);
-		int tp = lua_type(L, 1);
-		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 1, get_qargmsg().c_str());
-
-		if (tp == LUA_TUSERDATA) {
-			val1 = quaternion_check(L, 1);
-		}
-		else if (tp == LUA_TNUMBER) {
-			val1->w() = lua_tonumber(L, 1);
-		}
-
-		lua_newtable(L);
-		lua_pushinteger(L, 1);
-		lua_pushnumber(L, val1->w());
-		lua_settable(L, -3);
-
-		lua_pushinteger(L, 2);
-		lua_pushnumber(L, val1->x());
-		lua_settable(L, -3);
-
-		lua_pushinteger(L, 3);
-		lua_pushnumber(L, val1->y());
-		lua_settable(L, -3);
-
-		lua_pushinteger(L, 4);
-		lua_pushnumber(L, val1->z());
-		lua_settable(L, -3);
-
+		lua_pushnumber(L, val1->dot(*val2));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -950,33 +591,27 @@ int quaternion__table(lua_State* L) {
 
 int quaternion__cross(lua_State* L) {
 	try {
-		Quat* val1 = new Quat(0, 0, 0, 0);
-		Quat* val2 = new Quat(0, 0, 0, 0);
+		Quat* val1 = tm_toquaternion_s(L, 1);
+		Quat* val2 = tm_toquaternion_s(L, 2);
 
-		int tp = lua_type(L, 1);
-		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 1, get_qargmsg().c_str());
+		lua_pushquaternion(L, (*val1) * (*val2));
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
 
-		if (tp == LUA_TUSERDATA) {
-			val1 = quaternion_check(L, 1);
-		}
-		else if (tp == LUA_TNUMBER) {
-			val1->w() = lua_tonumber(L, 1);
-		}
+int quaternion__table(lua_State* L) {
+	try {
+		Quat* val1 = tm_toquaternion_s(L, 1);
 
-		tp = lua_type(L, 2);
-		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 2, get_qargmsg().c_str());
-
-		if (tp == LUA_TUSERDATA) {
-			val2 = quaternion_check(L, 2);
-		}
-		else if (tp == LUA_TNUMBER) {
-			val2->w() = tm_tonumber(L, 2);
-		}
-
-		Quat* vret = reinterpret_cast<Quat*>(lua_newuserdata(L, sizeof(Quat)));
-		luaL_getmetatable(L, TEXTMODULE_QUATERNION);
-		lua_setmetatable(L, -2);
-		*vret = (*val1) * (*val2);
+		lua_newtable(L);
+		lua_settablevalue(L, 1, val1->w());
+		lua_settablevalue(L, 2, val1->x());
+		lua_settablevalue(L, 3, val1->y());
+		lua_settablevalue(L, 4, val1->z());
 
 		return 1;
 	}

@@ -181,6 +181,7 @@
     <ClCompile Include="string.cpp" />
     <ClCompile Include="textmodule.cpp" />
     <ClCompile Include="textmodule_color.cpp" />
+    <ClCompile Include="textmodule_geometry.cpp" />
     <ClCompile Include="textmodule_lua.cpp" />
     <ClCompile Include="textmodule_option.cpp" />
     <ClCompile Include="textmodule_string.cpp" />
@@ -222,6 +223,7 @@
     <ClInclude Include="textmodule.h" />
     <ClInclude Include="textmodule_color.h" />
     <ClInclude Include="textmodule_exception.h" />
+    <ClInclude Include="textmodule_geometry.h" />
     <ClInclude Include="textmodule_lua.h" />
     <ClInclude Include="textmodule_option.h" />
     <ClInclude Include="textmodule_string.h" />

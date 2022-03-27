@@ -17,9 +17,9 @@ using qrcodegen::QrSegment;
 QrCode get_qrcode(lua_State* L, int idx) {
 	std::vector<QrSegment> segment = QrSegment::makeSegments(tm_tostring(L, idx));
 	QrCode::Ecc ecc = static_cast<QrCode::Ecc>(tm_tonumber_s(L, idx + 1, 2)-1);
-	int min_version = tm_tonumber_s(L, idx + 2, QrCode::MIN_VERSION);
-	int max_version = tm_tonumber_s(L, idx + 3, QrCode::MAX_VERSION);
-	int mask = tm_tonumber_s(L, idx + 4, -1);
+	int min_version = tm_tointeger_s(L, idx + 2, QrCode::MIN_VERSION);
+	int max_version = tm_tointeger_s(L, idx + 3, QrCode::MAX_VERSION);
+	int mask = tm_tointeger_s(L, idx + 4, -1);
 	bool boost_ecc = tm_toboolean_s(L, idx + 5, true);
 
 	return QrCode::encodeSegments(segment, ecc, min_version, max_version, mask, boost_ecc);

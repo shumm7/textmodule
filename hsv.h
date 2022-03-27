@@ -33,12 +33,12 @@ static luaL_Reg TEXTMODULE_HSV_META_REG[] = {
 	{"__tostring", hsv____tostring},
 	//{"__index", hsv____index},
 	{"__newindex", hsv____newindex},
-	{"__call", hsv____call},
+	//{"__call", hsv____call},
 
 	{"h", hsv_h},
 	{"s", hsv_s},
 	{"v", hsv_v},
-	{"hsv", hsv_hsv},
+	{"value", hsv_hsv},
 	{"rgb", hsv_rgb},
 	{ nullptr, nullptr }
 };

@@ -17,7 +17,7 @@ int random_uniform(lua_State* L) {
 			n = 1;
 			break;
 		case 1:
-			m = 1;
+			m = 0;
 			n = tm_tonumber(L, 1);
 			break;
 		case 2:

@@ -165,6 +165,9 @@
     <ClCompile Include="qrcode.cpp">
       <Filter>ソース ファイル\function</Filter>
     </ClCompile>
+    <ClCompile Include="textmodule_geometry.cpp">
+      <Filter>ソース ファイル\lib</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="string.h">
@@ -280,6 +283,9 @@
     </ClInclude>
     <ClInclude Include="qrcode.h">
       <Filter>ヘッダー ファイル\function</Filter>
+    </ClInclude>
+    <ClInclude Include="textmodule_geometry.h">
+      <Filter>ヘッダー ファイル\lib</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

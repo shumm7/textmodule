@@ -37,7 +37,7 @@ static luaL_Reg TEXTMODULE_HSL_META_REG[] = {
 	{"__tostring", hsl____tostring},
 	//{"__index", hsl____index},
 	{"__newindex", hsl____newindex},
-	{"__call", hsl____call},
+	//{"__call", hsl____call},
 
 	{"h", hsl_h},
 	{"s", hsl_s},

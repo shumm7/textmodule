@@ -17,6 +17,7 @@ int quaternion_angleaxis(lua_State* L);
 int quaternion_twovectors(lua_State* L);
 int quaternion_lookrot(lua_State* L);
 int quaternion_identity(lua_State* L);
+int quaternion_zero(lua_State* L);
 
 int quaternion__w(lua_State* L);
 int quaternion__x(lua_State* L);
@@ -56,6 +57,7 @@ static luaL_Reg TEXTMODULE_QUATERNION_REG[] = {
 	{"twovectors", quaternion_twovectors},
 	{"lookrot", quaternion_lookrot},
 	{"identity", quaternion_identity},
+	{"zero", quaternion_zero},
 
 	{"w", quaternion__w},
 	{"x", quaternion__x},

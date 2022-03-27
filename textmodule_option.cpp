@@ -5,6 +5,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <regex>
 
 #include "textmodule.h"
 #include "textmodule_option.h"
@@ -47,7 +48,7 @@ int versionCheck() {
 		web::http::http_response response = client.request(request).get();
 
 		if (response.status_code() == status_codes::OK) {
-			std::wstring v = response.extract_string().get();
+			std::wstring v = std::regex_replace(response.extract_string().get(), wregex(L"\n"), L"\0");
 			if (v == tostring_n(MODULE_VERSION)) {
 				return VERSION_CHECK_LATEST;
 			}
