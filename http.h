@@ -1,3 +1,4 @@
+#pragma once
 #include <lua.hpp>
 
 int http_get(lua_State* L);

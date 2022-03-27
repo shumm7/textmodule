@@ -1,9 +1,8 @@
 #include <lua.hpp>
-#include <Eigen/Geometry>
-#include <Eigen/Dense>
 #include <cmath>
 #include <iostream>
 
+#include "vector2.h"
 #include "textmodule_lua.h"
 #include "textmodule_string.h"
 #include "textmodule_exception.h"
@@ -262,26 +261,8 @@ int vector2____unm(lua_State* L) {
 
 int vector2____lt(lua_State* L) {
 	try {
-		double val1 = 0;
-		double val2 = 0;
-
-		int tp = lua_type(L, 1);
-		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 1, "number/" TEXTMODULE_VECTOR2 " expected");
-
-		if (tp == LUA_TUSERDATA)
-			val1 = geometry_norm(*vector2_check(L, 1));
-		else if (tp == LUA_TNUMBER)
-			val1 = lua_tonumber(L, 1);
-
-
-		tp = lua_type(L, 2);
-		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 2, "number/" TEXTMODULE_VECTOR2 " expected");
-
-		if (tp == LUA_TUSERDATA)
-			val2 = geometry_norm(*vector2_check(L, 2));
-		else if (tp == LUA_TNUMBER)
-			val2 = lua_tonumber(L, 2);
-
+		double val1 = g_vector2_norm(*vector2_check(L, 1));
+		double val2 = g_vector2_norm(*vector2_check(L, 2));
 
 		lua_pushboolean(L, val1 < val2);
 		return 1;
@@ -294,26 +275,8 @@ int vector2____lt(lua_State* L) {
 
 int vector2____le(lua_State* L) {
 	try {
-		double val1 = 0;
-		double val2 = 0;
-
-		int tp = lua_type(L, 1);
-		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 1, "number/" TEXTMODULE_VECTOR2 " expected");
-
-		if (tp == LUA_TUSERDATA)
-			val1 = geometry_norm(*vector2_check(L, 1));
-		else if (tp == LUA_TNUMBER)
-			val1 = lua_tonumber(L, 1);
-
-
-		tp = lua_type(L, 2);
-		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 2, "number/" TEXTMODULE_VECTOR2 " expected");
-
-		if (tp == LUA_TUSERDATA)
-			val2 = geometry_norm(*vector2_check(L, 2));
-		else if (tp == LUA_TNUMBER)
-			val2 = lua_tonumber(L, 2);
-
+		double val1 = g_vector2_norm(*vector2_check(L, 1));
+		double val2 = g_vector2_norm(*vector2_check(L, 2));
 
 		lua_pushboolean(L, val1 <= val2);
 		return 1;
@@ -410,7 +373,7 @@ int vector2__abs(lua_State* L) {
 	try {
 		Vector2* val1 = vector2_check(L, 1);
 
-		lua_pushnumber(L, geometry_abs(*val1));
+		lua_pushnumber(L, g_vector2_abs(*val1));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -423,7 +386,7 @@ int vector2__norm(lua_State* L) {
 	try {
 		Vector2* val1 = vector2_check(L, 1);
 
-		lua_pushnumber(L, geometry_norm(*val1));
+		lua_pushnumber(L, g_vector2_norm(*val1));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -479,7 +442,7 @@ int vector2__distance(lua_State* L) {
 		Vector2* val2 = vector2_check(L, 2);
 
 		Vector2 ret = (*val1) - (*val2);
-		lua_pushnumber(L, geometry_abs(ret));
+		lua_pushnumber(L, g_vector2_abs(ret));
 		return 1;
 	}
 	catch (std::exception& e) {

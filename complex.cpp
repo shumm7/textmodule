@@ -3,6 +3,7 @@
 #include <complex>
 #include <cmath>
 
+#include "complex.h"
 #include "textmodule_lua.h"
 #include "textmodule_string.h"
 #include "textmodule_exception.h"
@@ -216,7 +217,7 @@ int complex____lt(lua_State* L) {
 		std::complex<double>* val1 = tm_tocomplex_s(L, 1);
 		std::complex<double>* val2 = tm_tocomplex_s(L, 2);
 
-		lua_pushboolean(L, geometry_norm(*val1) < geometry_norm(*val2));
+		lua_pushboolean(L, g_complex_norm(*val1) < g_complex_norm(*val2));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -230,7 +231,7 @@ int complex____le(lua_State* L) {
 		std::complex<double>* val1 = tm_tocomplex_s(L, 1);
 		std::complex<double>* val2 = tm_tocomplex_s(L, 2);
 
-		lua_pushboolean(L, geometry_norm(*val1) <= geometry_norm(*val2));
+		lua_pushboolean(L, g_complex_norm(*val1) <= g_complex_norm(*val2));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -326,7 +327,7 @@ int complex__abs(lua_State* L) {
 	try {
 		std::complex<double>* val1 = tm_tocomplex_s(L, 1);
 
-		lua_pushnumber(L, geometry_abs(*val1));
+		lua_pushnumber(L, g_complex_abs(*val1));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -352,7 +353,7 @@ int complex__norm(lua_State* L) {
 	try {
 		std::complex<double>* val1 = tm_tocomplex_s(L, 1);
 
-		lua_pushnumber(L, geometry_norm(*val1));
+		lua_pushnumber(L, g_complex_norm(*val1));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -391,7 +392,7 @@ int complex__polar(lua_State* L) {
 	try {
 		std::complex<double>* val1 = tm_tocomplex_s(L, 1);
 
-		lua_pushnumber(L, geometry_abs(*val1));
+		lua_pushnumber(L, g_complex_abs(*val1));
 		lua_pushnumber(L, std::atan(val1->imag() / val1->real()));
 		return 2;
 	}

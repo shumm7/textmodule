@@ -1,9 +1,8 @@
 #include <lua.hpp>
-#include <Eigen/Geometry>
-#include <Eigen/Dense>
 #include <cmath>
 #include <iostream>
 
+#include "quaternion.h"
 #include "textmodule_lua.h"
 #include "textmodule_string.h"
 #include "textmodule_exception.h"
@@ -329,7 +328,7 @@ int quaternion____div(lua_State* L) {
 
 		Quat* vret = lua_pushquaternion(L);
 		*vret = (*val1) * ( val2->conjugate());
-		double d = geometry_norm(*val2);
+		double d = g_quaternion_norm(*val2);
 		vret->w() /= d;
 		vret->x() /= d;
 		vret->y() /= d;
@@ -366,7 +365,7 @@ int quaternion____lt(lua_State* L) {
 		Quat* val1 = tm_toquaternion_s(L, 1);
 		Quat* val2 = tm_toquaternion_s(L, 2);
 
-		lua_pushboolean(L, geometry_norm(*val1) < geometry_norm(*val2));
+		lua_pushboolean(L, g_quaternion_norm(*val1) < g_quaternion_norm(*val2));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -380,7 +379,7 @@ int quaternion____le(lua_State* L) {
 		Quat* val1 = tm_toquaternion_s(L, 1);
 		Quat* val2 = tm_toquaternion_s(L, 2);
 
-		lua_pushboolean(L, geometry_norm(*val1) <= geometry_norm(*val2));
+		lua_pushboolean(L, g_quaternion_norm(*val1) <= g_quaternion_norm(*val2));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -501,7 +500,7 @@ int quaternion__abs(lua_State* L) {
 	try {
 		Quat* val1 = tm_toquaternion_s(L, 1);
 
-		lua_pushnumber(L, geometry_abs(*val1));
+		lua_pushnumber(L, g_quaternion_abs(*val1));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -514,7 +513,7 @@ int quaternion__norm(lua_State* L) {
 	try {
 		Quat* val1 = tm_toquaternion_s(L, 1);
 
-		lua_pushnumber(L, geometry_norm(*val1));
+		lua_pushnumber(L, g_quaternion_norm(*val1));
 		return 1;
 	}
 	catch (std::exception& e) {

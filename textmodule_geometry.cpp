@@ -1,34 +1,39 @@
 #include "textmodule_geometry.h"
 
-double geometry_norm(std::complex<double> value) {
+double g_complex_norm(std::complex<double> value) {
 	return std::norm(value);
 }
 
-double geometry_norm(Quat value) {
-	return std::pow(value.w(), 2) + std::pow(value.x(), 2) + std::pow(value.y(), 2) + std::pow(value.z(), 2);
-}
-
-double geometry_norm(Vector2 value) {
+double g_quaternion_norm(Quat value) {
 	return std::pow(value.norm(), 2);
 }
 
-double geometry_norm(Vector3 value) {
+double g_vector2_norm(Vector2 value) {
+	return std::pow(value.norm(), 2);
+}
+
+double g_vector3_norm(Vector3 value) {
 	return std::pow(value.norm(), 2);
 }
 
 
-double geometry_abs(std::complex<double> value) {
+double g_complex_abs(std::complex<double> value) {
 	return std::abs(value);
 }
 
-double geometry_abs(Quat value) {
-	return std::sqrt(geometry_norm(value));
-}
-
-double geometry_abs(Vector2 value) {
+double g_quaternion_abs(Quat value) {
 	return value.norm();
 }
 
-double geometry_abs(Vector3 value) {
+double g_vector2_abs(Vector2 value) {
 	return value.norm();
 }
+
+double g_vector3_abs(Vector3 value) {
+	return value.norm();
+}
+
+#ifdef EIGEN_INTERNAL_U_PROTECTOR
+#define U EIGEN_INTERNAL_U_PROTECTOR
+#undef EIGEN_INTERNAL_U_PROTECTOR
+#endif

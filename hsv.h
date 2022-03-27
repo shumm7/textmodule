@@ -1,3 +1,4 @@
+#pragma once
 #include <lua.hpp>
 #include "textmodule_color.h"
 

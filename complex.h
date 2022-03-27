@@ -1,9 +1,6 @@
 #pragma once
 #include <lua.hpp>
 
-#define TEXTMODULE_COMPLEX "std::complex<double>*"
-#define complex_check(L, n) (reinterpret_cast<std::complex<double>*>(luaL_checkudata(L, n, TEXTMODULE_COMPLEX)))
-
 int complex_new(lua_State* L);
 int complex_polar_new(lua_State* L);
 

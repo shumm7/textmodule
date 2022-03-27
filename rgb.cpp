@@ -6,12 +6,11 @@
 #include "hsl.h"
 #include "color.h"
 
-#include "vector3.h"
-
 #include "textmodule_lua.h"
 #include "textmodule_string.h"
 #include "textmodule_color.h"
 #include "textmodule_exception.h"
+#include "textmodule_geometry.h"
 
 std::string get_rgbmsg() {
 	std::string t = "number/string/";

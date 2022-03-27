@@ -1,12 +1,5 @@
 #pragma once
-#include <Eigen/Geometry>
-#include <Eigen/Dense>
 #include <lua.hpp>
-
-typedef Eigen::Vector3d Vector3;
-
-#define TEXTMODULE_VECTOR3 "Eigen::Vector3d*"
-#define vector3_check(L, n) (reinterpret_cast<Vector3*>(luaL_checkudata(L, n, TEXTMODULE_VECTOR3)))
 
 int vector3_new(lua_State* L);
 int vector3_identity(lua_State* L);

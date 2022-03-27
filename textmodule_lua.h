@@ -1,7 +1,13 @@
 #pragma once
 #include <lua.hpp>
 #include <iostream>
-#include "textmodule_geometry.h"
+#include <complex>
+#include <Eigen/Geometry>
+#include <Eigen/Dense>
+
+typedef Eigen::Quaternion<double> Quat;
+typedef Eigen::Vector3d Vector3;
+typedef Eigen::Vector2d Vector2;
 
 typedef std::string lua_Sstring;
 typedef std::wstring lua_Wstring;
