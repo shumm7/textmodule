@@ -1,13 +1,10 @@
-#ifdef U
-#define EIGEN_INTERNAL_U_PROTECTOR U
-#undef U
-#endif
-
 #include <lua.hpp>
 #include <iostream>
 
 #include "textmodule_lua.h"
+#include "textmodule_color.h"
 #include "textmodule_string.h"
+#include "textmodule_math.h"
 #include "textmodule_exception.h"
 #include "textmodule_geometry.h"
 
@@ -391,8 +388,3 @@ Vector3* lua_pushvector3(lua_State* L, Vector3 vector) {
 Vector3* lua_pushvector3(lua_State* L) {
 	return lua_pushvector3(L, 0, 0, 0);
 }
-
-#ifdef EIGEN_INTERNAL_U_PROTECTOR
-#define U EIGEN_INTERNAL_U_PROTECTOR
-#undef EIGEN_INTERNAL_U_PROTECTOR
-#endif

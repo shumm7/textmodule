@@ -1,4 +1,5 @@
 #include <iostream>
+#include <atlconv.h>
 #include <windows.h>
 #include <string>
 #include <sstream>
@@ -6,27 +7,28 @@
 #include <string>
 #include <algorithm>
 
+#pragma comment(lib, "atls.lib")
+#pragma comment(lib, "afxnmcd.lib")
+
 //ワイド文字 - マルチバイト文字　相互変換
 std::string WstrToStr(std::wstring str) {
-	int iBufferSize = WideCharToMultiByte(CP_OEMCP, 0, str.c_str(), -1, (char*)NULL, 0, NULL, NULL);
-	CHAR* cpMultiByte = new CHAR[iBufferSize];
+	USES_CONVERSION_EX;
 
-	WideCharToMultiByte(CP_OEMCP, 0, str.c_str(), -1, cpMultiByte, iBufferSize, NULL, NULL);
-	std::string oRet(cpMultiByte, cpMultiByte + iBufferSize - 1);
-
-	delete[] cpMultiByte;
-	return(oRet);
+	const auto pwstr = W2A_EX(str.c_str(), str.length());
+	if (pwstr != NULL) {
+		std::string dst(pwstr);
+		return dst;
+	}
 }
 
 std::wstring StrToWstr(std::string str) {
-	int iBufferSize = MultiByteToWideChar(CP_ACP, 0, str.c_str(), -1, (wchar_t*)NULL, 0);
-	wchar_t* cpUCS2 = new wchar_t[iBufferSize];
+	USES_CONVERSION_EX;
 
-	MultiByteToWideChar(CP_ACP, 0, str.c_str(), -1, cpUCS2, iBufferSize);
-	std::wstring oRet(cpUCS2, cpUCS2 + iBufferSize - 1);
-
-	delete[] cpUCS2;
-	return(oRet);
+	const auto pwstr = A2W_EX(str.c_str(), str.length());
+	if (pwstr != NULL) {
+		std::wstring dst(pwstr);
+		return dst;
+	}
 }
 
 
