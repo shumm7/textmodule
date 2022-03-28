@@ -66,3 +66,6 @@ Vector2* lua_pushvector2(lua_State* L);
 Vector3* lua_pushvector3(lua_State* L, double x, double y, double z);
 Vector3* lua_pushvector3(lua_State* L, Vector3 vector);
 Vector3* lua_pushvector3(lua_State* L);
+Vector4* lua_pushvector4(lua_State* L, double x, double y, double z, double w);
+Vector4* lua_pushvector4(lua_State* L, Vector4 vector);
+Vector4* lua_pushvector4(lua_State* L);

@@ -6,12 +6,6 @@
 #include "textmodule_lua.h"
 #include "textmodule_string.h"
 
-#ifdef _DEBUG
-#pragma comment(lib, "cpprest142_2_10d.lib")
-#else
-#pragma comment(lib, "cpprest142_2_10.lib")
-#endif
-
 using namespace web;
 using namespace web::http;
 using namespace web::http::client;

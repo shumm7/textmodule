@@ -19,6 +19,7 @@
     "geometry": {
        "vector2": true,
        "vector3": true,
+       "vector4": true,
        "complex": true,
        "quaternion": true
     },
@@ -38,6 +39,7 @@
     "geometry": {
        "vector2": true,
        "vector3": true,
+       "vector4": true,
        "complex": true,
        "quaternion": true
     },

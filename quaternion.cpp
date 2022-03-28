@@ -602,6 +602,21 @@ int quaternion__cross(lua_State* L) {
 	}
 }
 
+int quaternion__slerp(lua_State* L) {
+	try {
+		Quat* val1 = tm_toquaternion_s(L, 1);
+		Quat* val2 = tm_toquaternion_s(L, 2);
+		double t = tm_tonumber(L, 3);
+
+		lua_pushquaternion(L, val1->slerp(t, *val2));
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
 int quaternion__table(lua_State* L) {
 	try {
 		Quat* val1 = tm_toquaternion_s(L, 1);
@@ -612,6 +627,19 @@ int quaternion__table(lua_State* L) {
 		lua_settablevalue(L, 3, val1->y());
 		lua_settablevalue(L, 4, val1->z());
 
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int quaternion__vector4(lua_State* L) {
+	try {
+		Quat* val1 = tm_toquaternion_s(L, 1);
+
+		lua_pushvector4(L, val1->w(), val1->x(), val1->y(), val1->z());
 		return 1;
 	}
 	catch (std::exception& e) {

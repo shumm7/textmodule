@@ -23,6 +23,7 @@
 #include "complex.h"
 #include "vector2.h"
 #include "vector3.h"
+#include "vector4.h"
 #include "quaternion.h"
 
 #include "color.h"
@@ -59,6 +60,7 @@ void luaReg(lua_State* L, nlohmann::json o) {
 	luaReg_complex(L, API_COMPLEX, getOptionParamB(o, OPTION_VAPI, API_GEOMETRY, API_COMPLEX));
 	luaReg_vector2(L, API_VECTOR2, getOptionParamB(o, OPTION_VAPI, API_GEOMETRY, API_VECTOR2));
 	luaReg_vector3(L, API_VECTOR3, getOptionParamB(o, OPTION_VAPI, API_GEOMETRY, API_VECTOR3));
+	luaReg_vector4(L, API_VECTOR4, getOptionParamB(o, OPTION_VAPI, API_GEOMETRY, API_VECTOR4));
 	luaReg_quaternion(L, API_QUATERNION, getOptionParamB(o, OPTION_VAPI, API_GEOMETRY, API_QUATERNION));
 
 	//clipboard
@@ -112,6 +114,7 @@ void luaGlobal(lua_State* L, nlohmann::json o) {
 	luaGlobal_complex(L, API_COMPLEX, getOptionParamB(o, OPTION_VAPI_GLOBAL, API_GEOMETRY, API_COMPLEX));
 	luaGlobal_vector2(L, API_VECTOR2, getOptionParamB(o, OPTION_VAPI_GLOBAL, API_GEOMETRY, API_VECTOR2));
 	luaGlobal_vector3(L, API_VECTOR3, getOptionParamB(o, OPTION_VAPI_GLOBAL, API_GEOMETRY, API_VECTOR3));
+	luaGlobal_vector3(L, API_VECTOR4, getOptionParamB(o, OPTION_VAPI_GLOBAL, API_GEOMETRY, API_VECTOR4));
 	luaGlobal_quaternion(L, API_QUATERNION, getOptionParamB(o, OPTION_VAPI_GLOBAL, API_GEOMETRY, API_QUATERNION));
 }
 
@@ -142,6 +145,7 @@ extern "C" {
 	__declspec(dllexport) int luaopen_textmodule(lua_State* L) {
 		try {
 			int n = luaSetup(L);
+			SetDllPath();
 
 			return 1 + n;
 		}

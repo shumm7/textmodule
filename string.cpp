@@ -1,10 +1,13 @@
 #include <lua.hpp>
 #include <iostream>
 #include <regex>
+#include <fmt/core.h>
+#include <fmt/format.h>
 
 #include "string.h"
 #include "textmodule_lua.h"
 #include "textmodule_string.h"
+#include "textmodule_math.h"
 
 int string_find(lua_State* L) {
 	try {
@@ -295,6 +298,40 @@ int string_rep(lua_State* L) {
 		}
 
 		lua_pushwstring(L, ret);
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int string_format(lua_State* L) {
+	try {
+		std::string str = tm_tosstring(L, 1);
+		fmt::dynamic_format_arg_store<fmt::format_context> store;
+
+		int i = 2;
+		while (true) {
+			int tp = lua_type(L, i);
+
+			if (tp == LUA_TNUMBER)
+				store.push_back(lua_tonumber(L, i));
+			else if (tp == LUA_TBOOLEAN)
+				store.push_back(lua_toboolean(L, i));
+			else if (tp == LUA_TSTRING)
+				store.push_back(lua_tostring(L, i));
+			else if (tp == LUA_TNIL)
+				store.push_back("nil");
+			else if (tp == LUA_TNONE)
+				break;
+			else
+				return luaL_argerror(L, i, "format must be number/boolean/string/nil");
+
+			i++;
+		};
+
+		lua_pushsstring(L, fmt::vformat(str, store));
 		return 1;
 	}
 	catch (std::exception& e) {

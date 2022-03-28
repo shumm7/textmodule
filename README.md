@@ -55,3 +55,8 @@ This library is licensed under the BSD 3-Clause "New" or "Revised" License.
 https://github.com/nayuki/QR-Code-generator  
 Copyright (c) 2022, Project Nayuki. All rights reserved.  
 This library is licensed under the MIT License.  
+
+### fmtlib/fmt
+https://github.com/fmtlib/fmt
+Copyright (c) 2012 - present, Victor Zverovich. All rights reserved.  
+This library is licensed under the MIT License.  

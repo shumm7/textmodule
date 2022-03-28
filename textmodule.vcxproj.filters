@@ -49,6 +49,9 @@
     <Filter Include="ヘッダー ファイル\lib\qr-code-generator">
       <UniqueIdentifier>{4844f0f9-f7f3-4e38-b6f2-b88f1f116a3b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\lib\fmt">
+      <UniqueIdentifier>{f780111b-e71c-441c-ae7b-3cc85c77faff}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="lua.cpp">
@@ -167,6 +170,9 @@
     </ClCompile>
     <ClCompile Include="textmodule_geometry.cpp">
       <Filter>ソース ファイル\lib</Filter>
+    </ClCompile>
+    <ClCompile Include="vector4.cpp">
+      <Filter>ソース ファイル\function\geometry</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -287,5 +293,11 @@
     <ClInclude Include="textmodule_geometry.h">
       <Filter>ヘッダー ファイル\lib</Filter>
     </ClInclude>
+    <ClInclude Include="vector4.h">
+      <Filter>ヘッダー ファイル\function\geometry</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

@@ -34,6 +34,7 @@ int vector2__conj(lua_State* L);
 int vector2__table(lua_State* L);
 int vector2__complex(lua_State* L);
 int vector2__vector3(lua_State* L);
+int vector2__vector4(lua_State* L);
 
 void luaReg_vector2(lua_State* L, const char* name, bool reg);
 void luaGlobal_vector2(lua_State* L, const char* name, bool reg);
@@ -61,6 +62,7 @@ static luaL_Reg TEXTMODULE_VECTOR2_REG[] = {
 	{"complex", vector2__complex},
 	{"table", vector2__table},
 	{"vector3", vector2__vector3},
+	{"vector4", vector2__vector4},
 	{ nullptr, nullptr }
 };
 
@@ -89,5 +91,6 @@ static luaL_Reg TEXTMODULE_VECTOR2_META_REG[] = {
 	{"complex", vector2__complex},
 	{"table", vector2__table},
 	{"vector3", vector2__vector3},
+	{"vector4", vector2__vector4},
 	{nullptr, nullptr}
 };

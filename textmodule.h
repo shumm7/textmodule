@@ -32,6 +32,7 @@
 #define API_COMPLEX "complex"
 #define API_VECTOR2 "vector2"
 #define API_VECTOR3 "vector3"
+#define API_VECTOR4 "vector4"
 #define API_QUATERNION "quaternion"
 
 //ALIAS
@@ -41,3 +42,4 @@
 #define ALIAS_API_RANDOM "rand"
 
 std::wstring getVersionNum(int num);
+void SetDllPath();

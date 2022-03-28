@@ -35,6 +35,8 @@ int quaternion__normalize(lua_State* L);
 int quaternion__dot(lua_State* L);
 int quaternion__table(lua_State* L);
 int quaternion__cross(lua_State* L);
+int quaternion__slerp(lua_State* L);
+int quaternion__vector4(lua_State* L);
 
 void luaReg_quaternion(lua_State* L, const char* name, bool reg);
 void luaGlobal_quaternion(lua_State* L, const char* name, bool reg);
@@ -63,6 +65,8 @@ static luaL_Reg TEXTMODULE_QUATERNION_REG[] = {
 	{"dot", quaternion__dot},
 	{"cross", quaternion__cross},
 	{"table", quaternion__table},
+	{"slerp", quaternion__slerp},
+	{"vector4", quaternion__vector4},
 	{ nullptr, nullptr }
 };
 
@@ -92,5 +96,7 @@ static luaL_Reg TEXTMODULE_QUATERNION_META_REG[] = {
 	{"dot", quaternion__dot},
 	{"cross", quaternion__cross},
 	{"table", quaternion__table},
+	{"slerp", quaternion__slerp},
+	{"vector4", quaternion__vector4},
 	{nullptr, nullptr}
 };

@@ -505,6 +505,19 @@ int vector2__vector3(lua_State* L) {
 	}
 }
 
+int vector2__vector4(lua_State* L) {
+	try {
+		Vector2* val1 = vector2_check(L, 1);
+
+		lua_pushvector4(L, val1->x(), val1->y(), 0, 0);
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
 
 void luaReg_vector2(lua_State* L, const char* name, bool reg) {
 	if (reg) {
