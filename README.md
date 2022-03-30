@@ -60,3 +60,10 @@ This library is licensed under the MIT License.
 https://github.com/fmtlib/fmt
 Copyright (c) 2012 - present, Victor Zverovich. All rights reserved.  
 This library is licensed under the MIT License.  
+
+### tweener
+Some source was adapted from Tweener's easing functions (Penner's Easing Equations) and http://code.google.com/p/tweener/ (jstweener javascript version)  
+Tweener authors, Yuichi Tateno, Emmanuel Oga  
+
+Copyright (c) 2010, Emmanuel Oga.  
+It is licensed under the MIT License.  
