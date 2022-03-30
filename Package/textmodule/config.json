@@ -19,6 +19,7 @@
     "geometry": {
        "vector2": true,
        "vector3": true,
+       "vector4": true,
        "complex": true,
        "quaternion": true
     },
@@ -26,18 +27,22 @@
     "filesystem": true,
     "hash": true,
     "http": true,
-    "qrcode": true
+    "qrcode": true,
+    "object": true,
+    "ease"; true
   },
   "api-alias": {
     "tmstring": true,
     "filesystem": true,
-    "random": true
+    "random": true,
+    "object": true
   },
   "api-global": {
     "clipboard": true,
     "geometry": {
        "vector2": true,
        "vector3": true,
+       "vector4": true,
        "complex": true,
        "quaternion": true
     },

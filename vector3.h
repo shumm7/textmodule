@@ -37,6 +37,7 @@ int vector3__distance(lua_State* L);
 int vector3__conj(lua_State* L);
 int vector3__table(lua_State* L);
 int vector3__vector2(lua_State* L);
+int vector3__vector4(lua_State* L);
 
 void luaReg_vector3(lua_State* L, const char* name, bool reg);
 void luaGlobal_vector3(lua_State* L, const char* name, bool reg);
@@ -67,6 +68,7 @@ static luaL_Reg TEXTMODULE_VECTOR3_REG[] = {
 	{"conj", vector3__conj},
 	{"table", vector3__table},
 	{"vector2", vector3__vector2},
+	{"vector4", vector3__vector4},
 	{ nullptr, nullptr }
 };
 
@@ -96,5 +98,6 @@ static luaL_Reg TEXTMODULE_VECTOR3_META_REG[] = {
 	{"conj", vector3__conj},
 	{"table", vector3__table},
 	{"vector2", vector3__vector2},
+	{"vector4", vector3__vector4},
 	{nullptr, nullptr}
 };

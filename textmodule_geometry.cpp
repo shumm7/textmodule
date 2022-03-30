@@ -16,6 +16,10 @@ double g_vector3_norm(Vector3 value) {
 	return std::pow(value.norm(), 2);
 }
 
+double g_vector4_norm(Vector4 value) {
+	return std::pow(value.norm(), 2);
+}
+
 
 double g_complex_abs(std::complex<double> value) {
 	return std::abs(value);
@@ -30,6 +34,10 @@ double g_vector2_abs(Vector2 value) {
 }
 
 double g_vector3_abs(Vector3 value) {
+	return value.norm();
+}
+
+double g_vector4_abs(Vector4 value) {
 	return value.norm();
 }
 

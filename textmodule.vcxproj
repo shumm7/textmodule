@@ -97,8 +97,9 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <AdditionalLibraryDirectories>D:\Visual Studio 2019\source\repos\textmodule\lua\lib;D:\Visual Studio 2019\source\repos\textmodule\cpprestsdk.v142.2.10.15\x86\lib;D:\Visual Studio 2019\source\repos\textmodule\MeCab\sdk;D:\Visual Studio 2019\source\repos\textmodule\icu\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>lua51.lib;libmecab.lib;icudt.lib;icuin.lib;icuio.lib;icutest.lib;icutu.lib;icuuc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>lua51.lib;libmecab.lib;cpprest142_2_10.lib;icudt.lib;icuin.lib;icuio.lib;icutest.lib;icutu.lib;icuuc.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateMapFile>true</GenerateMapFile>
+      <DelayLoadDLLs>libmecab.dll</DelayLoadDLLs>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -131,9 +132,10 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>D:\Visual Studio 2019\source\repos\textmodule\lua\lib;D:\Visual Studio 2019\source\repos\textmodule\cpprestsdk.v142.2.10.15\x86\lib;D:\Visual Studio 2019\source\repos\textmodule\MeCab\sdk;</AdditionalLibraryDirectories>
-      <AdditionalDependencies>lua51.lib;libmecab.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>lua51.lib;libmecab.lib;cpprest142_2_10.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateMapFile>false</GenerateMapFile>
       <GenerateDebugInformation>false</GenerateDebugInformation>
+      <DelayLoadDLLs>libmecab.dll</DelayLoadDLLs>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -158,6 +160,7 @@
     <ClCompile Include="complex.cpp" />
     <ClCompile Include="base.cpp" />
     <ClCompile Include="debug.cpp" />
+    <ClCompile Include="ease.cpp" />
     <ClCompile Include="filesystem.cpp" />
     <ClCompile Include="hash-library\crc32.cpp" />
     <ClCompile Include="hash-library\digest.cpp" />
@@ -173,6 +176,7 @@
     <ClCompile Include="lua.cpp" />
     <ClCompile Include="cmath.cpp" />
     <ClCompile Include="mecab.cpp" />
+    <ClCompile Include="obj.cpp" />
     <ClCompile Include="QR-Code-generator\qrcodegen.cpp" />
     <ClCompile Include="qrcode.cpp" />
     <ClCompile Include="quaternion.cpp" />
@@ -191,6 +195,7 @@
     <ClCompile Include="textmodule_exception.cpp" />
     <ClCompile Include="vector2.cpp" />
     <ClCompile Include="vector3.cpp" />
+    <ClCompile Include="vector4.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base.h" />
@@ -200,6 +205,7 @@
     <ClInclude Include="color.h" />
     <ClInclude Include="complex.h" />
     <ClInclude Include="debug.h" />
+    <ClInclude Include="ease.h" />
     <ClInclude Include="filesystem.h" />
     <ClInclude Include="hash-library\crc32.h" />
     <ClInclude Include="hash-library\hash.h" />
@@ -214,6 +220,7 @@
     <ClInclude Include="hsv.h" />
     <ClInclude Include="http.h" />
     <ClInclude Include="mecab.h" />
+    <ClInclude Include="obj.h" />
     <ClInclude Include="QR-Code-generator\qrcodegen.hpp" />
     <ClInclude Include="qrcode.h" />
     <ClInclude Include="quaternion.h" />
@@ -222,18 +229,31 @@
     <ClInclude Include="string.h" />
     <ClInclude Include="textmodule.h" />
     <ClInclude Include="textmodule_color.h" />
+    <ClInclude Include="textmodule_ease.h" />
     <ClInclude Include="textmodule_exception.h" />
     <ClInclude Include="textmodule_geometry.h" />
     <ClInclude Include="textmodule_lua.h" />
     <ClInclude Include="textmodule_option.h" />
     <ClInclude Include="textmodule_string.h" />
     <ClInclude Include="os.h" />
+    <ClCompile Include="textmodule_ease.cpp" />
     <ClInclude Include="tmstring.h" />
     <ClInclude Include="utf8.h" />
     <ClInclude Include="vector2.h" />
     <ClInclude Include="vector3.h" />
+    <ClInclude Include="vector4.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
+    <Import Project="packages\fmt.7.0.1\build\fmt.targets" Condition="Exists('packages\fmt.7.0.1\build\fmt.targets')" />
   </ImportGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>このプロジェクトは、このコンピューター上にない NuGet パッケージを参照しています。それらのパッケージをダウンロードするには、[NuGet パッケージの復元] を使用します。詳細については、http://go.microsoft.com/fwlink/?LinkID=322105 を参照してください。見つからないファイルは {0} です。</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('packages\fmt.7.0.1\build\fmt.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\fmt.7.0.1\build\fmt.targets'))" />
+  </Target>
 </Project>

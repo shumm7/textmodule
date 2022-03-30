@@ -382,6 +382,7 @@ int vector3____index(lua_State* L) {
 				return 0;
 			}
 		}
+		return 0;
 	}
 	catch (std::exception& e) {
 		luaL_error(L, e.what());
@@ -575,6 +576,19 @@ int vector3__vector2(lua_State* L) {
 	}
 }
 
+int vector3__vector4(lua_State* L) {
+	try {
+		Vector3* val = vector3_check(L, 1);
+
+		Vector4* ret = lua_pushvector4(L, val->x(), val->y(), val->z(), 0);
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
 
 void luaReg_vector3(lua_State* L, const char* name, bool reg) {
 	if (reg) {
@@ -603,8 +617,3 @@ void luaGlobal_vector3(lua_State* L, const char* name, bool reg) {
 		lua_setglobal(L, name);
 	}
 }
-
-#ifdef EIGEN_INTERNAL_U_PROTECTOR
-#define U EIGEN_INTERNAL_U_PROTECTOR
-#undef EIGEN_INTERNAL_U_PROTECTOR
-#endif

@@ -320,6 +320,7 @@ int vector2____index(lua_State* L) {
 				return 0;
 			}
 		}
+		return 0;
 	}
 	catch (std::exception& e) {
 		luaL_error(L, e.what());
@@ -497,6 +498,19 @@ int vector2__vector3(lua_State* L) {
 		Vector2* val1 = vector2_check(L, 1);
 
 		lua_pushvector3(L, val1->x(), val1->y(), 0);
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int vector2__vector4(lua_State* L) {
+	try {
+		Vector2* val1 = vector2_check(L, 1);
+
+		lua_pushvector4(L, val1->x(), val1->y(), 0, 0);
 		return 1;
 	}
 	catch (std::exception& e) {

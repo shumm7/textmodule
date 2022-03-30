@@ -36,3 +36,7 @@ double clamp_s(double n, double min, double max) {
 double clamp_s(double n) {
 	return clamp_s(n, 0, 1);
 }
+
+bool isinteger(double n) {
+	return static_cast<int>(n) == n;
+}

@@ -1,4 +1,8 @@
 #include <iostream>
+#include <windows.h>
+#include <filesystem>
+
+#define DLLDIR "./textmodule/bin"
 
 std::wstring getVersionNum(int num) {
 	switch (num) {
@@ -28,7 +32,12 @@ std::wstring getVersionNum(int num) {
 	case 24: return L"1.3.1";
 	case 25: return L"1.3.2";
 	case 26: return L"1.3.3";
+	case 27: return L"1.3.4";
 
 	default: return L"";
 	}
+}
+
+void SetDllPath() {
+	SetDllDirectory(std::filesystem::canonical(DLLDIR).string().c_str());
 }

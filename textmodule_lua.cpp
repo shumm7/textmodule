@@ -178,6 +178,12 @@ unsigned long tm_tounsigned(lua_State* L, int idx) {
 }
 
 // Boolean
+bool tm_toboolean(lua_State* L, int idx) {
+	if(lua_type(L, idx)!=LUA_TBOOLEAN)
+		luaL_typerror(L, idx, lua_typename(L, LUA_TBOOLEAN));
+	return lua_toboolean(L, idx);
+}
+
 bool tm_toboolean_s(lua_State* L, int idx) {
 	int tp = lua_type(L, idx);
 	luaL_argcheck(L, tp == LUA_TNONE || tp == LUA_TBOOLEAN, idx, "boolean/none expected");
@@ -387,4 +393,24 @@ Vector3* lua_pushvector3(lua_State* L, Vector3 vector) {
 
 Vector3* lua_pushvector3(lua_State* L) {
 	return lua_pushvector3(L, 0, 0, 0);
+}
+
+Vector4* lua_pushvector4(lua_State* L, double x, double y, double z, double w) {
+	Vector4* ret = reinterpret_cast<Vector4*>(lua_newuserdata(L, sizeof(Vector4)));
+	luaL_getmetatable(L, TEXTMODULE_VECTOR4);
+	lua_setmetatable(L, -2);
+
+	ret->x() = x;
+	ret->y() = y;
+	ret->z() = z;
+	ret->w() = w;
+	return ret;
+}
+
+Vector4* lua_pushvector4(lua_State* L, Vector4 vector) {
+	return lua_pushvector4(L, vector.x(), vector.y(), vector.z(), vector.w());
+}
+
+Vector4* lua_pushvector4(lua_State* L) {
+	return lua_pushvector4(L, 0, 0, 0, 0);
 }

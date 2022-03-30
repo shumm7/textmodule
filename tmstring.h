@@ -2,6 +2,7 @@
 #include <lua.hpp>
 
 #define S_NUMBER "0123456789"
+#define S_HEX_DIGITS "0123456789abcdefABCDEF"
 #define S_ALPHABET "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 #define S_SMALL_ALPHABET "abcdefghijklmnopqrstuvwxyz"
 #define S_CAPITAL_ALPHABET "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -18,6 +19,7 @@
 #define S_HIRAGANA "‚Ÿ‚ ‚¡‚¢‚£‚¤‚¥‚¦‚§‚¨‚©‚ª‚«‚¬‚­‚®‚¯‚°‚±‚²‚³‚´‚µ‚¶‚·‚¸‚¹‚º‚»‚¼‚½‚¾‚¿‚À‚Á‚Â‚Ã‚Ä‚Å‚Æ‚Ç‚È‚É‚Ê‚Ë‚Ì‚Í‚Î‚Ï‚Ð‚Ñ‚Ò‚Ó‚Ô‚Õ‚Ö‚×‚Ø‚Ù‚Ú‚Û‚Ü‚Ý‚Þ‚ß‚à‚á‚â‚ã‚ä‚å‚æ‚ç‚è‚é‚ê‚ë‚ì‚í‚î‚ï‚ð‚ñ"
 #define S_HIRAGANA_N "‚ ‚¢‚¤‚¦‚¨‚©‚«‚­‚¯‚±‚³‚µ‚·‚¹‚»‚½‚¿‚Â‚Ä‚Æ‚È‚É‚Ê‚Ë‚Ì‚Í‚Ð‚Ó‚Ö‚Ù‚Ü‚Ý‚Þ‚ß‚à‚â‚ä‚æ‚ç‚è‚é‚ê‚ë‚í‚ð‚ñ"
 #define S_IROHA "	‚¢‚ë‚Í‚É‚Ù‚Ö‚Æ‚¿‚è‚Ê‚é‚ð‚í‚©‚æ‚½‚ê‚»‚Â‚Ë‚È‚ç‚Þ‚¤‚î‚Ì‚¨‚­‚â‚Ü‚¯‚Ó‚±‚¦‚Ä‚ ‚³‚«‚ä‚ß‚Ý‚µ‚ï‚Ð‚à‚¹‚·‚ñ"
+#define S_QUICK_BROWN_FOX "The quick brown fox jumps over the lazy dog"
 #define S_PIPE "„Ÿ„ „¡„¢„£„¤„¥„¦„§„¨„©„ª„«„¬„­„®„¯„°„±„²„³„´„µ„¶„·„¸„¹„º„»„¼„½„¾"
 
 int tmstring_hiragana(lua_State* L);
@@ -37,6 +39,8 @@ int tmstring_capitalize_words(lua_State* L);
 int tmstring_random(lua_State* L);
 int tmstring_roundnumber(lua_State* L);
 int tmstring_anagram(lua_State* L);
+int tmstring_print(lua_State* L);
+int tmstring_printf(lua_State* L);
 
 void luaReg_tmstring(lua_State* L, const char* name, bool reg);
 
@@ -57,5 +61,7 @@ static luaL_Reg TEXTMODULE_TMSTRING_REG[] = {
 	{"random", tmstring_random},
 	{"roundnumber",  tmstring_roundnumber},
 	{"anagram", tmstring_anagram},
+	{"print", tmstring_print},
+	{"printf", tmstring_printf},
 	{ nullptr, nullptr }
 };

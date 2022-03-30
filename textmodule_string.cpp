@@ -6,6 +6,7 @@
 #include <vector>
 #include <string>
 #include <algorithm>
+#include <exception>
 
 #pragma comment(lib, "atls.lib")
 #pragma comment(lib, "afxnmcd.lib")
@@ -19,6 +20,7 @@ std::string WstrToStr(std::wstring str) {
 		std::string dst(pwstr);
 		return dst;
 	}
+	throw std::runtime_error("string conversion failed");
 }
 
 std::wstring StrToWstr(std::string str) {
@@ -29,6 +31,7 @@ std::wstring StrToWstr(std::string str) {
 		std::wstring dst(pwstr);
 		return dst;
 	}
+	throw std::runtime_error("string conversion failed");
 }
 
 
@@ -36,7 +39,7 @@ std::wstring StrToWstr(std::string str) {
 std::wstring _jreplace(std::wstring String1, std::wstring String2, std::wstring String3, bool invert)
 {
 	if (invert) {
-		auto temp = String3;
+		std::wstring temp = String3;
 		String3 = String2;
 		String2 = temp;
 	}
