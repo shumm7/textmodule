@@ -4,6 +4,9 @@
 #include <sstream>
 #include <mecab.h>
 #include <random>
+#include <regex>
+#include <fmt/core.h>
+#include <fmt/format.h>
 
 #include "tmstring.h"
 #include "mecab.h"
@@ -393,65 +396,77 @@ int tmstring_anagram(lua_State* L) {
 	}
 }
 
+int tmstring_print(lua_State* L) {
+	try {
+		std::cout << tm_tostring(L, 1) << std::endl;
+		return 0;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int tmstring_printf(lua_State* L) {
+	try {
+		std::string str = tm_tosstring(L, 1);
+		fmt::dynamic_format_arg_store<fmt::format_context> store;
+
+		int i = 2;
+		while (true) {
+			int tp = lua_type(L, i);
+
+			if (tp == LUA_TNUMBER)
+				store.push_back(lua_tonumber(L, i));
+			else if (tp == LUA_TBOOLEAN)
+				store.push_back(lua_toboolean(L, i));
+			else if (tp == LUA_TSTRING)
+				store.push_back(lua_tostring(L, i));
+			else if (tp == LUA_TNIL)
+				store.push_back("nil");
+			else if (tp == LUA_TNONE)
+				break;
+			else
+				return luaL_argerror(L, i, "format must be number/boolean/string/nil");
+
+			i++;
+		};
+
+		std::cout << fmt::vformat(str, store) << std::endl;
+		return 0;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
 void luaReg_tmstring(lua_State* L, const char* name, bool reg) {
 	if (reg) {
 		lua_newtable(L);
 		luaL_register(L, NULL, TEXTMODULE_TMSTRING_REG);
 		luaL_register(L, NULL, TEXTMODULE_MECAB_REG);
 
-		lua_pushstring(L, S_NUMBER);
-		lua_setfield(L, -2, "number");
-
-		lua_pushstring(L, S_ALPHABET);
-		lua_setfield(L, -2, "alphabet");
-
-		lua_pushstring(L, S_SMALL_ALPHABET);
-		lua_setfield(L, -2, "small_alphabet");
-
-		lua_pushstring(L, S_CAPITAL_ALPHABET);
-		lua_setfield(L, -2, "capital_alphabet");
-
-		lua_pushstring(L, S_ALPHABET_NUMBER);
-		lua_setfield(L, -2, "alphabet_number");
-
-		lua_pushstring(L, S_SYMBOL);
-		lua_setfield(L, -2, "symbol");
-
-		lua_pushstring(L, S_ASCII);
-		lua_setfield(L, -2, "ascii");
-
-		lua_pushstring(L, S_HIRAGANA);
-		lua_setfield(L, -2, "c_hiragana");
-
-		lua_pushstring(L, S_KATAKANA);
-		lua_setfield(L, -2, "c_katakana");
-
-		lua_pushstring(L, S_HALF_KATAKANA);
-		lua_setfield(L, -2, "half_katakana");
-
-		lua_pushstring(L, S_HIRAGANA_N);
-		lua_setfield(L, -2, "n_hiragana");
-
-		lua_pushstring(L, S_IROHA);
-		lua_setfield(L, -2, "iroha");
-
-		lua_pushstring(L, S_PIPE);
-		lua_setfield(L, -2, "pipe");
-
-		lua_pushstring(L, S_FULL_NUMBER);
-		lua_setfield(L, -2, "full_number");
-
-		lua_pushstring(L, S_FULL_ALPHABET);
-		lua_setfield(L, -2, "full_alphabet");
-
-		lua_pushstring(L, S_FULL_SMALL_ALPHABET);
-		lua_setfield(L, -2, "full_small_alphabet");
-
-		lua_pushstring(L, S_FULL_CAPITAL_ALPHABET);
-		lua_setfield(L, -2, "full_capital_alphabet");
-
-		lua_pushstring(L, S_FULL_ALPHABET_NUMBER);
-		lua_setfield(L, -2, "full_alphabet_number");
+		lua_settablevalue(L, "number", S_NUMBER);
+		lua_settablevalue(L, "hex_digits", S_HEX_DIGITS);
+		lua_settablevalue(L, "alphabet", S_ALPHABET);
+		lua_settablevalue(L, "small_alphabet", S_SMALL_ALPHABET);
+		lua_settablevalue(L, "capital_alphabet", S_CAPITAL_ALPHABET);
+		lua_settablevalue(L, "alphabet_number", S_ALPHABET_NUMBER);
+		lua_settablevalue(L, "symbol", S_SYMBOL);
+		lua_settablevalue(L, "ascii", S_ASCII);
+		lua_settablevalue(L, "c_hiragana", S_HIRAGANA);
+		lua_settablevalue(L, "c_katakana", S_KATAKANA);
+		lua_settablevalue(L, "half_katakana", S_HALF_KATAKANA);
+		lua_settablevalue(L, "n_hiragana", S_HIRAGANA_N);
+		lua_settablevalue(L, "iroha", S_IROHA);
+		lua_settablevalue(L, "pipe", S_PIPE);
+		lua_settablevalue(L, "full_number", S_FULL_NUMBER);
+		lua_settablevalue(L, "full_alphabet", S_FULL_ALPHABET);
+		lua_settablevalue(L, "full_small_alphabet", S_FULL_SMALL_ALPHABET);
+		lua_settablevalue(L, "full_capital_alphabet", S_FULL_CAPITAL_ALPHABET);
+		lua_settablevalue(L, "full_alphabet_number", S_FULL_ALPHABET_NUMBER);
+		lua_settablevalue(L, "quick_brown_fox", S_QUICK_BROWN_FOX);
 
 		lua_setfield(L, -2, name);
 	}

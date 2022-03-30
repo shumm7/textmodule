@@ -178,6 +178,12 @@ unsigned long tm_tounsigned(lua_State* L, int idx) {
 }
 
 // Boolean
+bool tm_toboolean(lua_State* L, int idx) {
+	if(lua_type(L, idx)!=LUA_TBOOLEAN)
+		luaL_typerror(L, idx, lua_typename(L, LUA_TBOOLEAN));
+	return lua_toboolean(L, idx);
+}
+
 bool tm_toboolean_s(lua_State* L, int idx) {
 	int tp = lua_type(L, idx);
 	luaL_argcheck(L, tp == LUA_TNONE || tp == LUA_TBOOLEAN, idx, "boolean/none expected");

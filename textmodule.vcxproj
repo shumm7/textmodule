@@ -160,6 +160,7 @@
     <ClCompile Include="complex.cpp" />
     <ClCompile Include="base.cpp" />
     <ClCompile Include="debug.cpp" />
+    <ClCompile Include="ease.cpp" />
     <ClCompile Include="filesystem.cpp" />
     <ClCompile Include="hash-library\crc32.cpp" />
     <ClCompile Include="hash-library\digest.cpp" />
@@ -175,6 +176,7 @@
     <ClCompile Include="lua.cpp" />
     <ClCompile Include="cmath.cpp" />
     <ClCompile Include="mecab.cpp" />
+    <ClCompile Include="obj.cpp" />
     <ClCompile Include="QR-Code-generator\qrcodegen.cpp" />
     <ClCompile Include="qrcode.cpp" />
     <ClCompile Include="quaternion.cpp" />
@@ -203,6 +205,7 @@
     <ClInclude Include="color.h" />
     <ClInclude Include="complex.h" />
     <ClInclude Include="debug.h" />
+    <ClInclude Include="ease.h" />
     <ClInclude Include="filesystem.h" />
     <ClInclude Include="hash-library\crc32.h" />
     <ClInclude Include="hash-library\hash.h" />
@@ -217,6 +220,7 @@
     <ClInclude Include="hsv.h" />
     <ClInclude Include="http.h" />
     <ClInclude Include="mecab.h" />
+    <ClInclude Include="obj.h" />
     <ClInclude Include="QR-Code-generator\qrcodegen.hpp" />
     <ClInclude Include="qrcode.h" />
     <ClInclude Include="quaternion.h" />
@@ -225,12 +229,14 @@
     <ClInclude Include="string.h" />
     <ClInclude Include="textmodule.h" />
     <ClInclude Include="textmodule_color.h" />
+    <ClInclude Include="textmodule_ease.h" />
     <ClInclude Include="textmodule_exception.h" />
     <ClInclude Include="textmodule_geometry.h" />
     <ClInclude Include="textmodule_lua.h" />
     <ClInclude Include="textmodule_option.h" />
     <ClInclude Include="textmodule_string.h" />
     <ClInclude Include="os.h" />
+    <ClCompile Include="textmodule_ease.cpp" />
     <ClInclude Include="tmstring.h" />
     <ClInclude Include="utf8.h" />
     <ClInclude Include="vector2.h" />

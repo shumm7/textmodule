@@ -547,84 +547,34 @@ int cmath_sph_neumann(lua_State* L) {
 void luaReg_cmath(lua_State* L, const char* name, bool reg) {
 	if (reg) {
 		lua_newtable(L);
-
-		// rad_to_deg
-		lua_pushnumber(L, 180.0 / std::numbers::pi);
-		lua_setfield(L, -2, "rad_to_deg");
-
-		//deg_to_rad
-		lua_pushnumber(L, std::numbers::pi / 180.0);
-		lua_setfield(L, -2, "deg_to_rad");
-
-		//e
-		lua_pushnumber(L, std::numbers::e);
-		lua_setfield(L, -2, "e");
-
-		//napier
-		lua_pushnumber(L, std::numbers::e);
-		lua_setfield(L, -2, "napier");
-
-		//log2e
-		lua_pushnumber(L, std::numbers::log2e);
-		lua_setfield(L, -2, "log2e");
-
-		//log10e
-		lua_pushnumber(L, std::numbers::log10e);
-		lua_setfield(L, -2, "log10e");
-
-		//pi
-		lua_pushnumber(L, std::numbers::pi);
-		lua_setfield(L, -2, "pi");
-
-		//inv_pi
-		lua_pushnumber(L, std::numbers::inv_pi);
-		lua_setfield(L, -2, "inv_pi");
-
-		//inv_sqrtpi
-		lua_pushnumber(L, std::numbers::inv_sqrtpi);
-		lua_setfield(L, -2, "inv_sqrtpi");
-
-		//ln2
-		lua_pushnumber(L, std::numbers::ln2);
-		lua_setfield(L, -2, "ln2");
-
-		//ln10
-		lua_pushnumber(L, std::numbers::ln10);
-		lua_setfield(L, -2, "ln10");
-
-		//sqrt2
-		lua_pushnumber(L, std::numbers::sqrt2);
-		lua_setfield(L, -2, "sqrt2");
-
-		//sqrt3
-		lua_pushnumber(L, std::numbers::sqrt3);
-		lua_setfield(L, -2, "sqrt3");
-
-		//inv_sqrt3
-		lua_pushnumber(L, std::numbers::inv_sqrt3);
-		lua_setfield(L, -2, "inv_sqrt3");
-
-		//egamma
-		lua_pushnumber(L, std::numbers::egamma);
-		lua_setfield(L, -2, "egamma");
-
-		//phi
-		lua_pushnumber(L, std::numbers::phi);
-		lua_setfield(L, -2, "phi");
-
-		//huge
-		lua_pushnumber(L, HUGE_VAL);
-		lua_setfield(L, -2, "huge");
-
-		//infinity
-		lua_pushnumber(L, INFINITY);
-		lua_setfield(L, -2, "infinity");
-
-		//nan
-		lua_pushnumber(L, NAN);
-		lua_setfield(L, -2, "nan");
-
 		luaL_register(L, NULL, TEXTMODULE_CMATH_REG);
+
+		lua_settablevalue(L, "rad_to_deg", 180.0 / std::numbers::pi);
+		lua_settablevalue(L, "deg_to_rad", std::numbers::pi / 180.0);
+		lua_settablevalue(L, "e", std::numbers::e);
+		lua_settablevalue(L, "napier", std::numbers::e);
+		lua_settablevalue(L, "log2e", std::numbers::log2e);
+		lua_settablevalue(L, "log10e", std::numbers::log10e);
+		lua_settablevalue(L, "pi", std::numbers::pi);
+		lua_settablevalue(L, "inv_pi", std::numbers::inv_pi);
+		lua_settablevalue(L, "inv_sqrtpi", std::numbers::inv_sqrtpi);
+		lua_settablevalue(L, "ln2", std::numbers::ln2);
+		lua_settablevalue(L, "ln10", std::numbers::ln10);
+		lua_settablevalue(L, "sqrt2", std::numbers::sqrt2);
+		lua_settablevalue(L, "sqrt3", std::numbers::sqrt3);
+		lua_settablevalue(L, "inv_sqrt3", std::numbers::inv_sqrt3);
+		lua_settablevalue(L, "egamma", std::numbers::egamma);
+		lua_settablevalue(L, "phi", std::numbers::phi);
+		lua_settablevalue(L, "huge", HUGE_VAL);
+		lua_settablevalue(L, "infinity", std::numeric_limits<double>::infinity());
+		lua_settablevalue(L, "negative_infinity", -std::numeric_limits<double>::infinity());
+		lua_settablevalue(L, "nan", NAN);
+		lua_settablevalue(L, "quiet_nan", std::numeric_limits<double>::quiet_NaN());
+		lua_settablevalue(L, "signaling_nan", std::numeric_limits<double>::signaling_NaN());
+		lua_settablevalue(L, "min_exponent", std::numeric_limits<double>::min_exponent10);
+		lua_settablevalue(L, "max_exponent", std::numeric_limits<double>::max_exponent10);
+		lua_settablevalue(L, "digits", std::numeric_limits<double>::digits10);
+
 		lua_setfield(L, -2, name);
 	}
 }

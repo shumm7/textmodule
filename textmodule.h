@@ -21,6 +21,8 @@
 #define API_HTTP "http"
 #define API_BIT "bit"
 #define API_QRCODE "qrcode"
+#define API_OBJ "object"
+#define API_EASE "ease"
 
 //API_COLOR
 #define API_COLOR_BASE "color"
@@ -40,6 +42,7 @@
 #define ALIAS_API_TMSTRING "tmstr"
 #define ALIAS_API_FILESYSTEM "fs"
 #define ALIAS_API_RANDOM "rand"
+#define ALIAS_API_OBJ "obj"
 
 std::wstring getVersionNum(int num);
 void SetDllPath();

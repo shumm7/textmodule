@@ -332,6 +332,7 @@ int rgb____index(lua_State* L) {
 				return 0;
 			}
 		}
+		return 0;
 	}
 	catch (std::exception& e) {
 		luaL_error(L, e.what());

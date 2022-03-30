@@ -31,6 +31,7 @@ double tm_tonumber_s(lua_State* L, int idx, double def);
 unsigned long tm_tounsigned(lua_State* L, int idx);
 
 // Boolean
+bool tm_toboolean(lua_State* L, int idx);
 bool tm_toboolean_s(lua_State* L, int idx);
 bool tm_toboolean_s(lua_State* L, int idx, bool def);
 

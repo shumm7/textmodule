@@ -19,6 +19,8 @@
 #include "random.h"
 #include "bit.h"
 #include "qrcode.h"
+#include "obj.h"
+#include "ease.h"
 
 #include "complex.h"
 #include "vector2.h"
@@ -86,6 +88,12 @@ void luaReg(lua_State* L, nlohmann::json o) {
 
 	//qrcode
 	luaReg_qrcode(L, API_QRCODE, getOptionParamB(o, OPTION_VAPI, API_QRCODE));
+
+	//obj
+	luaReg_obj(L, API_OBJ, getOptionParamB(o, OPTION_VAPI, API_OBJ));
+
+	//ease
+	luaReg_ease(L, API_EASE, getOptionParamB(o, OPTION_VAPI, API_EASE));
 }
 
 void luaAlias(lua_State* L, nlohmann::json o) {
@@ -102,6 +110,11 @@ void luaAlias(lua_State* L, nlohmann::json o) {
 	luaReg_random(L,
 		ALIAS_API_RANDOM,
 		getOptionParamB(o, OPTION_VAPI_ALIAS, API_RANDOM) && getOptionParamB(o, OPTION_VAPI, API_RANDOM)
+	);
+
+	luaReg_obj(L,
+		ALIAS_API_OBJ,
+		getOptionParamB(o, OPTION_VAPI_ALIAS, API_OBJ) && getOptionParamB(o, OPTION_VAPI, API_OBJ)
 	);
 }
 

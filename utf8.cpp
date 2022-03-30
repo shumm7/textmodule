@@ -31,7 +31,7 @@ int utf8_byte(lua_State* L) {
 			int c = text[k];
 			auto r = UnicodeToUTF8(c);
 			if (r != -1) {
-				lua_pushinteger(L, r);
+				lua_pushnumber(L, r);
 			}
 			else {
 				return 0;

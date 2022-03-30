@@ -60,7 +60,7 @@ int versionCheck() {
 			return VERSION_CHECK_ERROR;
 		}
 	}
-	catch (std::exception& e) {
+	catch (std::exception) {
 		return VERSION_CHECK_ERROR;
 	}
 }
