@@ -394,51 +394,6 @@ int tmstring_anagram(lua_State* L) {
 	}
 }
 
-int tmstring_print(lua_State* L) {
-	try {
-		std::cout << tm_tostring(L, 1) << std::endl;
-		return 0;
-	}
-	catch (std::exception& e) {
-		luaL_error(L, e.what());
-		return 1;
-	}
-}
-
-int tmstring_printf(lua_State* L) {
-	try {
-		lua_Sstring str = tm_tosstring(L, 1);
-		fmt::dynamic_format_arg_store<fmt::format_context> store;
-
-		int i = 2;
-		while (true) {
-			int tp = lua_type(L, i);
-
-			if (tp == LUA_TNUMBER)
-				store.push_back(lua_tonumber(L, i));
-			else if (tp == LUA_TBOOLEAN)
-				store.push_back(lua_toboolean(L, i));
-			else if (tp == LUA_TSTRING)
-				store.push_back(lua_tostring(L, i));
-			else if (tp == LUA_TNIL)
-				store.push_back("nil");
-			else if (tp == LUA_TNONE)
-				break;
-			else
-				store.push_back(lua_topointer(L, i));
-
-			i++;
-		};
-
-		std::cout << fmt::vformat(str, store) << std::endl;
-		return 0;
-	}
-	catch (std::exception& e) {
-		luaL_error(L, e.what());
-		return 1;
-	}
-}
-
 void luaReg_tmstring(lua_State* L, const char* name, bool reg) {
 	if (reg) {
 		lua_newtable(L);

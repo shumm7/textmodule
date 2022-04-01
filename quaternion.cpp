@@ -626,9 +626,12 @@ int quaternion__slerp(lua_State* L) {
 	try {
 		lua_Quaternion* val1 = tm_toquaternion_s(L, 1);
 		lua_Quaternion* val2 = tm_toquaternion_s(L, 2);
+
+		lua_Quaternion res(val1->w(), val1->x(), val1->y(), val1->z());
+		lua_Quaternion p(val2->w(), val2->x(), val2->y(), val2->z());
 		lua_Number t = tm_tonumber(L, 3);
 
-		lua_pushquaternion(L, val1->slerp(t, *val2));
+		lua_pushquaternion(L, res.slerp(t, p));
 		return 1;
 	}
 	catch (std::exception& e) {

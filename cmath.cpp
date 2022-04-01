@@ -267,6 +267,96 @@ int cmath_circle_perm(lua_State* L) {
 }
 
 
+int cmath_sign(lua_State* L) {
+	try {
+		lua_pushboolean(L, !std::signbit(tm_tonumber(L, 1)));
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int cmath_isprime(lua_State* L) {
+	try {
+		lua_pushboolean(L, isprime(tm_tointeger(L, 1)));
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int cmath_isinteger(lua_State* L) {
+	try {
+		lua_Number a = tm_tonumber(L, 1);
+		lua_Integer b = (lua_Integer)tm_tonumber(L, 1);
+		lua_pushboolean(L, a == b);
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int cmath_iseven(lua_State* L) {
+	try {
+		lua_Integer n = tm_tointeger(L, 1);
+		lua_pushboolean(L, n % 2 == 0);
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int cmath_isodd(lua_State* L) {
+	try {
+		lua_Integer n = tm_tointeger(L, 1);
+		lua_pushboolean(L, n % 2 != 0);
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int cmath_classify(lua_State* L) {
+	try {
+		int c = std::fpclassify(tm_tonumber(L, 1));
+		switch (c) {
+		case FP_INFINITE:
+			lua_pushstring(L, "infinite");
+			break;
+		case FP_NAN:
+			lua_pushstring(L, "nan");
+			break;
+		case FP_NORMAL:
+			lua_pushstring(L, "normal");
+			break;
+		case FP_SUBNORMAL:
+			lua_pushstring(L, "subnormal");
+			break;
+		case FP_ZERO:
+			lua_pushstring(L, "zero");
+			break;
+		default:
+			return 0;
+		}
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+
 int cmath_assoc_laguerre(lua_State* L) {
 	try {
 		lua_pushnumber(L, std::assoc_laguerre(tm_tointeger(L, 1), tm_tointeger(L, 2), tm_tonumber(L, 3)));
@@ -582,14 +672,16 @@ void luaReg_cmath(lua_State* L, const char* name, bool reg) {
 		lua_settablevalue(L, "egamma", std::numbers::egamma);
 		lua_settablevalue(L, "phi", std::numbers::phi);
 		lua_settablevalue(L, "huge", HUGE_VAL);
-		lua_settablevalue(L, "infinity", std::numeric_limits<double>::infinity());
-		lua_settablevalue(L, "negative_infinity", -std::numeric_limits<double>::infinity());
+		lua_settablevalue(L, "infinity", std::numeric_limits<lua_Number>::infinity());
+		lua_settablevalue(L, "negative_infinity", -std::numeric_limits<lua_Number>::infinity());
 		lua_settablevalue(L, "nan", NAN);
-		lua_settablevalue(L, "quiet_nan", std::numeric_limits<double>::quiet_NaN());
-		lua_settablevalue(L, "signaling_nan", std::numeric_limits<double>::signaling_NaN());
-		lua_settablevalue(L, "min_exponent", std::numeric_limits<double>::min_exponent10);
-		lua_settablevalue(L, "max_exponent", std::numeric_limits<double>::max_exponent10);
-		lua_settablevalue(L, "digits", std::numeric_limits<double>::digits10);
+		lua_settablevalue(L, "quiet_nan", std::numeric_limits<lua_Number>::quiet_NaN());
+		lua_settablevalue(L, "signaling_nan", std::numeric_limits<lua_Number>::signaling_NaN());
+		lua_settablevalue(L, "min_exponent", std::numeric_limits<lua_Number>::min_exponent10);
+		lua_settablevalue(L, "max_exponent", std::numeric_limits<lua_Number>::max_exponent10);
+		lua_settablevalue(L, "digits", std::numeric_limits<lua_Number>::digits10);
+		lua_settablevalue(L, "denorm_min", std::numeric_limits<lua_Number>::denorm_min());
+		lua_settablevalue(L, "epsilon", std::numeric_limits<lua_Number>::epsilon());
 
 		lua_setfield(L, -2, name);
 	}

@@ -2,6 +2,8 @@
 #include <iostream>
 #include <sstream>
 #include <vector>
+#include <fmt/core.h>
+#include <fmt/format.h>
 
 #include "base.h"
 #include "textmodule.h"
@@ -95,6 +97,54 @@ int base_type(lua_State* L) {
 				lua_settablevalue(L, j + 1, res.at(j));
 			return 1;
 		}
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int base_print(lua_State* L) {
+	try {
+		for (int i = 0; i < lua_gettop(L); i++) {
+			std::cout << tm_convtostring(L, i + 1) << "\t";
+		}
+		std::cout << std::endl;
+		return 0;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int base_printf(lua_State* L) {
+	try {
+		lua_Sstring str = tm_tosstring(L, 1);
+		fmt::dynamic_format_arg_store<fmt::format_context> store;
+
+		int i = 2;
+		while (true) {
+			int tp = lua_type(L, i);
+
+			if (tp == LUA_TNUMBER)
+				store.push_back(lua_tonumber(L, i));
+			else if (tp == LUA_TBOOLEAN)
+				store.push_back(lua_toboolean(L, i));
+			else if (tp == LUA_TSTRING)
+				store.push_back(lua_tostring(L, i));
+			else if (tp == LUA_TNIL)
+				store.push_back("nil");
+			else if (tp == LUA_TNONE)
+				break;
+			else
+				store.push_back(lua_topointer(L, i));
+
+			i++;
+		};
+
+		std::cout << fmt::vformat(str, store) << std::endl;
+		return 0;
 	}
 	catch (std::exception& e) {
 		luaL_error(L, e.what());

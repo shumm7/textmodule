@@ -20,6 +20,13 @@ int cmath_rep_comb(lua_State* L);
 int cmath_rep_perm(lua_State* L);
 int cmath_circle_perm(lua_State* L);
 
+int cmath_sign(lua_State* L);
+int cmath_isprime(lua_State* L);
+int cmath_isinteger(lua_State* L);
+int cmath_iseven(lua_State* L);
+int cmath_isodd(lua_State* L);
+int cmath_classify(lua_State* L);
+
 int cmath_assoc_laguerre(lua_State* L);
 int cmath_assoc_legendre(lua_State* L);
 int cmath_beta(lua_State* L);
@@ -65,6 +72,13 @@ static luaL_Reg TEXTMODULE_CMATH_REG[] = {
 	{"rep_perm", cmath_rep_perm},
 	{"circle_perm", cmath_circle_perm},
 
+	{"sign", cmath_sign},
+	{"isprime", cmath_isprime},
+	{"isinteger", cmath_isinteger},
+	{"iseven", cmath_iseven},
+	{"isodd", cmath_isodd},
+	{"classify", cmath_classify},
+	
 	{"assoc_laguerre", cmath_assoc_laguerre},
 	{"assoc_legendre", cmath_assoc_legendre},
 	{"beta", cmath_beta},
