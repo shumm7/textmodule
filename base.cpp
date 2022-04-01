@@ -1,9 +1,9 @@
 #include <lua.hpp>
 #include <iostream>
 #include <sstream>
+#include <vector>
 
 #include "base.h"
-#include "color.h"
 #include "textmodule.h"
 #include "textmodule_string.h"
 #include "textmodule_exception.h"
@@ -12,8 +12,8 @@
 
 int base_getinfo(lua_State* L) {
 	try {
-		std::wstring t = tm_towstring(L, 1);
-		int i = tm_tointeger_s(L, 2, 1);
+		lua_Wstring t = tm_towstring(L, 1);
+		lua_Integer i = tm_tointeger_s(L, 2, 1);
 
 		if (t == L"version") {
 			if (i == 1) {
@@ -26,7 +26,7 @@ int base_getinfo(lua_State* L) {
 			}
 		}
 		else if (t == L"versions") {
-			std::wstring res = getVersionNum(i);
+			lua_Wstring res = getVersionNum(i);
 			if (res != L"") {
 				lua_pushwstring(L, res);
 				return 1;
@@ -54,69 +54,59 @@ int base_debug_print(lua_State* L) {
 		int i = 1;
 		std::wstring ret = L"";
 
-		while (true)
-		{
-			int tp = lua_type(L, i);
-			std::stringstream ss;
+		if (lua_type(L, i) == LUA_TNONE) {
+			debug_string(ret);
+			lua_pushwstring(L, ret);
+			return 1;
+		}
 
-			switch (tp)
-			{
-			case LUA_TNIL:
-				ret = ret + L"nil";
-				break;
-			case LUA_TNUMBER:
-				ss << lua_tonumber(L, i);
-				ret = ret + StrToWstr(ss.str());
-				break;
-			case LUA_TBOOLEAN:
-				if (lua_toboolean(L, i))
-					ret = ret + L"true";
-				else
-					ret = ret + L"false";
-				break;
-			case LUA_TSTRING:
-				ret = ret + lua_towstring(L, i);
-				break;
-			case LUA_TTABLE:
-				ret = ret + L"table";
-				break;
-			case LUA_TFUNCTION:
-				ret = ret + L"function";
-				break;
-			case LUA_TUSERDATA:
-				ret = ret + L"userdata";
-				break;
-			case LUA_TTHREAD:
-				ret = ret + L"thread";
-				break;
-			case LUA_TLIGHTUSERDATA:
-				ret = ret + L"lightuserdata";
-				break;
-			case LUA_TNONE:
-				ret = ret.substr(0, ret.length() - 1);
-				debug_string(ret);
-				lua_pushwstring(L, ret);
-				return 1;
+		while (lua_type(L, i)!=LUA_TNONE)
+		{
+			ret += StrToWstr(tm_convtostring(L, i)) + L"\t";
+			i++;
+		}
+		ret = ret.substr(0, ret.length() - 1);
+		debug_string(ret);
+		lua_pushwstring(L, ret);
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int base_type(lua_State* L) {
+	try {
+		if (lua_gettop(L) <= 1) {
+			lua_pushstring(L, tm_typename(L, 1));
+			return 1;
+		}
+		else {
+			int i = 1;
+			std::vector<std::string> res;
+			while (lua_type(L, i) != LUA_TNONE) {
+				res.push_back(tm_typename(L, i));
+				i++;
 			}
 
-			ret = ret + L",";
-			i++;
+			lua_newtable(L);
+			for (int j = 0; j < (i - 1); j++)
+				lua_settablevalue(L, j + 1, res.at(j));
+			return 1;
 		}
 	}
 	catch (std::exception& e) {
 		luaL_error(L, e.what());
 		return 1;
 	}
-	return 0;
 }
 
 int base_exception(lua_State* L) {
-	if (lua_type(L, 1) == LUA_TSTRING) {
+	if (lua_type(L, 1) == LUA_TSTRING)
 		throw std::exception(lua_tostring(L, 1));
-	}
-	else if (lua_type(L, 1) == LUA_TNONE) {
+	else if (lua_type(L, 1) == LUA_TNONE)
 		throw std::exception();
-	}
 	return 0;
 }
 
@@ -130,6 +120,7 @@ int base_versioncheck(lua_State* L) {
 			break;
 		case VERSION_CHECK_OUTDATED:
 			lua_pushboolean(L, false);
+			break;
 		case VERSION_CHECK_ERROR:
 			lua_pushnil(L);
 			break;
@@ -155,6 +146,5 @@ void luaReg_base(lua_State* L, bool reg) {
 	luaL_register(L, MODULE_NAME, none);
 	if (reg) {
 		luaL_register(L, NULL, TEXTMODULE_BASE_REG);
-		luaL_register(L, NULL, TEXTMODULE_COLOR_MAIN_REG);
 	}
 }

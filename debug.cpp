@@ -4,6 +4,10 @@
 #include "textmodule_string.h"
 #include "textmodule_exception.h"
 
+static luaL_Reg TEXTMODULE_DEBUG_REG[] = {
+	{ nullptr, nullptr }
+};
+
 void luaReg_debug(lua_State* L, const char* name, bool reg) {
 	if (reg) {
 		lua_newtable(L);

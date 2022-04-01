@@ -2,10 +2,6 @@
 #include <lua.hpp>
 #include "textmodule_color.h"
 
-#define TEXTMODULE_HSL "HSL*"
-#define hsl_check(L, n) (reinterpret_cast<HSL*>(luaL_checkudata(L, n, TEXTMODULE_HSL)))
-
-
 int hsl_new(lua_State* L);
 int hsl____tostring(lua_State* L);
 int hsl____index(lua_State* L);

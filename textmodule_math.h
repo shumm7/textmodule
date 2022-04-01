@@ -1,20 +1,22 @@
 #pragma once
-double range(double n, double min, double max);
-double range(double n);
+#include "textmodule_lua.h"
 
-double clamp(double n, double min, double max);
-double clamp(double n);
+lua_Number range(lua_Number n, lua_Number min, lua_Number max);
+lua_Number range(lua_Number n);
 
-double clamp_s(double n, double min, double max);
-double clamp_s(double n);
+lua_Number clamp(lua_Number n, lua_Number min, lua_Number max);
+lua_Number clamp(lua_Number n);
 
-bool isinteger(double n);
+lua_Number clamp_s(lua_Number n, lua_Number min, lua_Number max);
+lua_Number clamp_s(lua_Number n);
 
-double combination(int n, int r);
-double factorial(int n);
-double permutation(int n, int r);
-double repetition_combination(int n, int r);
-double repetition_permutation(int n, int r);
-double circular_permutation(int n);
+lua_Boolean isinteger(lua_Number n);
 
-double bernstein(double t, int n, int i);
+lua_Number combination(lua_Integer n, lua_Integer r);
+lua_Number factorial(lua_Integer n);
+lua_Number permutation(lua_Integer n, lua_Integer r);
+lua_Number repetition_combination(lua_Integer n, lua_Integer r);
+lua_Number repetition_permutation(lua_Integer n, lua_Integer r);
+lua_Number circular_permutation(lua_Integer n);
+
+lua_Number bernstein(lua_Number t, lua_Integer n, lua_Integer i);

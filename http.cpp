@@ -17,8 +17,8 @@ web::http::http_request set_header(lua_State* L, int idx, web::http::http_reques
 	if (type == LUA_TTABLE) {
 		lua_pushnil(L);
 		while (lua_next(L, idx) != 0) {
-			std::wstring key = tm_towstring(L, -2);
-			std::wstring value = tm_towstring(L, -1);
+			lua_Wstring key = tm_towstring(L, -2);
+			lua_Wstring value = tm_towstring(L, -1);
 			request.headers().add(key, value);
 			lua_pop(L, 1);
 		}
@@ -28,7 +28,7 @@ web::http::http_request set_header(lua_State* L, int idx, web::http::http_reques
 
 int http_get(lua_State* L) {
 	try {
-		std::wstring url = tm_towstring(L, 1);
+		lua_Wstring url = tm_towstring(L, 1);
 
 		web::http::http_request request(methods::GET);
 		request = set_header(L, 2, request);
@@ -48,8 +48,8 @@ int http_get(lua_State* L) {
 
 int http_post(lua_State* L) {
 	try {
-		std::wstring url = tm_towstring(L, 1);
-		std::wstring body = tm_towstring(L, 2);
+		lua_Wstring url = tm_towstring(L, 1);
+		lua_Wstring body = tm_towstring(L, 2);
 
 		web::http::http_request request(methods::POST);
 		request.set_body(body);

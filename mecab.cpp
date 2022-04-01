@@ -35,8 +35,8 @@ void mecab_check(const MeCab::Node* node) {
 	}
 }
 
-const MeCab::Node* mecab_getNode(MeCab::Tagger* tagger, std::wstring w_input) {
-	std::string input = WstrToStr(w_input);
+const MeCab::Node* mecab_getNode(MeCab::Tagger* tagger, lua_Wstring w_input) {
+	lua_Sstring input = WstrToStr(w_input);
 
 	char buf[LUAL_BUFFERSIZE];
 	if (input.size() < LUAL_BUFFERSIZE) {
@@ -53,15 +53,15 @@ const MeCab::Node* mecab_getNode(MeCab::Tagger* tagger, std::wstring w_input) {
 	return node;
 }
 
-std::wstring mecab_getYomigana(MeCab::Tagger* tagger, std::wstring w_input) {
+lua_Wstring mecab_getYomigana(MeCab::Tagger* tagger, lua_Wstring w_input) {
 	mecab_check(tagger);
 
 	const MeCab::Node* node = mecab_getNode(tagger, w_input);
 	mecab_check(node);
 
-	std::wstring res;
+	lua_Wstring res;
 	for (; node; node = node->next) {
-		std::vector<std::wstring> v = split(StrToWstr(node->feature), L',');
+		std::vector<lua_Wstring> v = split(StrToWstr(node->feature), L',');
 		if (v.size() != 1) {
 			if(v[0]!=L"BOS/EOS")
 				res += v[7];
@@ -73,7 +73,7 @@ std::wstring mecab_getYomigana(MeCab::Tagger* tagger, std::wstring w_input) {
 
 int mecab_node(lua_State* L) {
 	try {
-		std::wstring text = tm_towstring(L, 1);
+		lua_Wstring text = tm_towstring(L, 1);
 
 		char* c[MECAB_PARAM_N] = {
 		const_cast<char*>(MECAB_PARAM_A),
@@ -94,76 +94,29 @@ int mecab_node(lua_State* L) {
 			lua_pushinteger(L, i);
 			lua_newtable(L);
 
-			//id
-			lua_pushinteger(L, node->id);
-			lua_setfield(L, -2, "id");
-
-			//surface
-			lua_pushstring(L, node->surface);
-			lua_setfield(L, -2, "surface");
-
-			//feature
 			{
-				std::vector<std::wstring> v = split(StrToWstr(node->feature), L',');
+				std::vector<lua_Wstring> v = split(StrToWstr(node->feature), L',');
 				lua_newtable(L);
-				for (int i = 0; i < v.size(); i++) {
-					lua_pushinteger(L, i + 1);
-					lua_pushwstring(L, v[i]);
-					lua_settable(L, -3);
-				}
-				lua_pushinteger(L, 0);
-				lua_pushstring(L, node->feature);
-				lua_settable(L, -3);
+				for (int i = 0; i < v.size(); i++)
+					lua_settablevalue(L, i + 1, v[i]);
+				lua_settablevalue(L, 0, node->feature);
 			}
-			lua_setfield(L, -2, "feature");
+			lua_setfield(L, -2, "feature"); //feature
 
-			//length
-			lua_pushinteger(L, node->length);
-			lua_setfield(L, -2, "length");
-
-			//rlength
-			lua_pushinteger(L, node->rlength);
-			lua_setfield(L, -2, "rlength");
-
-			//rcAttr
-			lua_pushinteger(L, node->rcAttr);
-			lua_setfield(L, -2, "rcAttr");
-
-			//lcAttr
-			lua_pushinteger(L, node->lcAttr);
-			lua_setfield(L, -2, "lcAttr");
-
-			//posid
-			lua_pushinteger(L, node->posid);
-			lua_setfield(L, -2, "posid");
-
-			//char_type
-			lua_pushinteger(L, node->char_type);
-			lua_setfield(L, -2, "char_type");
-
-			//stat
-			lua_pushinteger(L, node->rlength);
-			lua_setfield(L, -2, "stat");
-
-			//isbest
-			lua_pushinteger(L, node->isbest);
-			lua_setfield(L, -2, "isbest");
-
-			//alpha
-			lua_pushnumber(L, node->alpha);
-			lua_setfield(L, -2, "alpha");
-
-			//beta
-			lua_pushnumber(L, node->beta);
-			lua_setfield(L, -2, "beta");
-
-			//prob
-			lua_pushnumber(L, node->prob);
-			lua_setfield(L, -2, "prob");
-
-			//cost
-			lua_pushinteger(L, node->cost);
-			lua_setfield(L, -2, "cost");
+			lua_settablevalue(L, "id", (lua_Integer)node->id); //id
+			lua_settablevalue(L, "surface", node->surface); //surface
+			lua_settablevalue(L, "length", (lua_Integer)node->length); //length
+			lua_settablevalue(L, "rlength", (lua_Integer)node->rlength); //rlength
+			lua_settablevalue(L, "rcAttr", (lua_Integer)node->rcAttr); //rcAttr
+			lua_settablevalue(L, "lcAttr", (lua_Integer)node->lcAttr); //lcAttr
+			lua_settablevalue(L, "posid", (lua_Integer)node->posid); //posid
+			lua_settablevalue(L, "char_type", (lua_Integer)node->char_type); //char_type
+			lua_settablevalue(L, "stat", (lua_Integer)node->stat); //stat
+			lua_settablevalue(L, "isbest", (lua_Integer)node->isbest); //isbest
+			lua_settablevalue(L, "alpha", (lua_Number)node->alpha); //alpha
+			lua_settablevalue(L, "beta", (lua_Number)node->beta); //beta
+			lua_settablevalue(L, "prob", (lua_Number)node->prob); //prob
+			lua_settablevalue(L, "cost", (lua_Integer)node->cost); //cost
 
 			lua_settable(L, -3);
 			i++;
@@ -182,7 +135,7 @@ int mecab_node(lua_State* L) {
 
 int mecab_yomi_hiragana(lua_State* L) {
 	try {
-		std::wstring text = tm_towstring(L, 1);
+		lua_Wstring text = tm_towstring(L, 1);
 
 		char* c[MECAB_PARAM_N] = {
 		const_cast<char*>(MECAB_PARAM_A),
@@ -209,7 +162,7 @@ int mecab_yomi_hiragana(lua_State* L) {
 
 int mecab_yomi_katakana(lua_State* L) {
 	try {
-		std::wstring text = tm_towstring(L, 1);
+		lua_Wstring text = tm_towstring(L, 1);
 
 		char* c[MECAB_PARAM_N] = {
 		const_cast<char*>(MECAB_PARAM_A),
@@ -236,7 +189,7 @@ int mecab_yomi_katakana(lua_State* L) {
 
 int mecab_words(lua_State* L) {
 	try {
-		std::wstring text = tm_towstring(L, 1);
+		lua_Wstring text = tm_towstring(L, 1);
 
 		char* c[MECAB_PARAM_N+1] = {
 		const_cast<char*>(MECAB_PARAM_A),
@@ -249,18 +202,14 @@ int mecab_words(lua_State* L) {
 		mecab_check(model);
 		MeCab::Tagger* tagger = model->createTagger();
 		mecab_check(tagger);
-		std::string val = tagger->parse(WstrToStr(text).c_str());
-
-		lua_pushsstring(L, val);
+		lua_Sstring val = tagger->parse(WstrToStr(text).c_str());
 
 		lua_newtable(L);
-		std::vector<std::wstring> v = split(StrToWstr(val), L' ');
+		std::vector<lua_Wstring> v = split(StrToWstr(val), L' ');
 
 		for (int i = 0; i < v.size(); ++i) {
 			if (v[i] != L"" && v[i] != L"\n") {
-				lua_pushinteger(L, i + 1);
-				lua_pushwstring(L, v[i]);
-				lua_settable(L, -3);
+				lua_settablevalue(L, i + 1, v[i]);
 			}
 		}
 

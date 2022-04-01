@@ -12,10 +12,10 @@
 
 int string_find(lua_State* L) {
 	try {
-		std::wstring text = tm_towstring(L, 1);
-		std::wstring pattern = tm_towstring(L, 2);
-		int init = tm_tointeger_s(L, 3, 1);
-		bool plain = tm_toboolean_s(L, 4, false);
+		lua_Wstring text = tm_towstring(L, 1);
+		lua_Wstring pattern = tm_towstring(L, 2);
+		lua_Integer init = tm_tointeger_s(L, 3, 1);
+		lua_Boolean plain = tm_toboolean_s(L, 4, false);
 		bool rev = false;
 
 		if (init < 0) {
@@ -32,20 +32,20 @@ int string_find(lua_State* L) {
 
 		if (plain) {
 			if (!rev) {
-				std::wstring temp = text.substr(init);
+				lua_Wstring temp = text.substr(init);
 				int pos = temp.find(pattern);
 				if (pos!=std::string::npos) {
-					int n = pos + 1 + init;
+					lua_Integer n = pos + 1 + init;
 					lua_pushinteger(L, n);
 					lua_pushinteger(L, n + pattern.length() - 1);
 					return 2;
 				}
 			}
 			else {
-				std::wstring temp = text.substr(text.length() - init - 1);
+				lua_Wstring temp = text.substr(text.length() - init - 1);
 				int pos = temp.find(pattern);
 				if (pos != std::string::npos) {
-					int n = pos + text.length() - init;
+					lua_Integer n = pos + text.length() - init;
 					lua_pushinteger(L, n);
 					lua_pushinteger(L, n + pattern.length() - 1);
 					return 2;
@@ -55,20 +55,20 @@ int string_find(lua_State* L) {
 		else {
 			std::wsmatch results;
 			if(!rev){
-				std::wstring temp = text.substr(init);
+				lua_Wstring temp = text.substr(init);
 				bool sresult = std::regex_search(temp, results, std::wregex(pattern));
 				if (sresult) {
-					int n = results.position() + 1 + init;
+					lua_Integer n = results.position() + 1 + init;
 					lua_pushinteger(L, n);
 					lua_pushinteger(L, n + results.length() - 1);
 					return 2;
 				}
 			}
 			else {
-				std::wstring temp = text.substr(text.length() - init - 1);
+				lua_Wstring temp = text.substr(text.length() - init - 1);
 				bool sresult = std::regex_search(temp, results, std::wregex(pattern));
 				if (sresult) {
-					int n = results.position() + text.length() - init;
+					lua_Integer n = results.position() + text.length() - init;
 					lua_pushinteger(L, n);
 					lua_pushinteger(L, n + results.length() - 1);
 					return 2;
@@ -88,9 +88,9 @@ int string_find(lua_State* L) {
 
 int string_sub(lua_State* L) {
 	try {
-		std::wstring text = tm_towstring(L, 1);
-		int start = tm_tointeger(L, 2) - 1;
-		int end = tm_tointeger_s(L, 3, text.length()) - 1;
+		lua_Wstring text = tm_towstring(L, 1);
+		lua_Integer start = tm_tointeger(L, 2) - 1;
+		lua_Integer end = tm_tointeger_s(L, 3, text.length()) - 1;
 
 		lua_pushwstring(L, text.substr(start, end - start + 1));
 		return 1;
@@ -103,10 +103,10 @@ int string_sub(lua_State* L) {
 
 int string_gsub(lua_State* L) {
 	try {
-		std::wstring text = tm_towstring(L, 1);
-		std::wstring pattern = tm_towstring(L, 2);
-		std::wstring repl = tm_towstring(L, 3);
-		int num = tm_tointeger_s(L, 4, 1);
+		lua_Wstring text = tm_towstring(L, 1);
+		lua_Wstring pattern = tm_towstring(L, 2);
+		lua_Wstring repl = tm_towstring(L, 3);
+		lua_Integer num = tm_tointeger_s(L, 4, 1);
 
 		for (int i = 0; i < num; i++)
 		{
@@ -118,9 +118,8 @@ int string_gsub(lua_State* L) {
 				int l = results.length();
 				text = text.replace(s, l, repl);
 			}
-			else {
+			else
 				break;
-			}
 		}
 		lua_pushwstring(L, text);
 		return 1;
@@ -136,8 +135,7 @@ int string_gsub(lua_State* L) {
 
 int string_len(lua_State* L) {
 	try {
-		std::wstring text = tm_towstring(L, 1);
-
+		lua_Wstring text = tm_towstring(L, 1);
 		lua_pushinteger(L, text.length());
 		return 1;
 	}
@@ -149,12 +147,10 @@ int string_len(lua_State* L) {
 
 int string_reverse(lua_State* L) {
 	try {
-		std::wstring text = tm_towstring(L, 1);
-		std::wstring ret;
+		lua_Wstring text = tm_towstring(L, 1);
+		lua_Wstring ret;
 		for (unsigned int i = 0; i < text.length(); i++)
-		{
 			ret += text.substr(text.length() - i - 1, 1);
-		}
 
 		lua_pushwstring(L, ret);
 		return 1;
@@ -189,9 +185,9 @@ int string_lower(lua_State* L) {
 
 int string_match(lua_State* L) {
 	try {
-		std::wstring text = tm_towstring(L, 1);
-		std::wstring pattern = tm_towstring(L, 2);
-		int start = tm_tointeger_s(L, 3, 1) - 1;
+		lua_Wstring text = tm_towstring(L, 1);
+		lua_Wstring pattern = tm_towstring(L, 2);
+		lua_Integer start = tm_tointeger_s(L, 3, 1) - 1;
 
 		text = text.substr(start);
 		std::wsmatch results;
@@ -201,9 +197,8 @@ int string_match(lua_State* L) {
 			lua_pushwstring(L, results.str());
 			return 1;
 		}
-		else {
+		else
 			return 0;
-		}
 	}
 	catch (std::regex_error) {
 		return 0;
@@ -216,23 +211,19 @@ int string_match(lua_State* L) {
 
 int string_byte(lua_State* L) {
 	try {
-		std::wstring text = tm_towstring(L, 1);
-		int i = tm_tointeger_s(L, 2, 1) - 1;
-		int j = tm_tointeger_s(L, 3, 1) - 1;
+		lua_Wstring text = tm_towstring(L, 1);
+		lua_Integer i = tm_tointeger_s(L, 2, 1) - 1;
+		lua_Integer j = tm_tointeger_s(L, 3, 1) - 1;
 		int length = text.length();
 
-		if (length < 1) {
+		if (length < 1)
 			return 0;
-		}
-		if (j < i) {
+		if (j < i)
 			return 0;
-		}
-		if (i >= length) {
+		if (i >= length)
 			return 0;
-		}
-		if (j >= length) {
+		if (j >= length)
 			j = length - 1;
-		}
 
 		for (int k = i; k <= j; k++)
 		{
@@ -253,22 +244,18 @@ int string_char(lua_State* L) {
 		std::vector<unsigned long long> list;
 
 		while (true) {
-			if (lua_type(L, cnt) == LUA_TNUMBER) {
+			if (lua_type(L, cnt) == LUA_TNUMBER)
 				list.push_back(lua_tonumber(L, cnt));
-			}
-			else {
+			else
 				break;
-			}
-
 			cnt++;
 		}
 
-		if (list.size() < 1) {
+		if (list.size() < 1)
 			return 0;
-		}
 
 		wchar_t temp;
-		std::wstring ret;
+		lua_Wstring ret;
 		for (unsigned int i = 0; i < list.size(); i++)
 		{
 			temp = list[i];
@@ -286,8 +273,8 @@ int string_char(lua_State* L) {
 
 int string_gmatch(lua_State* L) {
 	try {
-		std::wstring s = tm_towstring(L, 1);
-		std::wstring pattern = tm_towstring(L, 2);
+		lua_Wstring s = tm_towstring(L, 1);
+		lua_Wstring pattern = tm_towstring(L, 2);
 		std::wsmatch m;
 
 		luaL_dostring(L, "function _TEXTMODULE_GMATCH_IFUNC(x) local pos,length=0,#x  return function()  pos = pos + 1  if pos>length then  return nil  else  return x[pos] end end end");
@@ -298,11 +285,7 @@ int string_gmatch(lua_State* L) {
 			int size = m.size();
 
 			for (int i = 0; i < size; i++)
-			{
-				lua_pushinteger(L, i + 1);
-				lua_pushwstring(L, m[i].str());
-				lua_settable(L, -3);
-			}
+				lua_settablevalue(L, i + 1, m[i].str());
 		}
 
 		lua_pcall(L, 1, 1, 0);
@@ -319,9 +302,9 @@ int string_gmatch(lua_State* L) {
 
 int string_split(lua_State* L) {
 	try {
-		std::wstring str = tm_towstring(L, 1);
-		std::wstring pattern = tm_towstring(L, 2);
-		int n = tm_tonumber_s(L, 3, -1);
+		lua_Wstring str = tm_towstring(L, 1);
+		lua_Wstring pattern = tm_towstring(L, 2);
+		lua_Integer n = tm_tointeger_s(L, 3, -1);
 
 		std::wsmatch result;
 		int count = 0;
@@ -329,18 +312,14 @@ int string_split(lua_State* L) {
 		lua_newtable(L);
 		while (std::regex_search(str, result, std::wregex(pattern)) && (count < n || n < 1)) {
 			int p = result.position();
-			lua_pushinteger(L, count + 1);
-			lua_pushwstring(L, str.substr(0, p));
-			lua_settable(L, -3);
+			lua_settablevalue(L, count + 1, str.substr(0, p));
 
 			str = str.substr(p + result[0].str().length());
 			count++;
 		}
-		if (str.length() > 0) {
-			lua_pushinteger(L, count + 1);
-			lua_pushwstring(L, str);
-			lua_settable(L, -3);
-		}
+
+		if (str.length() > 0)
+			lua_settablevalue(L, count + 1, str);
 
 		return 1;
 	}
@@ -352,9 +331,9 @@ int string_split(lua_State* L) {
 
 int string_rep(lua_State* L) {
 	try {
-		std::wstring s = tm_towstring(L, 1);
-		int n = tm_tointeger(L, 2);
-		std::wstring ret;
+		lua_Wstring s = tm_towstring(L, 1);
+		lua_Integer n = tm_tointeger(L, 2);
+		lua_Wstring ret;
 
 		for (int i = 0; i < n; i++) {
 			ret += s;
@@ -371,7 +350,7 @@ int string_rep(lua_State* L) {
 
 int string_format(lua_State* L) {
 	try {
-		std::string str = tm_tosstring(L, 1);
+		lua_Sstring str = tm_tosstring(L, 1);
 		try {
 			fmt::dynamic_format_arg_store<fmt::format_context> store;
 
@@ -390,7 +369,7 @@ int string_format(lua_State* L) {
 				else if (tp == LUA_TNONE)
 					break;
 				else
-					return luaL_argerror(L, i, "format must be number/boolean/string/nil");
+					store.push_back(lua_topointer(L, i));
 
 				i++;
 			};

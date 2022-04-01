@@ -3,8 +3,6 @@
 #include <vector>
 #include "textmodule_color.h"
 
-#define TEXTMODULE_COLORLIST "ColorList"
-
 typedef struct ColorItem {
 	std::wstring color = L"";
 	std::wstring name = L"";
@@ -32,11 +30,5 @@ static luaL_Reg TEXTMODULE_COLOR_META_REG[] = {
 	{"search", color_search},
 	{"makepalette", color_makepalette},
 	{"loadpalette", color_loadpalette},
-	{ nullptr, nullptr }
-};
-
-static luaL_Reg TEXTMODULE_COLOR_MAIN_REG[] = {
-	//{"RGB", color_RGB},
-	//{"HSV", color_HSV},
 	{ nullptr, nullptr }
 };

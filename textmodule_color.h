@@ -1,6 +1,14 @@
 #pragma once
 #include <iostream>
 
+#define TEXTMODULE_COLORLIST "ColorList"
+#define TEXTMODULE_RGB "RGB*"
+#define TEXTMODULE_HSV "HSV*"
+#define TEXTMODULE_HSL "HSL*"
+#define rgb_check(L, n) (reinterpret_cast<RGB*>(luaL_checkudata(L, n, TEXTMODULE_RGB)))
+#define hsv_check(L, n) (reinterpret_cast<HSV*>(luaL_checkudata(L, n, TEXTMODULE_HSV)))
+#define hsl_check(L, n) (reinterpret_cast<HSL*>(luaL_checkudata(L, n, TEXTMODULE_HSL)))
+
 typedef struct {
 	unsigned char r; // 0 - 255
 	unsigned char g; // 0 - 255
@@ -35,7 +43,6 @@ typedef struct {
 int check_rgbvalue(int n);
 int check_hsv_hvalue(int n);
 int check_hsv_svvalue(int n);
-int range(int n, int min, int max);
 
 std::wstring getRGBhex(RGB* val);
 void getRGBhex(int num, RGB* ret);

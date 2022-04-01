@@ -2,9 +2,6 @@
 #include <lua.hpp>
 #include "textmodule_color.h"
 
-#define TEXTMODULE_RGB "rgb*"
-#define rgb_check(L, n) (reinterpret_cast<RGB*>(luaL_checkudata(L, n, TEXTMODULE_RGB)))
-
 int rgb_new(lua_State* L);
 int rgb_comp(lua_State* L);
 int rgb_opposite(lua_State* L);

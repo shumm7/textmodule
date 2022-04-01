@@ -2,9 +2,6 @@
 #include <lua.hpp>
 #include "textmodule_color.h"
 
-#define TEXTMODULE_HSV "HSV*"
-#define hsv_check(L, n) (reinterpret_cast<HSV*>(luaL_checkudata(L, n, TEXTMODULE_HSV)))
-
 int hsv_new(lua_State* L);
 int hsv____tostring(lua_State* L);
 int hsv____index(lua_State* L);

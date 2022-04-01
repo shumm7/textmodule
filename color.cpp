@@ -8,6 +8,7 @@
 #include "textmodule_lua.h"
 #include "textmodule_string.h"
 #include "textmodule_color.h"
+#include "textmodule_exception.h"
 
 #define LIST_DIRECTORY ".\\textmodule\\color\\"
 
@@ -22,12 +23,6 @@ enum Target {
 	japanese = 1<<2,
 	english = 1<<3
 };
-
-std::string get_colorlistmsg() {
-	std::string t = TEXTMODULE_COLORLIST;
-	t += " expected";
-	return t;
-}
 
 void getlist(std::string listname, ColorList* list) {
 	std::string dir = LIST_DIRECTORY + listname + ".csv";
@@ -94,7 +89,7 @@ void search(ColorList* list, std::wstring searchWord, int searchMode, ColorList*
 				ret->push_back(p);
 		}
 		else {
-			throw std::invalid_argument("invalid search mode");
+			throw std::invalid_argument(INVALID_SEARCH_MODE);
 		}
 	}
 }
@@ -112,16 +107,10 @@ void set_colorlist_table(lua_State* L, ColorList* val) {
 			getRGBhex(HexToDec(val->at(i).color), ret);
 			lua_setfield(L, -2, "color");
 
-			lua_pushwstring(L, val->at(i).name);
-			lua_setfield(L, -2, "name");
-
-			lua_pushwstring(L, val->at(i).japanese);
-			lua_setfield(L, -2, "japanese");
-
-			lua_pushwstring(L, val->at(i).english);
-			lua_setfield(L, -2, "english");
+			lua_settablevalue(L, "name", val->at(i).name);
+			lua_settablevalue(L, "japanese", val->at(i).japanese);
+			lua_settablevalue(L, "english", val->at(i).english);
 		}
-
 		lua_settable(L, -3);
 	}
 
@@ -130,7 +119,7 @@ void set_colorlist_table(lua_State* L, ColorList* val) {
 }
 
 void get_colorlist_table(lua_State* L, int idx, ColorList* ret) {
-	luaL_argcheck(L, lua_type(L, idx) == LUA_TTABLE && luaL_checkmetatable(L, idx, TEXTMODULE_COLORLIST), idx, get_colorlistmsg().c_str());
+	luaL_argcheck(L, lua_type(L, idx) == LUA_TTABLE && luaL_checkmetatable(L, idx, TEXTMODULE_COLORLIST), idx, "colorlist expected");
 
 	lua_pushnil(L);
 	while (lua_next(L, idx)) {
@@ -185,9 +174,9 @@ int color_makepalette(lua_State* L) {
 		ColorList list;
 		get_colorlist_table(L, 1, &list);
 
-		std::wstring ret;
-		std::wstring color;
-		std::wstring name;
+		lua_Wstring ret;
+		lua_Wstring color;
+		lua_Wstring name;
 		int r = 0;
 
 		for (int i = 0; i < 32; i++) {
@@ -228,18 +217,18 @@ int color_makepalette(lua_State* L) {
 
 int color_loadpalette(lua_State* L) {
 	try {
-		std::wstring palette = lua_towstring(L, 1);
-		std::vector<std::wstring> lines = split(palette, L'\n');
+		lua_Wstring palette = lua_towstring(L, 1);
+		std::vector<lua_Wstring> lines = split(palette, L'\n');
 		ColorList ret;
 
 		for (int i = 0; i < 8; i++) {
-			std::vector<std::wstring> colors = split(lines.at(i), L',');
+			std::vector<lua_Wstring> colors = split(lines.at(i), L',');
 			for (int j = 0; j < 4; j++) {
 				std::wstring n_color = colors.at(j);
 				ColorItem p;
 
 				if (n_color.find(L";") != std::string::npos) { //F–¼‚ð‹LÚ‚µ‚Ä‚¢‚é
-					std::vector<std::wstring> n = split(n_color, L';');
+					std::vector<lua_Wstring> n = split(n_color, L';');
 					p.color = DecToHex(HexToDec(L"0x" + lowerString(n.at(0))));
 					p.name = n.at(1);
 				}

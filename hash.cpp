@@ -16,7 +16,7 @@
 
 int hash_sha256(lua_State* L) {
 	try {
-		std::string str = tm_tostring(L, 1);
+		lua_Sstring str = tm_tostring(L, 1);
 
 		SHA256 hash;
 		lua_pushsstring(L, hash(str));
@@ -30,7 +30,7 @@ int hash_sha256(lua_State* L) {
 
 int hash_sha3(lua_State* L) {
 	try {
-		std::string str = tm_tostring(L, 1);
+		lua_Sstring str = tm_tostring(L, 1);
 
 		SHA3 hash;
 		lua_pushsstring(L, hash(str));
@@ -44,7 +44,7 @@ int hash_sha3(lua_State* L) {
 
 int hash_sha1(lua_State* L) {
 	try {
-		std::string str = tm_tostring(L, 1);
+		lua_Sstring str = tm_tostring(L, 1);
 
 		SHA1 hash;
 		lua_pushsstring(L, hash(str));
@@ -58,7 +58,7 @@ int hash_sha1(lua_State* L) {
 
 int hash_md5(lua_State* L) {
 	try {
-		std::string str = tm_tostring(L, 1);
+		lua_Sstring str = tm_tostring(L, 1);
 
 		MD5 hash;
 		lua_pushsstring(L, hash(str));
@@ -72,7 +72,7 @@ int hash_md5(lua_State* L) {
 
 int hash_keccak(lua_State* L) {
 	try {
-		std::string str = tm_tostring(L, 1);
+		lua_Sstring str = tm_tostring(L, 1);
 
 		Keccak hash;
 		lua_pushsstring(L, hash(str));
@@ -86,7 +86,7 @@ int hash_keccak(lua_State* L) {
 
 int hash_crc32(lua_State* L) {
 	try {
-		std::string str = tm_tostring(L, 1);
+		lua_Sstring str = tm_tostring(L, 1);
 
 		CRC32 hash;
 		lua_pushsstring(L, hash(str));
@@ -100,9 +100,9 @@ int hash_crc32(lua_State* L) {
 
 int hash_hmac(lua_State* L) {
 	try {
-		std::string str = tm_tostring(L, 1);
-		std::string key = tm_tostring(L, 2);
-		std::string type = lowerString(tm_tostring_s(L, 3, "sha256"));
+		lua_Sstring str = tm_tostring(L, 1);
+		lua_Sstring key = tm_tostring(L, 2);
+		lua_Sstring type = lowerString(tm_tostring_s(L, 3, "sha256"));
 
 		if (type == "sha256") {
 			lua_pushsstring(L, hmac<SHA256>(str, key));

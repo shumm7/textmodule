@@ -7,6 +7,7 @@
 #include "textmodule_color.h"
 #include "textmodule_string.h"
 #include "textmodule_exception.h"
+#include "textmodule_math.h"
 
 #define EXCEPTION_OUT_OF_RANGE "the value is out of range"
 #define EXCEPTION_OUT_OF_RANGE_HEX "the value is out of range (0x000000 to 0xffffff)"
@@ -15,7 +16,7 @@
 
 float check_value(float n, float min, float max, const char* message) {
 	if (n < min || n>max) {
-		throw_invalid_argument(message);
+		throw std::invalid_argument(message);
 	}
 	return n;
 }
@@ -35,15 +36,6 @@ int check_hsv_hvalue(int n) {
 }
 int check_hsv_svvalue(int n) {
 	return check_value(n, 0, 100, EXCEPTION_OUT_OF_RANGE_SV);
-}
-int range(int n, int min, int max) {
-	if (n < min) {
-		n = min;
-	}
-	else if (n > max) {
-		n = max;
-	}
-	return n;
 }
 
 std::wstring lstr(std::wstring str, int length, wchar_t c) {
@@ -71,7 +63,7 @@ void getRGBhex(int num, RGB* ret) {
 	if (hex.length() < 6)
 		hex = std::wstring(6 - hex.length(), L'0') + hex;
 	else if (hex.length() > 6)
-		throw_invalid_argument(EXCEPTION_OUT_OF_RANGE_HEX);
+		throw std::invalid_argument(EXCEPTION_OUT_OF_RANGE_HEX);
 
 	ret->r = check_rgbvalue(HexToDec(hex.substr(0, 2)));
 	ret->g = check_rgbvalue(HexToDec(hex.substr(2, 2)));

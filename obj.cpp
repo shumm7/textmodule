@@ -23,7 +23,7 @@
 
 int obj_remove_ctrl(lua_State* L) {
 	try {
-		std::wstring str = tm_towstring(L, 1);
+		lua_Wstring str = tm_towstring(L, 1);
 		str = std::regex_replace(str, std::wregex(REG_CTRL), L"");
 
 		lua_pushwstring(L, str);
@@ -37,8 +37,8 @@ int obj_remove_ctrl(lua_State* L) {
 
 int obj_find_ctrl(lua_State* L) {
 	try {
-		std::wstring str = tm_towstring(L, 1);
-		int idx = tm_tointeger_s(L, 2, 1);
+		lua_Wstring str = tm_towstring(L, 1);
+		lua_Integer idx = tm_tointeger_s(L, 2, 1);
 		std::wsmatch results;
 
 		if (idx > 0) {
@@ -48,7 +48,7 @@ int obj_find_ctrl(lua_State* L) {
 				bool sresult = std::regex_search(temp, results, std::wregex(REG_CTRL));
 
 				if (sresult) {
-					int n = results.position() + 1 + i;
+					lua_Integer n = results.position() + 1 + i;
 					if (pivot == idx) {
 						lua_pushinteger(L, n);
 						lua_pushinteger(L, n + results.length() - 1);
@@ -64,9 +64,9 @@ int obj_find_ctrl(lua_State* L) {
 			}
 		}
 		else if (idx == 0) {
-			int count = 0;
+			lua_Integer count = 0;
 			for (int i = 0; i < str.length(); i++) {
-				std::wstring temp = str.substr(i);
+				lua_Wstring temp = str.substr(i);
 				bool sresult = std::regex_search(temp, results, std::wregex(REG_CTRL));
 
 				if (sresult) {

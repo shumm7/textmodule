@@ -90,9 +90,6 @@
     <ClCompile Include="textmodule_string.cpp">
       <Filter>ソース ファイル\lib</Filter>
     </ClCompile>
-    <ClCompile Include="textmodule_exception.cpp">
-      <Filter>ソース ファイル\lib</Filter>
-    </ClCompile>
     <ClCompile Include="textmodule_option.cpp">
       <Filter>ソース ファイル\lib</Filter>
     </ClCompile>

@@ -9,6 +9,7 @@
 #include "textmodule_lua.h"
 #include "textmodule_string.h"
 #include "textmodule_color.h"
+#include "textmodule_math.h"
 #include "textmodule_exception.h"
 #include "textmodule_geometry.h"
 

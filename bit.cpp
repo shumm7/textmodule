@@ -63,7 +63,7 @@ int bit_not(lua_State* L) {
 
 int bit_and(lua_State* L) {
     try {
-        unsigned long ret = tm_tounsigned(L, 1) & tm_tounsigned(L, 2);
+        lua_Unsigned ret = tm_tounsigned(L, 1) & tm_tounsigned(L, 2);
         int idx = 3;
         while (lua_type(L, idx) == LUA_TNUMBER) {
             ret = ret & tm_tounsigned(L, 3);
@@ -150,7 +150,7 @@ int bit_popcount(lua_State* L) {
 
 int bit_string(lua_State* L) {
     try {
-        unsigned long v = tm_tounsigned(L, 1);
+        lua_Unsigned v = tm_tounsigned(L, 1);
         std::wstringstream ss;
         ss << std::bitset<sizeof(v) * CHAR_BIT>(v);
 

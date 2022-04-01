@@ -193,7 +193,6 @@
     <ClCompile Include="os.cpp" />
     <ClCompile Include="tmstring.cpp" />
     <ClCompile Include="utf8.cpp" />
-    <ClCompile Include="textmodule_exception.cpp" />
     <ClCompile Include="vector2.cpp" />
     <ClCompile Include="vector3.cpp" />
     <ClCompile Include="vector4.cpp" />

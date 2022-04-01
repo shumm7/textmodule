@@ -8,12 +8,11 @@
 #include "textmodule_lua.h"
 #include "textmodule_math.h"
 #include "textmodule_geometry.h"
+#include "textmodule_exception.h"
 
 int cmath_cbrt(lua_State* L) {
 	try {
-		double x = tm_tonumber(L, 1);
-
-		lua_pushnumber(L, std::cbrt(x));
+		lua_pushnumber(L, std::cbrt(tm_tonumber(L, 1)));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -24,9 +23,7 @@ int cmath_cbrt(lua_State* L) {
 
 int cmath_trunc(lua_State* L) {
 	try {
-		double n = tm_tonumber(L, 1);
-
-		lua_pushnumber(L, std::trunc(n));
+		lua_pushnumber(L, std::trunc(tm_tonumber(L, 1)));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -37,11 +34,7 @@ int cmath_trunc(lua_State* L) {
 
 int cmath_lerp(lua_State* L) {
 	try {
-		double a = tm_tonumber(L, 1);
-		double b = tm_tonumber(L, 2);
-		double t = tm_tonumber(L, 3);
-
-		lua_pushnumber(L, std::lerp(a, b, t));
+		lua_pushnumber(L, std::lerp(tm_tonumber(L, 1), tm_tonumber(L, 2), tm_tonumber(L, 3)));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -52,23 +45,22 @@ int cmath_lerp(lua_State* L) {
 
 int cmath_clamp(lua_State* L) {
 	try {
-		double value = tm_tonumber(L, 1);
-		double min = tm_tonumber_s(L, 2, 0);
-		double max = tm_tonumber_s(L, 3, 1);
+		lua_Number value = tm_tonumber(L, 1);
+		lua_Number min = tm_tonumber_s(L, 2, 0);
+		lua_Number max = tm_tonumber_s(L, 3, 1);
 
 		if (min > max) {
-			throw std::invalid_argument("invalid argument");
+			lua_Number temp = min;
+			min = max;
+			max = temp;
 		}
 
-		if (value < min) {
+		if (value < min)
 			lua_pushnumber(L, min);
-		}
-		else if (value > max) {
+		else if (value > max)
 			lua_pushnumber(L, max);
-		}
-		else {
+		else
 			lua_pushnumber(L, value);
-		}
 
 		return 1;
 	}
@@ -80,12 +72,14 @@ int cmath_clamp(lua_State* L) {
 
 int cmath_rep(lua_State* L) {
 	try {
-		double value = tm_tonumber(L, 1);
-		double min = tm_tonumber_s(L, 2, 0);
-		double max = tm_tonumber_s(L, 3, 1);
+		lua_Number value = tm_tonumber(L, 1);
+		lua_Number min = tm_tonumber_s(L, 2, 0);
+		lua_Number max = tm_tonumber_s(L, 3, 1);
 
 		if (min > max) {
-			throw std::invalid_argument("invalid argument");
+			lua_Number temp = min;
+			min = max;
+			max = temp;
 		}
 
 		while (min > value || value >= max) {
@@ -108,10 +102,7 @@ int cmath_rep(lua_State* L) {
 
 int cmath_tgamma(lua_State* L) {
 	try {
-		double x = tm_tonumber(L, 1);
-
-		lua_pushnumber(L, std::tgamma(x));
-
+		lua_pushnumber(L, std::tgamma(tm_tonumber(L, 1)));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -122,10 +113,7 @@ int cmath_tgamma(lua_State* L) {
 
 int cmath_lgamma(lua_State* L) {
 	try {
-		double x = tm_tonumber(L, 1);
-
-		lua_pushnumber(L, std::lgamma(x));
-
+		lua_pushnumber(L, std::lgamma(tm_tonumber(L, 1)));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -136,10 +124,7 @@ int cmath_lgamma(lua_State* L) {
 
 int cmath_erf(lua_State* L) {
 	try {
-		double x = tm_tonumber(L, 1);
-		
-		lua_pushnumber(L, std::erf(x));
-
+		lua_pushnumber(L, std::erf(tm_tonumber(L, 1)));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -150,10 +135,7 @@ int cmath_erf(lua_State* L) {
 
 int cmath_erfc(lua_State* L) {
 	try {
-		double x = tm_tonumber(L, 1);
-
-		lua_pushnumber(L, std::erfc(x));
-
+		lua_pushnumber(L, std::erfc(tm_tonumber(L, 1)));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -164,8 +146,8 @@ int cmath_erfc(lua_State* L) {
 
 int cmath_hypot(lua_State* L) {
 	try {
-		double x = tm_tonumber(L, 1);
-		double y = tm_tonumber(L, 2);
+		lua_Number x = tm_tonumber(L, 1);
+		lua_Number y = tm_tonumber(L, 2);
 
 		int tp = lua_type(L, 3);
 		luaL_argcheck(L, tp == LUA_TNONE || tp == LUA_TNUMBER, 3, "number/none expected");
@@ -173,7 +155,7 @@ int cmath_hypot(lua_State* L) {
 			lua_pushnumber(L, std::hypot(x, y));
 		}
 		else {
-			double z = tm_tonumber(L, 3);
+			lua_Number z = tm_tonumber(L, 3);
 			lua_pushnumber(L, std::hypot(x, y, z));
 		}
 
@@ -187,11 +169,7 @@ int cmath_hypot(lua_State* L) {
 
 int cmath_copysign(lua_State* L) {
 	try {
-		double x = tm_tonumber(L, 1);
-		double y = tm_tonumber(L, 2);
-
-		lua_pushnumber(L, std::copysign(x, y));
-
+		lua_pushnumber(L, std::copysign(tm_tonumber(L, 1), tm_tonumber(L, 2)));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -202,11 +180,7 @@ int cmath_copysign(lua_State* L) {
 
 int cmath_gcd(lua_State* L) {
 	try {
-		int x = tm_tointeger(L, 1);
-		int y = tm_tointeger(L, 2);
-
-		lua_pushnumber(L, std::gcd(x, y));
-
+		lua_pushnumber(L, std::gcd(tm_tointeger(L, 1), tm_tointeger(L, 2)));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -217,11 +191,7 @@ int cmath_gcd(lua_State* L) {
 
 int cmath_lcm(lua_State* L) {
 	try {
-		int x = tm_tointeger(L, 1);
-		int y = tm_tointeger(L, 2);
-
-		lua_pushnumber(L, std::lcm(x, y));
-
+		lua_pushnumber(L, std::lcm(tm_tointeger(L, 1), tm_tointeger(L, 2)));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -299,12 +269,7 @@ int cmath_circle_perm(lua_State* L) {
 
 int cmath_assoc_laguerre(lua_State* L) {
 	try {
-		double n = tm_tonumber(L, 1);
-		double m = tm_tonumber(L, 2);
-		double x = tm_tonumber(L, 3);
-
-		lua_pushnumber(L, std::assoc_laguerre(n, m, x));
-
+		lua_pushnumber(L, std::assoc_laguerre(tm_tointeger(L, 1), tm_tointeger(L, 2), tm_tonumber(L, 3)));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -315,12 +280,7 @@ int cmath_assoc_laguerre(lua_State* L) {
 
 int cmath_assoc_legendre(lua_State* L) {
 	try {
-		double l = tm_tonumber(L, 1);
-		double m = tm_tonumber(L, 2);
-		double x = tm_tonumber(L, 3);
-
-		lua_pushnumber(L, std::assoc_legendre(l, m, x));
-
+		lua_pushnumber(L, std::assoc_legendre(tm_tointeger(L, 1), tm_tointeger(L, 2), tm_tonumber(L, 3)));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -331,11 +291,7 @@ int cmath_assoc_legendre(lua_State* L) {
 
 int cmath_beta(lua_State* L) {
 	try {
-		double x = tm_tonumber(L, 1);
-		double y = tm_tonumber(L, 2);
-
-		lua_pushnumber(L, std::beta(x, y));
-
+		lua_pushnumber(L, std::beta(tm_tonumber(L, 1), tm_tonumber(L, 2)));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -346,10 +302,7 @@ int cmath_beta(lua_State* L) {
 
 int cmath_comp_ellint_1(lua_State* L) {
 	try {
-		double k = tm_tonumber(L, 1);
-
-		lua_pushnumber(L, std::comp_ellint_1(k));
-
+		lua_pushnumber(L, std::comp_ellint_1(tm_tonumber(L, 1)));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -360,10 +313,7 @@ int cmath_comp_ellint_1(lua_State* L) {
 
 int cmath_comp_ellint_2(lua_State* L) {
 	try {
-		double k = tm_tonumber(L, 1);
-
-		lua_pushnumber(L, std::comp_ellint_2(k));
-
+		lua_pushnumber(L, std::comp_ellint_2(tm_tonumber(L, 1)));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -374,11 +324,7 @@ int cmath_comp_ellint_2(lua_State* L) {
 
 int cmath_comp_ellint_3(lua_State* L) {
 	try {
-		double k = tm_tonumber(L, 1);
-		double nu = tm_tonumber(L, 2);
-
-		lua_pushnumber(L, std::comp_ellint_3(k, nu));
-
+		lua_pushnumber(L, std::comp_ellint_3(tm_tonumber(L, 1), tm_tonumber(L, 2)));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -389,11 +335,7 @@ int cmath_comp_ellint_3(lua_State* L) {
 
 int cmath_cyl_bessel_i(lua_State* L) {
 	try {
-		double nu = tm_tonumber(L, 1);
-		double x = tm_tonumber(L, 2);
-
-		lua_pushnumber(L, std::cyl_bessel_i(nu, x));
-
+		lua_pushnumber(L, std::cyl_bessel_i(tm_tonumber(L, 1), tm_tonumber(L, 2)));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -404,11 +346,7 @@ int cmath_cyl_bessel_i(lua_State* L) {
 
 int cmath_cyl_bessel_j(lua_State* L) {
 	try {
-		double nu = tm_tonumber(L, 1);
-		double x = tm_tonumber(L, 2);
-
-		lua_pushnumber(L, std::cyl_bessel_j(nu, x));
-
+		lua_pushnumber(L, std::cyl_bessel_j(tm_tonumber(L, 1), tm_tonumber(L, 2)));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -419,11 +357,7 @@ int cmath_cyl_bessel_j(lua_State* L) {
 
 int cmath_cyl_bessel_k(lua_State* L) {
 	try {
-		double nu = tm_tonumber(L, 1);
-		double x = tm_tonumber(L, 2);
-
-		lua_pushnumber(L, std::cyl_bessel_k(nu, x));
-
+		lua_pushnumber(L, std::cyl_bessel_k(tm_tonumber(L, 1), tm_tonumber(L, 2)));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -434,11 +368,7 @@ int cmath_cyl_bessel_k(lua_State* L) {
 
 int cmath_cyl_neumann(lua_State* L) {
 	try {
-		double nu = tm_tonumber(L, 1);
-		double x = tm_tonumber(L, 2);
-
-		lua_pushnumber(L, std::cyl_neumann(nu, x));
-
+		lua_pushnumber(L, std::cyl_neumann(tm_tonumber(L, 1), tm_tonumber(L, 2)));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -449,11 +379,7 @@ int cmath_cyl_neumann(lua_State* L) {
 
 int cmath_ellint_1(lua_State* L) {
 	try {
-		double k = tm_tonumber(L, 1);
-		double phi = tm_tonumber(L, 2);
-
-		lua_pushnumber(L, std::ellint_1(k, phi));
-
+		lua_pushnumber(L, std::ellint_1(tm_tonumber(L, 1), tm_tonumber(L, 2)));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -464,11 +390,7 @@ int cmath_ellint_1(lua_State* L) {
 
 int cmath_ellint_2(lua_State* L) {
 	try {
-		double k = tm_tonumber(L, 1);
-		double phi = tm_tonumber(L, 2);
-
-		lua_pushnumber(L, std::ellint_2(k, phi));
-
+		lua_pushnumber(L, std::ellint_2(tm_tonumber(L, 1), tm_tonumber(L, 2)));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -479,12 +401,7 @@ int cmath_ellint_2(lua_State* L) {
 
 int cmath_ellint_3(lua_State* L) {
 	try {
-		double k = tm_tonumber(L, 1);
-		double nu = tm_tonumber(L, 2);
-		double phi = tm_tonumber(L, 3);
-
-		lua_pushnumber(L, std::ellint_3(k, nu, phi));
-
+		lua_pushnumber(L, std::ellint_3(tm_tonumber(L, 1), tm_tonumber(L, 2), tm_tonumber(L, 3)));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -495,10 +412,7 @@ int cmath_ellint_3(lua_State* L) {
 
 int cmath_expint(lua_State* L) {
 	try {
-		double x = tm_tonumber(L, 1);
-
-		lua_pushnumber(L, std::expint(x));
-
+		lua_pushnumber(L, std::expint(tm_tonumber(L, 1)));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -509,11 +423,7 @@ int cmath_expint(lua_State* L) {
 
 int cmath_hermite(lua_State* L) {
 	try {
-		double n = tm_tonumber(L, 1);
-		double x = tm_tonumber(L, 2);
-
-		lua_pushnumber(L, std::hermite(n, x));
-
+		lua_pushnumber(L, std::hermite(tm_tointeger(L, 1), tm_tonumber(L, 2)));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -524,11 +434,7 @@ int cmath_hermite(lua_State* L) {
 
 int cmath_laguerre(lua_State* L) {
 	try {
-		double n = tm_tonumber(L, 1);
-		double x = tm_tonumber(L, 2);
-
-		lua_pushnumber(L, std::laguerre(n, x));
-
+		lua_pushnumber(L, std::laguerre(tm_tointeger(L, 1), tm_tonumber(L, 2)));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -539,10 +445,7 @@ int cmath_laguerre(lua_State* L) {
 
 int cmath_legendre(lua_State* L) {
 	try {
-		double n = tm_tonumber(L, 1);
-		double x = tm_tonumber(L, 2);
-		lua_pushnumber(L, std::legendre(n, x));
-
+		lua_pushnumber(L, std::legendre(tm_tointeger(L, 1), tm_tonumber(L, 2)));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -553,10 +456,7 @@ int cmath_legendre(lua_State* L) {
 
 int cmath_riemann_zeta(lua_State* L) {
 	try {
-		double x = tm_tonumber(L, 1);
-
-		lua_pushnumber(L, std::riemann_zeta(x));
-
+		lua_pushnumber(L, std::riemann_zeta(tm_tonumber(L, 1)));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -570,7 +470,7 @@ int cmath_sph_bessel(lua_State* L) {
 		double n = tm_tonumber(L, 1);
 		double x = tm_tonumber(L, 2);
 
-		lua_pushnumber(L, std::sph_bessel(n, x));
+		lua_pushnumber(L, std::sph_bessel(tm_tointeger(L, 1), tm_tonumber(L, 2)));
 
 		return 1;
 	}
@@ -582,12 +482,7 @@ int cmath_sph_bessel(lua_State* L) {
 
 int cmath_sph_legendre(lua_State* L) {
 	try {
-		double l = tm_tonumber(L, 1);
-		double m = tm_tonumber(L, 2);
-		double theta = tm_tonumber(L, 3);
-
-		lua_pushnumber(L, std::sph_legendre(l, m, theta));
-
+		lua_pushnumber(L, std::sph_legendre(tm_tointeger(L, 1), tm_tointeger(L, 2), tm_tonumber(L, 3)));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -598,11 +493,7 @@ int cmath_sph_legendre(lua_State* L) {
 
 int cmath_sph_neumann(lua_State* L) {
 	try {
-		double n = tm_tonumber(L, 1);
-		double x = tm_tonumber(L, 2);
-
-		lua_pushnumber(L, std::sph_neumann(n, x));
-
+		lua_pushnumber(L, std::sph_neumann(tm_tointeger(L, 1), tm_tonumber(L, 2)));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -613,12 +504,12 @@ int cmath_sph_neumann(lua_State* L) {
 
 int cmath_bezier(lua_State* L) {
 	try {
-		double t = tm_tonumber(L, 1);
+		lua_Number t = tm_tonumber(L, 1);
 		int tp = lua_type(L, 2);
-		luaL_argcheck(L, tp == LUA_TNUMBER || tp==LUA_TUSERDATA, 2, "number/" TEXTMODULE_VECTOR2 "/" TEXTMODULE_VECTOR3 "/" TEXTMODULE_VECTOR4 " expected");
+		luaL_argcheck(L, tp == LUA_TNUMBER || tp==LUA_TUSERDATA, 2, "number/vector2/vector3/vector4 expected");
 	
 		if (tp == LUA_TNUMBER) {
-			double res = 0;
+			lua_Number res = 0;
 			int n = lua_gettop(L) - 2;
 			for (int i = 0; i <= n; i++) {
 				res += bernstein(t, n, i) * tm_tonumber(L, i + 2);
@@ -628,37 +519,37 @@ int cmath_bezier(lua_State* L) {
 		}
 		else if (tp == LUA_TUSERDATA) {
 			if (luaL_checkmetatable(L, 2, TEXTMODULE_VECTOR2)) {
-				Vector2 res = { 0,0 };
+				lua_Vector2 res = { 0,0 };
 				int n = lua_gettop(L) - 2;
 
 				for (int i = 0; i <= n; i++) {
-					res += bernstein(t, n, i) * (*vector2_check(L, i + 2));
+					res += bernstein(t, n, i) * (*tm_tovector2(L, i + 2));
 				}
 				lua_pushvector2(L, res);
 				return 1;
 			}
 			else if (luaL_checkmetatable(L, 2, TEXTMODULE_VECTOR3)) {
-				Vector3 res = { 0,0,0 };
+				lua_Vector3 res = { 0,0,0 };
 				int n = lua_gettop(L) - 2;
 
 				for (int i = 0; i <= n; i++) {
-					res += bernstein(t, n, i) * (*vector3_check(L, i + 2));
+					res += bernstein(t, n, i) * (*tm_tovector3(L, i + 2));
 				}
 				lua_pushvector3(L, res);
 				return 1;
 			}
 			else if (luaL_checkmetatable(L, 2, TEXTMODULE_VECTOR4)) {
-				Vector4 res = { 0,0,0,0 };
+				lua_Vector4 res = { 0,0,0,0 };
 				int n = lua_gettop(L) - 2;
 
 				for (int i = 0; i <= n; i++) {
-					res += bernstein(t, n, i) * (*vector4_check(L, i + 2));
+					res += bernstein(t, n, i) * (*tm_tovector4(L, i + 2));
 				}
 				lua_pushvector4(L, res);
 				return 1;
 			}
 			else
-				return luaL_argerror(L, 2, "number/" TEXTMODULE_VECTOR2 "/" TEXTMODULE_VECTOR3 "/" TEXTMODULE_VECTOR4 " expected");
+				return luaL_argerror(L, 2, "number/vector2/vector3/vector4 expected");
 		}
 		return 0;
 	}
