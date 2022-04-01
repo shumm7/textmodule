@@ -13,6 +13,12 @@ int cmath_hypot(lua_State* L);
 int cmath_copysign(lua_State* L);
 int cmath_gcd(lua_State*);
 int cmath_lcm(lua_State*);
+int cmath_fact(lua_State* L);
+int cmath_comb(lua_State* L);
+int cmath_perm(lua_State* L);
+int cmath_rep_comb(lua_State* L);
+int cmath_rep_perm(lua_State* L);
+int cmath_circle_perm(lua_State* L);
 
 int cmath_assoc_laguerre(lua_State* L);
 int cmath_assoc_legendre(lua_State* L);
@@ -35,6 +41,7 @@ int cmath_riemann_zeta(lua_State* L);
 int cmath_sph_bessel(lua_State* L);
 int cmath_sph_legendre(lua_State* L);
 int cmath_sph_neumann(lua_State* L);
+int cmath_bezier(lua_State* L);
 
 void luaReg_cmath(lua_State* L, const char* name, bool reg);
 
@@ -52,6 +59,11 @@ static luaL_Reg TEXTMODULE_CMATH_REG[] = {
 	{"copysign", cmath_copysign},
 	{"gcd", cmath_gcd},
 	{"lcm", cmath_lcm},
+	{"fact", cmath_fact},
+	{"perm", cmath_perm},
+	{"rep_comb", cmath_rep_comb},
+	{"rep_perm", cmath_rep_perm},
+	{"circle_perm", cmath_circle_perm},
 
 	{"assoc_laguerre", cmath_assoc_laguerre},
 	{"assoc_legendre", cmath_assoc_legendre},
@@ -74,5 +86,7 @@ static luaL_Reg TEXTMODULE_CMATH_REG[] = {
 	{"sph_bessel", cmath_sph_bessel},
 	{"sph_legendre", cmath_sph_legendre},
 	{"sph_neumann", cmath_sph_neumann},
+
+	{"bezier", cmath_bezier},
 	{ nullptr, nullptr }
 };

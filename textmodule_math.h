@@ -1,17 +1,20 @@
 #pragma once
 double range(double n, double min, double max);
 double range(double n);
-//入力された変数nを、minとmaxで指定された範囲に制限します。
-//範囲外の数値が入力された場合は、例外を送出します。
+
 double clamp(double n, double min, double max);
-//入力された変数nを、0～1の範囲に制限します。
-//範囲外の数値が入力された場合は、例外を送出します。
 double clamp(double n);
-//入力された変数nを、minとmaxで指定された範囲に制限します。
-//範囲外の数値が入力された場合は、minもしくはmaxを返します。
+
 double clamp_s(double n, double min, double max);
-//入力された変数nを、0～1の範囲に制限します。
-//範囲外の数値が入力された場合は、0か1を返します。
 double clamp_s(double n);
 
 bool isinteger(double n);
+
+double combination(int n, int r);
+double factorial(int n);
+double permutation(int n, int r);
+double repetition_combination(int n, int r);
+double repetition_permutation(int n, int r);
+double circular_permutation(int n);
+
+double bernstein(double t, int n, int i);

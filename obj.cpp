@@ -7,26 +7,24 @@
 #include "textmodule_string.h"
 #include "textmodule_math.h"
 
-#define REG_CTRL_SHARP L"(<#>|<#[0-9a-f]{6}>|<#[0-9a-f]{6}\,[0-9a-f]{6}>)"
-#define REG_CTRL_S L"(<s(|[0-9]*?)>|<s(|[0-9]*?),([^,]*?)>|<s(|[0-9]*),(.*),(|[BI])*>)"
-#define REG_CTRL_R L"(<r>|<r[0-9]*?>)"
-#define REG_CTRL_W L"(<w>|<w[0-9]*?>|<w[\*][0-9]*?>)"
-#define REG_CTRL_C L"(<c>|<c[0-9]*?>|<c[\*][0-9]*?>)"
-#define REG_CTRL_P L"(<p[\+\-][0-9]*?,[\+\-][0-9]*?>|<p[\+\-][0-9]*?,[\+\-][0-9]*?,[\+\-][0-9]*?>)"
+#define HEX6 "[0-9a-f]{6}"
+#define INTN "[0-9]*?"
+#define NUMP "(?:[0-9]+[.]?[0-9]*|[.][0-9]+)"
+#define NUMN "([+-]?(?:[0-9]+[.]?[0-9]*|[.][0-9]+))"
+
+#define REG_CTRL_SHARP L"(<#>|<#" HEX6 ">|<#" HEX6 "," HEX6 ">)"
+#define REG_CTRL_S L"(<s(|" INTN ")>|<s(|" INTN "),([^,]*?)>|<s(|" INTN "),(.*),(|[BI])*>)"
+#define REG_CTRL_R L"(<r>|<r" NUMP ">)"
+#define REG_CTRL_W L"(<w>|<w[*]?" NUMP ">)"
+#define REG_CTRL_C L"(<c>|<c[*]?" NUMP ">)"
+#define REG_CTRL_P L"(<p" NUMN "?," NUMN "?>|<p" NUMN "?," NUMN "?," NUMN "?>)"
 #define REG_CTRL_QUESTION L"(<[\?](.*?)[\?]>)"
 #define REG_CTRL L"(" REG_CTRL_SHARP L"|" REG_CTRL_S L"|" REG_CTRL_R L"|" REG_CTRL_W L"|" REG_CTRL_C L"|" REG_CTRL_P L"|" REG_CTRL_QUESTION L")"
 
 int obj_remove_ctrl(lua_State* L) {
 	try {
 		std::wstring str = tm_towstring(L, 1);
-
-		str = std::regex_replace(str, std::wregex(REG_CTRL_SHARP), L"");
-		str = std::regex_replace(str, std::wregex(REG_CTRL_S), L"");
-		str = std::regex_replace(str, std::wregex(REG_CTRL_R), L"");
-		str = std::regex_replace(str, std::wregex(REG_CTRL_W), L"");
-		str = std::regex_replace(str, std::wregex(REG_CTRL_C), L"");
-		str = std::regex_replace(str, std::wregex(REG_CTRL_P), L"");
-		str = std::regex_replace(str, std::wregex(REG_CTRL_QUESTION), L"");
+		str = std::regex_replace(str, std::wregex(REG_CTRL), L"");
 
 		lua_pushwstring(L, str);
 		return 1;

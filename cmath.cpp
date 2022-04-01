@@ -6,6 +6,8 @@
 
 #include "cmath.h"
 #include "textmodule_lua.h"
+#include "textmodule_math.h"
+#include "textmodule_geometry.h"
 
 int cmath_cbrt(lua_State* L) {
 	try {
@@ -220,6 +222,72 @@ int cmath_lcm(lua_State* L) {
 
 		lua_pushnumber(L, std::lcm(x, y));
 
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int cmath_fact(lua_State* L) {
+	try {
+		lua_pushnumber(L, factorial(tm_tointeger(L, 1)));
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int cmath_comb(lua_State* L) {
+	try {
+		lua_pushnumber(L, combination(tm_tointeger(L, 1), tm_tointeger(L, 2)));
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int cmath_perm(lua_State* L) {
+	try {
+		lua_pushnumber(L, permutation(tm_tointeger(L, 1), tm_tointeger(L, 2)));
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int cmath_rep_comb(lua_State* L) {
+	try {
+		lua_pushnumber(L, repetition_combination(tm_tointeger(L, 1), tm_tointeger(L, 2)));
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int cmath_rep_perm(lua_State* L) {
+	try {
+		lua_pushnumber(L, repetition_permutation(tm_tointeger(L, 1), tm_tointeger(L, 2)));
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int cmath_circle_perm(lua_State* L) {
+	try {
+		lua_pushnumber(L, circular_permutation(tm_tointeger(L, 1)));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -536,6 +604,63 @@ int cmath_sph_neumann(lua_State* L) {
 		lua_pushnumber(L, std::sph_neumann(n, x));
 
 		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int cmath_bezier(lua_State* L) {
+	try {
+		double t = tm_tonumber(L, 1);
+		int tp = lua_type(L, 2);
+		luaL_argcheck(L, tp == LUA_TNUMBER || tp==LUA_TUSERDATA, 2, "number/" TEXTMODULE_VECTOR2 "/" TEXTMODULE_VECTOR3 "/" TEXTMODULE_VECTOR4 " expected");
+	
+		if (tp == LUA_TNUMBER) {
+			double res = 0;
+			int n = lua_gettop(L) - 2;
+			for (int i = 0; i <= n; i++) {
+				res += bernstein(t, n, i) * tm_tonumber(L, i + 2);
+			}
+			lua_pushnumber(L, res);
+			return 1;
+		}
+		else if (tp == LUA_TUSERDATA) {
+			if (luaL_checkmetatable(L, 2, TEXTMODULE_VECTOR2)) {
+				Vector2 res = { 0,0 };
+				int n = lua_gettop(L) - 2;
+
+				for (int i = 0; i <= n; i++) {
+					res += bernstein(t, n, i) * (*vector2_check(L, i + 2));
+				}
+				lua_pushvector2(L, res);
+				return 1;
+			}
+			else if (luaL_checkmetatable(L, 2, TEXTMODULE_VECTOR3)) {
+				Vector3 res = { 0,0,0 };
+				int n = lua_gettop(L) - 2;
+
+				for (int i = 0; i <= n; i++) {
+					res += bernstein(t, n, i) * (*vector3_check(L, i + 2));
+				}
+				lua_pushvector3(L, res);
+				return 1;
+			}
+			else if (luaL_checkmetatable(L, 2, TEXTMODULE_VECTOR4)) {
+				Vector4 res = { 0,0,0,0 };
+				int n = lua_gettop(L) - 2;
+
+				for (int i = 0; i <= n; i++) {
+					res += bernstein(t, n, i) * (*vector4_check(L, i + 2));
+				}
+				lua_pushvector4(L, res);
+				return 1;
+			}
+			else
+				return luaL_argerror(L, 2, "number/" TEXTMODULE_VECTOR2 "/" TEXTMODULE_VECTOR3 "/" TEXTMODULE_VECTOR4 " expected");
+		}
+		return 0;
 	}
 	catch (std::exception& e) {
 		luaL_error(L, e.what());
