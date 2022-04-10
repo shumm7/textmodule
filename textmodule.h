@@ -25,10 +25,9 @@
 #define API_EASE "ease"
 
 //API_COLOR
-#define API_COLOR_BASE "color"
-#define API_RGB "rgb"
-#define API_HSV "hsv"
-#define API_HSL "hsl"
+#define API_COLOR "color"
+#define API_PIXEL "pixel"
+#define API_IMAGE "image"
 
 //API_GEOMETRY
 #define API_COMPLEX "complex"

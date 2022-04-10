@@ -517,6 +517,145 @@ lua_Vector4* lua_pushvector4(lua_State* L) {
 	return lua_pushvector4(L, 0, 0, 0, 0);
 }
 
+// Color
+lua_Color* lua_tocolor(lua_State* L, int idx) {
+	return reinterpret_cast<lua_Color*>(color_check(L, idx));
+}
+
+lua_Color* tm_tocolor(lua_State* L, int idx) {
+	return lua_tocolor(L, idx);
+}
+
+lua_Color* tm_tocolor_s(lua_State* L, int idx, lua_Color def) {
+	int tp = lua_type(L, idx);
+	luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNONE, idx, "color/none expected");
+	lua_Color* val = new lua_Color;
+
+	if (tp == LUA_TUSERDATA) {
+		val = reinterpret_cast<lua_Color*>(color_check(L, idx));
+	}
+	else if (tp == LUA_TNONE) {
+		val->r = def.r;
+		val->g = def.g;
+		val->b = def.b;
+		val->a = def.a;
+	}
+
+	return val;
+}
+
+lua_Color* tm_tocolor_s(lua_State* L, int idx, double r, double g, double b, double a) {
+	return tm_tocolor_s(L, idx, lua_Color{ r,g,b,a });
+}
+
+lua_Color* tm_tocolor_s(lua_State* L, int idx) {
+	return tm_tocolor_s(L, idx, 0, 0, 0, 0);
+}
+
+lua_Color* lua_pushcolor(lua_State* L, double r, double g, double b, double a) {
+	lua_Color* ret = reinterpret_cast<lua_Color*>(lua_newuserdata(L, sizeof(lua_Color)));
+	luaL_getmetatable(L, TEXTMODULE_COLOR);
+	lua_setmetatable(L, -2);
+
+	ret->r = r;
+	ret->g = g;
+	ret->b = b;
+	ret->a = a;
+	return ret;
+}
+
+lua_Color* lua_pushcolor(lua_State* L, lua_Color def) {
+	return lua_pushcolor(L, def.r, def.g, def.b, def.a);
+}
+
+lua_Color* lua_pushcolor(lua_State* L, lua_Vector4 def) {
+	return lua_pushcolor(L, def.x(), def.y(), def.z(), def.w());
+}
+
+lua_Color* lua_pushcolor(lua_State* L) {
+	return lua_pushcolor(L, 0, 0, 0, 0);
+}
+
+//Pixel
+lua_Pixel* lua_topixel(lua_State* L, int idx) {
+	return reinterpret_cast<lua_Pixel*>(pixel_check(L, idx));
+}
+
+lua_Pixel* tm_topixel(lua_State* L, int idx) {
+	return lua_topixel(L, idx);
+}
+
+lua_Pixel* tm_topixel_s(lua_State* L, int idx, lua_Pixel def) {
+	int tp = lua_type(L, idx);
+	luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNONE, idx, "pixel/none expected");
+	lua_Pixel* val = new lua_Pixel;
+
+	if (tp == LUA_TUSERDATA) {
+		val = reinterpret_cast<lua_Pixel*>(pixel_check(L, idx));
+	}
+	else if (tp == LUA_TNONE) {
+		val->r = def.r;
+		val->g = def.g;
+		val->b = def.b;
+		val->a = def.a;
+	}
+
+	return val;
+}
+
+lua_Pixel* tm_topixel_s(lua_State* L, int idx, uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
+	return tm_topixel_s(L, idx, lua_Pixel{ r,g,b,a });
+}
+
+lua_Pixel* tm_topixel_s(lua_State* L, int idx, double r, double g, double b, double a) {
+	return tm_topixel_s(L, idx, (uint8_t)clamp_s(r, 0, 255), (uint8_t)clamp_s(g, 0, 255), (uint8_t)clamp_s(b, 0, 255), (uint8_t)clamp_s(a, 0, 255));
+}
+
+lua_Pixel* tm_topixel_s(lua_State* L, int idx) {
+	return tm_topixel_s(L, idx, 0.0, 0.0, 0.0, 0.0);
+}
+
+lua_Pixel* lua_pushpixel(lua_State* L, uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
+	lua_Pixel* ret = reinterpret_cast<lua_Pixel*>(lua_newuserdata(L, sizeof(lua_Pixel)));
+	luaL_getmetatable(L, TEXTMODULE_PIXEL);
+	lua_setmetatable(L, -2);
+
+	ret->r = r;
+	ret->g = g;
+	ret->b = b;
+	ret->a = a;
+	return ret;
+}
+
+lua_Pixel* lua_pushpixel(lua_State* L, double r, double g, double b, double a) {
+	return lua_pushpixel(L, (uint8_t)clamp_s(r, 0, 255), (uint8_t)clamp_s(g, 0, 255), (uint8_t)clamp_s(b, 0, 255), (uint8_t)clamp_s(a, 0, 255));
+}
+
+lua_Pixel* lua_pushpixel(lua_State* L, lua_Pixel def) {
+	return lua_pushpixel(L, def.r, def.g, def.b, def.a);
+}
+
+lua_Pixel* lua_pushpixel(lua_State* L) {
+	return lua_pushpixel(L, 0.0, 0.0, 0.0, 0.0);
+}
+
+// Image
+lua_Image* lua_toimage(lua_State* L, int idx) {
+	return reinterpret_cast<lua_Image*>(image_check(L, idx));
+}
+
+lua_Image* tm_toimage(lua_State* L, int idx) {
+	return lua_toimage(L, idx);
+}
+
+lua_Image* lua_convertcache(lua_State* L, int idx) {
+	lua_Image* val = reinterpret_cast<lua_Image*>(lua_touserdata(L, idx));
+	luaL_getmetatable(L, TEXTMODULE_IMAGE);
+	lua_setmetatable(L, idx);
+
+	return val;
+}
+
 // Misc
 bool luaL_checkmetatable(lua_State* L, int ud, const char* tname) {
 	if (lua_getmetatable(L, ud)) {  /* does it have a metatable? */
@@ -569,12 +708,10 @@ const char* tm_typename(lua_State* L, int idx) {
 			return "vector3";
 		else if (luaL_checkmetatable(L, idx, TEXTMODULE_VECTOR4))
 			return "vector4";
-		else if (luaL_checkmetatable(L, idx, TEXTMODULE_RGB))
-			return "rgb";
-		else if (luaL_checkmetatable(L, idx, TEXTMODULE_HSV))
-			return "hsv";
-		else if (luaL_checkmetatable(L, idx, TEXTMODULE_HSL))
-			return "hsl";
+		else if (luaL_checkmetatable(L, idx, TEXTMODULE_COLOR))
+			return "color";
+		else if (luaL_checkmetatable(L, idx, TEXTMODULE_PIXEL))
+			return "pixel";
 		else if (luaL_checkmetatable(L, idx, LUA_FILEHANDLE))
 			return "filehandle";
 	}

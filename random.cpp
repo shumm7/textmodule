@@ -4,6 +4,98 @@
 #include "random.h"
 #include "textmodule_lua.h"
 
+int random_minstd_rand0(lua_State* L) {
+	try {
+		std::random_device seed_gen;
+		std::minstd_rand0 engine(seed_gen());
+		lua_pushnumber(L, engine());
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int random_minstd_rand(lua_State* L) {
+	try {
+		std::random_device seed_gen;
+		std::minstd_rand engine(seed_gen());
+		lua_pushnumber(L, engine());
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int random_mt19937(lua_State* L) {
+	try {
+		std::random_device seed_gen;
+		std::mt19937 engine(seed_gen());
+		lua_pushnumber(L, engine());
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int random_mt19937_64(lua_State* L) {
+	try {
+		std::random_device seed_gen;
+		std::mt19937_64 engine(seed_gen());
+		lua_pushnumber(L, engine());
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int random_ranlux24(lua_State* L) {
+	try {
+		std::random_device seed_gen;
+		std::ranlux24 engine(seed_gen());
+		lua_pushnumber(L, engine());
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int random_ranlux48(lua_State* L) {
+	try {
+		std::random_device seed_gen;
+		std::ranlux48 engine(seed_gen());
+		lua_pushnumber(L, engine());
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int random_knuth_b(lua_State* L) {
+	try {
+		std::random_device seed_gen;
+		std::knuth_b engine(seed_gen());
+		lua_pushnumber(L, engine());
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+
 int random_uniform(lua_State* L) {
 	try {
 		lua_Number m = 0;

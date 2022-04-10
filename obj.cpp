@@ -166,6 +166,26 @@ void luaReg_const_object(lua_State* L, const char* name) {
 	lua_setfield(L, -2, name);
 }
 
+void luaReg_const_blend(lua_State* L, const char* name) {
+	lua_newtable(L);
+
+	lua_settablevalue(L, "normal", 0);
+	lua_settablevalue(L, "add", 1);
+	lua_settablevalue(L, "subtract", 2);
+	lua_settablevalue(L, "multiply", 3);
+	lua_settablevalue(L, "screen", 4);
+	lua_settablevalue(L, "overray", 5);
+	lua_settablevalue(L, "lighten", 6);
+	lua_settablevalue(L, "darken", 7);
+	lua_settablevalue(L, "luminosity", 8);
+	lua_settablevalue(L, "color_difference", 9);
+	lua_settablevalue(L, "shadow", 10);
+	lua_settablevalue(L, "contrast", 11);
+	lua_settablevalue(L, "difference", 12);
+
+	lua_setfield(L, -2, name);
+}
+
 void luaReg_obj(lua_State* L, const char* name, bool reg) {
 	if (reg) {
 		lua_newtable(L);
@@ -173,6 +193,7 @@ void luaReg_obj(lua_State* L, const char* name, bool reg) {
 
 		luaReg_const_figure(L, "figure");
 		luaReg_const_object(L, "object");
+		luaReg_const_blend(L, "blend");
 
 		lua_setfield(L, -2, name);
 	}

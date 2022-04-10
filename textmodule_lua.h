@@ -4,20 +4,40 @@
 #include "textmodule_geometry.h"
 #include "textmodule_color.h"
 
-// Type Define
+//Type for wide string (std::wstring)
 typedef std::wstring lua_Wstring;
+//Type for multibyte string (std::string)
 typedef std::string lua_Sstring;
+//Type for lua string (const char*)
 typedef const char* lua_String;
+//Type for float number
 typedef float lua_Float;
+//Type for unsigned integer
 typedef unsigned long lua_Unsigned;
+//Type for boolean
 typedef bool lua_Boolean;
 
+//Type for complex class
 typedef std::complex<double> lua_Complex;
+//Type for quaternion class
 typedef Quat	lua_Quaternion;
+//Type for vector2 class
 typedef Vector2	lua_Vector2;
+//Type for vector3 class
 typedef Vector3	lua_Vector3;
+//Type for vector4 class
 typedef Vector4	lua_Vector4;
 
+//Type for rgba class
+typedef st_rgba lua_Color;
+//Type for value of rgba class
+typedef double lua_Colorvar;
+//Type for 32bit rgba class
+typedef st_rgba32 lua_Pixel;
+//Type for value of 32bit rgba class
+typedef uint8_t lua_Pixelvar;
+//Type of 32bit bgra array
+typedef st_imgpixel lua_Image;
 
 // String
 lua_Wstring lua_towstring(lua_State* L, int idx);
@@ -111,6 +131,34 @@ lua_Vector4* tm_tovector4_s(lua_State* L, int idx);
 lua_Vector4* lua_pushvector4(lua_State* L, double x, double y, double z, double w);
 lua_Vector4* lua_pushvector4(lua_State* L, lua_Vector4 vector);
 lua_Vector4* lua_pushvector4(lua_State* L);
+
+// Color
+lua_Color* lua_tocolor(lua_State* L, int idx);
+lua_Color* tm_tocolor(lua_State* L, int idx);
+lua_Color* tm_tocolor_s(lua_State* L, int idx, lua_Color def);
+lua_Color* tm_tocolor_s(lua_State* L, int idx, double r, double g, double b, double a);
+lua_Color* tm_tocolor_s(lua_State* L, int idx);
+lua_Color* lua_pushcolor(lua_State* L, double r, double g, double b, double a);
+lua_Color* lua_pushcolor(lua_State* L, lua_Color def);
+lua_Color* lua_pushcolor(lua_State* L, lua_Vector4 def);
+lua_Color* lua_pushcolor(lua_State* L);
+
+// Pixel
+lua_Pixel* lua_topixel(lua_State* L, int idx);
+lua_Pixel* tm_topixel(lua_State* L, int idx);
+lua_Pixel* tm_topixel_s(lua_State* L, int idx, lua_Pixel def);
+lua_Pixel* tm_topixel_s(lua_State* L, int idx, uint8_t r, uint8_t g, uint8_t b, uint8_t a);
+lua_Pixel* tm_topixel_s(lua_State* L, int idx, double r, double g, double b, double a);
+lua_Pixel* tm_topixel_s(lua_State* L, int idx);
+lua_Pixel* lua_pushpixel(lua_State* L, uint8_t r, uint8_t g, uint8_t b, uint8_t a);
+lua_Pixel* lua_pushpixel(lua_State* L, double r, double g, double b, double a);
+lua_Pixel* lua_pushpixel(lua_State* L, lua_Pixel def);
+lua_Pixel* lua_pushpixel(lua_State* L);
+
+// Image
+lua_Image* lua_toimage(lua_State* L, int idx);
+lua_Image* tm_toimage(lua_State* L, int idx);
+lua_Image* lua_convertcache(lua_State* L, int idx);
 
 // Misc
 bool luaL_checkmetatable(lua_State* L, int ud, const char* tname);

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -156,7 +156,7 @@
   <ItemGroup>
     <ClCompile Include="bit.cpp" />
     <ClCompile Include="clipboard.cpp" />
-    <ClCompile Include="color.cpp" />
+    <ClCompile Include="colorlist.cpp" />
     <ClCompile Include="complex.cpp" />
     <ClCompile Include="base.cpp" />
     <ClCompile Include="debug.cpp" />
@@ -170,18 +170,18 @@
     <ClCompile Include="hash-library\sha256.cpp" />
     <ClCompile Include="hash-library\sha3.cpp" />
     <ClCompile Include="hash.cpp" />
-    <ClCompile Include="hsl.cpp" />
-    <ClCompile Include="hsv.cpp" />
     <ClCompile Include="http.cpp" />
+    <ClCompile Include="image.cpp" />
     <ClCompile Include="lua.cpp" />
     <ClCompile Include="cmath.cpp" />
     <ClCompile Include="mecab.cpp" />
     <ClCompile Include="obj.cpp" />
+    <ClCompile Include="pixel.cpp" />
     <ClCompile Include="QR-Code-generator\qrcodegen.cpp" />
     <ClCompile Include="qrcode.cpp" />
     <ClCompile Include="quaternion.cpp" />
     <ClCompile Include="random.cpp" />
-    <ClCompile Include="rgb.cpp" />
+    <ClCompile Include="color.cpp" />
     <ClCompile Include="string.cpp" />
     <ClCompile Include="textmodule.cpp" />
     <ClCompile Include="textmodule_color.cpp" />
@@ -202,7 +202,7 @@
     <ClInclude Include="bit.h" />
     <ClInclude Include="clipboard.h" />
     <ClInclude Include="cmath.h" />
-    <ClInclude Include="color.h" />
+    <ClInclude Include="colorlist.h" />
     <ClInclude Include="complex.h" />
     <ClInclude Include="debug.h" />
     <ClInclude Include="ease.h" />
@@ -216,16 +216,16 @@
     <ClInclude Include="hash-library\sha256.h" />
     <ClInclude Include="hash-library\sha3.h" />
     <ClInclude Include="hash.h" />
-    <ClInclude Include="hsl.h" />
-    <ClInclude Include="hsv.h" />
     <ClInclude Include="http.h" />
+    <ClInclude Include="image.h" />
     <ClInclude Include="mecab.h" />
     <ClInclude Include="obj.h" />
+    <ClInclude Include="pixel.h" />
     <ClInclude Include="QR-Code-generator\qrcodegen.hpp" />
     <ClInclude Include="qrcode.h" />
     <ClInclude Include="quaternion.h" />
     <ClInclude Include="random.h" />
-    <ClInclude Include="rgb.h" />
+    <ClInclude Include="color.h" />
     <ClInclude Include="string.h" />
     <ClInclude Include="textmodule.h" />
     <ClInclude Include="textmodule_color.h" />

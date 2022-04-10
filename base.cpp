@@ -51,6 +51,40 @@ int base_getinfo(lua_State* L) {
 	}
 }
 
+int base_showtable(lua_State* L) {
+	try {
+		if (!lua_istable(L, 1))
+			return luaL_argerror(L, 1, "table expected");
+
+		lua_pushnil(L);
+		lua_Sstring key;
+		lua_Sstring value;
+		lua_Sstring ret = "";
+
+		while (lua_next(L, 1) != 0) {
+			if(ret.length()!=0)
+				ret += "\n";
+
+			if (lua_type(L, -2) == LUA_TNUMBER)
+				key = WstrToStr(tostring_n(lua_tonumber(L, -2)));
+			else
+				key = tm_convtostring(L, -2);
+
+			value = tm_convtostring(L, -1);
+			ret += std::string("[" + key + "] " + value);
+
+			lua_pop(L, 1);
+		}
+
+		lua_pushsstring(L, ret);
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
 int base_debug_print(lua_State* L) {
 	try {
 		int i = 1;
@@ -62,10 +96,8 @@ int base_debug_print(lua_State* L) {
 			return 1;
 		}
 
-		while (lua_type(L, i)!=LUA_TNONE)
-		{
+		for (int i = 1; i <= lua_gettop(L); i++) {
 			ret += StrToWstr(tm_convtostring(L, i)) + L"\t";
-			i++;
 		}
 		ret = ret.substr(0, ret.length() - 1);
 		debug_string(ret);
@@ -172,8 +204,6 @@ int base_versioncheck(lua_State* L) {
 			lua_pushboolean(L, false);
 			break;
 		case VERSION_CHECK_ERROR:
-			lua_pushnil(L);
-			break;
 		default:
 			lua_pushnil(L);
 			break;

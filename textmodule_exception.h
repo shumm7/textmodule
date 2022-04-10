@@ -11,3 +11,4 @@
 
 //color
 #define INVALID_SEARCH_MODE "invalid search mode"
+#define IMAGE_OUT_OF_RANGE "pixel coordinate is out of range"
