@@ -420,6 +420,29 @@ void luaReg_tmstring(lua_State* L, const char* name, bool reg) {
 		lua_settablevalue(L, "full_capital_alphabet", S_FULL_CAPITAL_ALPHABET);
 		lua_settablevalue(L, "full_alphabet_number", S_FULL_ALPHABET_NUMBER);
 		lua_settablevalue(L, "quick_brown_fox", S_QUICK_BROWN_FOX);
+		lua_settablevalue(L, "lorem_ipsum", S_LOREM_IPSUM);
+		lua_settablevalue(L, "polano", S_POLANO);
+
+		lua_settablevalue(L, "empty", "");
+		lua_settablevalue(L, "crlf", "\r\n");
+
+		lua_settablevalue(L, "lf", "\n");
+		lua_settablevalue(L, "cr", "\r");
+		lua_settablevalue(L, "ht", "\t");
+		lua_settablevalue(L, "vt", "\v");
+		lua_settablevalue(L, "bs", "\b");
+		lua_settablevalue(L, "bel", "\a");
+		lua_settablevalue(L, "nul", "\0");
+		lua_settablevalue(L, "ff", "\f");
+
+		lua_settablevalue(L, "line_feed", "\n");
+		lua_settablevalue(L, "carriage_return", "\r");
+		lua_settablevalue(L, "horizontal_tabulation", "\t");
+		lua_settablevalue(L, "vertical_tabulation", "\v");
+		lua_settablevalue(L, "backspace", "\b");
+		lua_settablevalue(L, "bell", "\a");
+		lua_settablevalue(L, "null", "\0");
+		lua_settablevalue(L, "form_feed", "\f");
 
 		lua_setfield(L, -2, name);
 	}

@@ -29,7 +29,7 @@
     "http": true,
     "qrcode": true,
     "object": true,
-    "ease"; true
+    "ease": true
   },
   "api-alias": {
     "tmstring": true,

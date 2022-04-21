@@ -560,7 +560,7 @@ int quaternion__euler(lua_State* L) {
 		lua_Quaternion* val1 = tm_toquaternion(L, 1);
 
 		lua_pushvector3(L, (*val1).toRotationMatrix().eulerAngles(0, 1, 2));
-		return 3;
+		return 1;
 	}
 	catch (std::exception& e) {
 		luaL_error(L, e.what());
