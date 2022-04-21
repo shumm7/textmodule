@@ -8,23 +8,19 @@
 
 int utf8_byte(lua_State* L) {
 	try {
-		std::wstring text = tm_towstring(L, 1);
-		int i = tm_tointeger_s(L, 2, 1) - 1;
-		int j = tm_tointeger_s(L, 3, 1) - 1;
-		int length = text.length();
+		lua_Wstring text = tm_towstring(L, 1);
+		lua_Integer i = tm_tointeger_s(L, 2, 1) - 1;
+		lua_Integer j = tm_tointeger_s(L, 3, 1) - 1;
+		lua_Integer length = text.length();
 
-		if (length < 1) {
+		if (length < 1)
 			return 0;
-		}
-		if (j < i) {
+		if (j < i)
 			return 0;
-		}
-		if (i >= length) {
+		if (i >= length)
 			return 0;
-		}
-		if (j >= length) {
+		if (j >= length)
 			j = length - 1;
-		}
 
 		for (int k = i; k <= j; k++)
 		{
@@ -51,25 +47,13 @@ int utf8_char(lua_State* L) {
 		int cnt = 1;
 		std::vector<unsigned long long> list;
 
-		while (true) {
-			int tp = lua_type(L, cnt);
+		while (LUA_TNUMBER== lua_type(L, cnt)) {
+			unsigned long long r = UTF8ToUnicode(lua_tonumber(L, cnt));
 
-			if (tp == LUA_TNUMBER) {
-				unsigned long long r = UTF8ToUnicode(lua_tonumber(L, cnt));
-
-				if (r != -1) {
-					list.push_back(r);
-				}
-				else {
-					return 0;
-				}
-			}
-			else if (tp == LUA_TNIL || tp == LUA_TNONE) {
-				break;
-			}
-			else {
+			if (r != -1)
+				list.push_back(r);
+			else
 				return 0;
-			}
 
 			cnt++;
 		}
@@ -79,7 +63,7 @@ int utf8_char(lua_State* L) {
 		}
 
 		wchar_t temp;
-		std::wstring ret;
+		lua_Wstring ret;
 		for (unsigned int i = 0; i < list.size(); i++)
 		{
 			temp = (wchar_t)list[i];

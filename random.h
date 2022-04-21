@@ -1,6 +1,14 @@
 #pragma once
 #include <lua.hpp>
 
+int random_minstd_rand0(lua_State* L);
+int random_minstd_rand(lua_State* L);
+int random_mt19937(lua_State* L);
+int random_mt19937_64(lua_State* L);
+int random_ranlux24(lua_State* L);
+int random_ranlux48(lua_State* L);
+int random_knuth_b(lua_State* L);
+
 int random_uniform(lua_State* L);
 int random_bernoulli(lua_State* L);
 int random_binomial(lua_State* L);
@@ -21,6 +29,14 @@ int random_student_t(lua_State* L);
 void luaReg_random(lua_State* L, const char* name, bool reg);
 
 static luaL_Reg TEXTMODULE_RANDOM_REG[] = {
+	{"minstd_rand0", random_minstd_rand0},
+	{"minstd_rand", random_minstd_rand},
+	{"mt19937", random_mt19937},
+	{"mt19937_64", random_mt19937_64},
+	{"ranlux24", random_ranlux24},
+	{"ranlux48", random_ranlux48},
+	{"knuth_b", random_knuth_b},
+
 	{"uniform", random_uniform},
 	{"bernoulli", random_bernoulli},
 	{"binomial", random_binomial},

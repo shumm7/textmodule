@@ -90,9 +90,6 @@
     <ClCompile Include="textmodule_string.cpp">
       <Filter>ソース ファイル\lib</Filter>
     </ClCompile>
-    <ClCompile Include="textmodule_exception.cpp">
-      <Filter>ソース ファイル\lib</Filter>
-    </ClCompile>
     <ClCompile Include="textmodule_option.cpp">
       <Filter>ソース ファイル\lib</Filter>
     </ClCompile>
@@ -126,19 +123,7 @@
     <ClCompile Include="cmath.cpp">
       <Filter>ソース ファイル\function</Filter>
     </ClCompile>
-    <ClCompile Include="rgb.cpp">
-      <Filter>ソース ファイル\function\color</Filter>
-    </ClCompile>
-    <ClCompile Include="textmodule_color.cpp">
-      <Filter>ソース ファイル\lib</Filter>
-    </ClCompile>
-    <ClCompile Include="hsv.cpp">
-      <Filter>ソース ファイル\function\color</Filter>
-    </ClCompile>
-    <ClCompile Include="hsl.cpp">
-      <Filter>ソース ファイル\function\color</Filter>
-    </ClCompile>
-    <ClCompile Include="color.cpp">
+    <ClCompile Include="colorlist.cpp">
       <Filter>ソース ファイル\function\color</Filter>
     </ClCompile>
     <ClCompile Include="complex.cpp">
@@ -182,6 +167,21 @@
     </ClCompile>
     <ClCompile Include="textmodule_ease.cpp">
       <Filter>ソース ファイル\lib</Filter>
+    </ClCompile>
+    <ClCompile Include="textmodule_math.cpp">
+      <Filter>ソース ファイル\lib</Filter>
+    </ClCompile>
+    <ClCompile Include="color.cpp">
+      <Filter>ソース ファイル\function\color</Filter>
+    </ClCompile>
+    <ClCompile Include="pixel.cpp">
+      <Filter>ソース ファイル\function\color</Filter>
+    </ClCompile>
+    <ClCompile Include="textmodule_color.cpp">
+      <Filter>ソース ファイル\lib</Filter>
+    </ClCompile>
+    <ClCompile Include="image.cpp">
+      <Filter>ソース ファイル\function\color</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -254,19 +254,7 @@
     <ClInclude Include="cmath.h">
       <Filter>ヘッダー ファイル\function</Filter>
     </ClInclude>
-    <ClInclude Include="rgb.h">
-      <Filter>ヘッダー ファイル\function\color</Filter>
-    </ClInclude>
-    <ClInclude Include="textmodule_color.h">
-      <Filter>ヘッダー ファイル\lib</Filter>
-    </ClInclude>
-    <ClInclude Include="hsv.h">
-      <Filter>ヘッダー ファイル\function\color</Filter>
-    </ClInclude>
-    <ClInclude Include="hsl.h">
-      <Filter>ヘッダー ファイル\function\color</Filter>
-    </ClInclude>
-    <ClInclude Include="color.h">
+    <ClInclude Include="colorlist.h">
       <Filter>ヘッダー ファイル\function\color</Filter>
     </ClInclude>
     <ClInclude Include="complex.h">
@@ -313,6 +301,21 @@
     </ClInclude>
     <ClInclude Include="textmodule_ease.h">
       <Filter>ヘッダー ファイル\lib</Filter>
+    </ClInclude>
+    <ClInclude Include="textmodule_math.h">
+      <Filter>ヘッダー ファイル\lib</Filter>
+    </ClInclude>
+    <ClInclude Include="color.h">
+      <Filter>ヘッダー ファイル\function\color</Filter>
+    </ClInclude>
+    <ClInclude Include="pixel.h">
+      <Filter>ヘッダー ファイル\function\color</Filter>
+    </ClInclude>
+    <ClInclude Include="textmodule_color.h">
+      <Filter>ヘッダー ファイル\lib</Filter>
+    </ClInclude>
+    <ClInclude Include="image.h">
+      <Filter>ヘッダー ファイル\function\color</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

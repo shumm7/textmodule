@@ -10,10 +10,10 @@
 
 int vector4_new(lua_State* L) {
 	try {
-		double x = tm_tonumber_s(L, 1, 0);
-		double y = tm_tonumber_s(L, 2, 0);
-		double z = tm_tonumber_s(L, 3, 0);
-		double w = tm_tonumber_s(L, 4, 0);
+		lua_Number x = tm_tonumber_s(L, 1, 0);
+		lua_Number y = tm_tonumber_s(L, 2, 0);
+		lua_Number z = tm_tonumber_s(L, 3, 0);
+		lua_Number w = tm_tonumber_s(L, 4, 0);
 
 		lua_pushvector4(L, x, y, z, w);
 		return 1;
@@ -26,7 +26,7 @@ int vector4_new(lua_State* L) {
 
 int vector4_identity(lua_State* L) {
 	try {
-		lua_pushvector4(L, Vector4::Identity());
+		lua_pushvector4(L, lua_Vector4::Identity());
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -60,7 +60,7 @@ int vector4_zero(lua_State* L) {
 
 int vector4__x(lua_State* L) {
 	try {
-		Vector4* val = vector4_check(L, 1);
+		lua_Vector4* val = tm_tovector4(L, 1);
 
 		int tp = lua_type(L, 2);
 		luaL_argcheck(L, tp == LUA_TNONE || tp == LUA_TNUMBER, 2, "number/none expected");
@@ -83,7 +83,7 @@ int vector4__x(lua_State* L) {
 
 int vector4__y(lua_State* L) {
 	try {
-		Vector4* val = vector4_check(L, 1);
+		lua_Vector4* val = tm_tovector4(L, 1);
 
 		int tp = lua_type(L, 2);
 		luaL_argcheck(L, tp == LUA_TNONE || tp == LUA_TNUMBER, 2, "number/none expected");
@@ -106,7 +106,7 @@ int vector4__y(lua_State* L) {
 
 int vector4__z(lua_State* L) {
 	try {
-		Vector4* val = vector4_check(L, 1);
+		lua_Vector4* val = tm_tovector4(L, 1);
 
 		int tp = lua_type(L, 2);
 		luaL_argcheck(L, tp == LUA_TNONE || tp == LUA_TNUMBER, 2, "number/none expected");
@@ -129,7 +129,7 @@ int vector4__z(lua_State* L) {
 
 int vector4__w(lua_State* L) {
 	try {
-		Vector4* val = vector4_check(L, 1);
+		lua_Vector4* val = tm_tovector4(L, 1);
 
 		int tp = lua_type(L, 2);
 		luaL_argcheck(L, tp == LUA_TNONE || tp == LUA_TNUMBER, 2, "number/none expected");
@@ -152,9 +152,9 @@ int vector4__w(lua_State* L) {
 
 int vector4____tostring(lua_State* L) {
 	try {
-		Vector4* val = vector4_check(L, 1);
+		lua_Vector4* val = tm_tovector4(L, 1);
 
-		std::wstring ret = L"("
+		lua_Wstring ret = L"("
 			+ tostring_n(val->x()) + L","
 			+ tostring_n(val->y()) + L","
 			+ tostring_n(val->z()) + L","
@@ -171,7 +171,7 @@ int vector4____tostring(lua_State* L) {
 
 int vector4____gc(lua_State* L) {
 	try {
-		Vector4* c = vector4_check(L, 1);
+		lua_Vector4* c = tm_tovector4(L, 1);
 		if (c != nullptr)
 			free(c);
 
@@ -185,8 +185,8 @@ int vector4____gc(lua_State* L) {
 
 int vector4____add(lua_State* L) {
 	try {
-		Vector4* val1 = vector4_check(L, 1);
-		Vector4* val2 = vector4_check(L, 2);
+		lua_Vector4* val1 = tm_tovector4(L, 1);
+		lua_Vector4* val2 = tm_tovector4(L, 2);
 
 		lua_pushvector4(L,
 			val1->x() + val2->x(),
@@ -204,8 +204,8 @@ int vector4____add(lua_State* L) {
 
 int vector4____sub(lua_State* L) {
 	try {
-		Vector4* val1 = vector4_check(L, 1);
-		Vector4* val2 = vector4_check(L, 2);
+		lua_Vector4* val1 = tm_tovector4(L, 1);
+		lua_Vector4* val2 = tm_tovector4(L, 2);
 
 		lua_pushvector4(L,
 			val1->x() - val2->x(),
@@ -224,18 +224,18 @@ int vector4____sub(lua_State* L) {
 int vector4____mul(lua_State* L) {
 	try {
 		int tp = lua_type(L, 1);
-		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 1, "number/" TEXTMODULE_VECTOR4 " expected");
+		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 1, "number/vector4 expected");
 
 		if (tp == LUA_TUSERDATA) { // Vector4 * Number
-			Vector4* val1 = vector4_check(L, 1);
-			double val2 = tm_tonumber(L, 2);
+			lua_Vector4* val1 = tm_tovector4(L, 1);
+			lua_Number val2 = tm_tonumber(L, 2);
 
 			lua_pushvector4(L, (*val1) * val2);
 			return 1;
 		}
 		else if (tp == LUA_TNUMBER) { // Number * Vector4
-			double val1 = lua_tonumber(L, 1);
-			Vector4* val2 = vector4_check(L, 2);
+			lua_Number val1 = tm_tonumber(L, 1);
+			lua_Vector4* val2 = tm_tovector4(L, 2);
 
 			lua_pushvector4(L, val1 * (*val2));
 			return 1;
@@ -250,8 +250,8 @@ int vector4____mul(lua_State* L) {
 
 int vector4____div(lua_State* L) {
 	try {
-		Vector4* val1 = vector4_check(L, 1);
-		double val2 = tm_tonumber(L, 2);
+		lua_Vector4* val1 = tm_tovector4(L, 1);
+		lua_Number val2 = tm_tonumber(L, 2);
 
 		lua_pushvector4(L, (*val1) / val2);
 		return 1;
@@ -264,7 +264,7 @@ int vector4____div(lua_State* L) {
 
 int vector4____unm(lua_State* L) {
 	try {
-		Vector4* val = vector4_check(L, 1);
+		lua_Vector4* val = tm_tovector4(L, 1);
 
 		lua_pushvector4(L, -(val->x()), -(val->y()), -(val->z()), -(val->w()));
 		return 1;
@@ -277,10 +277,7 @@ int vector4____unm(lua_State* L) {
 
 int vector4____lt(lua_State* L) {
 	try {
-		double val1 = g_vector4_norm(*vector4_check(L, 1));
-		double val2 = g_vector4_norm(*vector4_check(L, 2));
-
-		lua_pushboolean(L, val1 < val2);
+		lua_pushboolean(L, g_vector4_norm(*tm_tovector4(L, 1)) < g_vector4_norm(*tm_tovector4(L, 2)));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -291,10 +288,7 @@ int vector4____lt(lua_State* L) {
 
 int vector4____le(lua_State* L) {
 	try {
-		double val1 = g_vector4_norm(*vector4_check(L, 1));
-		double val2 = g_vector4_norm(*vector4_check(L, 2));
-
-		lua_pushboolean(L, val1 <= val2);
+		lua_pushboolean(L, g_vector4_norm(*tm_tovector4(L, 1)) <= g_vector4_norm(*tm_tovector4(L, 2)));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -305,7 +299,7 @@ int vector4____le(lua_State* L) {
 
 int vector4____index(lua_State* L) {
 	try {
-		Vector4* val1 = vector4_check(L, 1);
+		lua_Vector4* val1 = tm_tovector4(L, 1);
 
 		int tp = lua_type(L, 2);
 		luaL_argcheck(L, tp == LUA_TSTRING || tp == LUA_TNUMBER, 2, "string/number expected");
@@ -329,7 +323,7 @@ int vector4____index(lua_State* L) {
 			}
 		}
 		else if (tp == LUA_TSTRING) {
-			std::string l = tm_tostring(L, 2);
+			lua_Sstring l = tm_tostring(L, 2);
 			if (l == "x") {
 				lua_pushnumber(L, val1->x());
 				return 1;
@@ -360,11 +354,11 @@ int vector4____index(lua_State* L) {
 
 int vector4____newindex(lua_State* L) {
 	try {
-		Vector4* val1 = vector4_check(L, 1);
+		lua_Vector4* val1 = tm_tovector4(L, 1);
 
 		int tp = lua_type(L, 2);
 		luaL_argcheck(L, tp == LUA_TSTRING || tp == LUA_TNUMBER, 2, "string/number expected");
-		double value = tm_tonumber(L, 3);
+		lua_Number value = tm_tonumber(L, 3);
 
 		if (tp == LUA_TNUMBER) {
 			switch (tm_tointeger(L, 2)) {
@@ -385,7 +379,7 @@ int vector4____newindex(lua_State* L) {
 			}
 		}
 		else if (tp == LUA_TSTRING) {
-			std::string l = tm_tostring(L, 2);
+			lua_Sstring l = tm_tostring(L, 2);
 			if (l == "x") {
 				val1->x() = value;
 			}
@@ -414,7 +408,7 @@ int vector4____newindex(lua_State* L) {
 
 int vector4__abs(lua_State* L) {
 	try {
-		Vector4* val1 = vector4_check(L, 1);
+		lua_Vector4* val1 = tm_tovector4(L, 1);
 
 		lua_pushnumber(L, g_vector4_abs(*val1));
 		return 1;
@@ -427,7 +421,7 @@ int vector4__abs(lua_State* L) {
 
 int vector4__norm(lua_State* L) {
 	try {
-		Vector4* val1 = vector4_check(L, 1);
+		lua_Vector4* val1 = tm_tovector4(L, 1);
 
 		lua_pushnumber(L, g_vector4_norm(*val1));
 		return 1;
@@ -440,7 +434,7 @@ int vector4__norm(lua_State* L) {
 
 int vector4__normalize(lua_State* L) {
 	try {
-		Vector4* val1 = vector4_check(L, 1);
+		lua_Vector4* val1 = tm_tovector4(L, 1);
 
 		lua_pushvector4(L, val1->normalized());
 		return 1;
@@ -453,8 +447,8 @@ int vector4__normalize(lua_State* L) {
 
 int vector4__dot(lua_State* L) {
 	try {
-		Vector4* val1 = vector4_check(L, 1);
-		Vector4* val2 = vector4_check(L, 2);
+		lua_Vector4* val1 = tm_tovector4(L, 1);
+		lua_Vector4* val2 = tm_tovector4(L, 2);
 
 		lua_pushnumber(L, val1->dot(*val2));
 		return 1;
@@ -467,8 +461,8 @@ int vector4__dot(lua_State* L) {
 
 int vector4__scale(lua_State* L) {
 	try {
-		Vector4* val1 = vector4_check(L, 1);
-		Vector4* val2 = vector4_check(L, 2);
+		lua_Vector4* val1 = tm_tovector4(L, 1);
+		lua_Vector4* val2 = tm_tovector4(L, 2);
 
 		lua_pushvector4(L, val1->x() * val2->x(), val1->y() * val2->y(), val1->z() * val2->z(), val1->w() * val2->w());
 		return 1;
@@ -481,10 +475,10 @@ int vector4__scale(lua_State* L) {
 
 int vector4__distance(lua_State* L) {
 	try {
-		Vector4* val1 = vector4_check(L, 1);
-		Vector4* val2 = vector4_check(L, 2);
+		lua_Vector4* val1 = tm_tovector4(L, 1);
+		lua_Vector4* val2 = tm_tovector4(L, 2);
 
-		Vector4 ret = (*val1) - (*val2);
+		lua_Vector4 ret = (*val1) - (*val2);
 		lua_pushnumber(L, g_vector4_abs(ret));
 		return 1;
 	}
@@ -496,7 +490,7 @@ int vector4__distance(lua_State* L) {
 
 int vector4__conj(lua_State* L) {
 	try {
-		Vector4* val1 = vector4_check(L, 1);
+		lua_Vector4* val1 = tm_tovector4(L, 1);
 
 		lua_pushvector4(L, val1->conjugate());
 		return 1;
@@ -509,7 +503,7 @@ int vector4__conj(lua_State* L) {
 
 int vector4__table(lua_State* L) {
 	try {
-		Vector4* val1 = vector4_check(L, 1);
+		lua_Vector4* val1 = tm_tovector4(L, 1);
 
 		lua_newtable(L);
 		lua_settablevalue(L, 1, val1->x());
@@ -526,7 +520,7 @@ int vector4__table(lua_State* L) {
 
 int vector4__quaternion(lua_State* L) {
 	try {
-		Vector4* val = vector4_check(L, 1);
+		lua_Vector4* val = tm_tovector4(L, 1);
 
 		lua_pushquaternion(L, val->x(), val->y(), val->z(), val->w());
 		return 1;
@@ -539,9 +533,9 @@ int vector4__quaternion(lua_State* L) {
 
 int vector4__vector2(lua_State* L) {
 	try {
-		Vector4* val = vector4_check(L, 1);
+		lua_Vector4* val = tm_tovector4(L, 1);
 
-		Vector2* ret = lua_pushvector2(L, val->x(), val->y());
+		lua_Vector2* ret = lua_pushvector2(L, val->x(), val->y());
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -552,9 +546,9 @@ int vector4__vector2(lua_State* L) {
 
 int vector4__vector3(lua_State* L) {
 	try {
-		Vector4* val = vector4_check(L, 1);
+		lua_Vector4* val = tm_tovector4(L, 1);
 
-		Vector3* ret = lua_pushvector3(L, val->x(), val->y(), val->z());
+		lua_Vector3* ret = lua_pushvector3(L, val->x(), val->y(), val->z());
 		return 1;
 	}
 	catch (std::exception& e) {

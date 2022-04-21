@@ -21,6 +21,8 @@
 #define S_IROHA "	いろはにほへとちりぬるをわかよたれそつねならむうゐのおくやまけふこえてあさきゆめみしゑひもせすん"
 #define S_QUICK_BROWN_FOX "The quick brown fox jumps over the lazy dog"
 #define S_PIPE "─│┌┐┘└├┬┤┴┼━┃┏┓┛┗┣┳┫┻╋┠┯┨┷┿┝┰┥┸╂"
+#define S_LOREM_IPSUM "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+#define S_POLANO "あのイーハトーヴォのすきとおった風、夏でも底に冷たさをもつ青いそら、うつくしい森で飾られたモリーオ市、郊外のぎらぎらひかる草の波。"
 
 int tmstring_hiragana(lua_State* L);
 int tmstring_katakana(lua_State* L);
@@ -39,8 +41,6 @@ int tmstring_capitalize_words(lua_State* L);
 int tmstring_random(lua_State* L);
 int tmstring_roundnumber(lua_State* L);
 int tmstring_anagram(lua_State* L);
-int tmstring_print(lua_State* L);
-int tmstring_printf(lua_State* L);
 
 void luaReg_tmstring(lua_State* L, const char* name, bool reg);
 
@@ -61,7 +61,5 @@ static luaL_Reg TEXTMODULE_TMSTRING_REG[] = {
 	{"random", tmstring_random},
 	{"roundnumber",  tmstring_roundnumber},
 	{"anagram", tmstring_anagram},
-	{"print", tmstring_print},
-	{"printf", tmstring_printf},
 	{ nullptr, nullptr }
 };

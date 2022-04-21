@@ -1,17 +1,23 @@
 #pragma once
-double range(double n, double min, double max);
-double range(double n);
-//入力された変数nを、minとmaxで指定された範囲に制限します。
-//範囲外の数値が入力された場合は、例外を送出します。
-double clamp(double n, double min, double max);
-//入力された変数nを、0～1の範囲に制限します。
-//範囲外の数値が入力された場合は、例外を送出します。
-double clamp(double n);
-//入力された変数nを、minとmaxで指定された範囲に制限します。
-//範囲外の数値が入力された場合は、minもしくはmaxを返します。
-double clamp_s(double n, double min, double max);
-//入力された変数nを、0～1の範囲に制限します。
-//範囲外の数値が入力された場合は、0か1を返します。
-double clamp_s(double n);
+#include "textmodule_lua.h"
 
-bool isinteger(double n);
+lua_Number range(lua_Number n, lua_Number min, lua_Number max);
+lua_Number range(lua_Number n);
+
+lua_Number clamp(lua_Number n, lua_Number min, lua_Number max);
+lua_Number clamp(lua_Number n);
+
+lua_Number clamp_s(lua_Number n, lua_Number min, lua_Number max);
+lua_Number clamp_s(lua_Number n);
+
+lua_Boolean isinteger(lua_Number n);
+lua_Boolean isprime(lua_Integer n);
+
+lua_Number combination(lua_Integer n, lua_Integer r);
+lua_Number factorial(lua_Integer n);
+lua_Number permutation(lua_Integer n, lua_Integer r);
+lua_Number repetition_combination(lua_Integer n, lua_Integer r);
+lua_Number repetition_permutation(lua_Integer n, lua_Integer r);
+lua_Number circular_permutation(lua_Integer n);
+
+lua_Number bernstein(lua_Number t, lua_Integer n, lua_Integer i);

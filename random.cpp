@@ -4,11 +4,103 @@
 #include "random.h"
 #include "textmodule_lua.h"
 
+int random_minstd_rand0(lua_State* L) {
+	try {
+		std::random_device seed_gen;
+		std::minstd_rand0 engine(seed_gen());
+		lua_pushnumber(L, engine());
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int random_minstd_rand(lua_State* L) {
+	try {
+		std::random_device seed_gen;
+		std::minstd_rand engine(seed_gen());
+		lua_pushnumber(L, engine());
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int random_mt19937(lua_State* L) {
+	try {
+		std::random_device seed_gen;
+		std::mt19937 engine(seed_gen());
+		lua_pushnumber(L, engine());
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int random_mt19937_64(lua_State* L) {
+	try {
+		std::random_device seed_gen;
+		std::mt19937_64 engine(seed_gen());
+		lua_pushnumber(L, engine());
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int random_ranlux24(lua_State* L) {
+	try {
+		std::random_device seed_gen;
+		std::ranlux24 engine(seed_gen());
+		lua_pushnumber(L, engine());
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int random_ranlux48(lua_State* L) {
+	try {
+		std::random_device seed_gen;
+		std::ranlux48 engine(seed_gen());
+		lua_pushnumber(L, engine());
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int random_knuth_b(lua_State* L) {
+	try {
+		std::random_device seed_gen;
+		std::knuth_b engine(seed_gen());
+		lua_pushnumber(L, engine());
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+
 int random_uniform(lua_State* L) {
 	try {
-		double m = 0;
-		double n = 0;
-		int seed = 0;
+		lua_Number m = 0;
+		lua_Number n = 0;
+		lua_Integer seed = 0;
 		bool seed_set = false;
 
 		switch (lua_gettop(L)) {
@@ -55,7 +147,7 @@ int random_uniform(lua_State* L) {
 
 int random_bernoulli(lua_State* L) {
 	try {
-		double m = tm_tonumber(L, 1);
+		lua_Number m = tm_tonumber(L, 1);
 
 		if (lua_type(L, 2) == LUA_TNUMBER) {
 			std::default_random_engine engine(tm_tointeger(L, 2));
@@ -78,8 +170,8 @@ int random_bernoulli(lua_State* L) {
 
 int random_binomial(lua_State* L) {
 	try {
-		double m = tm_tonumber(L, 1);
-		double n = tm_tonumber(L, 2);
+		lua_Number m = tm_tonumber(L, 1);
+		lua_Number n = tm_tonumber(L, 2);
 
 		if (lua_type(L, 3) == LUA_TNUMBER) {
 			std::default_random_engine engine(tm_tointeger(L, 3));
@@ -102,7 +194,7 @@ int random_binomial(lua_State* L) {
 
 int random_geometric(lua_State* L) {
 	try {
-		double m = tm_tonumber(L, 1);
+		lua_Number m = tm_tonumber(L, 1);
 
 		if (lua_type(L, 2) == LUA_TNUMBER) {
 			std::default_random_engine engine(tm_tointeger(L, 2));
@@ -125,8 +217,8 @@ int random_geometric(lua_State* L) {
 
 int random_negative_binomial(lua_State* L) {
 	try {
-		double m = tm_tonumber(L, 1);
-		double n = tm_tonumber(L, 2);
+		lua_Number m = tm_tonumber(L, 1);
+		lua_Number n = tm_tonumber(L, 2);
 
 		if (lua_type(L, 3) == LUA_TNUMBER) {
 			std::default_random_engine engine(tm_tointeger(L, 3));
@@ -149,7 +241,7 @@ int random_negative_binomial(lua_State* L) {
 
 int random_poisson(lua_State* L) {
 	try {
-		double m = tm_tonumber(L, 1);
+		lua_Number m = tm_tonumber(L, 1);
 
 		if (lua_type(L, 2) == LUA_TNUMBER) {
 			std::default_random_engine engine(tm_tointeger(L, 2));
@@ -172,7 +264,7 @@ int random_poisson(lua_State* L) {
 
 int random_exponential(lua_State* L) {
 	try {
-		double m = tm_tonumber(L, 1);
+		lua_Number m = tm_tonumber(L, 1);
 
 		if (lua_type(L, 2) == LUA_TNUMBER) {
 			std::default_random_engine engine(tm_tointeger(L, 2));
@@ -195,8 +287,8 @@ int random_exponential(lua_State* L) {
 
 int random_gamma(lua_State* L) {
 	try {
-		double m = tm_tonumber(L, 1);
-		double n = tm_tonumber(L, 2);
+		lua_Number m = tm_tonumber(L, 1);
+		lua_Number n = tm_tonumber(L, 2);
 
 		if (lua_type(L, 3) == LUA_TNUMBER) {
 			std::default_random_engine engine(tm_tointeger(L, 3));
@@ -219,8 +311,8 @@ int random_gamma(lua_State* L) {
 
 int random_weibull(lua_State* L) {
 	try {
-		double m = tm_tonumber(L, 1);
-		double n = tm_tonumber(L, 2);
+		lua_Number m = tm_tonumber(L, 1);
+		lua_Number n = tm_tonumber(L, 2);
 
 		if (lua_type(L, 3) == LUA_TNUMBER) {
 			std::default_random_engine engine(tm_tointeger(L, 3));
@@ -243,8 +335,8 @@ int random_weibull(lua_State* L) {
 
 int random_extreme_value(lua_State* L) {
 	try {
-		double m = tm_tonumber(L, 1);
-		double n = tm_tonumber(L, 2);
+		lua_Number m = tm_tonumber(L, 1);
+		lua_Number n = tm_tonumber(L, 2);
 
 		if (lua_type(L, 3) == LUA_TNUMBER) {
 			std::default_random_engine engine(tm_tointeger(L, 3));
@@ -267,8 +359,8 @@ int random_extreme_value(lua_State* L) {
 
 int random_normal(lua_State* L) {
 	try {
-		double m = tm_tonumber(L, 1);
-		double n = tm_tonumber(L, 2);
+		lua_Number m = tm_tonumber(L, 1);
+		lua_Number n = tm_tonumber(L, 2);
 
 		if (lua_type(L, 3) == LUA_TNUMBER) {
 			std::default_random_engine engine(tm_tointeger(L, 3));
@@ -291,8 +383,8 @@ int random_normal(lua_State* L) {
 
 int random_lognormal(lua_State* L) {
 	try {
-		double m = tm_tonumber(L, 1);
-		double n = tm_tonumber(L, 2);
+		lua_Number m = tm_tonumber(L, 1);
+		lua_Number n = tm_tonumber(L, 2);
 
 		if (lua_type(L, 3) == LUA_TNUMBER) {
 			std::default_random_engine engine(tm_tointeger(L, 3));
@@ -315,7 +407,7 @@ int random_lognormal(lua_State* L) {
 
 int random_chi_squared(lua_State* L) {
 	try {
-		double m = tm_tonumber(L, 1);
+		lua_Number m = tm_tonumber(L, 1);
 
 		if (lua_type(L, 2) == LUA_TNUMBER) {
 			std::default_random_engine engine(tm_tointeger(L, 2));
@@ -338,8 +430,8 @@ int random_chi_squared(lua_State* L) {
 
 int random_cauchy(lua_State* L) {
 	try {
-		double m = tm_tonumber(L, 1);
-		double n = tm_tonumber(L, 2);
+		lua_Number m = tm_tonumber(L, 1);
+		lua_Number n = tm_tonumber(L, 2);
 
 		if (lua_type(L, 3) == LUA_TNUMBER) {
 			std::default_random_engine engine(tm_tointeger(L, 3));
@@ -362,8 +454,8 @@ int random_cauchy(lua_State* L) {
 
 int random_fisher_f(lua_State* L) {
 	try {
-		double m = tm_tonumber(L, 1);
-		double n = tm_tonumber(L, 2);
+		lua_Number m = tm_tonumber(L, 1);
+		lua_Number n = tm_tonumber(L, 2);
 
 		if (lua_type(L, 3) == LUA_TNUMBER) {
 			std::default_random_engine engine(tm_tointeger(L, 3));
@@ -386,7 +478,7 @@ int random_fisher_f(lua_State* L) {
 
 int random_student_t(lua_State* L) {
 	try {
-		double m = tm_tonumber(L, 1);
+		lua_Number m = tm_tonumber(L, 1);
 
 		if (lua_type(L, 2) == LUA_TNUMBER) {
 			std::default_random_engine engine(tm_tointeger(L, 2));

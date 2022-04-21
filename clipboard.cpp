@@ -13,7 +13,7 @@ int clipboard_get(lua_State* L) {
 	try {
 		HGLOBAL hMem;
 		LPTSTR lpBuff;
-		std::wstring str;
+		lua_Wstring str;
 		bool flag = false;
 
 		if (OpenClipboard(NULL)) {
@@ -103,6 +103,7 @@ int clipboard_clear(lua_State* L) {
 		return 1;
 	}
 }
+
 
 void luaReg_clipboard(lua_State* L, const char* name, bool reg) {
 	if (reg) {

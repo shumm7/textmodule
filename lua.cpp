@@ -28,10 +28,10 @@
 #include "vector4.h"
 #include "quaternion.h"
 
+#include "colorlist.h"
 #include "color.h"
-#include "rgb.h"
-#include "hsv.h"
-#include "hsl.h"
+#include "pixel.h"
+#include "image.h"
 
 void luaReg(lua_State* L, nlohmann::json o) {
 	//base
@@ -53,10 +53,9 @@ void luaReg(lua_State* L, nlohmann::json o) {
 	luaReg_utf8(L, API_UTF8, getOptionParamB(o, OPTION_VAPI, API_UTF8));
 
 	//color
-	luaReg_color(L, API_COLOR_BASE, getOptionParamB(o, OPTION_VAPI, API_COLOR, API_COLOR_BASE));
-	luaReg_rgb(L, API_RGB, getOptionParamB(o, OPTION_VAPI, API_COLOR, API_RGB));
-	luaReg_hsv(L, API_HSV, getOptionParamB(o, OPTION_VAPI, API_COLOR, API_HSV));
-	luaReg_hsl(L, API_HSL, getOptionParamB(o, OPTION_VAPI, API_COLOR, API_HSL));
+	luaReg_color(L, API_COLOR, getOptionParamB(o, OPTION_VAPI, API_COLOR, API_COLOR));
+	luaReg_pixel(L, API_PIXEL, getOptionParamB(o, OPTION_VAPI, API_COLOR, API_PIXEL));
+	//luaReg_image(L, API_IMAGE, getOptionParamB(o, OPTION_VAPI, API_COLOR, API_IMAGE));
 
 	//geometry
 	luaReg_complex(L, API_COMPLEX, getOptionParamB(o, OPTION_VAPI, API_GEOMETRY, API_COMPLEX));

@@ -33,9 +33,7 @@ int qrcode_encode(lua_State* L) {
 		lua_pushinteger(L, x + 1);
 		lua_newtable(L);
 		for (int y = 0; y < qr.getSize(); y++) {
-			lua_pushinteger(L, y + 1);
-			lua_pushboolean(L, qr.getModule(x, y));
-			lua_settable(L, -3);
+			lua_settablevalue(L, y + 1, qr.getModule(x, y));
 		}
 		lua_settable(L, -3);
 	}
@@ -43,9 +41,9 @@ int qrcode_encode(lua_State* L) {
 }
 
 int qrcode_encode_string(lua_State* L) {
-	std::wstring black = tm_towstring(L, 1);
-	std::wstring white = tm_towstring(L, 2);
-	std::wstring ret;
+	lua_Wstring black = tm_towstring(L, 1);
+	lua_Wstring white = tm_towstring(L, 2);
+	lua_Wstring ret;
 
 	QrCode qr = get_qrcode(L, 3);
 

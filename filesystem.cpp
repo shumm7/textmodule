@@ -37,9 +37,8 @@ int fs_current(lua_State* L) {
 
 int fs_absolute(lua_State* L) {
 	try {
-		std::wstring dir = tm_towstring(L, 1);
-
-		std::wstring res = std::filesystem::absolute(dir).wstring();
+		lua_Wstring dir = tm_towstring(L, 1);
+		lua_Wstring res = std::filesystem::absolute(dir).wstring();
 		lua_pushwstring(L, res);
 		return 1;
 	}
@@ -51,9 +50,8 @@ int fs_absolute(lua_State* L) {
 
 int fs_relative(lua_State* L) {
 	try {
-		std::wstring dir = tm_towstring(L, 1);
-
-		std::wstring res = std::filesystem::relative(dir).wstring();
+		lua_Wstring dir = tm_towstring(L, 1);
+		lua_Wstring res = std::filesystem::relative(dir).wstring();
 		lua_pushwstring(L, res);
 		return 1;
 	}
@@ -65,9 +63,8 @@ int fs_relative(lua_State* L) {
 
 int fs_proximate(lua_State* L) {
 	try {
-		std::wstring dir = tm_towstring(L, 1);
-
-		std::wstring res = std::filesystem::proximate(dir).wstring();
+		lua_Wstring dir = tm_towstring(L, 1);
+		lua_Wstring res = std::filesystem::proximate(dir).wstring();
 		lua_pushwstring(L, res);
 		return 1;
 	}
@@ -79,9 +76,8 @@ int fs_proximate(lua_State* L) {
 
 int fs_canonical(lua_State* L) {
 	try {
-		std::wstring dir = tm_towstring(L, 1);
-
-		std::wstring res = std::filesystem::canonical(dir).wstring();
+		lua_Wstring dir = tm_towstring(L, 1);
+		lua_Wstring res = std::filesystem::canonical(dir).wstring();
 		lua_pushwstring(L, res);
 		return 1;
 	}
@@ -93,14 +89,12 @@ int fs_canonical(lua_State* L) {
 
 int fs_create(lua_State* L) {
 	try {
-		std::wstring dir = tm_towstring(L, 1);
+		lua_Wstring dir = tm_towstring(L, 1);
 
-		if (std::filesystem::create_directory(dir)) {
+		if (std::filesystem::create_directory(dir))
 			lua_pushboolean(L, true);
-		}
-		else {
+		else
 			lua_pushboolean(L, false);
-		}
 
 		return 1;
 	}
@@ -112,14 +106,12 @@ int fs_create(lua_State* L) {
 
 int fs_create_all(lua_State* L) {
 	try {
-		std::wstring dir = tm_towstring(L, 1);
+		lua_Wstring dir = tm_towstring(L, 1);
 
-		if (std::filesystem::create_directories(dir)) {
+		if (std::filesystem::create_directories(dir))
 			lua_pushboolean(L, true);
-		}
-		else {
+		else
 			lua_pushboolean(L, false);
-		}
 
 		return 1;
 	}
@@ -131,14 +123,12 @@ int fs_create_all(lua_State* L) {
 
 int fs_exists(lua_State* L) {
 	try {
-		std::wstring dir = tm_towstring(L, 1);
+		lua_Wstring dir = tm_towstring(L, 1);
 
-		if (std::filesystem::exists(dir)) {
+		if (std::filesystem::exists(dir))
 			lua_pushboolean(L, true);
-		}
-		else {
+		else
 			lua_pushboolean(L, false);
-		}
 
 		return 1;
 	}
@@ -150,14 +140,12 @@ int fs_exists(lua_State* L) {
 
 int fs_remove(lua_State* L) {
 	try {
-		std::wstring dir = tm_towstring(L, 1);
+		lua_Wstring dir = tm_towstring(L, 1);
 
-		if (std::filesystem::remove(dir)) {
+		if (std::filesystem::remove(dir))
 			lua_pushboolean(L, true);
-		}
-		else {
+		else
 			lua_pushboolean(L, false);
-		}
 
 		return 1;
 	}
@@ -169,9 +157,8 @@ int fs_remove(lua_State* L) {
 
 int fs_remove_all(lua_State* L) {
 	try {
-		std::wstring dir = tm_towstring(L, 1);
-
-		int cnt = static_cast<int>(std::filesystem::remove_all(dir));
+		lua_Wstring dir = tm_towstring(L, 1);
+		lua_Integer cnt = static_cast<lua_Integer>(std::filesystem::remove_all(dir));
 		if (cnt>=1) {
 			lua_pushboolean(L, true);
 			lua_pushinteger(L, cnt);
@@ -191,14 +178,14 @@ int fs_remove_all(lua_State* L) {
 
 int fs_copy(lua_State* L) {
 	try {
-		std::wstring from = tm_towstring(L, 1);
-		std::wstring to = tm_towstring(L, 2);
+		lua_Wstring from = tm_towstring(L, 1);
+		lua_Wstring to = tm_towstring(L, 2);
 
 		int cnt = 3;
 		std::filesystem::copy_options options = std::filesystem::copy_options::none;
 
 		while (lua_type(L, cnt) == LUA_TSTRING) {
-			std::wstring mode = lua_towstring(L, cnt);
+			lua_Wstring mode = lua_towstring(L, cnt);
 
 			if (mode == L"none") options = options | std::filesystem::copy_options::none;
 			else if (mode == L"skip_existing") options = options | std::filesystem::copy_options::skip_existing;
@@ -225,14 +212,14 @@ int fs_copy(lua_State* L) {
 
 int fs_copy_file(lua_State* L) {
 	try {
-		std::wstring from = tm_towstring(L, 1);
-		std::wstring to = tm_towstring(L, 2);
+		lua_Wstring from = tm_towstring(L, 1);
+		lua_Wstring to = tm_towstring(L, 2);
 
 		int cnt = 3;
 		std::filesystem::copy_options options = std::filesystem::copy_options::none;
 
 		while (lua_type(L, cnt) == LUA_TSTRING) {
-			std::wstring mode = lua_towstring(L, cnt);
+			lua_Wstring mode = lua_towstring(L, cnt);
 
 			if (mode == L"none") options = options | std::filesystem::copy_options::none;
 			else if (mode == L"skip_existing") options = options | std::filesystem::copy_options::skip_existing;
@@ -259,8 +246,8 @@ int fs_copy_file(lua_State* L) {
 
 int fs_rename(lua_State* L) {
 	try {
-		std::wstring from = tm_towstring(L, 1);
-		std::wstring to = tm_towstring(L, 2);
+		lua_Wstring from = tm_towstring(L, 1);
+		lua_Wstring to = tm_towstring(L, 2);
 
 		std::filesystem::rename(from, to);
 		return 0;
@@ -273,7 +260,7 @@ int fs_rename(lua_State* L) {
 
 int fs_type(lua_State* L) {
 	try {
-		std::wstring dir = tm_towstring(L, 1);
+		lua_Wstring dir = tm_towstring(L, 1);
 
 		std::filesystem::file_type type = std::filesystem::status(dir).type();
 		switch (type) {
@@ -321,9 +308,9 @@ int fs_type(lua_State* L) {
 
 int fs_size(lua_State* L) {
 	try {
-		std::wstring dir = tm_towstring(L, 1);
+		lua_Wstring dir = tm_towstring(L, 1);
 
-		int size = (int)std::filesystem::file_size(dir);
+		lua_Integer size = (lua_Integer)std::filesystem::file_size(dir);
 		lua_pushinteger(L, size);
 		return 1;
 	}
@@ -336,7 +323,7 @@ int fs_size(lua_State* L) {
 int fs_read(lua_State* L) {
 	try {
 		std::ifstream fs(tm_towstring(L, 1));
-		std::string str((std::istreambuf_iterator<char>(fs)), std::istreambuf_iterator<char>());
+		lua_Sstring str((std::istreambuf_iterator<char>(fs)), std::istreambuf_iterator<char>());
 		fs.close();
 		lua_pushsstring(L, str);
 		return 1;

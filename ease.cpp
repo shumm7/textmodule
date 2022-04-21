@@ -8,10 +8,10 @@
 
 int ease_linear(lua_State* L) {
 	try {
-		double t = tm_tonumber(L, 1);
-		double b = tm_tonumber(L, 2);
-		double c = tm_tonumber(L, 3);
-		double d = tm_tonumber_s(L, 4, 1);
+		lua_Number t = tm_tonumber(L, 1);
+		lua_Number b = tm_tonumber(L, 2);
+		lua_Number c = tm_tonumber(L, 3);
+		lua_Number d = tm_tonumber_s(L, 4, 1);
 
 		lua_pushnumber(L, e_linear(t, b, c, d));
 		return 1;
@@ -24,10 +24,10 @@ int ease_linear(lua_State* L) {
 
 int ease_inQuad(lua_State* L) {
 	try {
-		double t = tm_tonumber(L, 1);
-		double b = tm_tonumber(L, 2);
-		double c = tm_tonumber(L, 3);
-		double d = tm_tonumber_s(L, 4, 1);
+		lua_Number t = tm_tonumber(L, 1);
+		lua_Number b = tm_tonumber(L, 2);
+		lua_Number c = tm_tonumber(L, 3);
+		lua_Number d = tm_tonumber_s(L, 4, 1);
 
 		lua_pushnumber(L, e_inQuad(t, b, c, d));
 		return 1;
@@ -39,10 +39,10 @@ int ease_inQuad(lua_State* L) {
 }
 int ease_outQuad(lua_State* L) {
 	try {
-		double t = tm_tonumber(L, 1);
-		double b = tm_tonumber(L, 2);
-		double c = tm_tonumber(L, 3);
-		double d = tm_tonumber_s(L, 4, 1);
+		lua_Number t = tm_tonumber(L, 1);
+		lua_Number b = tm_tonumber(L, 2);
+		lua_Number c = tm_tonumber(L, 3);
+		lua_Number d = tm_tonumber_s(L, 4, 1);
 
 		lua_pushnumber(L, e_outQuad(t, b, c, d));
 		return 1;
@@ -54,10 +54,10 @@ int ease_outQuad(lua_State* L) {
 }
 int ease_inOutQuad(lua_State* L) {
 	try {
-		double t = tm_tonumber(L, 1);
-		double b = tm_tonumber(L, 2);
-		double c = tm_tonumber(L, 3);
-		double d = tm_tonumber_s(L, 4, 1);
+		lua_Number t = tm_tonumber(L, 1);
+		lua_Number b = tm_tonumber(L, 2);
+		lua_Number c = tm_tonumber(L, 3);
+		lua_Number d = tm_tonumber_s(L, 4, 1);
 
 		lua_pushnumber(L, e_inOutQuad(t, b, c, d));
 		return 1;
@@ -69,10 +69,10 @@ int ease_inOutQuad(lua_State* L) {
 }
 int ease_outInQuad(lua_State* L) {
 	try {
-		double t = tm_tonumber(L, 1);
-		double b = tm_tonumber(L, 2);
-		double c = tm_tonumber(L, 3);
-		double d = tm_tonumber_s(L, 4, 1);
+		lua_Number t = tm_tonumber(L, 1);
+		lua_Number b = tm_tonumber(L, 2);
+		lua_Number c = tm_tonumber(L, 3);
+		lua_Number d = tm_tonumber_s(L, 4, 1);
 
 		lua_pushnumber(L, e_outInQuad(t, b, c, d));
 		return 1;
@@ -85,10 +85,10 @@ int ease_outInQuad(lua_State* L) {
 
 int ease_inCubic(lua_State* L) {
 	try {
-		double t = tm_tonumber(L, 1);
-		double b = tm_tonumber(L, 2);
-		double c = tm_tonumber(L, 3);
-		double d = tm_tonumber_s(L, 4, 1);
+		lua_Number t = tm_tonumber(L, 1);
+		lua_Number b = tm_tonumber(L, 2);
+		lua_Number c = tm_tonumber(L, 3);
+		lua_Number d = tm_tonumber_s(L, 4, 1);
 
 		lua_pushnumber(L, e_inCubic(t, b, c, d));
 		return 1;
@@ -100,10 +100,10 @@ int ease_inCubic(lua_State* L) {
 }
 int ease_outCubic(lua_State* L) {
 	try {
-		double t = tm_tonumber(L, 1);
-		double b = tm_tonumber(L, 2);
-		double c = tm_tonumber(L, 3);
-		double d = tm_tonumber_s(L, 4, 1);
+		lua_Number t = tm_tonumber(L, 1);
+		lua_Number b = tm_tonumber(L, 2);
+		lua_Number c = tm_tonumber(L, 3);
+		lua_Number d = tm_tonumber_s(L, 4, 1);
 
 		lua_pushnumber(L, e_outCubic(t, b, c, d));
 		return 1;
@@ -115,10 +115,10 @@ int ease_outCubic(lua_State* L) {
 }
 int ease_inOutCubic(lua_State* L) {
 	try {
-		double t = tm_tonumber(L, 1);
-		double b = tm_tonumber(L, 2);
-		double c = tm_tonumber(L, 3);
-		double d = tm_tonumber_s(L, 4, 1);
+		lua_Number t = tm_tonumber(L, 1);
+		lua_Number b = tm_tonumber(L, 2);
+		lua_Number c = tm_tonumber(L, 3);
+		lua_Number d = tm_tonumber_s(L, 4, 1);
 
 		lua_pushnumber(L, e_inOutCubic(t, b, c, d));
 		return 1;
@@ -130,10 +130,10 @@ int ease_inOutCubic(lua_State* L) {
 }
 int ease_outInCubic(lua_State* L) {
 	try {
-		double t = tm_tonumber(L, 1);
-		double b = tm_tonumber(L, 2);
-		double c = tm_tonumber(L, 3);
-		double d = tm_tonumber_s(L, 4, 1);
+		lua_Number t = tm_tonumber(L, 1);
+		lua_Number b = tm_tonumber(L, 2);
+		lua_Number c = tm_tonumber(L, 3);
+		lua_Number d = tm_tonumber_s(L, 4, 1);
 
 		lua_pushnumber(L, e_outInCubic(t, b, c, d));
 		return 1;
@@ -146,10 +146,10 @@ int ease_outInCubic(lua_State* L) {
 
 int ease_inQuart(lua_State* L) {
 	try {
-		double t = tm_tonumber(L, 1);
-		double b = tm_tonumber(L, 2);
-		double c = tm_tonumber(L, 3);
-		double d = tm_tonumber_s(L, 4, 1);
+		lua_Number t = tm_tonumber(L, 1);
+		lua_Number b = tm_tonumber(L, 2);
+		lua_Number c = tm_tonumber(L, 3);
+		lua_Number d = tm_tonumber_s(L, 4, 1);
 
 		lua_pushnumber(L, e_inQuart(t, b, c, d));
 		return 1;
@@ -161,10 +161,10 @@ int ease_inQuart(lua_State* L) {
 }
 int ease_outQuart(lua_State* L) {
 	try {
-		double t = tm_tonumber(L, 1);
-		double b = tm_tonumber(L, 2);
-		double c = tm_tonumber(L, 3);
-		double d = tm_tonumber_s(L, 4, 1);
+		lua_Number t = tm_tonumber(L, 1);
+		lua_Number b = tm_tonumber(L, 2);
+		lua_Number c = tm_tonumber(L, 3);
+		lua_Number d = tm_tonumber_s(L, 4, 1);
 
 		lua_pushnumber(L, e_outQuart(t, b, c, d));
 		return 1;
@@ -176,10 +176,10 @@ int ease_outQuart(lua_State* L) {
 }
 int ease_inOutQuart(lua_State* L) {
 	try {
-		double t = tm_tonumber(L, 1);
-		double b = tm_tonumber(L, 2);
-		double c = tm_tonumber(L, 3);
-		double d = tm_tonumber_s(L, 4, 1);
+		lua_Number t = tm_tonumber(L, 1);
+		lua_Number b = tm_tonumber(L, 2);
+		lua_Number c = tm_tonumber(L, 3);
+		lua_Number d = tm_tonumber_s(L, 4, 1);
 
 		lua_pushnumber(L, e_inOutQuart(t, b, c, d));
 		return 1;
@@ -191,10 +191,10 @@ int ease_inOutQuart(lua_State* L) {
 }
 int ease_outInQuart(lua_State* L) {
 	try {
-		double t = tm_tonumber(L, 1);
-		double b = tm_tonumber(L, 2);
-		double c = tm_tonumber(L, 3);
-		double d = tm_tonumber_s(L, 4, 1);
+		lua_Number t = tm_tonumber(L, 1);
+		lua_Number b = tm_tonumber(L, 2);
+		lua_Number c = tm_tonumber(L, 3);
+		lua_Number d = tm_tonumber_s(L, 4, 1);
 
 		lua_pushnumber(L, e_outInQuart(t, b, c, d));
 		return 1;
@@ -207,10 +207,10 @@ int ease_outInQuart(lua_State* L) {
 
 int ease_inQuint(lua_State* L) {
 	try {
-		double t = tm_tonumber(L, 1);
-		double b = tm_tonumber(L, 2);
-		double c = tm_tonumber(L, 3);
-		double d = tm_tonumber_s(L, 4, 1);
+		lua_Number t = tm_tonumber(L, 1);
+		lua_Number b = tm_tonumber(L, 2);
+		lua_Number c = tm_tonumber(L, 3);
+		lua_Number d = tm_tonumber_s(L, 4, 1);
 
 		lua_pushnumber(L, e_inQuint(t, b, c, d));
 		return 1;
@@ -222,10 +222,10 @@ int ease_inQuint(lua_State* L) {
 }
 int ease_outQuint(lua_State* L) {
 	try {
-		double t = tm_tonumber(L, 1);
-		double b = tm_tonumber(L, 2);
-		double c = tm_tonumber(L, 3);
-		double d = tm_tonumber_s(L, 4, 1);
+		lua_Number t = tm_tonumber(L, 1);
+		lua_Number b = tm_tonumber(L, 2);
+		lua_Number c = tm_tonumber(L, 3);
+		lua_Number d = tm_tonumber_s(L, 4, 1);
 
 		lua_pushnumber(L, e_outQuint(t, b, c, d));
 		return 1;
@@ -237,10 +237,10 @@ int ease_outQuint(lua_State* L) {
 }
 int ease_inOutQuint(lua_State* L) {
 	try {
-		double t = tm_tonumber(L, 1);
-		double b = tm_tonumber(L, 2);
-		double c = tm_tonumber(L, 3);
-		double d = tm_tonumber_s(L, 4, 1);
+		lua_Number t = tm_tonumber(L, 1);
+		lua_Number b = tm_tonumber(L, 2);
+		lua_Number c = tm_tonumber(L, 3);
+		lua_Number d = tm_tonumber_s(L, 4, 1);
 
 		lua_pushnumber(L, e_inOutQuint(t, b, c, d));
 		return 1;
@@ -252,10 +252,10 @@ int ease_inOutQuint(lua_State* L) {
 }
 int ease_outInQuint(lua_State* L) {
 	try {
-		double t = tm_tonumber(L, 1);
-		double b = tm_tonumber(L, 2);
-		double c = tm_tonumber(L, 3);
-		double d = tm_tonumber_s(L, 4, 1);
+		lua_Number t = tm_tonumber(L, 1);
+		lua_Number b = tm_tonumber(L, 2);
+		lua_Number c = tm_tonumber(L, 3);
+		lua_Number d = tm_tonumber_s(L, 4, 1);
 
 		lua_pushnumber(L, e_outInQuint(t, b, c, d));
 		return 1;
@@ -268,10 +268,10 @@ int ease_outInQuint(lua_State* L) {
 
 int ease_inSine(lua_State* L) {
 	try {
-		double t = tm_tonumber(L, 1);
-		double b = tm_tonumber(L, 2);
-		double c = tm_tonumber(L, 3);
-		double d = tm_tonumber_s(L, 4, 1);
+		lua_Number t = tm_tonumber(L, 1);
+		lua_Number b = tm_tonumber(L, 2);
+		lua_Number c = tm_tonumber(L, 3);
+		lua_Number d = tm_tonumber_s(L, 4, 1);
 
 		lua_pushnumber(L, e_inSine(t, b, c, d));
 		return 1;
@@ -283,10 +283,10 @@ int ease_inSine(lua_State* L) {
 }
 int ease_outSine(lua_State* L) {
 	try {
-		double t = tm_tonumber(L, 1);
-		double b = tm_tonumber(L, 2);
-		double c = tm_tonumber(L, 3);
-		double d = tm_tonumber_s(L, 4, 1);
+		lua_Number t = tm_tonumber(L, 1);
+		lua_Number b = tm_tonumber(L, 2);
+		lua_Number c = tm_tonumber(L, 3);
+		lua_Number d = tm_tonumber_s(L, 4, 1);
 
 		lua_pushnumber(L, e_outSine(t, b, c, d));
 		return 1;
@@ -298,10 +298,10 @@ int ease_outSine(lua_State* L) {
 }
 int ease_inOutSine(lua_State* L) {
 	try {
-		double t = tm_tonumber(L, 1);
-		double b = tm_tonumber(L, 2);
-		double c = tm_tonumber(L, 3);
-		double d = tm_tonumber_s(L, 4, 1);
+		lua_Number t = tm_tonumber(L, 1);
+		lua_Number b = tm_tonumber(L, 2);
+		lua_Number c = tm_tonumber(L, 3);
+		lua_Number d = tm_tonumber_s(L, 4, 1);
 
 		lua_pushnumber(L, e_inOutSine(t, b, c, d));
 		return 1;
@@ -313,10 +313,10 @@ int ease_inOutSine(lua_State* L) {
 }
 int ease_outInSine(lua_State* L) {
 	try {
-		double t = tm_tonumber(L, 1);
-		double b = tm_tonumber(L, 2);
-		double c = tm_tonumber(L, 3);
-		double d = tm_tonumber_s(L, 4, 1);
+		lua_Number t = tm_tonumber(L, 1);
+		lua_Number b = tm_tonumber(L, 2);
+		lua_Number c = tm_tonumber(L, 3);
+		lua_Number d = tm_tonumber_s(L, 4, 1);
 
 		lua_pushnumber(L, e_outInSine(t, b, c, d));
 		return 1;
@@ -329,10 +329,10 @@ int ease_outInSine(lua_State* L) {
 
 int ease_inExpo(lua_State* L) {
 	try {
-		double t = tm_tonumber(L, 1);
-		double b = tm_tonumber(L, 2);
-		double c = tm_tonumber(L, 3);
-		double d = tm_tonumber_s(L, 4, 1);
+		lua_Number t = tm_tonumber(L, 1);
+		lua_Number b = tm_tonumber(L, 2);
+		lua_Number c = tm_tonumber(L, 3);
+		lua_Number d = tm_tonumber_s(L, 4, 1);
 
 		lua_pushnumber(L, e_inExpo(t, b, c, d));
 		return 1;
@@ -344,10 +344,10 @@ int ease_inExpo(lua_State* L) {
 }
 int ease_outExpo(lua_State* L) {
 	try {
-		double t = tm_tonumber(L, 1);
-		double b = tm_tonumber(L, 2);
-		double c = tm_tonumber(L, 3);
-		double d = tm_tonumber_s(L, 4, 1);
+		lua_Number t = tm_tonumber(L, 1);
+		lua_Number b = tm_tonumber(L, 2);
+		lua_Number c = tm_tonumber(L, 3);
+		lua_Number d = tm_tonumber_s(L, 4, 1);
 
 		lua_pushnumber(L, e_outExpo(t, b, c, d));
 		return 1;
@@ -359,10 +359,10 @@ int ease_outExpo(lua_State* L) {
 }
 int ease_inOutExpo(lua_State* L) {
 	try {
-		double t = tm_tonumber(L, 1);
-		double b = tm_tonumber(L, 2);
-		double c = tm_tonumber(L, 3);
-		double d = tm_tonumber_s(L, 4, 1);
+		lua_Number t = tm_tonumber(L, 1);
+		lua_Number b = tm_tonumber(L, 2);
+		lua_Number c = tm_tonumber(L, 3);
+		lua_Number d = tm_tonumber_s(L, 4, 1);
 
 		lua_pushnumber(L, e_inOutExpo(t, b, c, d));
 		return 1;
@@ -374,10 +374,10 @@ int ease_inOutExpo(lua_State* L) {
 }
 int ease_outInExpo(lua_State* L) {
 	try {
-		double t = tm_tonumber(L, 1);
-		double b = tm_tonumber(L, 2);
-		double c = tm_tonumber(L, 3);
-		double d = tm_tonumber_s(L, 4, 1);
+		lua_Number t = tm_tonumber(L, 1);
+		lua_Number b = tm_tonumber(L, 2);
+		lua_Number c = tm_tonumber(L, 3);
+		lua_Number d = tm_tonumber_s(L, 4, 1);
 
 		lua_pushnumber(L, e_outInExpo(t, b, c, d));
 		return 1;
@@ -390,10 +390,10 @@ int ease_outInExpo(lua_State* L) {
 
 int ease_inCirc(lua_State* L) {
 	try {
-		double t = tm_tonumber(L, 1);
-		double b = tm_tonumber(L, 2);
-		double c = tm_tonumber(L, 3);
-		double d = tm_tonumber_s(L, 4, 1);
+		lua_Number t = tm_tonumber(L, 1);
+		lua_Number b = tm_tonumber(L, 2);
+		lua_Number c = tm_tonumber(L, 3);
+		lua_Number d = tm_tonumber_s(L, 4, 1);
 
 		lua_pushnumber(L, e_inCirc(t, b, c, d));
 		return 1;
@@ -405,10 +405,10 @@ int ease_inCirc(lua_State* L) {
 }
 int ease_outCirc(lua_State* L) {
 	try {
-		double t = tm_tonumber(L, 1);
-		double b = tm_tonumber(L, 2);
-		double c = tm_tonumber(L, 3);
-		double d = tm_tonumber_s(L, 4, 1);
+		lua_Number t = tm_tonumber(L, 1);
+		lua_Number b = tm_tonumber(L, 2);
+		lua_Number c = tm_tonumber(L, 3);
+		lua_Number d = tm_tonumber_s(L, 4, 1);
 
 		lua_pushnumber(L, e_outCirc(t, b, c, d));
 		return 1;
@@ -420,10 +420,10 @@ int ease_outCirc(lua_State* L) {
 }
 int ease_inOutCirc(lua_State* L) {
 	try {
-		double t = tm_tonumber(L, 1);
-		double b = tm_tonumber(L, 2);
-		double c = tm_tonumber(L, 3);
-		double d = tm_tonumber_s(L, 4, 1);
+		lua_Number t = tm_tonumber(L, 1);
+		lua_Number b = tm_tonumber(L, 2);
+		lua_Number c = tm_tonumber(L, 3);
+		lua_Number d = tm_tonumber_s(L, 4, 1);
 
 		lua_pushnumber(L, e_inOutCirc(t, b, c, d));
 		return 1;
@@ -435,10 +435,10 @@ int ease_inOutCirc(lua_State* L) {
 }
 int ease_outInCirc(lua_State* L) {
 	try {
-		double t = tm_tonumber(L, 1);
-		double b = tm_tonumber(L, 2);
-		double c = tm_tonumber(L, 3);
-		double d = tm_tonumber_s(L, 4, 1);
+		lua_Number t = tm_tonumber(L, 1);
+		lua_Number b = tm_tonumber(L, 2);
+		lua_Number c = tm_tonumber(L, 3);
+		lua_Number d = tm_tonumber_s(L, 4, 1);
 
 		lua_pushnumber(L, e_outInCirc(t, b, c, d));
 		return 1;
@@ -451,14 +451,14 @@ int ease_outInCirc(lua_State* L) {
 
 int ease_inElastic(lua_State* L) {
 	try {
-		double t;
-		double b;
-		double c;
-		double d;
-		double a;
-		double p;
+		lua_Number t;
+		lua_Number b;
+		lua_Number c;
+		lua_Number d;
+		lua_Number a;
+		lua_Number p;
 
-		switch(lua_gettop(L)) {
+		switch (lua_gettop(L)) {
 		case 3:
 		case 4:
 			t = tm_tonumber(L, 1);
@@ -485,12 +485,12 @@ int ease_inElastic(lua_State* L) {
 }
 int ease_outElastic(lua_State* L) {
 	try {
-		double t;
-		double b;
-		double c;
-		double d;
-		double a;
-		double p;
+		lua_Number t;
+		lua_Number b;
+		lua_Number c;
+		lua_Number d;
+		lua_Number a;
+		lua_Number p;
 
 		switch (lua_gettop(L)) {
 		case 3:
@@ -519,12 +519,12 @@ int ease_outElastic(lua_State* L) {
 }
 int ease_inOutElastic(lua_State* L) {
 	try {
-		double t;
-		double b;
-		double c;
-		double d;
-		double a;
-		double p;
+		lua_Number t;
+		lua_Number b;
+		lua_Number c;
+		lua_Number d;
+		lua_Number a;
+		lua_Number p;
 
 		switch (lua_gettop(L)) {
 		case 3:
@@ -553,12 +553,12 @@ int ease_inOutElastic(lua_State* L) {
 }
 int ease_outInElastic(lua_State* L) {
 	try {
-		double t;
-		double b;
-		double c;
-		double d;
-		double a;
-		double p;
+		lua_Number t;
+		lua_Number b;
+		lua_Number c;
+		lua_Number d;
+		lua_Number a;
+		lua_Number p;
 
 		switch (lua_gettop(L)) {
 		case 3:
@@ -588,11 +588,11 @@ int ease_outInElastic(lua_State* L) {
 
 int ease_inBack(lua_State* L) {
 	try {
-		double t;
-		double b;
-		double c;
-		double d;
-		double s;
+		lua_Number t;
+		lua_Number b;
+		lua_Number c;
+		lua_Number d;
+		lua_Number s;
 
 		switch (lua_gettop(L)) {
 		case 3:
@@ -620,11 +620,11 @@ int ease_inBack(lua_State* L) {
 }
 int ease_outBack(lua_State* L) {
 	try {
-		double t;
-		double b;
-		double c;
-		double d;
-		double s;
+		lua_Number t;
+		lua_Number b;
+		lua_Number c;
+		lua_Number d;
+		lua_Number s;
 
 		switch (lua_gettop(L)) {
 		case 3:
@@ -652,11 +652,11 @@ int ease_outBack(lua_State* L) {
 }
 int ease_inOutBack(lua_State* L) {
 	try {
-		double t;
-		double b;
-		double c;
-		double d;
-		double s;
+		lua_Number t;
+		lua_Number b;
+		lua_Number c;
+		lua_Number d;
+		lua_Number s;
 
 		switch (lua_gettop(L)) {
 		case 3:
@@ -684,11 +684,11 @@ int ease_inOutBack(lua_State* L) {
 }
 int ease_outInBack(lua_State* L) {
 	try {
-		double t;
-		double b;
-		double c;
-		double d;
-		double s;
+		lua_Number t;
+		lua_Number b;
+		lua_Number c;
+		lua_Number d;
+		lua_Number s;
 
 		switch (lua_gettop(L)) {
 		case 3:
@@ -717,10 +717,10 @@ int ease_outInBack(lua_State* L) {
 
 int ease_inBounce(lua_State* L) {
 	try {
-		double t = tm_tonumber(L, 1);
-		double b = tm_tonumber(L, 2);
-		double c = tm_tonumber(L, 3);
-		double d = tm_tonumber_s(L, 4, 1);
+		lua_Number t = tm_tonumber(L, 1);
+		lua_Number b = tm_tonumber(L, 2);
+		lua_Number c = tm_tonumber(L, 3);
+		lua_Number d = tm_tonumber_s(L, 4, 1);
 
 		lua_pushnumber(L, e_inBounce(t, b, c, d));
 		return 1;
@@ -732,10 +732,10 @@ int ease_inBounce(lua_State* L) {
 }
 int ease_outBounce(lua_State* L) {
 	try {
-		double t = tm_tonumber(L, 1);
-		double b = tm_tonumber(L, 2);
-		double c = tm_tonumber(L, 3);
-		double d = tm_tonumber_s(L, 4, 1);
+		lua_Number t = tm_tonumber(L, 1);
+		lua_Number b = tm_tonumber(L, 2);
+		lua_Number c = tm_tonumber(L, 3);
+		lua_Number d = tm_tonumber_s(L, 4, 1);
 
 		lua_pushnumber(L, e_outBounce(t, b, c, d));
 		return 1;
@@ -747,10 +747,10 @@ int ease_outBounce(lua_State* L) {
 }
 int ease_inOutBounce(lua_State* L) {
 	try {
-		double t = tm_tonumber(L, 1);
-		double b = tm_tonumber(L, 2);
-		double c = tm_tonumber(L, 3);
-		double d = tm_tonumber_s(L, 4, 1);
+		lua_Number t = tm_tonumber(L, 1);
+		lua_Number b = tm_tonumber(L, 2);
+		lua_Number c = tm_tonumber(L, 3);
+		lua_Number d = tm_tonumber_s(L, 4, 1);
 
 		lua_pushnumber(L, e_inOutBounce(t, b, c, d));
 		return 1;
@@ -762,10 +762,10 @@ int ease_inOutBounce(lua_State* L) {
 }
 int ease_outInBounce(lua_State* L) {
 	try {
-		double t = tm_tonumber(L, 1);
-		double b = tm_tonumber(L, 2);
-		double c = tm_tonumber(L, 3);
-		double d = tm_tonumber_s(L, 4, 1);
+		lua_Number t = tm_tonumber(L, 1);
+		lua_Number b = tm_tonumber(L, 2);
+		lua_Number c = tm_tonumber(L, 3);
+		lua_Number d = tm_tonumber_s(L, 4, 1);
 
 		lua_pushnumber(L, e_outInBounce(t, b, c, d));
 		return 1;

@@ -4,311 +4,160 @@
 #include <cmath>
 #include <algorithm>
 
+#include "textmodule_math.h"
 #include "textmodule_color.h"
 #include "textmodule_string.h"
-#include "textmodule_exception.h"
 
-#define EXCEPTION_OUT_OF_RANGE "the value is out of range"
-#define EXCEPTION_OUT_OF_RANGE_HEX "the value is out of range (0x000000 to 0xffffff)"
-#define EXCEPTION_OUT_OF_RANGE_RGB "the value is out of range (0x00 to 0xff)"
-#define EXCEPTION_OUT_OF_RANGE_SV "the value is out of range (0 to 100)"
-
-float check_value(float n, float min, float max, const char* message) {
-	if (n < min || n>max) {
-		throw_invalid_argument(message);
-	}
-	return n;
-}
-int check_rgbvalue(int n) {
-	return check_value(n, 0, 255, EXCEPTION_OUT_OF_RANGE_RGB);
-}
-int check_hsv_hvalue(int n) {
-	if (n < 0) {
-		while (n < 0)
-			n += 360;
-	}
-	else if (n > 360) {
-		while (n > 360)
-			n -= 360;
-	}
-	return n;
-}
-int check_hsv_svvalue(int n) {
-	return check_value(n, 0, 100, EXCEPTION_OUT_OF_RANGE_SV);
-}
-int range(int n, int min, int max) {
-	if (n < min) {
-		n = min;
-	}
-	else if (n > max) {
-		n = max;
-	}
-	return n;
-}
-
-std::wstring lstr(std::wstring str, int length, wchar_t c) {
+std::wstring c_lstr(std::wstring str, int length, wchar_t c) {
 	if (str.length() >= length)
 		return str;
 	return std::wstring(length - str.length(), c) + str;
 }
 
-std::wstring getRGBhex(RGB* val) {
-	int r = check_rgbvalue(val->r);
-	int g = check_rgbvalue(val->g);
-	int b = check_rgbvalue(val->b);
+std::wstring c_get_pixel_hex(st_rgba32* val) {
+	int r = clamp_s(val->r, 0, 255);
+	int g = clamp_s(val->g, 0, 255);
+	int b = clamp_s(val->b, 0, 255);
 
 	std::wstring hex = L"0x";
-	hex += lstr(DecToHex(r).substr(2), 2, L'0');
-	hex += lstr(DecToHex(g).substr(2), 2, L'0');
-	hex += lstr(DecToHex(b).substr(2), 2, L'0');
+	hex += c_lstr(DecToHex(r).substr(2), 2, L'0');
+	hex += c_lstr(DecToHex(g).substr(2), 2, L'0');
+	hex += c_lstr(DecToHex(b).substr(2), 2, L'0');
 	return hex;
 }
-void getRGBhex(int num, RGB* ret) {
+
+std::wstring c_get_pixel_hex(uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
+	st_rgba32 c = {0,0,0,0};
+
+	c.r = r;
+	c.g = g;
+	c.b = b;
+	c.a = a;
+	return c_get_pixel_hex(&c);
+}
+
+std::wstring c_get_pixel_hex(uint8_t r, uint8_t g, uint8_t b) {
+	return c_get_pixel_hex(r, g, b, 0);
+}
+
+std::wstring c_get_color_hex(st_rgba* val) {
+	uint8_t r = clamp_s(val->r) * 255.0;
+	uint8_t g = clamp_s(val->g) * 255.0;
+	uint8_t b = clamp_s(val->b) * 255.0;
+	return c_get_pixel_hex(r, g, b);
+}
+
+std::wstring c_get_color_hex(double r, double g, double b, double a) {
+	st_rgba c = {0,0,0,0};
+
+	c.r = r;
+	c.g = g;
+	c.b = b;
+	c.a = a;
+	return c_get_color_hex(&c);
+}
+
+std::wstring c_get_color_hex(double r, double g, double b) {
+	return c_get_pixel_hex(r, g, b, 0);
+}
+
+
+void c_color_to_pixel(st_rgba32* ret, st_rgba* val) {
+	ret->r = (uint8_t)clamp_s((val->r) * 255.0, 0, 255);
+	ret->g = (uint8_t)clamp_s((val->g) * 255.0, 0, 255);
+	ret->b = (uint8_t)clamp_s((val->b) * 255.0, 0, 255);
+	ret->a = (uint8_t)clamp_s((val->a) * 255.0, 0, 255);
+	return;
+}
+
+void c_color_to_pixel(st_rgba32* ret, double r, double g, double b, double a) {
+	st_rgba c = {0,0,0,0};
+	c.r = r;
+	c.g = g;
+	c.b = b;
+	c.a = a;
+	c_color_to_pixel(ret, &c);
+	return;
+}
+
+void c_color_to_pixel(st_rgba32* ret, double r, double g, double b) {
+	return c_color_to_pixel(ret, r,g,b,0);
+}
+
+
+void c_pixel_to_color(st_rgba* ret, st_rgba32* val) {
+	ret->r = clamp_s((double)val->r / 255.0);
+	ret->g = clamp_s((double)val->g / 255.0);
+	ret->b = clamp_s((double)val->b / 255.0);
+	ret->a = clamp_s((double)val->a / 255.0);
+	return;
+}
+
+void c_pixel_to_color(st_rgba* ret, uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
+	st_rgba32 c = {0,0,0,0};
+	c.r = r;
+	c.g = g;
+	c.b = b;
+	c.a = a;
+	return c_pixel_to_color(ret, &c);
+}
+
+void c_pixel_to_color(st_rgba* ret, uint8_t r, uint8_t g, uint8_t b) {
+	return c_pixel_to_color(ret, r, g, b, 0);
+}
+
+
+void c_hex_to_pixel(st_rgba32* ret, int num, uint8_t a) {
+	num = clamp_s(num, 0x000000, 0xffffff);
+
 	std::wstring hex = DecToHex(num);
 	if (hex.substr(0, 2) == L"0x")
 		hex = hex.substr(2);
 
 	if (hex.length() < 6)
 		hex = std::wstring(6 - hex.length(), L'0') + hex;
-	else if (hex.length() > 6)
-		throw_invalid_argument(EXCEPTION_OUT_OF_RANGE_HEX);
 
-	ret->r = check_rgbvalue(HexToDec(hex.substr(0, 2)));
-	ret->g = check_rgbvalue(HexToDec(hex.substr(2, 2)));
-	ret->b = check_rgbvalue(HexToDec(hex.substr(4, 2)));
+	ret->r = clamp_s(HexToDec(hex.substr(0, 2)), 0, 255);
+	ret->g = clamp_s(HexToDec(hex.substr(2, 2)), 0, 255);
+	ret->b = clamp_s(HexToDec(hex.substr(4, 2)), 0, 255);
+	ret->a = a;
+	return;
+}
+
+void c_hex_to_pixel(st_rgba32* ret, std::wstring num, uint8_t a) {
+	return c_hex_to_pixel(ret, HexToDec(num), a);
+}
+
+void c_hex_to_pixel(st_rgba32* ret, int num) {
+	return c_hex_to_pixel(ret, num, (uint8_t)0);
+}
+
+void c_hex_to_pixel(st_rgba32* ret, std::wstring num) {
+	return c_hex_to_pixel(ret, num, (uint8_t)0);
 }
 
 
-double hx(int x, double max, double min) {
-	double kx = (double)x;
-	return kx / 60.0 * (max - min) + min;
+double c_color_norm(st_rgba* value) {
+	return std::pow(value->r, 2) + std::pow(value->g, 2) + std::pow(value->b, 2) + std::pow(value->a, 2);
 }
 
-void RGBtoHSV(RGB* val, HSV* ret) {
-	double r = check_rgbvalue(val->r);
-	double g = check_rgbvalue(val->g);
-	double b = check_rgbvalue(val->b);
-
-	double h = 0;
-	double s = 0;
-	double v = 0;
-	double max = std::max({ r, g, b });
-	double min = std::min({ r, g, b });
-
-	if (r == g && g == b) {
-		h = 0;
-	}
-	else if (max == r) {
-		h = 60 * ((g - b) / (max - min));
-	}
-	else if (max == g) {
-		h = 60 * ((b - r) / (max - min)) + 120.0;
-	}
-	else if (max == b) {
-		h = 60 * ((r - g) / (max - min)) + 240.0;
-	}
-
-	while (h < 0) {
-		h += 360;
-	}
-
-	s = (max - min) / max * 100;
-	v = max / 255.0 * 100;
-
-	ret->h = check_hsv_hvalue(round(h));
-	ret->s = check_hsv_hvalue(round(s));
-	ret->v = check_hsv_hvalue(round(v));
-}
-void HSVtoRGB(HSV* val, RGB* ret) {
-	double h = check_hsv_hvalue(val->h);
-	double s = check_hsv_svvalue(val->s);
-	double v = check_hsv_svvalue(val->v);
-
-	double r = 0;
-	double g = 0;
-	double b = 0;
-
-	double hd = (h / 60.0);
-	hd = hd - std::floor(hd);// h/60ÇÃè¨êîïîï™ÇéÊìæ
-	double sd = s / 100.0;
-	double vd = v / 100.0;
-
-	double ka = vd * 255;
-	double kb = vd * (1 - sd) * 255.0;
-	double kc = vd * (1 - sd * hd) * 255.0;
-	double kd = vd * (1 - sd * (1 - hd)) * 255.0;
-
-	if (s == 0) {
-		r = ka; g = ka; b = ka;
-	}
-	else if (0 <= h && h < 60) {
-		r = ka; g = kd; b = kb;
-	}
-	else if (60 <= h && h < 120) {
-		r = kc; g = ka; b = kb;
-	}
-	else if (120 <= h && h < 180) {
-		r = kb; g = ka; b = kd;
-	}
-	else if (180 <= h && h < 240) {
-		r = kb; g = kc; b = ka;
-	}
-	else if (240 <= h && h < 300) {
-		r = kd; g = kb; b = ka;
-	}
-	else if (300 <= h && h < 360) {
-		r = ka; g = kb; b = kc;
-	}
-
-	ret->r = check_rgbvalue(r);
-	ret->g = check_rgbvalue(g);
-	ret->b = check_rgbvalue(b);
+double c_pixel_norm(st_rgba32* value) {
+	st_rgba c;
+	c_pixel_to_color(&c, value);
+	return c_color_norm(&c);
 }
 
-void RGBtoHSL(RGB* val, HSL* ret) {
-	double r = check_rgbvalue(val->r);
-	double g = check_rgbvalue(val->g);
-	double b = check_rgbvalue(val->b);
 
-	double h = 0;
-	double s = 0;
-	double l = 0;
-
-	double max = std::max({ r, g, b });
-	double min = std::min({ r, g, b });
-
-	if (r == g && g == b) {
-		h = 0;
-	}
-	else if (max == r) {
-		h = 60 * ((g - b) / (max - min));
-	}
-	else if (max == g) {
-		h = 60 * ((b - r) / (max - min)) + 120.0;
-	}
-	else if (max == b) {
-		h = 60 * ((r - g) / (max - min)) + 240.0;
-	}
-
-	if (h < 0) {
-		h += 360;
-	}
-
-	l = (max + min) / 2.0 * (100.0 / 255.0);
-
-	if (r == 255 && g == 255 && b == 255) {
-		s = 0;
-	}
-	else if (0 <= l && l <= 50) {
-		s = (max - min) / (max + min) * 100.0;
-	}
-	else if (50 < l && l <= 100) {
-		s = (max - min) / (510.0 - (max + min)) * 100.0;
-	}
-
-	ret->h = check_hsv_hvalue(round(h));
-	ret->s = check_hsv_hvalue(round(s));
-	ret->l = check_hsv_hvalue(round(l));
-}
-void HSLtoRGB(HSL* val, RGB* ret) {
-	double h = check_hsv_hvalue(val->h);
-	double s = check_hsv_svvalue(val->s);
-	double l = check_hsv_svvalue(val->l);
-
-	double r = 0;
-	double g = 0;
-	double b = 0;
-
-	double ld = 0;
-	if (0 <= l && l < 50)
-		ld = l;
-	else if (50 <= l && l <= 100)
-		ld = 100.0 - l;
-
-	double max = 2.55 * (l + ld * s / 100.0);
-	double min = 2.55 * (l - ld * s / 100.0);
-
-	if (0 <= h && h < 60) {
-		r = max; g = hx(h, max, min); b = min;
-	}
-	else if (60 <= h && h < 120) {
-		r = hx(120.0 - h, max, min); g = max; b = min;
-	}
-	else if (120 <= h && h < 180) {
-		r = min; g = max; b = hx(h - 120.0, max, min);
-	}
-	else if (180 <= h && h < 240) {
-		r = min; g = hx(240.0 - h, max, min); b = max;
-	}
-	else if (240 <= h && h < 300) {
-		r = hx(h - 240.0, max, min); g = min; b = max;
-	}
-	else if (300 <= h && h < 360) {
-		r = max; g = min; b = hx(360.0 - h, max, min);
-	}
-
-	ret->r = check_rgbvalue(r);
-	ret->g = check_rgbvalue(g);
-	ret->b = check_rgbvalue(b);
+void c_clamp_color(st_rgba* value) {
+	value->r = clamp_s(value->r);
+	value->g = clamp_s(value->g);
+	value->b = clamp_s(value->b);
+	value->a = clamp_s(value->a);
 }
 
-void RGBtoCMYK(RGB* val, CMYK* ret) {
-	double r = check_rgbvalue(val->r);
-	double g = check_rgbvalue(val->g);
-	double b = check_rgbvalue(val->b);
-
-	double c = 0;
-	double m = 0;
-	double y = 0;
-	double k = 0;
-
-	double max = std::max({ r, g, b }) / 255.0;
-
-	k = (1 - max);
-	if (k == 1) {
-		c = 0; m = 0; y = 0;
-	}
-	else {
-		c = (1 - r/255.0 - k) / (1 - k);
-		m = (1 - g / 255.0 - k) / (1 - k);
-		y = (1 - b / 255.0 - k) / (1 - k);
-	}
-
-	ret->c = check_hsv_svvalue(round(c * 100.0));
-	ret->m = check_hsv_svvalue(round(m * 100.0));
-	ret->y = check_hsv_svvalue(round(y * 100.0));
-	ret->k = check_hsv_svvalue(round(k * 100.0));
-}
-void CMYKtoRGB(CMYK* val, RGB* ret) {
-	double c = check_hsv_svvalue(val->c);
-	double m = check_hsv_svvalue(val->m);
-	double y = check_hsv_svvalue(val->y);
-	double k = check_hsv_svvalue(val->k);
-
-	double r = 255 * (100 - c) * (100 - k);
-	double g = 255 * (100 - m) * (100 - k);
-	double b = 255 * (100 - y) * (100 - k);
-
-	ret->r = check_rgbvalue(r);
-	ret->g = check_rgbvalue(g);
-	ret->b = check_rgbvalue(b);
-}
-
-void RGBtoCMY(RGB* val, CMY* ret) {
-	double r = check_rgbvalue(val->r);
-	double g = check_rgbvalue(val->g);
-	double b = check_rgbvalue(val->b);
-
-	ret->c = check_hsv_svvalue((255.0 - r)/255.0);
-	ret->m = check_hsv_svvalue((255.0 - g)/255.0);
-	ret->y = check_hsv_svvalue((255.0 - b)/255.0);
-}
-void CMYtoRGB(CMY* val, RGB* ret) {
-	double c = check_hsv_svvalue(val->c);
-	double m = check_hsv_svvalue(val->m);
-	double y = check_hsv_svvalue(val->y);
-
-	ret->r = check_rgbvalue((100.0 - c) * 255.0);
-	ret->g = check_rgbvalue((100.0 - m) * 255.0);
-	ret->b = check_rgbvalue((100.0 - y) * 255.0);
+void c_clamp_color(st_rgba* ret, st_rgba* value) {
+	ret->r = clamp_s(value->r);
+	ret->g = clamp_s(value->g);
+	ret->b = clamp_s(value->b);
+	ret->a = clamp_s(value->a);
 }
