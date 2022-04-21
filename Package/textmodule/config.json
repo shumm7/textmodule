@@ -12,9 +12,7 @@
     "utf8": true,
     "color": {
        "color": true,
-       "rgb": true,
-       "hsv": true,
-       "hsl": true
+       "pixel": true,
     },
     "geometry": {
        "vector2": true,
