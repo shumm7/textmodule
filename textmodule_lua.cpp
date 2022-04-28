@@ -1,4 +1,4 @@
-#include <lua.hpp>
+﻿#include <lua.hpp>
 #include <iostream>
 #include <format>
 
@@ -9,7 +9,7 @@
 #include "textmodule_exception.h"
 #include "textmodule_geometry.h"
 
-// String
+// Wstring
 lua_Wstring lua_towstring(lua_State* L, int idx) {
 	return StrToWstr(lua_tostring(L, idx));
 }
@@ -34,6 +34,39 @@ lua_Wstring tm_towstring_s(lua_State* L, int idx) {
 	return tm_towstring_s(L, idx, L"");
 }
 
+lua_Wstring lua_tolwstring(lua_State* L, int idx, size_t* len) {
+	return StrToWstr(lua_tolstring(L, idx, len));
+}
+
+lua_Wstring tm_tolwstring(lua_State* L, int idx, size_t* len) {
+	return StrToWstr(luaL_checklstring(L, idx, len));
+}
+
+lua_Wstring tm_tolwstring_s(lua_State* L, int idx, size_t* len, lua_Wstring def) {
+	int tp = lua_type(L, idx);
+	luaL_argcheck(L, tp == LUA_TNONE || tp == LUA_TSTRING, idx, "string/none expected");
+
+	if (tp == LUA_TNONE) {
+		return def;
+	}
+	else {
+		return lua_tolwstring(L, idx, len);
+	}
+}
+
+lua_Wstring tm_tolwstring_s(lua_State* L, int idx, size_t* len) {
+	return tm_tolwstring_s(L, idx, len, L"");
+}
+
+void lua_pushwstring(lua_State* L, lua_Wstring s) {
+	lua_pushstring(L, WstrToStr(s).c_str());
+}
+
+void lua_pushlwstring(lua_State* L, lua_Wstring s, size_t l) {
+	lua_pushlstring(L, WstrToStr(s).c_str(), l);
+}
+
+// Sstring
 lua_Sstring lua_tosstring(lua_State* L, int idx) {
 	return lua_tostring(L, idx);
 }
@@ -58,6 +91,39 @@ lua_Sstring tm_tosstring_s(lua_State* L, int idx) {
 	return tm_tosstring_s(L, idx, "");
 }
 
+lua_Sstring lua_tolsstring(lua_State* L, int idx, size_t* len) {
+	return lua_tolstring(L, idx, len);
+}
+
+lua_Sstring tm_tolsstring(lua_State* L, int idx, size_t* len) {
+	return luaL_checklstring(L, idx, len);
+}
+
+lua_Sstring tm_tolsstring_s(lua_State* L, int idx, size_t* len, lua_Sstring def) {
+	int tp = lua_type(L, idx);
+	luaL_argcheck(L, tp == LUA_TNONE || tp == LUA_TSTRING, idx, "string/none expected");
+
+	if (tp == LUA_TNONE) {
+		return def;
+	}
+	else {
+		return lua_tolstring(L, idx, len);
+	}
+}
+
+lua_Sstring tm_tolsstring_s(lua_State* L, int idx, size_t* len) {
+	return tm_tolsstring_s(L, idx, len, "");
+}
+
+void lua_pushsstring(lua_State* L, lua_Sstring s) {
+	lua_pushstring(L, s.c_str());
+}
+
+void lua_pushlsstring(lua_State* L, lua_Sstring s, size_t l) {
+	lua_pushlstring(L, s.c_str(), l);
+}
+
+// String
 lua_String tm_tostring(lua_State* L, int idx) {
 	return luaL_checkstring(L, idx);
 }
@@ -78,12 +144,24 @@ lua_String tm_tostring_s(lua_State* L, int idx) {
 	return tm_tostring_s(L, idx, "");
 }
 
-void lua_pushwstring(lua_State* L, lua_Wstring s) {
-	lua_pushstring(L, WstrToStr(s).c_str());
+lua_String tm_tolstring(lua_State* L, int idx, size_t* len) {
+	return luaL_checklstring(L, idx, len);
 }
 
-void lua_pushsstring(lua_State* L, lua_Sstring s) {
-	lua_pushstring(L, s.c_str());
+lua_String tm_tolstring_s(lua_State* L, int idx, size_t* len, lua_String def) {
+	int tp = lua_type(L, idx);
+	luaL_argcheck(L, tp == LUA_TNONE || tp == LUA_TSTRING, idx, "string/none expected");
+
+	if (tp == LUA_TNONE) {
+		return def;
+	}
+	else {
+		return lua_tolstring(L, idx, len);
+	}
+}
+
+lua_String tm_tolstring_s(lua_State* L, int idx, size_t* len) {
+	return tm_tolstring_s(L, idx, len, "");
 }
 
 //Number
@@ -723,3 +801,13 @@ const char* tm_typename(lua_State* L, int idx) {
 	return lua_typename(L, tp);
 }
 
+void lua_printstack(lua_State* L)
+{
+	int i;
+	int stackSize = lua_gettop(L);
+
+	for (i = stackSize; i >= 1; i--) {
+		int type = lua_type(L, i);
+		std::cout << WstrToStr(tostring_n(i)) << "\t" << lua_typename(L, type) << "\t" << tm_convtostring(L, i) << std::endl;
+	}
+}

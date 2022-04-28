@@ -7,6 +7,7 @@ int fs_absolute(lua_State* L);
 int fs_relative(lua_State* L);
 int fs_proximate(lua_State* L);
 int fs_canonical(lua_State* L);
+int fs_weakly_canonical(lua_State* L);
 
 int fs_create(lua_State* L);
 int fs_create_all(lua_State* L);
@@ -22,6 +23,7 @@ int fs_rename(lua_State* L);
 
 int fs_type(lua_State* L);
 int fs_size(lua_State* L);
+int fs_space(lua_State* L);
 
 int fs_read(lua_State* L);
 int fs_write(lua_State* L);
@@ -35,6 +37,7 @@ static luaL_Reg TEXTMODULE_FILESYSTEM_REG[] = {
 	{"relative", fs_relative},
 	{"proximate", fs_proximate},
 	{"canonical", fs_canonical},
+	{"weakly_canonical", fs_weakly_canonical},
 	{"create", fs_create},
 	{"create_all", fs_create_all},
 	{"exists", fs_exists},
@@ -45,6 +48,7 @@ static luaL_Reg TEXTMODULE_FILESYSTEM_REG[] = {
 	{"rename", fs_rename},
 	{"type", fs_type},
 	{"size", fs_size},
+	{"space", fs_space},
 	{"read", fs_read},
 	{"write", fs_write},
 	{"append", fs_append},

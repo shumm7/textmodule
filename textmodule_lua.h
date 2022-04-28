@@ -44,15 +44,31 @@ lua_Wstring lua_towstring(lua_State* L, int idx);
 lua_Wstring tm_towstring(lua_State* L, int idx);
 lua_Wstring tm_towstring_s(lua_State* L, int idx, lua_Wstring def);
 lua_Wstring tm_towstring_s(lua_State* L, int idx);
+lua_Wstring lua_tolwstring(lua_State* L, int idx, size_t* len);
+lua_Wstring tm_tolwstring(lua_State* L, int idx, size_t* len);
+lua_Wstring tm_tolwstring_s(lua_State* L, int idx, size_t* len, lua_Wstring def);
+lua_Wstring tm_tolwstring_s(lua_State* L, int idx, size_t* len);
+void lua_pushwstring(lua_State* L, lua_Wstring s);
+void lua_pushlwstring(lua_State* L, lua_Wstring s, size_t l);
+
+// Sstring
 lua_Sstring lua_tosstring(lua_State* L, int idx);
 lua_Sstring tm_tosstring(lua_State* L, int idx);
 lua_Sstring tm_tosstring_s(lua_State* L, int idx, lua_Sstring def);
 lua_Sstring tm_tosstring_s(lua_State* L, int idx);
+lua_Sstring tm_tolsstring(lua_State* L, int idx, size_t* len);
+lua_Sstring tm_tolsstring_s(lua_State* L, int idx, size_t* len, lua_Sstring def);
+lua_Sstring tm_tolsstring_s(lua_State* L, int idx, size_t* len);
+void lua_pushsstring(lua_State* L, lua_Sstring s);
+void lua_pushlsstring(lua_State* L, lua_Wstring s, size_t l);
+
+// String
 lua_String tm_tostring(lua_State* L, int idx);
 lua_String tm_tostring_s(lua_State* L, int idx, lua_String def);
 lua_String tm_tostring_s(lua_State* L, int idx);
-void lua_pushwstring(lua_State* L, lua_Wstring s);
-void lua_pushsstring(lua_State* L, lua_Sstring s);
+lua_String tm_tolstring(lua_State* L, int idx, size_t* len);
+lua_String tm_tolstring_s(lua_State* L, int idx, size_t* len, lua_String def);
+lua_String tm_tolstring_s(lua_State* L, int idx, size_t* len);
 
 // Number
 lua_Integer tm_tointeger(lua_State* L, int idx);
@@ -164,3 +180,4 @@ lua_Image* lua_convertcache(lua_State* L, int idx);
 bool luaL_checkmetatable(lua_State* L, int ud, const char* tname);
 const char* tm_convtostring(lua_State* L, int idx);
 const char* tm_typename(lua_State* L, int idx);
+void lua_printstack(lua_State* L);

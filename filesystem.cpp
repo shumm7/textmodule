@@ -87,6 +87,19 @@ int fs_canonical(lua_State* L) {
 	}
 }
 
+int fs_weakly_canonical(lua_State* L) {
+	try {
+		lua_Wstring dir = tm_towstring(L, 1);
+		lua_Wstring res = std::filesystem::weakly_canonical(dir).wstring();
+		lua_pushwstring(L, res);
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
 int fs_create(lua_State* L) {
 	try {
 		lua_Wstring dir = tm_towstring(L, 1);
@@ -310,9 +323,24 @@ int fs_size(lua_State* L) {
 	try {
 		lua_Wstring dir = tm_towstring(L, 1);
 
-		lua_Integer size = (lua_Integer)std::filesystem::file_size(dir);
-		lua_pushinteger(L, size);
+		lua_pushnumber(L, std::filesystem::file_size(dir));
 		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int fs_space(lua_State* L) {
+	try {
+		lua_Wstring dir = tm_towstring(L, 1);
+
+		std::filesystem::space_info space = std::filesystem::space(dir);
+		lua_pushnumber(L, space.capacity);
+		lua_pushnumber(L, space.free);
+		lua_pushnumber(L, space.available);
+		return 3;
 	}
 	catch (std::exception& e) {
 		luaL_error(L, e.what());

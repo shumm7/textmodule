@@ -394,6 +394,120 @@ int tmstring_anagram(lua_State* L) {
 	}
 }
 
+int tmstring_gsplit_aux(lua_State* L) {
+	try {
+		lua_Wstring str = lua_towstring(L, lua_upvalueindex(1));
+		lua_Wstring pattern = lua_towstring(L, lua_upvalueindex(2));
+		lua_Integer n = lua_tointeger(L, lua_upvalueindex(3));
+		lua_Integer idx = lua_tointeger(L, lua_upvalueindex(4));
+
+		std::wsmatch result;
+		int count = 0;
+
+		while (std::regex_search(str, result, std::wregex(pattern)) && (count < n || n < 1)) {
+			int p = result.position();
+
+			if (count == idx) {
+				lua_pushinteger(L, idx + 1);
+				lua_replace(L, lua_upvalueindex(4));
+				lua_pushwstring(L, str.substr(0, p));
+				return 1;
+			}
+
+			str = str.substr(p + result[0].str().length());
+			count++;
+		}
+
+		if (str.length() > 0 && count==idx) {
+			lua_pushinteger(L, idx + 1);
+			lua_replace(L, lua_upvalueindex(4));
+			lua_pushwstring(L, str);
+			return 1;
+		}
+
+		return 0;
+	}
+	catch (std::regex_error) {
+		return 0;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int tmstring_gsplit(lua_State* L) {
+	try {
+		luaL_checkstring(L, 1);
+		luaL_checkstring(L, 2);
+
+		if (lua_type(L, 3) == LUA_TNONE)
+			lua_pushinteger(L, -1);
+		else
+			luaL_checkinteger(L, 3);
+
+		lua_settop(L, 3);
+		lua_pushinteger(L, 0);
+		lua_pushcclosure(L, tmstring_gsplit_aux, 4);
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int tmstring_lines(lua_State* L) {
+	try {
+		luaL_checkstring(L, 1);
+		lua_settop(L, 1);
+		lua_pushstring(L, "\n");
+		lua_pushinteger(L, -1);
+		lua_pushinteger(L, 0);
+		lua_pushcclosure(L, tmstring_gsplit_aux, 4);
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int tmstring_chars_aux(lua_State* L) {
+	try {
+		lua_Wstring str = lua_towstring(L, lua_upvalueindex(1));
+		lua_Integer idx = lua_tointeger(L, lua_upvalueindex(2));
+
+		if (idx < str.length()) {
+			lua_pushinteger(L, idx + 1);
+			lua_replace(L, lua_upvalueindex(2));
+			std::wstring c{ str.at(idx) };
+			lua_pushwstring(L, c);
+			return 1;
+		}
+
+		return 0;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int tmstring_chars(lua_State* L) {
+	try {
+		luaL_checkstring(L, 1);
+		lua_settop(L, 1);
+		lua_pushinteger(L, 0);
+		lua_pushcclosure(L, tmstring_chars_aux, 2);
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
 void luaReg_tmstring(lua_State* L, const char* name, bool reg) {
 	if (reg) {
 		lua_newtable(L);
