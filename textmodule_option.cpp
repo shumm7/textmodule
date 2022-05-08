@@ -1,3 +1,5 @@
+#include "textmodule_option.hpp"
+
 #include <nlohmann/json.hpp>
 #include <cpprest/http_client.h>
 #include <cpprest/filestream.h>
@@ -7,9 +9,8 @@
 #include <string>
 #include <regex>
 
-#include "textmodule.h"
-#include "textmodule_option.h"
-#include "textmodule_string.h"
+#include "textmodule.hpp"
+#include "textmodule_string.hpp"
 
 #define OPTION_PATH ".\\textmodule\\config.json"
 #define VERSION_CHECK_URL L"https://raw.githubusercontent.com/shumm7/textmodule/main/VERSION"

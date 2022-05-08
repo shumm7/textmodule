@@ -23,6 +23,8 @@
 #define API_QRCODE "qrcode"
 #define API_OBJ "object"
 #define API_EASE "ease"
+#define API_DEVICE "device"
+#define API_TIME "time"
 
 //API_COLOR
 #define API_COLOR "color"

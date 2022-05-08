@@ -1,12 +1,14 @@
+#include "textmodule_color.hpp"
+
 #include <iostream>
 #include <sstream>
 #include <exception>
 #include <cmath>
 #include <algorithm>
 
-#include "textmodule_math.h"
-#include "textmodule_color.h"
-#include "textmodule_string.h"
+#include "textmodule_lua.hpp"
+#include "textmodule_math.hpp"
+#include "textmodule_string.hpp"
 
 std::wstring c_lstr(std::wstring str, int length, wchar_t c) {
 	if (str.length() >= length)
@@ -26,7 +28,7 @@ std::wstring c_get_pixel_hex(st_rgba32* val) {
 	return hex;
 }
 
-std::wstring c_get_pixel_hex(uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
+std::wstring c_get_pixel_hex(unsigned char r, unsigned char g, unsigned char b, unsigned char a) {
 	st_rgba32 c = {0,0,0,0};
 
 	c.r = r;
@@ -36,14 +38,14 @@ std::wstring c_get_pixel_hex(uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
 	return c_get_pixel_hex(&c);
 }
 
-std::wstring c_get_pixel_hex(uint8_t r, uint8_t g, uint8_t b) {
+std::wstring c_get_pixel_hex(unsigned char r, unsigned char g, unsigned char b) {
 	return c_get_pixel_hex(r, g, b, 0);
 }
 
 std::wstring c_get_color_hex(st_rgba* val) {
-	uint8_t r = clamp_s(val->r) * 255.0;
-	uint8_t g = clamp_s(val->g) * 255.0;
-	uint8_t b = clamp_s(val->b) * 255.0;
+	unsigned char r = clamp_s(val->r) * 255.0;
+	unsigned char g = clamp_s(val->g) * 255.0;
+	unsigned char b = clamp_s(val->b) * 255.0;
 	return c_get_pixel_hex(r, g, b);
 }
 
@@ -63,10 +65,10 @@ std::wstring c_get_color_hex(double r, double g, double b) {
 
 
 void c_color_to_pixel(st_rgba32* ret, st_rgba* val) {
-	ret->r = (uint8_t)clamp_s((val->r) * 255.0, 0, 255);
-	ret->g = (uint8_t)clamp_s((val->g) * 255.0, 0, 255);
-	ret->b = (uint8_t)clamp_s((val->b) * 255.0, 0, 255);
-	ret->a = (uint8_t)clamp_s((val->a) * 255.0, 0, 255);
+	ret->r = (unsigned char)clamp_s((val->r) * 255.0, 0, 255);
+	ret->g = (unsigned char)clamp_s((val->g) * 255.0, 0, 255);
+	ret->b = (unsigned char)clamp_s((val->b) * 255.0, 0, 255);
+	ret->a = (unsigned char)clamp_s((val->a) * 255.0, 0, 255);
 	return;
 }
 
@@ -93,7 +95,7 @@ void c_pixel_to_color(st_rgba* ret, st_rgba32* val) {
 	return;
 }
 
-void c_pixel_to_color(st_rgba* ret, uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
+void c_pixel_to_color(st_rgba* ret, unsigned char r, unsigned char g, unsigned char b, unsigned char a) {
 	st_rgba32 c = {0,0,0,0};
 	c.r = r;
 	c.g = g;
@@ -102,12 +104,12 @@ void c_pixel_to_color(st_rgba* ret, uint8_t r, uint8_t g, uint8_t b, uint8_t a) 
 	return c_pixel_to_color(ret, &c);
 }
 
-void c_pixel_to_color(st_rgba* ret, uint8_t r, uint8_t g, uint8_t b) {
+void c_pixel_to_color(st_rgba* ret, unsigned char r, unsigned char g, unsigned char b) {
 	return c_pixel_to_color(ret, r, g, b, 0);
 }
 
 
-void c_hex_to_pixel(st_rgba32* ret, int num, uint8_t a) {
+void c_hex_to_pixel(st_rgba32* ret, int num, unsigned char a) {
 	num = clamp_s(num, 0x000000, 0xffffff);
 
 	std::wstring hex = DecToHex(num);
@@ -124,16 +126,16 @@ void c_hex_to_pixel(st_rgba32* ret, int num, uint8_t a) {
 	return;
 }
 
-void c_hex_to_pixel(st_rgba32* ret, std::wstring num, uint8_t a) {
+void c_hex_to_pixel(st_rgba32* ret, std::wstring num, unsigned char a) {
 	return c_hex_to_pixel(ret, HexToDec(num), a);
 }
 
 void c_hex_to_pixel(st_rgba32* ret, int num) {
-	return c_hex_to_pixel(ret, num, (uint8_t)0);
+	return c_hex_to_pixel(ret, num, (unsigned char)0);
 }
 
 void c_hex_to_pixel(st_rgba32* ret, std::wstring num) {
-	return c_hex_to_pixel(ret, num, (uint8_t)0);
+	return c_hex_to_pixel(ret, num, (unsigned char)0);
 }
 
 

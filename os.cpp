@@ -1,26 +1,15 @@
+#include "os.hpp"
+
 #include <lua.hpp>
 #include <iostream>
 #include <chrono>
+#include <format>
 #include <time.h>
 #include <windows.h>
 
-#include "os.h"
-#include "textmodule_lua.h"
-#include "textmodule_string.h"
-
-lua_Integer tm_getfield(lua_State* L, const char* key, int d) {
-	lua_Integer res;
-	lua_getfield(L, -1, key);
-	if (lua_isnumber(L, -1))
-		res = lua_tointeger(L, -1);
-	else {
-		if (d < 0)
-			return luaL_error(L, "field " LUA_QS " missing in date table", key);
-		res = d;
-	}
-	lua_pop(L, 1);
-	return res;
-}
+#include "textmodule_lua.hpp"
+#include "textmodule_string.hpp"
+#include "textmodule_time.hpp"
 
 int os_time(lua_State* L) {
 	try {
@@ -35,16 +24,10 @@ int os_time(lua_State* L) {
 			return 1;
 		}
 		else if (tp == LUA_TTABLE) {
-			struct tm Time;
+			struct tm Time = tm{};
 			__time64_t res;
 
-			Time.tm_isdst = tm_getfield(L, "isdst", false);
-			Time.tm_year = tm_getfield(L, "year", -1) - 1900;
-			Time.tm_mon = tm_getfield(L, "month", -1) - 1;
-			Time.tm_mday = tm_getfield(L, "day", -1);
-			Time.tm_hour = tm_getfield(L, "hour", 12);
-			Time.tm_min = tm_getfield(L, "min", 0);
-			Time.tm_sec = tm_getfield(L, "sec", 0);
+			lua_totmstruct(L, 1, &Time);
 
 			res = _mktime64(&Time);
 			lua_pushnumber(L, (lua_Number)res);
@@ -96,25 +79,7 @@ int os_date(lua_State* L) {
 			else
 				_localtime64_s(&tm, &time_t);
 
-			lua_newtable(L);
-			lua_pushinteger(L, tm.tm_year + 1900);
-			lua_setfield(L, -2, "year");
-			lua_pushinteger(L, tm.tm_mon + 1);
-			lua_setfield(L, -2, "month");
-			lua_pushinteger(L, tm.tm_mday);
-			lua_setfield(L, -2, "day");
-			lua_pushinteger(L, tm.tm_hour);
-			lua_setfield(L, -2, "hour");
-			lua_pushinteger(L, tm.tm_min);
-			lua_setfield(L, -2, "min");
-			lua_pushinteger(L, tm.tm_sec);
-			lua_setfield(L, -2, "sec");
-			lua_pushinteger(L, tm.tm_wday + 1);
-			lua_setfield(L, -2, "wday");
-			lua_pushinteger(L, tm.tm_yday + 1);
-			lua_setfield(L, -2, "yday");
-			lua_pushinteger(L, tm.tm_isdst);
-			lua_setfield(L, -2, "isdst");
+			lua_pushtmstruct(L, &tm);
 
 			return 1;
 		}

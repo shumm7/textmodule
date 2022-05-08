@@ -1,15 +1,15 @@
-#include <lua.hpp>
+#include "filesystem.hpp"
 
+#include <lua.hpp>
 #include <filesystem>
 #include <iostream>
 #include <string>
 #include <fstream>
 #include <direct.h>
 
-#include "filesystem.h"
-#include "textmodule_lua.h"
-#include "textmodule_string.h"
-#include "textmodule_exception.h"
+#include "textmodule_lua.hpp"
+#include "textmodule_string.hpp"
+#include "textmodule_exception.hpp"
 
 int fs_current(lua_State* L) {
 	try {

@@ -1,13 +1,29 @@
-﻿#include <lua.hpp>
-#include <iostream>
-#include <format>
+﻿#include "textmodule_lua.hpp"
 
-#include "textmodule_lua.h"
-#include "textmodule_color.h"
-#include "textmodule_string.h"
-#include "textmodule_math.h"
-#include "textmodule_exception.h"
-#include "textmodule_geometry.h"
+#include <lua.hpp>
+#include <iostream>
+#include <chrono>
+
+#include <unicode/datefmt.h>
+#include <unicode/dtfmtsym.h>
+#include <unicode/gregocal.h>
+#include <unicode/timezone.h>
+#include <unicode/unistr.h>
+#include <unicode/ustring.h>
+#include <unicode/dtptngen.h>
+#include <unicode/dtitvfmt.h>
+
+#include <complex>
+#include <Eigen/Geometry>
+#include <Eigen/Dense>
+
+#include <fmt/core.h>
+#include <fmt/format.h>
+#include <boost/multiprecision/cpp_bin_float.hpp>
+
+#include "textmodule_string.hpp"
+#include "textmodule_math.hpp"
+#include "textmodule_time.hpp"
 
 // Wstring
 lua_Wstring lua_towstring(lua_State* L, int idx) {
@@ -123,6 +139,36 @@ void lua_pushlsstring(lua_State* L, lua_Sstring s, size_t l) {
 	lua_pushlstring(L, s.c_str(), l);
 }
 
+// Ustring
+lua_Ustring lua_toustring(lua_State* L, int idx) {
+	return StrToUstr(lua_tostring(L, idx));
+}
+
+lua_Ustring tm_toustring(lua_State* L, int idx) {
+	return StrToUstr(luaL_checkstring(L, idx));
+}
+
+lua_Ustring tm_toustring_s(lua_State* L, int idx, lua_Ustring def) {
+	int tp = lua_type(L, idx);
+	luaL_argcheck(L, tp == LUA_TNONE || tp == LUA_TSTRING, idx, "string/none expected");
+
+	if (tp == LUA_TNONE) {
+		return def;
+	}
+	else {
+		return lua_toustring(L, idx);
+	}
+}
+
+lua_Ustring tm_toustring_s(lua_State* L, int idx) {
+	return tm_toustring_s(L, idx, lua_Ustring(""));
+}
+
+void lua_pushustring(lua_State* L, lua_Ustring s) {
+	lua_pushstring(L, UstrToStr(s).c_str());
+}
+
+
 // String
 lua_String tm_tostring(lua_State* L, int idx) {
 	return luaL_checkstring(L, idx);
@@ -217,6 +263,66 @@ lua_Unsigned tm_tounsigned(lua_State* L, int idx) {
 	return static_cast<unsigned long>(luaL_checkinteger(L, idx));
 }
 
+// Bignumber
+lua_Bignumber lua_tobignumber(lua_State* L, int idx) {
+	return *(reinterpret_cast<lua_Bignumber*>(luaL_checkudata(L, idx, TEXTMODULE_BIGNUMBER)));
+}
+
+lua_Bignumber tm_tobignumber(lua_State* L, int idx) {
+	int tp = lua_type(L, idx);
+	luaL_argcheck(L, (tp == LUA_TUSERDATA && luaL_checkmetatable(L, idx, TEXTMODULE_BIGNUMBER)) || tp==LUA_TSTRING || tp==LUA_TNUMBER, idx, "bignumber/number expected");
+
+	if (tp == LUA_TNUMBER) {
+		lua_Bignumber c = lua_tointeger(L, idx);
+		return c;
+	}
+	else if (tp == LUA_TSTRING) {
+		lua_Bignumber s(lua_tostring(L, idx));
+		return s;
+	}
+	else {
+		return lua_tobignumber(L, idx);
+	}
+}
+
+lua_Bignumber tm_tobignumber_s(lua_State* L, int idx, lua_Bignumber def) {
+	int tp = lua_type(L, idx);
+	luaL_argcheck(L, tp == LUA_TNONE || tp == LUA_TNUMBER || tp==LUA_TSTRING || (lua_type(L, idx) == LUA_TUSERDATA && luaL_checkmetatable(L, idx, TEXTMODULE_BIGNUMBER)), idx, "number/bignumber/none expected");
+
+	if (tp == LUA_TNONE) {
+		return def;
+	}
+	else if(tp==LUA_TNUMBER) {
+		lua_Bignumber c = lua_tonumber(L, idx);
+		return c;
+	}
+	else if (tp == LUA_TSTRING) {
+		lua_Bignumber s(lua_tostring(L, idx));
+		return s;
+	}
+	else {
+		return lua_tobignumber(L, idx);
+	}
+}
+
+lua_Bignumber tm_tobignumber_s(lua_State* L, int idx) {
+	return tm_tobignumber_s(L, idx, 0);
+}
+
+lua_Bignumber lua_pushbignumber(lua_State* L, lua_Bignumber value) {
+	lua_Bignumber* ret = reinterpret_cast<lua_Bignumber*>(lua_newuserdata(L, sizeof(lua_Bignumber)));
+	luaL_getmetatable(L, TEXTMODULE_BIGNUMBER);
+	lua_setmetatable(L, -2);
+	*ret = value;
+
+	return *ret;
+}
+
+lua_Bignumber lua_pushbignumber(lua_State* L) {
+	lua_pushbignumber(L, 0);
+}
+
+
 // Boolean
 lua_Boolean tm_toboolean(lua_State* L, int idx) {
 	if(lua_type(L, idx)!=LUA_TBOOLEAN)
@@ -239,6 +345,7 @@ lua_Boolean tm_toboolean_s(lua_State* L, int idx, lua_Boolean def) {
 lua_Boolean tm_toboolean_s(lua_State* L, int idx) {
 	return tm_toboolean_s(L, idx, false);
 }
+
 
 // Table
 void lua_settablevalue(lua_State* L, int key, lua_Number value) {
@@ -307,18 +414,56 @@ void lua_settablevalue(lua_State* L, const char* key, lua_Wstring value) {
 	lua_setfield(L, -2, key);
 }
 
+// Clock
+lua_Clock* lua_toclock(lua_State* L, int idx) {
+	return reinterpret_cast<std::chrono::utc_clock::time_point*>(luaL_checkudata(L, idx, TEXTMODULE_CLOCK));
+}
+
+lua_Clock* tm_toclock(lua_State* L, int idx) {
+	luaL_argcheck(L, lua_type(L, idx) == LUA_TUSERDATA && luaL_checkmetatable(L, idx, TEXTMODULE_CLOCK), idx, "clock expected");
+	return lua_toclock(L, idx);
+}
+
+lua_Clock* tm_toclock_s(lua_State* L, int idx, lua_Clock def) {
+	int tp = lua_type(L, idx);
+	luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNONE, idx, "clock/none expected");
+
+	if (tp == LUA_TUSERDATA)
+		return lua_toclock(L, idx);
+	else if (tp == LUA_TNONE)
+		return &def;
+}
+
+lua_Clock* tm_toclock_s(lua_State* L, int idx) {
+	return tm_toclock_s(L, idx, std::chrono::utc_clock::now());
+}
+
+lua_Clock* lua_pushclock(lua_State* L, lua_Clock clock) {
+	lua_Clock* ret = reinterpret_cast<lua_Clock*>(lua_newuserdata(L, sizeof(lua_Clock)));
+	luaL_getmetatable(L, TEXTMODULE_CLOCK);
+	lua_setmetatable(L, -2);
+	*ret = clock;
+
+	return ret;
+}
+
+lua_Clock* lua_pushclock(lua_State* L) {
+	return lua_pushclock(L, std::chrono::utc_clock::now());
+}
+
+
 // Complex
 lua_Complex* lua_tocomplex(lua_State* L, int idx) {
-	return complex_check(L, idx);
+	return reinterpret_cast<std::complex<double>*>(luaL_checkudata(L, idx, TEXTMODULE_COMPLEX));
 }
 
 lua_Complex* tm_tocomplex(lua_State* L, int idx) {
 	int tp = lua_type(L, idx);
-	luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, idx, "number/complex expected");
+	luaL_argcheck(L, (tp == LUA_TUSERDATA && luaL_checkmetatable(L, idx, TEXTMODULE_COMPLEX)) || tp == LUA_TNUMBER, idx, "number/complex expected");
 	std::complex<double>* val = new std::complex<double>;
 
 	if (tp == LUA_TUSERDATA) {
-		val = complex_check(L, idx);
+		val = lua_tocomplex(L, idx);
 	}
 	else if (tp == LUA_TNUMBER) {
 		val->real(lua_tonumber(L, idx));
@@ -334,7 +479,7 @@ lua_Complex* tm_tocomplex_s(lua_State* L, int idx, lua_Complex def) {
 	std::complex<double>* val = new std::complex<double>;
 
 	if (tp == LUA_TUSERDATA) {
-		val = complex_check(L, idx);
+		val = lua_tocomplex(L, idx);
 	}
 	else if (tp == LUA_TNUMBER) {
 		val->real(lua_tonumber(L, idx));
@@ -372,16 +517,16 @@ lua_Complex* lua_pushcomplex(lua_State* L) {
 
 // Quaternion
 lua_Quaternion* lua_toquaternion(lua_State* L, int idx) {
-	return quaternion_check(L, idx);
+	return reinterpret_cast<Quat*>(luaL_checkudata(L, idx, TEXTMODULE_QUATERNION));
 }
 
 lua_Quaternion* tm_toquaternion(lua_State* L, int idx) {
 	int tp = lua_type(L, idx);
-	luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, idx, "number/quaternion expected");
+	luaL_argcheck(L, (tp == LUA_TUSERDATA && luaL_checkmetatable(L, idx, TEXTMODULE_QUATERNION)) || tp == LUA_TNUMBER, idx, "number/quaternion expected");
 	Quat* val = new Quat();
 
 	if (tp == LUA_TUSERDATA) {
-		val = quaternion_check(L, idx);
+		val = lua_toquaternion(L, idx);
 	}
 	else if (tp == LUA_TNUMBER) {
 		val->w() = lua_tonumber(L, idx);
@@ -396,7 +541,7 @@ lua_Quaternion* tm_toquaternion_s(lua_State* L, int idx, lua_Quaternion def) {
 	Quat* val = new Quat();
 
 	if (tp == LUA_TUSERDATA) {
-		val = quaternion_check(L, idx);
+		val = lua_toquaternion(L, idx);
 	}
 	else if (tp == LUA_TNUMBER) {
 		val->w() = lua_tonumber(L, idx);
@@ -438,10 +583,11 @@ lua_Quaternion* lua_pushquaternion(lua_State* L) {
 
 // Vector2
 lua_Vector2* lua_tovector2(lua_State* L, int idx) {
-	return vector2_check(L, idx);
+	return reinterpret_cast<Vector2*>(luaL_checkudata(L, idx, TEXTMODULE_VECTOR2));
 }
 
 lua_Vector2* tm_tovector2(lua_State* L, int idx) {
+	luaL_argcheck(L, lua_type(L, idx) == LUA_TUSERDATA && luaL_checkmetatable(L, idx, TEXTMODULE_VECTOR2), idx, "vector2 expected");
 	return lua_tovector2(L, idx);
 }
 
@@ -451,7 +597,7 @@ lua_Vector2* tm_tovector2_s(lua_State* L, int idx, lua_Vector2 def) {
 	Vector2* val = new Vector2();
 
 	if (tp == LUA_TUSERDATA) {
-		val = vector2_check(L, idx);
+		val = lua_tovector2(L, idx);
 	}
 	else if (tp == LUA_TNONE) {
 		val->x() = def.x();
@@ -489,10 +635,11 @@ lua_Vector2* lua_pushvector2(lua_State* L) {
 
 // Vector3
 lua_Vector3* lua_tovector3(lua_State* L, int idx) {
-	return vector3_check(L, idx);
+	return reinterpret_cast<Vector3*>(luaL_checkudata(L, idx, TEXTMODULE_VECTOR3));
 }
 
 lua_Vector3* tm_tovector3(lua_State* L, int idx) {
+	luaL_argcheck(L, lua_type(L, idx) == LUA_TUSERDATA && luaL_checkmetatable(L, idx, TEXTMODULE_VECTOR3), idx, "vector3 expected");
 	return lua_tovector3(L, idx);
 }
 
@@ -502,7 +649,7 @@ lua_Vector3* tm_tovector3_s(lua_State* L, int idx, lua_Vector3 def) {
 	Vector3* val = new Vector3();
 
 	if (tp == LUA_TUSERDATA) {
-		val = vector3_check(L, idx);
+		val = lua_tovector3(L, idx);
 	}
 	else if (tp == LUA_TNONE) {
 		val->x() = def.x();
@@ -542,10 +689,11 @@ lua_Vector3* lua_pushvector3(lua_State* L) {
 
 // Vector4
 lua_Vector4* lua_tovector4(lua_State* L, int idx) {
-	return vector4_check(L, idx);
+	return reinterpret_cast<Vector4*>(luaL_checkudata(L, idx, TEXTMODULE_VECTOR4));
 }
 
 lua_Vector4* tm_tovector4(lua_State* L, int idx) {
+	luaL_argcheck(L, lua_type(L, idx) == LUA_TUSERDATA && luaL_checkmetatable(L, idx, TEXTMODULE_VECTOR4), idx, "vector4 expected");
 	return lua_tovector4(L, idx);
 }
 
@@ -555,7 +703,7 @@ lua_Vector4* tm_tovector4_s(lua_State* L, int idx, lua_Vector4 def) {
 	Vector4* val = new Vector4();
 
 	if (tp == LUA_TUSERDATA) {
-		val = vector4_check(L, idx);
+		val = lua_tovector4(L, idx);
 	}
 	else if (tp == LUA_TNONE) {
 		val->x() = def.x();
@@ -597,10 +745,11 @@ lua_Vector4* lua_pushvector4(lua_State* L) {
 
 // Color
 lua_Color* lua_tocolor(lua_State* L, int idx) {
-	return reinterpret_cast<lua_Color*>(color_check(L, idx));
+	return reinterpret_cast<lua_Color*>(luaL_checkudata(L, idx, TEXTMODULE_COLOR));
 }
 
 lua_Color* tm_tocolor(lua_State* L, int idx) {
+	luaL_argcheck(L, lua_type(L, idx) == LUA_TUSERDATA && luaL_checkmetatable(L, idx, TEXTMODULE_COLOR), idx, "color expected");
 	return lua_tocolor(L, idx);
 }
 
@@ -610,7 +759,7 @@ lua_Color* tm_tocolor_s(lua_State* L, int idx, lua_Color def) {
 	lua_Color* val = new lua_Color;
 
 	if (tp == LUA_TUSERDATA) {
-		val = reinterpret_cast<lua_Color*>(color_check(L, idx));
+		val = lua_tocolor(L, idx);
 	}
 	else if (tp == LUA_TNONE) {
 		val->r = def.r;
@@ -656,10 +805,11 @@ lua_Color* lua_pushcolor(lua_State* L) {
 
 //Pixel
 lua_Pixel* lua_topixel(lua_State* L, int idx) {
-	return reinterpret_cast<lua_Pixel*>(pixel_check(L, idx));
+	return reinterpret_cast<lua_Pixel*>(luaL_checkudata(L, idx, TEXTMODULE_PIXEL));
 }
 
 lua_Pixel* tm_topixel(lua_State* L, int idx) {
+	luaL_argcheck(L, lua_type(L, idx) == LUA_TUSERDATA && luaL_checkmetatable(L, idx, TEXTMODULE_PIXEL), idx, "pixel expected");
 	return lua_topixel(L, idx);
 }
 
@@ -669,7 +819,7 @@ lua_Pixel* tm_topixel_s(lua_State* L, int idx, lua_Pixel def) {
 	lua_Pixel* val = new lua_Pixel;
 
 	if (tp == LUA_TUSERDATA) {
-		val = reinterpret_cast<lua_Pixel*>(pixel_check(L, idx));
+		val = lua_topixel(L, idx);
 	}
 	else if (tp == LUA_TNONE) {
 		val->r = def.r;
@@ -681,19 +831,19 @@ lua_Pixel* tm_topixel_s(lua_State* L, int idx, lua_Pixel def) {
 	return val;
 }
 
-lua_Pixel* tm_topixel_s(lua_State* L, int idx, uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
+lua_Pixel* tm_topixel_s(lua_State* L, int idx, unsigned char r, unsigned char g, unsigned char b, unsigned char a) {
 	return tm_topixel_s(L, idx, lua_Pixel{ r,g,b,a });
 }
 
 lua_Pixel* tm_topixel_s(lua_State* L, int idx, double r, double g, double b, double a) {
-	return tm_topixel_s(L, idx, (uint8_t)clamp_s(r, 0, 255), (uint8_t)clamp_s(g, 0, 255), (uint8_t)clamp_s(b, 0, 255), (uint8_t)clamp_s(a, 0, 255));
+	return tm_topixel_s(L, idx, (unsigned char)clamp_s(r, 0, 255), (unsigned char)clamp_s(g, 0, 255), (unsigned char)clamp_s(b, 0, 255), (unsigned char)clamp_s(a, 0, 255));
 }
 
 lua_Pixel* tm_topixel_s(lua_State* L, int idx) {
 	return tm_topixel_s(L, idx, 0.0, 0.0, 0.0, 0.0);
 }
 
-lua_Pixel* lua_pushpixel(lua_State* L, uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
+lua_Pixel* lua_pushpixel(lua_State* L, unsigned char r, unsigned char g, unsigned char b, unsigned char a) {
 	lua_Pixel* ret = reinterpret_cast<lua_Pixel*>(lua_newuserdata(L, sizeof(lua_Pixel)));
 	luaL_getmetatable(L, TEXTMODULE_PIXEL);
 	lua_setmetatable(L, -2);
@@ -706,7 +856,7 @@ lua_Pixel* lua_pushpixel(lua_State* L, uint8_t r, uint8_t g, uint8_t b, uint8_t 
 }
 
 lua_Pixel* lua_pushpixel(lua_State* L, double r, double g, double b, double a) {
-	return lua_pushpixel(L, (uint8_t)clamp_s(r, 0, 255), (uint8_t)clamp_s(g, 0, 255), (uint8_t)clamp_s(b, 0, 255), (uint8_t)clamp_s(a, 0, 255));
+	return lua_pushpixel(L, (unsigned char)clamp_s(r, 0, 255), (unsigned char)clamp_s(g, 0, 255), (unsigned char)clamp_s(b, 0, 255), (unsigned char)clamp_s(a, 0, 255));
 }
 
 lua_Pixel* lua_pushpixel(lua_State* L, lua_Pixel def) {
@@ -719,10 +869,11 @@ lua_Pixel* lua_pushpixel(lua_State* L) {
 
 // Image
 lua_Image* lua_toimage(lua_State* L, int idx) {
-	return reinterpret_cast<lua_Image*>(image_check(L, idx));
+	return reinterpret_cast<lua_Image*>(luaL_checkudata(L, idx, TEXTMODULE_IMAGE));
 }
 
 lua_Image* tm_toimage(lua_State* L, int idx) {
+	luaL_argcheck(L, lua_type(L, idx) == LUA_TUSERDATA && luaL_checkmetatable(L, idx, TEXTMODULE_IMAGE), idx, "image expected");
 	return lua_toimage(L, idx);
 }
 
@@ -766,7 +917,7 @@ const char* tm_convtostring(lua_State* L, int idx) {
 		case LUA_TNIL:
 			return "nil";
 		default:
-			lua_Sstring _f = std::format("{0:s}: {1:p}", luaL_typename(L, idx), lua_topointer(L, idx));
+			lua_Sstring _f = fmt::format("{0:s}: {1:p}", luaL_typename(L, idx), lua_topointer(L, idx));
 			const char* f = _f.c_str();
 			return f;
 		}
@@ -792,6 +943,10 @@ const char* tm_typename(lua_State* L, int idx) {
 			return "pixel";
 		else if (luaL_checkmetatable(L, idx, LUA_FILEHANDLE))
 			return "filehandle";
+		else if (luaL_checkmetatable(L, idx, TEXTMODULE_CLOCK))
+			return "clock";
+		else if (luaL_checkmetatable(L, idx, TEXTMODULE_BIGNUMBER))
+			return "bignumber";
 	}
 	else if (tp == LUA_TTABLE) {
 		if (luaL_checkmetatable(L, idx, TEXTMODULE_COLORLIST))
@@ -810,4 +965,43 @@ void lua_printstack(lua_State* L)
 		int type = lua_type(L, i);
 		std::cout << WstrToStr(tostring_n(i)) << "\t" << lua_typename(L, type) << "\t" << tm_convtostring(L, i) << std::endl;
 	}
+}
+
+int lua_pushtmstruct(lua_State* L, std::tm* tmstruct) {
+	struct tm tm = *tmstruct;
+
+	lua_newtable(L);
+	lua_pushinteger(L, tm.tm_year + 1900);
+	lua_setfield(L, -2, "year");
+	lua_pushinteger(L, tm.tm_mon + 1);
+	lua_setfield(L, -2, "month");
+	lua_pushinteger(L, tm.tm_mday);
+	lua_setfield(L, -2, "day");
+	lua_pushinteger(L, tm.tm_hour);
+	lua_setfield(L, -2, "hour");
+	lua_pushinteger(L, tm.tm_min);
+	lua_setfield(L, -2, "min");
+	lua_pushinteger(L, tm.tm_sec);
+	lua_setfield(L, -2, "sec");
+	lua_pushinteger(L, tm.tm_wday + 1);
+	lua_setfield(L, -2, "wday");
+	lua_pushinteger(L, tm.tm_yday + 1);
+	lua_setfield(L, -2, "yday");
+	lua_pushinteger(L, tm.tm_isdst);
+	lua_setfield(L, -2, "isdst");
+
+	return 1;
+}
+
+void lua_totmstruct(lua_State* L, int idx, std::tm* out) {
+	luaL_checktype(L, idx, LUA_TTABLE);
+	std::tm Time = *out;
+
+	Time.tm_isdst = time_tm_getfield(L, idx, "isdst", false);
+	Time.tm_year = time_tm_getfield(L, idx, "year", -1) - 1900;
+	Time.tm_mon = time_tm_getfield(L, idx, "month", -1) - 1;
+	Time.tm_mday = time_tm_getfield(L, idx, "day", -1);
+	Time.tm_hour = time_tm_getfield(L, idx, "hour", 12);
+	Time.tm_min = time_tm_getfield(L, idx, "min", 0);
+	Time.tm_sec = time_tm_getfield(L, idx, "sec", 0);
 }

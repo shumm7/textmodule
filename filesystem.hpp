@@ -1,5 +1,5 @@
+#pragma once
 #include <lua.hpp>
-#include <iostream>
 
 int fs_current(lua_State* L);
 

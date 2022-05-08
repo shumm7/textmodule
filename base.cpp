@@ -1,16 +1,18 @@
+#include "base.hpp"
+
 #include <lua.hpp>
 #include <iostream>
 #include <sstream>
 #include <vector>
 #include <fmt/core.h>
 #include <fmt/format.h>
+#include <fmt/chrono.h>
 
-#include "base.h"
-#include "textmodule.h"
-#include "textmodule_string.h"
-#include "textmodule_exception.h"
-#include "textmodule_option.h"
-#include "textmodule_lua.h"
+#include "textmodule.hpp"
+#include "textmodule_string.hpp"
+#include "textmodule_exception.hpp"
+#include "textmodule_option.hpp"
+#include "textmodule_lua.hpp"
 
 int base_getinfo(lua_State* L) {
 	try {
@@ -169,6 +171,9 @@ int base_printf(lua_State* L) {
 				store.push_back("nil");
 			else if (tp == LUA_TNONE)
 				break;
+			else if (tp == LUA_TUSERDATA) {
+				store.push_back(lua_topointer(L, i));
+			}
 			else
 				store.push_back(lua_topointer(L, i));
 

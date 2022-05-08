@@ -1,12 +1,13 @@
+#include "image.hpp"
+
 #include <lua.hpp>
 #include <iostream>
 
-#include "image.h"
-#include "textmodule_math.h"
-#include "textmodule_color.h"
-#include "textmodule_lua.h"
-#include "textmodule_string.h"
-#include "textmodule_exception.h"
+#include "textmodule_math.hpp"
+#include "textmodule_color.hpp"
+#include "textmodule_lua.hpp"
+#include "textmodule_string.hpp"
+#include "textmodule_exception.hpp"
 
 //WIP
 

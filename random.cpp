@@ -1,8 +1,9 @@
+#include "random.hpp"
+
 #include <lua.hpp>
 #include <random>
 
-#include "random.h"
-#include "textmodule_lua.h"
+#include "textmodule_lua.hpp"
 
 int random_minstd_rand0(lua_State* L) {
 	try {
@@ -47,7 +48,7 @@ int random_mt19937_64(lua_State* L) {
 	try {
 		std::random_device seed_gen;
 		std::mt19937_64 engine(seed_gen());
-		lua_pushnumber(L, engine());
+		lua_pushbignumber(L, engine());
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -73,7 +74,7 @@ int random_ranlux48(lua_State* L) {
 	try {
 		std::random_device seed_gen;
 		std::ranlux48 engine(seed_gen());
-		lua_pushnumber(L, engine());
+		lua_pushbignumber(L, engine());
 		return 1;
 	}
 	catch (std::exception& e) {

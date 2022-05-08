@@ -1,10 +1,11 @@
+#include "http.hpp"
+
 #include <cpprest/http_client.h>
 #include <cpprest/filestream.h>
 #include <lua.hpp>
 
-#include "http.h"
-#include "textmodule_lua.h"
-#include "textmodule_string.h"
+#include "textmodule_lua.hpp"
+#include "textmodule_string.hpp"
 
 using namespace web;
 using namespace web::http;

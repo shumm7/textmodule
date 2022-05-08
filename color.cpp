@@ -1,13 +1,17 @@
+#include "color.hpp"
+
 #include <lua.hpp>
 #include <iostream>
+#include <algorithm>
 
-#include "color.h"
-#include "colorlist.h"
-#include "textmodule_math.h"
-#include "textmodule_color.h"
-#include "textmodule_lua.h"
-#include "textmodule_string.h"
-#include "textmodule_exception.h"
+#include "colorlist.hpp"
+#include "textmodule_math.hpp"
+#include "textmodule_color.hpp"
+#include "textmodule_lua.hpp"
+#include "textmodule_string.hpp"
+#include "textmodule_exception.hpp"
+
+#define NOMINMAX
 
 int color_new(lua_State* L) {
 	try {
@@ -403,8 +407,8 @@ int color_comp(lua_State* L) {
 	try {
 		lua_Color* val = tm_tocolor(L, 1);
 
-		double max = std::max({ val->r, val->g, val->b });
-		double min = std::min({ val->r, val->g, val->b });
+		double max = (std::max)({ val->r, val->g, val->b });
+		double min = (std::min)({ val->r, val->g, val->b });
 
 		lua_pushcolor(L, (max + min) - (val->r), (max + min) - (val->g), (max + min) - (val->b), val->a);
 		return 1;
@@ -437,7 +441,7 @@ int color_average(lua_State* L) {
 int color_max(lua_State* L) {
 	try {
 		lua_Color* val = tm_tocolor(L, 1);
-		lua_pushnumber(L, std::max({ val->r, val->g, val->b }));
+		lua_pushnumber(L, (std::max)({ val->r, val->g, val->b }));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -449,7 +453,7 @@ int color_max(lua_State* L) {
 int color_min(lua_State* L) {
 	try {
 		lua_Color* val = tm_tocolor(L, 1);
-		lua_pushnumber(L, std::min({ val->r, val->g, val->b }));
+		lua_pushnumber(L, (std::min)({ val->r, val->g, val->b }));
 		return 1;
 	}
 	catch (std::exception& e) {

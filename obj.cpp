@@ -1,11 +1,13 @@
+ï»¿#include "obj.hpp"
+
 #include <lua.hpp>
 #include <iostream>
 #include <regex>
+#include <vector>
 
-#include "obj.h"
-#include "textmodule_lua.h"
-#include "textmodule_string.h"
-#include "textmodule_math.h"
+#include "textmodule_lua.hpp"
+#include "textmodule_string.hpp"
+#include "textmodule_math.hpp"
 
 #define HEX6 "[0-9a-f]{6}"
 #define INTN "[0-9]*?"
@@ -20,6 +22,11 @@
 #define REG_CTRL_P L"(<p" NUMN "?," NUMN "?>|<p" NUMN "?," NUMN "?," NUMN "?>)"
 #define REG_CTRL_QUESTION L"(<[\?](.*?)[\?]>)"
 #define REG_CTRL L"(" REG_CTRL_SHARP L"|" REG_CTRL_S L"|" REG_CTRL_R L"|" REG_CTRL_W L"|" REG_CTRL_C L"|" REG_CTRL_P L"|" REG_CTRL_QUESTION L")"
+
+typedef struct {};
+
+int font_count = 0;
+
 
 int obj_remove_ctrl(lua_State* L) {
 	try {
@@ -142,26 +149,26 @@ void luaReg_const_figure(lua_State* L, const char* name) {
 void luaReg_const_object(lua_State* L, const char* name) {
 	lua_newtable(L);
 
-	lua_settablevalue(L, "standard", "•W€•`‰æ");
-	lua_settablevalue(L, "advanced", "Šg’£•`‰æ");
-	lua_settablevalue(L, "movie", "“®‰æƒtƒ@ƒCƒ‹");
-	lua_settablevalue(L, "image", "‰æ‘œƒtƒ@ƒCƒ‹");
-	lua_settablevalue(L, "audio", "‰¹ºƒtƒ@ƒCƒ‹");
-	lua_settablevalue(L, "text", "ƒeƒLƒXƒg");
-	lua_settablevalue(L, "figure", "}Œ`");
-	lua_settablevalue(L, "framebuffer", "ƒtƒŒ[ƒ€ƒoƒbƒtƒ@");
-	lua_settablevalue(L, "wave", "‰¹º”gŒ`•\¦");
-	lua_settablevalue(L, "scene", "ƒV[ƒ“");
-	lua_settablevalue(L, "scene_audio", "ƒV[ƒ“(‰¹º)");
-	lua_settablevalue(L, "before", "’¼‘OƒIƒuƒWƒFƒNƒg");
-	lua_settablevalue(L, "particle", "ƒp[ƒeƒBƒNƒ‹o—Í");
-	lua_settablevalue(L, "custom_object", "ƒJƒXƒ^ƒ€ƒIƒuƒWƒFƒNƒg");
-	lua_settablevalue(L, "time", "ŠÔ§Œä");
-	lua_settablevalue(L, "group", "ƒOƒ‹[ƒv§Œä");
-	lua_settablevalue(L, "camera", "ƒJƒƒ‰§Œä");
-	lua_settablevalue(L, "camera_effect", "ƒJƒƒ‰Œø‰Ê");
-	lua_settablevalue(L, "effect", "ƒtƒBƒ‹ƒ^Œø‰Ê");
-	lua_settablevalue(L, "filter", "ƒtƒBƒ‹ƒ^ƒIƒuƒWƒFƒNƒg");
+	lua_settablevalue(L, "standard", "æ¨™æº–æç”»");
+	lua_settablevalue(L, "advanced", "æ‹¡å¼µæç”»");
+	lua_settablevalue(L, "movie", "å‹•ç”»ãƒ•ã‚¡ã‚¤ãƒ«");
+	lua_settablevalue(L, "image", "ç”»åƒãƒ•ã‚¡ã‚¤ãƒ«");
+	lua_settablevalue(L, "audio", "éŸ³å£°ãƒ•ã‚¡ã‚¤ãƒ«");
+	lua_settablevalue(L, "text", "ãƒ†ã‚­ã‚¹ãƒˆ");
+	lua_settablevalue(L, "figure", "å›³å½¢");
+	lua_settablevalue(L, "framebuffer", "ãƒ•ãƒ¬ãƒ¼ãƒ ãƒãƒƒãƒ•ã‚¡");
+	lua_settablevalue(L, "wave", "éŸ³å£°æ³¢å½¢è¡¨ç¤º");
+	lua_settablevalue(L, "scene", "ã‚·ãƒ¼ãƒ³");
+	lua_settablevalue(L, "scene_audio", "ã‚·ãƒ¼ãƒ³(éŸ³å£°)");
+	lua_settablevalue(L, "before", "ç›´å‰ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ");
+	lua_settablevalue(L, "particle", "ãƒ‘ãƒ¼ãƒ†ã‚£ã‚¯ãƒ«å‡ºåŠ›");
+	lua_settablevalue(L, "custom_object", "ã‚«ã‚¹ã‚¿ãƒ ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ");
+	lua_settablevalue(L, "time", "æ™‚é–“åˆ¶å¾¡");
+	lua_settablevalue(L, "group", "ã‚°ãƒ«ãƒ¼ãƒ—åˆ¶å¾¡");
+	lua_settablevalue(L, "camera", "ã‚«ãƒ¡ãƒ©åˆ¶å¾¡");
+	lua_settablevalue(L, "camera_effect", "ã‚«ãƒ¡ãƒ©åŠ¹æœ");
+	lua_settablevalue(L, "effect", "ãƒ•ã‚£ãƒ«ã‚¿åŠ¹æœ");
+	lua_settablevalue(L, "filter", "ãƒ•ã‚£ãƒ«ã‚¿ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ");
 
 	lua_setfield(L, -2, name);
 }

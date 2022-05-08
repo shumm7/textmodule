@@ -1,3 +1,5 @@
+﻿#include "tmstring.hpp"
+
 #include <lua.hpp>
 #include <iostream>
 #include <chrono>
@@ -5,19 +7,18 @@
 #include <mecab.h>
 #include <random>
 #include <regex>
-#include <fmt/core.h>
-#include <fmt/format.h>
+#include <format>
+#include <unicode/translit.h>
 
-#include "tmstring.h"
-#include "mecab.h"
-#include "textmodule_exception.h"
-#include "textmodule_lua.h"
-#include "textmodule_string.h"
+#include "mecab.hpp"
+#include "textmodule_exception.hpp"
+#include "textmodule_lua.hpp"
+#include "textmodule_string.hpp"
 
 int tmstring_hiragana(lua_State* L) {
 	try {
-		lua_Wstring katakana = tm_towstring(L, 1);
-		lua_pushwstring(L, toKatakana(katakana, true));
+		lua_Ustring str = tm_toustring(L, 1);
+		lua_pushustring(L, KatakanaToHiragana(str));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -28,8 +29,8 @@ int tmstring_hiragana(lua_State* L) {
 
 int tmstring_katakana(lua_State* L) {
 	try {
-		lua_Wstring hiragana = tm_towstring(L, 1);
-		lua_pushwstring(L, toKatakana(hiragana, false));
+		lua_Ustring str = tm_toustring(L, 1);
+		lua_pushustring(L, HiraganaToKatakana(str));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -40,10 +41,8 @@ int tmstring_katakana(lua_State* L) {
 
 int tmstring_halfwidth(lua_State* L) {
 	try {
-		lua_Wstring fullwidth = tm_towstring(L, 1);
-		lua_Boolean mode = tm_toboolean_s(L, 2, true);
-
-		lua_pushwstring(L, toHalfwidth(fullwidth, false, mode));
+		lua_Ustring str = tm_toustring(L, 1);
+		lua_pushustring(L, FullwidthToHalfwidth(str));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -54,10 +53,8 @@ int tmstring_halfwidth(lua_State* L) {
 
 int tmstring_fullwidth(lua_State* L) {
 	try {
-		lua_Wstring halfwidth = tm_towstring(L, 1);
-		lua_Boolean mode = tm_toboolean_s(L, 2, true);
-
-		lua_pushwstring(L, toHalfwidth(halfwidth, true, mode));
+		lua_Ustring str = tm_toustring(L, 1);
+		lua_pushustring(L, HalfwidthToFullwidth(str));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -65,6 +62,67 @@ int tmstring_fullwidth(lua_State* L) {
 		return 1;
 	}
 }
+
+int tmstring_fromlatin_h(lua_State* L) {
+	try {
+		lua_Ustring str = tm_toustring(L, 1);
+		if(tm_toboolean_s(L, 2, false))
+			lua_pushustring(L, LatinBGNToHiragana(str));
+		else
+			lua_pushustring(L, LatinToHiragana(str));
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int tmstring_fromlatin_k(lua_State* L) {
+	try {
+		lua_Ustring str = tm_toustring(L, 1);
+		if (tm_toboolean_s(L, 2, false))
+			lua_pushustring(L, LatinBGNToKatakana(str));
+		else
+			lua_pushustring(L, LatinToKatakana(str));
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int tmstring_latin_h(lua_State* L) {
+	try {
+		lua_Ustring str = tm_toustring(L, 1);
+		if (tm_toboolean_s(L, 2, false))
+			lua_pushustring(L, HiraganaToLatinBGN(str));
+		else
+			lua_pushustring(L, HiraganaToLatin(str));
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int tmstring_latin_k(lua_State* L) {
+	try {
+		lua_Ustring str = tm_toustring(L, 1);
+		if (tm_toboolean_s(L, 2, false))
+			lua_pushustring(L, KatakanaToLatinBGN(str));
+		else
+			lua_pushustring(L, KatakanaToLatin(str));
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
 
 int tmstring_mojibake(lua_State* L) {
 	try {
@@ -507,6 +565,7 @@ int tmstring_chars(lua_State* L) {
 		return 1;
 	}
 }
+
 
 void luaReg_tmstring(lua_State* L, const char* name, bool reg) {
 	if (reg) {

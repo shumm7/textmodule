@@ -1,14 +1,16 @@
+#include "string.hpp"
+
 #include <lua.hpp>
 #include <iostream>
 #include <regex>
 #include <fmt/core.h>
 #include <fmt/format.h>
+#include <fmt/chrono.h>
 #include <vector>
 
-#include "string.h"
-#include "textmodule_lua.h"
-#include "textmodule_string.h"
-#include "textmodule_math.h"
+#include "textmodule_lua.hpp"
+#include "textmodule_string.hpp"
+#include "textmodule_math.hpp"
 
 int string_find(lua_State* L) {
 	try {
@@ -388,6 +390,9 @@ int string_format(lua_State* L) {
 					store.push_back("nil");
 				else if (tp == LUA_TNONE)
 					break;
+				else if (tp == LUA_TUSERDATA) {
+					store.push_back(lua_topointer(L, i));
+				}
 				else
 					store.push_back(lua_topointer(L, i));
 

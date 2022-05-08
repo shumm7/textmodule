@@ -372,3 +372,5 @@ FodyWeavers.xsd
 /lua
 /cpprestsdk.v142.2.10.15
 /QR-Code-generator
+/aviutl_exedit_sdk
+/fmt

@@ -1,10 +1,11 @@
+#include "bit.hpp"
+
 #include <lua.hpp>
 #include <bit>
 #include <bitset>
 #include <sstream>
 
-#include "bit.h"
-#include "textmodule_lua.h"
+#include "textmodule_lua.hpp"
 
 int bit_lshift(lua_State* L) {
     try {

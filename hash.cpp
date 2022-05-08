@@ -1,3 +1,5 @@
+#include "hash.hpp"
+
 #include <lua.hpp>
 #include <iostream>
 #include <algorithm>
@@ -10,9 +12,8 @@
 #include "hash-library/crc32.h"
 #include "hash-library/hmac.h"
 
-#include "hash.h"
-#include "textmodule_lua.h"
-#include "textmodule_string.h"
+#include "textmodule_lua.hpp"
+#include "textmodule_string.hpp"
 
 int hash_sha256(lua_State* L) {
 	try {

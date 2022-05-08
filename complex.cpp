@@ -1,13 +1,14 @@
+#include "complex.hpp"
+
 #include <lua.hpp>
 #include <iostream>
 #include <complex>
 #include <cmath>
 
-#include "complex.h"
-#include "textmodule_lua.h"
-#include "textmodule_string.h"
-#include "textmodule_exception.h"
-#include "textmodule_geometry.h"
+#include "textmodule_lua.hpp"
+#include "textmodule_string.hpp"
+#include "textmodule_exception.hpp"
+#include "textmodule_geometry.hpp"
 
 int complex_new(lua_State* L) {
 	try {

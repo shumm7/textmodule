@@ -1,10 +1,11 @@
+#include "utf8.hpp"
+
 #include <lua.hpp>
 #include <iostream>
 #include <vector>
 
-#include "utf8.h"
-#include "textmodule_lua.h"
-#include "textmodule_string.h"
+#include "textmodule_lua.hpp"
+#include "textmodule_string.hpp"
 
 int utf8_byte(lua_State* L) {
 	try {

@@ -1,3 +1,4 @@
+#pragma once
 #include <lua.hpp>
 
 int cmath_cbrt(lua_State* L);
@@ -67,6 +68,7 @@ static luaL_Reg TEXTMODULE_CMATH_REG[] = {
 	{"gcd", cmath_gcd},
 	{"lcm", cmath_lcm},
 	{"fact", cmath_fact},
+	{"comb", cmath_comb},
 	{"perm", cmath_perm},
 	{"rep_comb", cmath_rep_comb},
 	{"rep_perm", cmath_rep_perm},

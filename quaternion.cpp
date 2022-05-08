@@ -1,12 +1,13 @@
+#include "quaternion.hpp"
+
 #include <lua.hpp>
 #include <cmath>
 #include <iostream>
 
-#include "quaternion.h"
-#include "textmodule_lua.h"
-#include "textmodule_string.h"
-#include "textmodule_exception.h"
-#include "textmodule_geometry.h"
+#include "textmodule_lua.hpp"
+#include "textmodule_string.hpp"
+#include "textmodule_exception.hpp"
+#include "textmodule_geometry.hpp"
 
 int quaternion_new(lua_State* L) {
 	try {
@@ -96,12 +97,12 @@ int quaternion_lookrot(lua_State* L) {
 		if (lua_type(L, 1) == LUA_TNONE)
 			v1 = new lua_Vector3(0, 0, 1);
 		else
-			v1 = vector3_check(L, 1);
+			v1 = tm_tovector3(L, 1);
 
 		if (lua_type(L, 2) == LUA_TNONE)
 			v2 = new lua_Vector3(0, 1, 0);
 		else
-			v2 = vector3_check(L, 2);
+			v2 = tm_tovector3(L, 2);
 
 
 		lua_Quaternion* ret = lua_pushquaternion(L);
@@ -316,12 +317,12 @@ int quaternion____mul(lua_State* L) {
 
 		if (tp == LUA_TUSERDATA) {
 			if (luaL_checkmetatable(L, 2, TEXTMODULE_QUATERNION)) {
-				lua_Quaternion* val2 = quaternion_check(L, 2);
+				lua_Quaternion* val2 = tm_toquaternion(L, 2);
 				lua_pushquaternion(L, (*val1) * (*val2));
 				return 1;
 			}
 			else if (luaL_checkmetatable(L, 2, TEXTMODULE_VECTOR3)) {
-				lua_Vector3* val2 = vector3_check(L, 2);
+				lua_Vector3* val2 = tm_tovector3(L, 2);
 				lua_pushvector3(L, (*val1) * (*val2));
 				return 1;
 			}

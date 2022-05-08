@@ -1,14 +1,16 @@
+#include "cmath.hpp"
+
 #include <lua.hpp>
 #include <iostream>
 #include <cmath>
 #include <numbers>
 #include <numeric>
 
-#include "cmath.h"
-#include "textmodule_lua.h"
-#include "textmodule_math.h"
-#include "textmodule_geometry.h"
-#include "textmodule_exception.h"
+#include "textmodule_lua.hpp"
+#include "textmodule_math.hpp"
+#include "textmodule_geometry.hpp"
+#include "textmodule_exception.hpp"
+#include "bignumber.hpp"
 
 int cmath_cbrt(lua_State* L) {
 	try {
@@ -202,7 +204,7 @@ int cmath_lcm(lua_State* L) {
 
 int cmath_fact(lua_State* L) {
 	try {
-		lua_pushnumber(L, factorial(tm_tointeger(L, 1)));
+		lua_pushbignumber(L, factorial(tm_tointeger(L, 1)));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -213,7 +215,7 @@ int cmath_fact(lua_State* L) {
 
 int cmath_comb(lua_State* L) {
 	try {
-		lua_pushnumber(L, combination(tm_tointeger(L, 1), tm_tointeger(L, 2)));
+		lua_pushbignumber(L, combination(tm_tointeger(L, 1), tm_tointeger(L, 2)));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -224,7 +226,7 @@ int cmath_comb(lua_State* L) {
 
 int cmath_perm(lua_State* L) {
 	try {
-		lua_pushnumber(L, permutation(tm_tointeger(L, 1), tm_tointeger(L, 2)));
+		lua_pushbignumber(L, permutation(tm_tointeger(L, 1), tm_tointeger(L, 2)));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -235,7 +237,7 @@ int cmath_perm(lua_State* L) {
 
 int cmath_rep_comb(lua_State* L) {
 	try {
-		lua_pushnumber(L, repetition_combination(tm_tointeger(L, 1), tm_tointeger(L, 2)));
+		lua_pushbignumber(L, repetition_combination(tm_tointeger(L, 1), tm_tointeger(L, 2)));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -246,7 +248,7 @@ int cmath_rep_comb(lua_State* L) {
 
 int cmath_rep_perm(lua_State* L) {
 	try {
-		lua_pushnumber(L, repetition_permutation(tm_tointeger(L, 1), tm_tointeger(L, 2)));
+		lua_pushbignumber(L, repetition_permutation(tm_tointeger(L, 1), tm_tointeger(L, 2)));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -257,7 +259,7 @@ int cmath_rep_perm(lua_State* L) {
 
 int cmath_circle_perm(lua_State* L) {
 	try {
-		lua_pushnumber(L, circular_permutation(tm_tointeger(L, 1)));
+		lua_pushbignumber(L, circular_permutation(tm_tointeger(L, 1)));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -650,39 +652,53 @@ int cmath_bezier(lua_State* L) {
 }
 
 
+void luaReg_const_cmath(lua_State* L) {
+	lua_settablevalue(L, "rad_to_deg", 180.0 / std::numbers::pi);
+	lua_settablevalue(L, "deg_to_rad", std::numbers::pi / 180.0);
+	lua_settablevalue(L, "e", std::numbers::e);
+	lua_settablevalue(L, "napier", std::numbers::e);
+	lua_settablevalue(L, "log2e", std::numbers::log2e);
+	lua_settablevalue(L, "log10e", std::numbers::log10e);
+	lua_settablevalue(L, "pi", std::numbers::pi);
+	lua_settablevalue(L, "inv_pi", std::numbers::inv_pi);
+	lua_settablevalue(L, "inv_sqrtpi", std::numbers::inv_sqrtpi);
+	lua_settablevalue(L, "ln2", std::numbers::ln2);
+	lua_settablevalue(L, "ln10", std::numbers::ln10);
+	lua_settablevalue(L, "sqrt2", std::numbers::sqrt2);
+	lua_settablevalue(L, "sqrt3", std::numbers::sqrt3);
+	lua_settablevalue(L, "inv_sqrt3", std::numbers::inv_sqrt3);
+	lua_settablevalue(L, "egamma", std::numbers::egamma);
+	lua_settablevalue(L, "phi", std::numbers::phi);
+	lua_settablevalue(L, "huge", HUGE_VAL);
+	lua_settablevalue(L, "infinity", std::numeric_limits<lua_Number>::infinity());
+	lua_settablevalue(L, "negative_infinity", -std::numeric_limits<lua_Number>::infinity());
+	lua_settablevalue(L, "nan", NAN);
+	lua_settablevalue(L, "quiet_nan", std::numeric_limits<lua_Number>::quiet_NaN());
+	lua_settablevalue(L, "signaling_nan", std::numeric_limits<lua_Number>::signaling_NaN());
+	lua_settablevalue(L, "min_exponent", std::numeric_limits<lua_Number>::min_exponent10);
+	lua_settablevalue(L, "max_exponent", std::numeric_limits<lua_Number>::max_exponent10);
+	lua_settablevalue(L, "digits", std::numeric_limits<lua_Number>::digits10);
+	lua_settablevalue(L, "denorm_min", std::numeric_limits<lua_Number>::denorm_min());
+	lua_settablevalue(L, "epsilon", std::numeric_limits<lua_Number>::epsilon());
+}
+
 void luaReg_cmath(lua_State* L, const char* name, bool reg) {
 	if (reg) {
 		lua_newtable(L);
+		luaReg_const_cmath(L);
 		luaL_register(L, NULL, TEXTMODULE_CMATH_REG);
-
-		lua_settablevalue(L, "rad_to_deg", 180.0 / std::numbers::pi);
-		lua_settablevalue(L, "deg_to_rad", std::numbers::pi / 180.0);
-		lua_settablevalue(L, "e", std::numbers::e);
-		lua_settablevalue(L, "napier", std::numbers::e);
-		lua_settablevalue(L, "log2e", std::numbers::log2e);
-		lua_settablevalue(L, "log10e", std::numbers::log10e);
-		lua_settablevalue(L, "pi", std::numbers::pi);
-		lua_settablevalue(L, "inv_pi", std::numbers::inv_pi);
-		lua_settablevalue(L, "inv_sqrtpi", std::numbers::inv_sqrtpi);
-		lua_settablevalue(L, "ln2", std::numbers::ln2);
-		lua_settablevalue(L, "ln10", std::numbers::ln10);
-		lua_settablevalue(L, "sqrt2", std::numbers::sqrt2);
-		lua_settablevalue(L, "sqrt3", std::numbers::sqrt3);
-		lua_settablevalue(L, "inv_sqrt3", std::numbers::inv_sqrt3);
-		lua_settablevalue(L, "egamma", std::numbers::egamma);
-		lua_settablevalue(L, "phi", std::numbers::phi);
-		lua_settablevalue(L, "huge", HUGE_VAL);
-		lua_settablevalue(L, "infinity", std::numeric_limits<lua_Number>::infinity());
-		lua_settablevalue(L, "negative_infinity", -std::numeric_limits<lua_Number>::infinity());
-		lua_settablevalue(L, "nan", NAN);
-		lua_settablevalue(L, "quiet_nan", std::numeric_limits<lua_Number>::quiet_NaN());
-		lua_settablevalue(L, "signaling_nan", std::numeric_limits<lua_Number>::signaling_NaN());
-		lua_settablevalue(L, "min_exponent", std::numeric_limits<lua_Number>::min_exponent10);
-		lua_settablevalue(L, "max_exponent", std::numeric_limits<lua_Number>::max_exponent10);
-		lua_settablevalue(L, "digits", std::numeric_limits<lua_Number>::digits10);
-		lua_settablevalue(L, "denorm_min", std::numeric_limits<lua_Number>::denorm_min());
-		lua_settablevalue(L, "epsilon", std::numeric_limits<lua_Number>::epsilon());
-
+		luaL_register(L, NULL, TEXTMODULE_BIGNUMBER_REG);
 		lua_setfield(L, -2, name);
+
+		//bignumber (metatable)
+		luaL_newmetatable(L, TEXTMODULE_BIGNUMBER); //add metatable
+		luaL_register(L, NULL, TEXTMODULE_BIGNUMBER_META_REG);
+
+		lua_pushstring(L, "__index"); //add __index
+		lua_newtable(L);
+		luaL_register(L, NULL, TEXTMODULE_BIGNUMBER_META_REG);
+		lua_settable(L, -3);
+
+		lua_pop(L, 1); //remove metatable
 	}
 }

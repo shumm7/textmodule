@@ -1,13 +1,14 @@
+#include "pixel.hpp"
+
 #include <lua.hpp>
 #include <iostream>
 
-#include "pixel.h"
-#include "textmodule.h"
-#include "textmodule_math.h"
-#include "textmodule_string.h"
-#include "textmodule_color.h"
-#include "textmodule_lua.h"
-#include "textmodule_exception.h"
+#include "textmodule.hpp"
+#include "textmodule_math.hpp"
+#include "textmodule_string.hpp"
+#include "textmodule_color.hpp"
+#include "textmodule_lua.hpp"
+#include "textmodule_exception.hpp"
 
 int pixel_new(lua_State* L) {
 	try {

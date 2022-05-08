@@ -1,13 +1,14 @@
+#include "colorlist.hpp"
+
 #include <lua.hpp>
 #include <csv.h>
 #include <vector>
 #include <fstream>
 
-#include "colorlist.h"
-#include "textmodule_lua.h"
-#include "textmodule_string.h"
-#include "textmodule_color.h"
-#include "textmodule_exception.h"
+#include "textmodule_lua.hpp"
+#include "textmodule_string.hpp"
+#include "textmodule_color.hpp"
+#include "textmodule_exception.hpp"
 
 #define LIST_DIRECTORY ".\\textmodule\\color\\"
 

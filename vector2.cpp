@@ -1,12 +1,13 @@
+#include "vector2.hpp"
+
 #include <lua.hpp>
 #include <cmath>
 #include <iostream>
 
-#include "vector2.h"
-#include "textmodule_lua.h"
-#include "textmodule_string.h"
-#include "textmodule_exception.h"
-#include "textmodule_geometry.h"
+#include "textmodule_lua.hpp"
+#include "textmodule_string.hpp"
+#include "textmodule_exception.hpp"
+#include "textmodule_geometry.hpp"
 
 int vector2_new(lua_State* L) {
 	try {
