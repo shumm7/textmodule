@@ -23,6 +23,7 @@
 #include "ease.hpp"
 #include "device.hpp"
 #include "time.hpp"
+#include "json.hpp"
 
 #include "complex.hpp"
 #include "vector2.hpp"
@@ -34,39 +35,6 @@
 #include "color.hpp"
 #include "pixel.hpp"
 #include "image.hpp"
-
-void luaReg(lua_State* L, nlohmann::json o) {
-	luaReg_base(L, getOptionParamB(o, OPTION_VAPI, API_BASE)); //base
-	luaReg_debug(L, API_DEBUG, true); //debug
-	luaReg_string(L, API_STRING, getOptionParamB(o, OPTION_VAPI, API_STRING)); //string
-	luaReg_tmstring(L, API_TMSTRING, getOptionParamB(o, OPTION_VAPI, API_TMSTRING)); //tmstring
-	luaReg_os(L, API_OS, getOptionParamB(o, OPTION_VAPI, API_OS)); //os
-	luaReg_utf8(L, API_UTF8, getOptionParamB(o, OPTION_VAPI, API_UTF8)); //utf8
-	luaReg_clipboard(L, API_CLIPBOARD, getOptionParamB(o, OPTION_VAPI, API_CLIPBOARD)); //clipboard
-	luaReg_filesystem(L, API_FILESYSTEM, getOptionParamB(o, OPTION_VAPI, API_FILESYSTEM)); //filesystem
-	luaReg_hash(L, API_HASH, getOptionParamB(o, OPTION_VAPI, API_HASH)); //hash
-	luaReg_http(L, API_HTTP, getOptionParamB(o, OPTION_VAPI, API_HTTP)); //http
-	luaReg_cmath(L, API_CMATH, getOptionParamB(o, OPTION_VAPI, API_CMATH)); //math
-	luaReg_random(L, API_RANDOM, getOptionParamB(o, OPTION_VAPI, API_RANDOM)); //random
-	luaReg_bit(L, API_BIT, getOptionParamB(o, OPTION_VAPI, API_BIT)); //bit
-	luaReg_qrcode(L, API_QRCODE, getOptionParamB(o, OPTION_VAPI, API_QRCODE)); //qrcode
-	luaReg_obj(L, API_OBJ, getOptionParamB(o, OPTION_VAPI, API_OBJ)); //obj
-	luaReg_ease(L, API_EASE, getOptionParamB(o, OPTION_VAPI, API_EASE)); //ease
-	luaReg_device(L, API_DEVICE, getOptionParamB(o, OPTION_VAPI, API_DEVICE)); //device
-	luaReg_time(L, API_TIME, getOptionParamB(o, OPTION_VAPI, API_TIME)); //time
-
-	//color
-	luaReg_color(L, API_COLOR, getOptionParamB(o, OPTION_VAPI, API_COLOR, API_COLOR)); //color
-	luaReg_pixel(L, API_PIXEL, getOptionParamB(o, OPTION_VAPI, API_COLOR, API_PIXEL)); //pixel
-	//luaReg_image(L, API_IMAGE, getOptionParamB(o, OPTION_VAPI, API_COLOR, API_IMAGE)); //image
-
-	//geometry
-	luaReg_complex(L, API_COMPLEX, getOptionParamB(o, OPTION_VAPI, API_GEOMETRY, API_COMPLEX)); //complex
-	luaReg_vector2(L, API_VECTOR2, getOptionParamB(o, OPTION_VAPI, API_GEOMETRY, API_VECTOR2)); //vector2
-	luaReg_vector3(L, API_VECTOR3, getOptionParamB(o, OPTION_VAPI, API_GEOMETRY, API_VECTOR3)); //vector3
-	luaReg_vector4(L, API_VECTOR4, getOptionParamB(o, OPTION_VAPI, API_GEOMETRY, API_VECTOR4)); //vector4
-	luaReg_quaternion(L, API_QUATERNION, getOptionParamB(o, OPTION_VAPI, API_GEOMETRY, API_QUATERNION)); //quaternion
-}
 
 void luaAlias(lua_State* L, nlohmann::json o) {
 	luaReg_tmstring(L,
@@ -90,6 +58,50 @@ void luaAlias(lua_State* L, nlohmann::json o) {
 	);
 }
 
+void luaReg(lua_State* L, nlohmann::json o, const char* module) {
+	//create base table
+	static luaL_Reg none[] = {
+		{nullptr, nullptr}
+	};
+	luaL_register(L, module, none);
+
+	//module
+	luaReg_base(L, getOptionParamB(o, OPTION_VAPI, API_BASE)); //base
+	luaReg_debug(L, API_DEBUG, true); //debug
+	luaReg_string(L, API_STRING, getOptionParamB(o, OPTION_VAPI, API_STRING)); //string
+	luaReg_tmstring(L, API_TMSTRING, getOptionParamB(o, OPTION_VAPI, API_TMSTRING)); //tmstring
+	luaReg_os(L, API_OS, getOptionParamB(o, OPTION_VAPI, API_OS)); //os
+	luaReg_utf8(L, API_UTF8, getOptionParamB(o, OPTION_VAPI, API_UTF8)); //utf8
+	luaReg_clipboard(L, API_CLIPBOARD, getOptionParamB(o, OPTION_VAPI, API_CLIPBOARD)); //clipboard
+	luaReg_filesystem(L, API_FILESYSTEM, getOptionParamB(o, OPTION_VAPI, API_FILESYSTEM)); //filesystem
+	luaReg_hash(L, API_HASH, getOptionParamB(o, OPTION_VAPI, API_HASH)); //hash
+	luaReg_http(L, API_HTTP, getOptionParamB(o, OPTION_VAPI, API_HTTP)); //http
+	luaReg_cmath(L, API_CMATH, getOptionParamB(o, OPTION_VAPI, API_CMATH)); //math
+	luaReg_random(L, API_RANDOM, getOptionParamB(o, OPTION_VAPI, API_RANDOM)); //random
+	luaReg_bit(L, API_BIT, getOptionParamB(o, OPTION_VAPI, API_BIT)); //bit
+	luaReg_qrcode(L, API_QRCODE, getOptionParamB(o, OPTION_VAPI, API_QRCODE)); //qrcode
+	luaReg_obj(L, API_OBJ, getOptionParamB(o, OPTION_VAPI, API_OBJ)); //obj
+	luaReg_ease(L, API_EASE, getOptionParamB(o, OPTION_VAPI, API_EASE)); //ease
+	luaReg_device(L, API_DEVICE, getOptionParamB(o, OPTION_VAPI, API_DEVICE)); //device
+	luaReg_time(L, API_TIME, getOptionParamB(o, OPTION_VAPI, API_TIME)); //time
+	luaReg_json(L, API_JSON, getOptionParamB(o, OPTION_VAPI, API_JSON)); //time
+
+	//color
+	luaReg_color(L, API_COLOR, getOptionParamB(o, OPTION_VAPI, API_COLOR, API_COLOR)); //color
+	luaReg_pixel(L, API_PIXEL, getOptionParamB(o, OPTION_VAPI, API_COLOR, API_PIXEL)); //pixel
+	//luaReg_image(L, API_IMAGE, getOptionParamB(o, OPTION_VAPI, API_COLOR, API_IMAGE)); //image
+
+	//geometry
+	luaReg_complex(L, API_COMPLEX, getOptionParamB(o, OPTION_VAPI, API_GEOMETRY, API_COMPLEX)); //complex
+	luaReg_vector2(L, API_VECTOR2, getOptionParamB(o, OPTION_VAPI, API_GEOMETRY, API_VECTOR2)); //vector2
+	luaReg_vector3(L, API_VECTOR3, getOptionParamB(o, OPTION_VAPI, API_GEOMETRY, API_VECTOR3)); //vector3
+	luaReg_vector4(L, API_VECTOR4, getOptionParamB(o, OPTION_VAPI, API_GEOMETRY, API_VECTOR4)); //vector4
+	luaReg_quaternion(L, API_QUATERNION, getOptionParamB(o, OPTION_VAPI, API_GEOMETRY, API_QUATERNION)); //quaternion
+
+	// alias
+	luaAlias(L, o);
+}
+
 void luaGlobal(lua_State* L, nlohmann::json o) {
 	luaGlobal_clipboard(L, API_CLIPBOARD, getOptionParamB(o, OPTION_VAPI_GLOBAL, API_CLIPBOARD));
 	luaGlobal_hash(L, API_HASH, getOptionParamB(o, OPTION_VAPI_GLOBAL, API_HASH));
@@ -103,14 +115,18 @@ void luaGlobal(lua_State* L, nlohmann::json o) {
 	luaGlobal_quaternion(L, API_QUATERNION, getOptionParamB(o, OPTION_VAPI_GLOBAL, API_GEOMETRY, API_QUATERNION));
 }
 
+
 int luaSetup(lua_State* L) {
 	nlohmann::json option = getOption();
 
 	// Luaインスタンスに変数を登録
 	if (getOptionParamB(option, OPTION_VMODULE)) {
-		luaReg(L, option);
-		luaAlias(L, option);
-		luaGlobal(L, option);
+		luaReg(L, option, MODULE_NAME); //main module
+
+		if(getOptionParamB(option, OPTION_VMODULE_ALIAS)) // tm alias
+			luaReg(L, option, ALIAS_MODULE_NAME);
+
+		luaGlobal(L, option); //global
 	}
 
 	// バージョンチェック

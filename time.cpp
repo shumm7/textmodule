@@ -174,6 +174,32 @@ int time___sub(lua_State* L) {
 	}
 }
 
+int time___type(lua_State* L) {
+	try {
+		lua_pushstring(L, "clock");
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int time___tonumber(lua_State* L) {
+	try {
+		lua_Clock* time = tm_toclock(L, 1);
+
+		long long duration = time_get_duration((*time).time_since_epoch(), 4);
+		lua_pushnumber(L, duration);
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+
 int time_duration(lua_State* L) {
 	try {
 		lua_Clock* time1 = tm_toclock(L, 1);
@@ -202,7 +228,6 @@ int time_epoch(lua_State* L) {
 		return 1;
 	}
 }
-
 
 int time_localize(lua_State* L) {
 	try {

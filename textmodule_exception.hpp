@@ -1,5 +1,8 @@
 #pragma once
 
+//general
+#define WRONG_NUMBER_OF_ARGS "wrong number of arguments"
+
 //device
 #define JOYSTICK_NOTFOUND "the specified joystick is not connected"
 #define CARD_NO_SERVICE "the smart card resource manager is not running"

@@ -365,6 +365,17 @@ int vector2____newindex(lua_State* L) {
 	}
 }
 
+int vector2____type(lua_State* L) {
+	try {
+		lua_pushstring(L, "vector2");
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
 int vector2__abs(lua_State* L) {
 	try {
 		lua_pushnumber(L, g_vector2_abs(*tm_tovector2(L, 1)));

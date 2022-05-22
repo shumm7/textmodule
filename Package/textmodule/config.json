@@ -1,5 +1,6 @@
 {
   "module": true,
+  "module-alias": true,
   "version-check": false,
   "api": {
     "base": true,
@@ -12,9 +13,7 @@
     "utf8": true,
     "color": {
        "color": true,
-       "rgb": true,
-       "hsv": true,
-       "hsl": true
+       "pixel": true
     },
     "geometry": {
        "vector2": true,
@@ -29,7 +28,9 @@
     "http": true,
     "qrcode": true,
     "object": true,
-    "ease": true
+    "ease": true,
+    "device": true,
+    "time": true
   },
   "api-alias": {
     "tmstring": true,

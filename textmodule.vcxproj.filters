@@ -201,6 +201,9 @@
     <ClCompile Include="bignumber.cpp">
       <Filter>ソース ファイル\function\submodule</Filter>
     </ClCompile>
+    <ClCompile Include="json.cpp">
+      <Filter>ソース ファイル\function</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="string.hpp">
@@ -349,6 +352,9 @@
     </ClInclude>
     <ClInclude Include="textmodule_type.hpp">
       <Filter>ヘッダー ファイル\lib</Filter>
+    </ClInclude>
+    <ClInclude Include="json.hpp">
+      <Filter>ヘッダー ファイル\function</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

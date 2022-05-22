@@ -12,6 +12,9 @@ typedef Eigen::Vector4d Vector4;
 typedef Eigen::Matrix3d Matrix3;
 typedef Eigen::AngleAxisd AngleAxis;
 
+typedef struct ColorItem { std::wstring color = L""; std::wstring name = L""; std::wstring japanese = L""; std::wstring english = L""; };
+typedef std::vector<ColorItem> ColorList;
+
 typedef struct { double r; double g; double b; double a; }st_rgba;
 typedef struct { unsigned char r; unsigned char g; unsigned char b; unsigned char a; }st_rgba32;
 typedef struct { unsigned char b; unsigned char g; unsigned char r; unsigned char a; }st_imgpixel;

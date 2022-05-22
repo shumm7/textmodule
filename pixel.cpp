@@ -304,6 +304,17 @@ int pixel____newindex(lua_State* L) {
 	}
 }
 
+int pixel____type(lua_State* L) {
+	try {
+		lua_pushstring(L, "pixel");
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
 
 int pixel_r(lua_State* L) {
 	try {

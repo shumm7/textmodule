@@ -21,6 +21,7 @@ int vector4____lt(lua_State* L);
 int vector4____le(lua_State* L);
 int vector4____index(lua_State* L);
 int vector4____newindex(lua_State* L);
+int vector4____type(lua_State* L);
 
 int vector4__abs(lua_State* L);
 int vector4__norm(lua_State* L);
@@ -78,6 +79,7 @@ static luaL_Reg TEXTMODULE_VECTOR4_META_REG[] = {
 	{"__le", vector4____le},
 	//{"__index", vector4____index},
 	{"__newindex", vector4____newindex},
+	{"__type", vector4____type},
 
 	{"abs", vector4__abs},
 	{"norm", vector4__norm},

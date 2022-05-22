@@ -407,6 +407,17 @@ int vector4____newindex(lua_State* L) {
 	}
 }
 
+int vector4____type(lua_State* L) {
+	try {
+		lua_pushstring(L, "vector4");
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
 int vector4__abs(lua_State* L) {
 	try {
 		lua_Vector4* val1 = tm_tovector4(L, 1);

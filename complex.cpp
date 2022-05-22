@@ -321,6 +321,17 @@ int complex____newindex(lua_State* L) {
 	}
 }
 
+int complex____type(lua_State* L) {
+	try {
+		lua_pushstring(L, "complex");
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
 int complex__abs(lua_State* L) {
 	try {
 		lua_Complex* val1 = tm_tocomplex(L, 1);

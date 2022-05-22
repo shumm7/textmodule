@@ -4,6 +4,7 @@
 #include <random>
 
 #include "textmodule_lua.hpp"
+#include "textmodule_exception.hpp"
 
 int random_minstd_rand0(lua_State* L) {
 	try {
@@ -124,7 +125,7 @@ int random_uniform(lua_State* L) {
 			seed_set = true;
 			break;
 		default:
-			return luaL_error(L, "wrong number of arguments");
+			return luaL_error(L, WRONG_NUMBER_OF_ARGS);
 		}
 
 		if (seed_set) {

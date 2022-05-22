@@ -301,6 +301,17 @@ int color____newindex(lua_State* L) {
 	}
 }
 
+int color____type(lua_State* L) {
+	try {
+		lua_pushstring(L, "color");
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
 
 int color_r(lua_State* L) {
 	try {

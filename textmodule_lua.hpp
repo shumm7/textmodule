@@ -7,6 +7,9 @@
 #include <unicode/unistr.h>
 #include <unicode/ustring.h>
 #include <boost/multiprecision/cpp_dec_float.hpp>
+
+#include <nlohmann/json.hpp>
+
 #include "textmodule_type.hpp"
 
 #define TEXTMODULE_VECTOR2 "Eigen::Vector2d*"
@@ -14,7 +17,8 @@
 #define TEXTMODULE_VECTOR4 "Eigen::Vector4d*"
 #define TEXTMODULE_COMPLEX "std::complex<double>*"
 #define TEXTMODULE_QUATERNION "Eigen::Quaterniond*"
-#define TEXTMODULE_COLORLIST "ColorList"
+#define TEXTMODULE_JSON "nlohmann::json*"
+#define TEXTMODULE_COLORLIST "table ColorList"
 #define TEXTMODULE_COLOR "st_rgba*"
 #define TEXTMODULE_PIXEL "st_rgba32*"
 #define TEXTMODULE_IMAGE "st_imgpixel*"
@@ -39,6 +43,8 @@ typedef bool lua_Boolean;
 typedef utc_clock lua_Clock;
 //Type for 1024 bit integer
 typedef dec_float lua_Bignumber;
+// Type for json
+typedef nlohmann::json lua_Json;
 
 //Type for complex class
 typedef Complex lua_Complex;
@@ -137,6 +143,9 @@ void lua_settablevalue(lua_State* L, const char* key, lua_Boolean value);
 void lua_settablevalue(lua_State* L, const char* key, lua_String value);
 void lua_settablevalue(lua_State* L, const char* key, lua_Sstring value);
 void lua_settablevalue(lua_State* L, const char* key, lua_Wstring value);
+void lua_setfield(lua_State* L, int idx, lua_Sstring k);
+void lua_setfield(lua_State* L, int idx, lua_Wstring k);
+bool lua_isarray(lua_State* L, int idx);
 
 // Clock
 lua_Clock* lua_toclock(lua_State* L, int idx);
@@ -229,3 +238,13 @@ const char* tm_typename(lua_State* L, int idx);
 void lua_printstack(lua_State* L);
 int lua_pushtmstruct(lua_State* L, std::tm* tmstruct);
 void lua_totmstruct(lua_State* L, int idx, std::tm* out);
+bool tm_callmeta(lua_State* L, int obj, const char* event);
+bool tm_callmetan(lua_State* L, int obj, const char* event, int nargs);
+
+// Json Utility
+lua_Json tm_jsonparse(lua_Sstring str);
+lua_Sstring tm_jsondump(lua_Json* j);
+lua_Sstring tm_jsondump(lua_Json* j, int l);
+void tm_pushjson(lua_State* L, lua_Json* j);
+lua_Json tm_tabletojson(lua_State* L, int idx);
+lua_Json tm_tojson(lua_State* L, int idx);

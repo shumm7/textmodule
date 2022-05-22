@@ -19,11 +19,14 @@
 
 #include <fmt/core.h>
 #include <fmt/format.h>
+
 #include <boost/multiprecision/cpp_bin_float.hpp>
 
 #include "textmodule_string.hpp"
 #include "textmodule_math.hpp"
 #include "textmodule_time.hpp"
+
+#define abs_index(L, i)         ((i) > 0 || (i) <= LUA_REGISTRYINDEX ? (i) : lua_gettop(L) + (i) + 1)
 
 // Wstring
 lua_Wstring lua_towstring(lua_State* L, int idx) {
@@ -414,6 +417,36 @@ void lua_settablevalue(lua_State* L, const char* key, lua_Wstring value) {
 	lua_setfield(L, -2, key);
 }
 
+void lua_setfield(lua_State* L, int idx, lua_Sstring k) {
+	lua_setfield(L, idx, k.c_str());
+}
+
+void lua_setfield(lua_State* L, int idx, lua_Wstring k) {
+	lua_setfield(L, idx, WstrToStr(k));
+}
+
+bool lua_isarray(lua_State* L, int idx) {
+	int h = lua_gettop(L);
+
+	bool ret = true;
+	double i = 1;
+
+	lua_pushnil(L);
+	while (lua_next(L, idx) != 0) {
+		if (lua_type(L, -2) == LUA_TNUMBER) {
+			double j = lua_tonumber(L, -2);
+			if (j - i != 0) ret = false;
+		}
+		else ret = false;
+
+		i = i + 1;
+		lua_pop(L, 1);
+	}
+
+	lua_settop(L, h);
+	return ret;
+}
+
 // Clock
 lua_Clock* lua_toclock(lua_State* L, int idx) {
 	return reinterpret_cast<std::chrono::utc_clock::time_point*>(luaL_checkudata(L, idx, TEXTMODULE_CLOCK));
@@ -426,7 +459,7 @@ lua_Clock* tm_toclock(lua_State* L, int idx) {
 
 lua_Clock* tm_toclock_s(lua_State* L, int idx, lua_Clock def) {
 	int tp = lua_type(L, idx);
-	luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNONE, idx, "clock/none expected");
+	luaL_argcheck(L, (tp == LUA_TUSERDATA && luaL_checkmetatable(L, idx, TEXTMODULE_CLOCK)) || tp == LUA_TNONE, idx, "clock/none expected");
 
 	if (tp == LUA_TUSERDATA)
 		return lua_toclock(L, idx);
@@ -743,6 +776,7 @@ lua_Vector4* lua_pushvector4(lua_State* L) {
 	return lua_pushvector4(L, 0, 0, 0, 0);
 }
 
+
 // Color
 lua_Color* lua_tocolor(lua_State* L, int idx) {
 	return reinterpret_cast<lua_Color*>(luaL_checkudata(L, idx, TEXTMODULE_COLOR));
@@ -907,11 +941,15 @@ const char* tm_convtostring(lua_State* L, int idx) {
 			lua_pop(L, 1);
 			return s;
 		}
-
+		const char* n = "";
 		switch (lua_type(L, idx)) {
 		case LUA_TSTRING:
-		case LUA_TNUMBER:
 			return lua_tostring(L, idx);
+		case LUA_TNUMBER:
+			lua_pushvalue(L, idx);
+			n = lua_tostring(L, -1);
+			lua_pop(L, 1);
+			return n;
 		case LUA_TBOOLEAN:
 			return (lua_toboolean(L, idx) ? "true" : "false");
 		case LUA_TNIL:
@@ -927,32 +965,9 @@ const char* tm_convtostring(lua_State* L, int idx) {
 const char* tm_typename(lua_State* L, int idx) {
 	int tp = lua_type(L, idx);
 	if (tp == LUA_TUSERDATA) {
-		if (luaL_checkmetatable(L, idx, TEXTMODULE_COMPLEX))
-			return "complex";
-		else if (luaL_checkmetatable(L, idx, TEXTMODULE_QUATERNION))
-			return "quaternion";
-		else if (luaL_checkmetatable(L, idx, TEXTMODULE_VECTOR2))
-			return "vector2";
-		else if (luaL_checkmetatable(L, idx, TEXTMODULE_VECTOR3))
-			return "vector3";
-		else if (luaL_checkmetatable(L, idx, TEXTMODULE_VECTOR4))
-			return "vector4";
-		else if (luaL_checkmetatable(L, idx, TEXTMODULE_COLOR))
-			return "color";
-		else if (luaL_checkmetatable(L, idx, TEXTMODULE_PIXEL))
-			return "pixel";
-		else if (luaL_checkmetatable(L, idx, LUA_FILEHANDLE))
+		if (luaL_checkmetatable(L, idx, LUA_FILEHANDLE))
 			return "filehandle";
-		else if (luaL_checkmetatable(L, idx, TEXTMODULE_CLOCK))
-			return "clock";
-		else if (luaL_checkmetatable(L, idx, TEXTMODULE_BIGNUMBER))
-			return "bignumber";
 	}
-	else if (tp == LUA_TTABLE) {
-		if (luaL_checkmetatable(L, idx, TEXTMODULE_COLORLIST))
-			return "colorlist";
-	}
-
 	return lua_typename(L, tp);
 }
 
@@ -1004,4 +1019,202 @@ void lua_totmstruct(lua_State* L, int idx, std::tm* out) {
 	Time.tm_hour = time_tm_getfield(L, idx, "hour", 12);
 	Time.tm_min = time_tm_getfield(L, idx, "min", 0);
 	Time.tm_sec = time_tm_getfield(L, idx, "sec", 0);
+}
+
+bool tm_callmeta(lua_State* L, int obj, const char* event) {
+	obj = abs_index(L, obj);
+	if (!luaL_getmetafield(L, obj, event))  /* no metafield? */
+		return false;
+	lua_pushvalue(L, obj);
+	lua_call(L, 1, 1);
+	return true;
+}
+
+bool tm_callmetan(lua_State* L, int obj, const char* event, int nargs) {
+	/* argn: number of arguments (including itself) */
+	if (nargs < 1)
+		return false;
+	if (lua_gettop(L) < nargs)
+		return false;
+
+	obj = abs_index(L, obj);
+
+	bool f;
+	for (int i = 0; i < nargs; i++) {
+		if (luaL_getmetafield(L, obj, event)) {
+			f = true;
+			break;
+		}
+	}
+
+	if (!f) return false; /* no metafield? */
+
+	for (int i = 0; i < nargs; i++)
+		lua_pushvalue(L, obj+i);
+	lua_call(L, nargs, 1);
+	return true;
+}
+
+
+// Json utility
+lua_Json tm_jsonparse(lua_Sstring str) {
+	return lua_Json::parse(str);
+}
+
+lua_Sstring tm_jsondump(lua_Json* j) {
+	return (*j).dump();
+}
+
+lua_Sstring tm_jsondump(lua_Json* j, int l) {
+	return (*j).dump(l);
+}
+
+lua_Json tm_tabletojsonarray(lua_State* L, int idx) {
+	lua_Json ret = lua_Json::array();
+
+	int t;
+	lua_Number num;
+
+	if (!lua_istable(L, idx)) {
+		luaL_argerror(L, idx, "table expected");
+		return ret;
+	}
+
+	lua_pushnil(L);
+	while (lua_next(L, idx) != 0) {
+		switch (lua_type(L, -1)) {
+		case LUA_TNIL:
+		case LUA_TNONE:
+			ret.push_back(nullptr);
+			break;
+		case LUA_TNUMBER:
+			num = lua_tonumber(L, -1);
+			if(isinteger(num))
+				ret.push_back((int)num);
+			else
+				ret.push_back(num);
+			break;
+		case LUA_TSTRING:
+			ret.push_back(lua_tosstring(L, -1));
+			break;
+		case LUA_TBOOLEAN:
+			ret.push_back(lua_toboolean(L, -1));
+			break;
+		case LUA_TTABLE:
+			t = lua_gettop(L);
+			if (lua_isarray(L, t)) {
+				ret.push_back(tm_tabletojsonarray(L, t));
+			}
+			else {
+				ret.push_back(tm_tabletojson(L, t));
+			}
+			break;
+		default:
+			luaL_argerror(L, -1, "invalid argument type");
+			break;
+		}
+
+		lua_pop(L, 1);
+	}
+
+	return ret;
+}
+
+lua_Json tm_tabletojson(lua_State* L, int idx) {
+	lua_Json ret = lua_Json::object();
+	int t;
+	lua_Number num;
+
+	if (!lua_istable(L, idx)) {
+		luaL_argerror(L, idx, "table expected");
+		return ret;
+	}
+
+	if (lua_isarray(L, idx)) {
+		return tm_tabletojsonarray(L, idx);
+	}
+
+	lua_pushnil(L);
+	while (lua_next(L, idx) != 0) {
+		std::string key = tm_convtostring(L, -2);
+		switch (lua_type(L, -1)) {
+		case LUA_TNIL:
+		case LUA_TNONE:
+			ret.emplace(key, nullptr);
+			break;
+		case LUA_TNUMBER:
+			num = lua_tonumber(L, -1);
+			if (isinteger(num))
+				ret.emplace(key, (int)num);
+			else
+				ret.emplace(key, num);
+			break;
+		case LUA_TSTRING:
+			ret.emplace(key, lua_tosstring(L, -1));
+			break;
+		case LUA_TBOOLEAN:
+			ret.emplace(key, lua_toboolean(L, -1));
+			break;
+		case LUA_TTABLE:
+			t = lua_gettop(L);
+			if (lua_isarray(L, t))
+				ret.emplace(key, tm_tabletojsonarray(L, t));
+			else
+				ret.emplace(key, tm_tabletojson(L, t));
+			break;
+		default:
+			luaL_argerror(L, -1, "invalid argument type");
+			break;
+		}
+
+		lua_pop(L, 1);
+	}
+
+	return ret;
+}
+
+void tm_pushjson(lua_State* L, lua_Json* j) {
+	auto x = *j;
+
+	if (x.is_null()) {
+		lua_pushnil(L);
+	}
+	else if (x.is_boolean()) {
+		lua_pushboolean(L, x.get<lua_Boolean>());
+	}
+	else if (x.is_number()) {
+		lua_pushnumber(L, x.get<lua_Number>());
+	}
+	else if (x.is_string()) {
+		lua_pushsstring(L, x.get<lua_Sstring>());
+	}
+	else if (x.is_object()) {
+		lua_newtable(L);
+		for (auto& el_o : x.items()) {
+			tm_pushjson(L, &el_o.value());
+			lua_setfield(L, -2, el_o.key());
+		}
+	}
+	else if (x.is_array()) {
+		lua_newtable(L);
+		int key = 0;
+		for (auto& el_a : x) {
+			lua_pushinteger(L, key + 1);
+			tm_pushjson(L, &el_a);
+			lua_settable(L, -3);
+			key++;
+		}
+	}
+}
+
+lua_Json tm_tojson(lua_State* L, int idx) {
+	int tp = lua_type(L, 1);
+	luaL_argcheck(L, tp == LUA_TSTRING || tp==LUA_TTABLE || tp==LUA_TNONE, 1, "string/table/none expected");
+
+	if (tp == LUA_TSTRING)
+		return tm_jsonparse(lua_tosstring(L, 1));
+	else if (tp == LUA_TTABLE)
+		return tm_tabletojson(L, idx);
+	else
+		return tm_jsonparse("{}");
 }

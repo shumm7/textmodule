@@ -22,6 +22,15 @@ http://www.lua.org/
 Copyright (C) 1994-2003 Tecgraf, PUC-Rio. All rights reserved.  
 This library is licensed under the MIT License.  
 
+### Boost
+https://www.boost.org/
+Copyright Rene Rivera 2006-2007.  
+This library is licensed under the Boost Software License Version 1.0.  
+
+### ICU
+Copyright (c) 1995-2014 International Business Machines Corporation and others. All rights reserved.  
+This library is licensed under the ICU License.  
+
 ### MeCab
 https://taku910.github.io/mecab/  
 MeCab is copyrighted free software by Taku Kudo and Nippon Telegraph and Telephone Corporation.  

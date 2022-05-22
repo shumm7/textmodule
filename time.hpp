@@ -21,6 +21,8 @@ int time_fromtable(lua_State* L);
 int time___tostring(lua_State* L);
 int time___add(lua_State* L);
 int time___sub(lua_State* L);
+int time___type(lua_State* L);
+int time___tonumber(lua_State* L);
 
 int time_duration(lua_State* L);
 int time_epoch(lua_State* L);
@@ -45,9 +47,13 @@ static luaL_Reg TEXTMODULE_TIME_REG[] = {
 static luaL_Reg TEXTMODULE_TIME_META_REG[] = {
 	{"totime", time_totime},
 	{"totable", time_totable},
+
 	{ "__tostring", time___tostring },
 	{ "__add", time___add },
 	{ "__sub", time___sub },
+	{"__type", time___type},
+	{"__tonumber", time___tonumber},
+
 	{"duration", time_duration},
 	{"epoch", time_epoch},
 	{"localize", time_localize},

@@ -19,10 +19,10 @@ int bignumber_bignumber(lua_State* L) {
 	}
 }
 
-int bignumber_tonumber(lua_State* L) {
+int bignumber___tostring(lua_State* L) {
 	try {
-		lua_Bignumber n = lua_tobignumber(L, 1);
-		lua_pushnumber(L, (lua_Number)n);
+		lua_Bignumber n = tm_tobignumber(L, 1);
+		lua_pushsstring(L, n.str());
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -31,10 +31,10 @@ int bignumber_tonumber(lua_State* L) {
 	}
 }
 
-int bignumber___tostring(lua_State* L) {
+int bignumber___tonumber(lua_State* L) {
 	try {
 		lua_Bignumber n = tm_tobignumber(L, 1);
-		lua_pushsstring(L, n.str());
+		lua_pushnumber(L, (lua_Number)n);
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -154,6 +154,17 @@ int bignumber___eq(lua_State* L) {
 	try {
 		bool ret = tm_tobignumber(L, 1) == tm_tobignumber(L, 2);
 		lua_pushboolean(L, ret);
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int bignumber___type(lua_State* L) {
+	try {
+		lua_pushstring(L, "bignumber");
 		return 1;
 	}
 	catch (std::exception& e) {

@@ -8,6 +8,7 @@
 #include "textmodule_lua.hpp"
 #include "textmodule_string.hpp"
 #include "textmodule_color.hpp"
+#include "textmodule_type.hpp"
 #include "textmodule_exception.hpp"
 
 #define LIST_DIRECTORY ".\\textmodule\\color\\"
@@ -238,6 +239,17 @@ int colorlist_loadpalette(lua_State* L) {
 			}
 		}
 		set_colorlist_table(L, &ret);
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int colorlist___type(lua_State* L) {
+	try {
+		lua_pushstring(L, "colorlist");
 		return 1;
 	}
 	catch (std::exception& e) {

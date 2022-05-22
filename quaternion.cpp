@@ -517,6 +517,17 @@ int quaternion____newindex(lua_State* L) {
 	}
 }
 
+int quaternion____type(lua_State* L) {
+	try {
+		lua_pushstring(L, "quaternion");
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
 int quaternion__abs(lua_State* L) {
 	try {
 		lua_Quaternion* val1 = tm_toquaternion(L, 1);
