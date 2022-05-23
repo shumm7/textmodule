@@ -1,13 +1,14 @@
+#include "pixel.hpp"
+
 #include <lua.hpp>
 #include <iostream>
 
-#include "pixel.h"
-#include "textmodule.h"
-#include "textmodule_math.h"
-#include "textmodule_string.h"
-#include "textmodule_color.h"
-#include "textmodule_lua.h"
-#include "textmodule_exception.h"
+#include "textmodule.hpp"
+#include "textmodule_math.hpp"
+#include "textmodule_string.hpp"
+#include "textmodule_color.hpp"
+#include "textmodule_lua.hpp"
+#include "textmodule_exception.hpp"
 
 int pixel_new(lua_State* L) {
 	try {
@@ -295,6 +296,17 @@ int pixel____newindex(lua_State* L) {
 		}
 
 		lua_pushpixel(L, *val);
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int pixel____type(lua_State* L) {
+	try {
+		lua_pushstring(L, "pixel");
 		return 1;
 	}
 	catch (std::exception& e) {

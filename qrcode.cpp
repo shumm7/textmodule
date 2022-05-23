@@ -1,12 +1,13 @@
+#include "qrcode.hpp"
+
 #include <lua.hpp>
 #include <iostream>
 #include <vector>
 #include "QR-Code-generator/qrcodegen.hpp"
 
-#include "qrcode.h"
-#include "textmodule_lua.h"
-#include "textmodule_string.h"
-#include "textmodule_exception.h"
+#include "textmodule_lua.hpp"
+#include "textmodule_string.hpp"
+#include "textmodule_exception.hpp"
 
 using qrcodegen::QrCode;
 using qrcodegen::QrSegment;

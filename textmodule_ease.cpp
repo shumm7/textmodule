@@ -1,6 +1,7 @@
+#include "textmodule_ease.hpp"
+
 #include <cmath>
 #include <numbers>
-#include "textmodule_ease.h"
 
 #define pi std::numbers::pi
 #define pow(n,m) std::pow(n,m)

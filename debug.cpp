@@ -1,8 +1,10 @@
+﻿#include "debug.hpp"
+
 #include <lua.hpp>
-#include "debug.h"
-#include "textmodule_lua.h"
-#include "textmodule_string.h"
-#include "textmodule_exception.h"
+
+#include "textmodule_lua.hpp"
+#include "textmodule_string.hpp"
+#include "textmodule_exception.hpp"
 
 static luaL_Reg TEXTMODULE_DEBUG_REG[] = {
 	{ nullptr, nullptr }

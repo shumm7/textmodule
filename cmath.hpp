@@ -1,3 +1,4 @@
+#pragma once
 #include <lua.hpp>
 
 int cmath_cbrt(lua_State* L);
@@ -49,6 +50,7 @@ int cmath_sph_bessel(lua_State* L);
 int cmath_sph_legendre(lua_State* L);
 int cmath_sph_neumann(lua_State* L);
 int cmath_bezier(lua_State* L);
+int cmath_equation(lua_State* L);
 
 void luaReg_cmath(lua_State* L, const char* name, bool reg);
 
@@ -67,6 +69,7 @@ static luaL_Reg TEXTMODULE_CMATH_REG[] = {
 	{"gcd", cmath_gcd},
 	{"lcm", cmath_lcm},
 	{"fact", cmath_fact},
+	{"comb", cmath_comb},
 	{"perm", cmath_perm},
 	{"rep_comb", cmath_rep_comb},
 	{"rep_perm", cmath_rep_perm},
@@ -102,5 +105,6 @@ static luaL_Reg TEXTMODULE_CMATH_REG[] = {
 	{"sph_neumann", cmath_sph_neumann},
 
 	{"bezier", cmath_bezier},
+	{"equation", cmath_equation},
 	{ nullptr, nullptr }
 };

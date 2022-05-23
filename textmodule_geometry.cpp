@@ -1,22 +1,26 @@
-#include "textmodule_geometry.h"
+#include "textmodule_geometry.hpp"
+
+#include <complex>
+#include <Eigen/Geometry>
+#include <Eigen/Dense>
 
 double g_complex_norm(std::complex<double> value) {
 	return std::norm(value);
 }
 
-double g_quaternion_norm(Quat value) {
+double g_quaternion_norm(Eigen::Quaterniond value) {
 	return std::pow(value.norm(), 2);
 }
 
-double g_vector2_norm(Vector2 value) {
+double g_vector2_norm(Eigen::Vector2d value) {
 	return std::pow(value.norm(), 2);
 }
 
-double g_vector3_norm(Vector3 value) {
+double g_vector3_norm(Eigen::Vector3d value) {
 	return std::pow(value.norm(), 2);
 }
 
-double g_vector4_norm(Vector4 value) {
+double g_vector4_norm(Eigen::Vector4d value) {
 	return std::pow(value.norm(), 2);
 }
 
@@ -25,19 +29,19 @@ double g_complex_abs(std::complex<double> value) {
 	return std::abs(value);
 }
 
-double g_quaternion_abs(Quat value) {
+double g_quaternion_abs(Eigen::Quaterniond value) {
 	return value.norm();
 }
 
-double g_vector2_abs(Vector2 value) {
+double g_vector2_abs(Eigen::Vector2d value) {
 	return value.norm();
 }
 
-double g_vector3_abs(Vector3 value) {
+double g_vector3_abs(Eigen::Vector3d value) {
 	return value.norm();
 }
 
-double g_vector4_abs(Vector4 value) {
+double g_vector4_abs(Eigen::Vector4d value) {
 	return value.norm();
 }
 

@@ -12,6 +12,7 @@ int pixel____lt(lua_State* L);
 int pixel____le(lua_State* L);
 int pixel____index(lua_State* L);
 int pixel____newindex(lua_State* L);
+int pixel____type(lua_State* L);
 
 int pixel_r(lua_State* L);
 int pixel_g(lua_State* L);
@@ -44,6 +45,7 @@ static luaL_Reg TEXTMODULE_PIXEL_META_REG[] = {
 	{"__le", pixel____le},
 	{"__index", pixel____index},
 	{"__newindex", pixel____newindex},
+	{"__type", pixel____type},
 
 	{"r", pixel_r},
 	{"g", pixel_g},

@@ -1,12 +1,13 @@
+#include "quaternion.hpp"
+
 #include <lua.hpp>
 #include <cmath>
 #include <iostream>
 
-#include "quaternion.h"
-#include "textmodule_lua.h"
-#include "textmodule_string.h"
-#include "textmodule_exception.h"
-#include "textmodule_geometry.h"
+#include "textmodule_lua.hpp"
+#include "textmodule_string.hpp"
+#include "textmodule_exception.hpp"
+#include "textmodule_geometry.hpp"
 
 int quaternion_new(lua_State* L) {
 	try {
@@ -96,12 +97,12 @@ int quaternion_lookrot(lua_State* L) {
 		if (lua_type(L, 1) == LUA_TNONE)
 			v1 = new lua_Vector3(0, 0, 1);
 		else
-			v1 = vector3_check(L, 1);
+			v1 = tm_tovector3(L, 1);
 
 		if (lua_type(L, 2) == LUA_TNONE)
 			v2 = new lua_Vector3(0, 1, 0);
 		else
-			v2 = vector3_check(L, 2);
+			v2 = tm_tovector3(L, 2);
 
 
 		lua_Quaternion* ret = lua_pushquaternion(L);
@@ -316,12 +317,12 @@ int quaternion____mul(lua_State* L) {
 
 		if (tp == LUA_TUSERDATA) {
 			if (luaL_checkmetatable(L, 2, TEXTMODULE_QUATERNION)) {
-				lua_Quaternion* val2 = quaternion_check(L, 2);
+				lua_Quaternion* val2 = tm_toquaternion(L, 2);
 				lua_pushquaternion(L, (*val1) * (*val2));
 				return 1;
 			}
 			else if (luaL_checkmetatable(L, 2, TEXTMODULE_VECTOR3)) {
-				lua_Vector3* val2 = vector3_check(L, 2);
+				lua_Vector3* val2 = tm_tovector3(L, 2);
 				lua_pushvector3(L, (*val1) * (*val2));
 				return 1;
 			}
@@ -509,6 +510,79 @@ int quaternion____newindex(lua_State* L) {
 
 		lua_pushquaternion(L, *val1);
 		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int quaternion____type(lua_State* L) {
+	try {
+		lua_pushstring(L, "quaternion");
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int quaternion____tonumber(lua_State* L) {
+	try {
+		lua_Quaternion* val = tm_toquaternion(L, 1);
+
+		lua_Wstring ret = tostring_n(val->w()) + L"+" + tostring_n(val->x()) + L"i+" + tostring_n(val->y()) + L"j+" + tostring_n(val->z()) + L"k";
+		lua_pushwstring(L, ret);
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int quaternion____call(lua_State* L) {
+	try {
+		lua_Quaternion* val = lua_toquaternion(L, 1);
+		int idx = tm_tointeger(L, 2);
+
+		if (lua_isnoneornil(L, 3)) {
+			switch (idx) {
+			case 1:
+				lua_pushnumber(L, val->w());
+				return 1;
+			case 2:
+				lua_pushnumber(L, val->x());
+				return 1;
+			case 3:
+				lua_pushnumber(L, val->y());
+				return 1;
+			case 4:
+				lua_pushnumber(L, val->z());
+				return 1;
+			default:
+				return 0;
+			}
+		}
+		else {
+			switch (idx) {
+			case 1:
+				val->w() = tm_tonumber(L, 3);
+				return 0;
+			case 2:
+				val->x() = tm_tonumber(L, 3);
+				return 0;
+			case 3:
+				val->y() = tm_tonumber(L, 3);
+				return 0;
+			case 4:
+				val->z() = tm_tonumber(L, 3);
+				return 0;
+			default:
+				return 0;
+			}
+		}
 	}
 	catch (std::exception& e) {
 		luaL_error(L, e.what());

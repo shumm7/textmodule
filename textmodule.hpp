@@ -2,7 +2,7 @@
 #include <iostream>
 
 #define MODULE_NAME "textmodule"
-#define MODULE_VERSION 28
+#define MODULE_VERSION 29
 
 //API
 #define API_BASE "base"
@@ -23,6 +23,9 @@
 #define API_QRCODE "qrcode"
 #define API_OBJ "object"
 #define API_EASE "ease"
+#define API_DEVICE "device"
+#define API_TIME "time"
+#define API_JSON "json"
 
 //API_COLOR
 #define API_COLOR "color"

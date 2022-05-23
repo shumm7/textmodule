@@ -1,11 +1,12 @@
+#include "clipboard.hpp"
+
 #include <lua.hpp>
 #include <iostream>
 #include <windows.h>
 
-#include "clipboard.h"
-#include "textmodule_lua.h"
-#include "textmodule_string.h"
-#include "textmodule_exception.h"
+#include "textmodule_lua.hpp"
+#include "textmodule_string.hpp"
+#include "textmodule_exception.hpp"
 
 #pragma comment(lib,"user32.lib")
 

@@ -52,6 +52,12 @@
     <Filter Include="ソース ファイル\lib\fmt">
       <UniqueIdentifier>{f780111b-e71c-441c-ae7b-3cc85c77faff}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\function\submodule">
+      <UniqueIdentifier>{754c626d-f847-4c78-a5e9-960db680b5df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\function\submodule">
+      <UniqueIdentifier>{7bf8ba7d-85ed-49d7-8bef-137c22530770}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="lua.cpp">
@@ -80,9 +86,6 @@
     </ClCompile>
     <ClCompile Include="textmodule.cpp">
       <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="mecab.cpp">
-      <Filter>ソース ファイル\function</Filter>
     </ClCompile>
     <ClCompile Include="textmodule_lua.cpp">
       <Filter>ソース ファイル\lib</Filter>
@@ -183,45 +186,60 @@
     <ClCompile Include="image.cpp">
       <Filter>ソース ファイル\function\color</Filter>
     </ClCompile>
+    <ClCompile Include="device.cpp">
+      <Filter>ソース ファイル\function</Filter>
+    </ClCompile>
+    <ClCompile Include="time.cpp">
+      <Filter>ソース ファイル\function</Filter>
+    </ClCompile>
+    <ClCompile Include="textmodule_time.cpp">
+      <Filter>ソース ファイル\lib</Filter>
+    </ClCompile>
+    <ClCompile Include="mecab.cpp">
+      <Filter>ソース ファイル\function\submodule</Filter>
+    </ClCompile>
+    <ClCompile Include="bignumber.cpp">
+      <Filter>ソース ファイル\function\submodule</Filter>
+    </ClCompile>
+    <ClCompile Include="json.cpp">
+      <Filter>ソース ファイル\function</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="string.h">
+    <ClInclude Include="string.hpp">
       <Filter>ヘッダー ファイル\function</Filter>
     </ClInclude>
-    <ClInclude Include="utf8.h">
+    <ClInclude Include="utf8.hpp">
       <Filter>ヘッダー ファイル\function</Filter>
     </ClInclude>
-    <ClInclude Include="os.h">
+    <ClInclude Include="os.hpp">
       <Filter>ヘッダー ファイル\function</Filter>
     </ClInclude>
-    <ClInclude Include="tmstring.h">
+    <ClInclude Include="tmstring.hpp">
       <Filter>ヘッダー ファイル\function</Filter>
     </ClInclude>
-    <ClInclude Include="clipboard.h">
+    <ClInclude Include="clipboard.hpp">
       <Filter>ヘッダー ファイル\function</Filter>
     </ClInclude>
-    <ClInclude Include="filesystem.h">
+    <ClInclude Include="filesystem.hpp">
       <Filter>ヘッダー ファイル\function</Filter>
     </ClInclude>
-    <ClInclude Include="mecab.h">
-      <Filter>ヘッダー ファイル\function</Filter>
-    </ClInclude>
-    <ClInclude Include="textmodule.h">
+    <ClInclude Include="textmodule.hpp">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="textmodule_string.h">
+    <ClInclude Include="textmodule_string.hpp">
       <Filter>ヘッダー ファイル\lib</Filter>
     </ClInclude>
-    <ClInclude Include="textmodule_lua.h">
+    <ClInclude Include="textmodule_lua.hpp">
       <Filter>ヘッダー ファイル\lib</Filter>
     </ClInclude>
-    <ClInclude Include="textmodule_exception.h">
+    <ClInclude Include="textmodule_exception.hpp">
       <Filter>ヘッダー ファイル\lib</Filter>
     </ClInclude>
-    <ClInclude Include="textmodule_option.h">
+    <ClInclude Include="textmodule_option.hpp">
       <Filter>ヘッダー ファイル\lib</Filter>
     </ClInclude>
-    <ClInclude Include="hash.h">
+    <ClInclude Include="hash.hpp">
       <Filter>ヘッダー ファイル\function</Filter>
     </ClInclude>
     <ClInclude Include="hash-library\crc32.h">
@@ -248,74 +266,95 @@
     <ClInclude Include="hash-library\sha256.h">
       <Filter>ヘッダー ファイル\lib\hash-library</Filter>
     </ClInclude>
-    <ClInclude Include="http.h">
+    <ClInclude Include="http.hpp">
       <Filter>ヘッダー ファイル\function</Filter>
     </ClInclude>
-    <ClInclude Include="cmath.h">
+    <ClInclude Include="cmath.hpp">
       <Filter>ヘッダー ファイル\function</Filter>
     </ClInclude>
-    <ClInclude Include="colorlist.h">
+    <ClInclude Include="colorlist.hpp">
       <Filter>ヘッダー ファイル\function\color</Filter>
     </ClInclude>
-    <ClInclude Include="complex.h">
+    <ClInclude Include="complex.hpp">
       <Filter>ヘッダー ファイル\function\geometry</Filter>
     </ClInclude>
-    <ClInclude Include="quaternion.h">
+    <ClInclude Include="quaternion.hpp">
       <Filter>ヘッダー ファイル\function\geometry</Filter>
     </ClInclude>
-    <ClInclude Include="vector3.h">
+    <ClInclude Include="vector3.hpp">
       <Filter>ヘッダー ファイル\function\geometry</Filter>
     </ClInclude>
-    <ClInclude Include="vector2.h">
+    <ClInclude Include="vector2.hpp">
       <Filter>ヘッダー ファイル\function\geometry</Filter>
     </ClInclude>
-    <ClInclude Include="bit.h">
+    <ClInclude Include="bit.hpp">
       <Filter>ヘッダー ファイル\function</Filter>
     </ClInclude>
-    <ClInclude Include="random.h">
+    <ClInclude Include="random.hpp">
       <Filter>ヘッダー ファイル\function</Filter>
     </ClInclude>
-    <ClInclude Include="debug.h">
+    <ClInclude Include="debug.hpp">
       <Filter>ヘッダー ファイル\function</Filter>
     </ClInclude>
     <ClInclude Include="QR-Code-generator\qrcodegen.hpp">
       <Filter>ヘッダー ファイル\lib\qr-code-generator</Filter>
     </ClInclude>
-    <ClInclude Include="base.h">
+    <ClInclude Include="base.hpp">
       <Filter>ヘッダー ファイル\function</Filter>
     </ClInclude>
-    <ClInclude Include="qrcode.h">
+    <ClInclude Include="qrcode.hpp">
       <Filter>ヘッダー ファイル\function</Filter>
     </ClInclude>
-    <ClInclude Include="textmodule_geometry.h">
+    <ClInclude Include="textmodule_geometry.hpp">
       <Filter>ヘッダー ファイル\lib</Filter>
     </ClInclude>
-    <ClInclude Include="vector4.h">
+    <ClInclude Include="vector4.hpp">
       <Filter>ヘッダー ファイル\function\geometry</Filter>
     </ClInclude>
-    <ClInclude Include="obj.h">
+    <ClInclude Include="obj.hpp">
       <Filter>ヘッダー ファイル\function</Filter>
     </ClInclude>
-    <ClInclude Include="ease.h">
+    <ClInclude Include="ease.hpp">
       <Filter>ヘッダー ファイル\function</Filter>
     </ClInclude>
-    <ClInclude Include="textmodule_ease.h">
+    <ClInclude Include="textmodule_ease.hpp">
       <Filter>ヘッダー ファイル\lib</Filter>
     </ClInclude>
-    <ClInclude Include="textmodule_math.h">
+    <ClInclude Include="textmodule_math.hpp">
       <Filter>ヘッダー ファイル\lib</Filter>
     </ClInclude>
-    <ClInclude Include="color.h">
+    <ClInclude Include="color.hpp">
       <Filter>ヘッダー ファイル\function\color</Filter>
     </ClInclude>
-    <ClInclude Include="pixel.h">
+    <ClInclude Include="pixel.hpp">
       <Filter>ヘッダー ファイル\function\color</Filter>
     </ClInclude>
-    <ClInclude Include="textmodule_color.h">
+    <ClInclude Include="textmodule_color.hpp">
       <Filter>ヘッダー ファイル\lib</Filter>
     </ClInclude>
-    <ClInclude Include="image.h">
+    <ClInclude Include="image.hpp">
       <Filter>ヘッダー ファイル\function\color</Filter>
+    </ClInclude>
+    <ClInclude Include="device.hpp">
+      <Filter>ヘッダー ファイル\function</Filter>
+    </ClInclude>
+    <ClInclude Include="time.hpp">
+      <Filter>ヘッダー ファイル\function</Filter>
+    </ClInclude>
+    <ClInclude Include="textmodule_time.hpp">
+      <Filter>ヘッダー ファイル\lib</Filter>
+    </ClInclude>
+    <ClInclude Include="mecab.hpp">
+      <Filter>ヘッダー ファイル\function\submodule</Filter>
+    </ClInclude>
+    <ClInclude Include="bignumber.hpp">
+      <Filter>ヘッダー ファイル\function\submodule</Filter>
+    </ClInclude>
+    <ClInclude Include="textmodule_type.hpp">
+      <Filter>ヘッダー ファイル\lib</Filter>
+    </ClInclude>
+    <ClInclude Include="json.hpp">
+      <Filter>ヘッダー ファイル\function</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

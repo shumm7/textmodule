@@ -1,14 +1,16 @@
+#include "string.hpp"
+
 #include <lua.hpp>
 #include <iostream>
 #include <regex>
 #include <fmt/core.h>
 #include <fmt/format.h>
+#include <fmt/chrono.h>
 #include <vector>
 
-#include "string.h"
-#include "textmodule_lua.h"
-#include "textmodule_string.h"
-#include "textmodule_math.h"
+#include "textmodule_lua.hpp"
+#include "textmodule_string.hpp"
+#include "textmodule_math.hpp"
 
 int string_find(lua_State* L) {
 	try {
@@ -271,28 +273,48 @@ int string_char(lua_State* L) {
 	}
 }
 
-int string_gmatch(lua_State* L) {
+int string_gmatch_aux(lua_State* L) {
 	try {
-		lua_Wstring s = tm_towstring(L, 1);
-		lua_Wstring pattern = tm_towstring(L, 2);
+		lua_Wstring s = lua_towstring(L, lua_upvalueindex(1));
+		lua_Wstring pattern = lua_towstring(L, lua_upvalueindex(2));
+		lua_Integer idx = lua_tointeger(L, lua_upvalueindex(3));
 		std::wsmatch m;
 
-		luaL_dostring(L, "function _TEXTMODULE_GMATCH_IFUNC(x) local pos,length=0,#x  return function()  pos = pos + 1  if pos>length then  return nil  else  return x[pos] end end end");
-		lua_getglobal(L, "_TEXTMODULE_GMATCH_IFUNC");
+		int len = s.length();
+		int c = 0;
+		for (int i = 0; i < len; i++) {
+			if (std::regex_search(s, m, std::wregex(pattern))) {
+				if (c == idx) {
+					lua_pushinteger(L, idx + 1);
+					lua_replace(L, lua_upvalueindex(3));
+					lua_pushwstring(L, m.str());
+					return 1;
+				}
 
-		lua_newtable(L);
-		if (std::regex_match(s, m, std::wregex(pattern))) {
-			int size = m.size();
-
-			for (int i = 0; i < size; i++)
-				lua_settablevalue(L, i + 1, m[i].str());
+				c++;
+				s = s.substr(m.position() + 1);
+			}
 		}
 
-		lua_pcall(L, 1, 1, 0);
-		return 1;
+		return 0;
 	}
 	catch (std::regex_error) {
 		return 0;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int string_gmatch(lua_State* L) {
+	try {
+		luaL_checkstring(L, 1);
+		luaL_checkstring(L, 2);
+		lua_settop(L, 2);
+		lua_pushinteger(L, 0);
+		lua_pushcclosure(L, string_gmatch_aux, 3);
+		return 1;
 	}
 	catch (std::exception& e) {
 		luaL_error(L, e.what());
@@ -368,6 +390,9 @@ int string_format(lua_State* L) {
 					store.push_back("nil");
 				else if (tp == LUA_TNONE)
 					break;
+				else if (tp == LUA_TUSERDATA) {
+					store.push_back(lua_topointer(L, i));
+				}
 				else
 					store.push_back(lua_topointer(L, i));
 

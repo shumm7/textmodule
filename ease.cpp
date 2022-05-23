@@ -1,10 +1,11 @@
+#include "ease.hpp"
+
 #include <lua.hpp>
 
-#include "ease.h"
-#include "textmodule_lua.h"
-#include "textmodule_string.h"
-#include "textmodule_exception.h"
-#include "textmodule_ease.h"
+#include "textmodule_lua.hpp"
+#include "textmodule_string.hpp"
+#include "textmodule_exception.hpp"
+#include "textmodule_ease.hpp"
 
 int ease_linear(lua_State* L) {
 	try {

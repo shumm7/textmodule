@@ -12,6 +12,7 @@ int color____lt(lua_State* L);
 int color____le(lua_State* L);
 int color____index(lua_State* L);
 int color____newindex(lua_State* L);
+int color____type(lua_State* L);
 
 int color_r(lua_State* L);
 int color_g(lua_State* L);
@@ -56,6 +57,7 @@ static luaL_Reg TEXTMODULE_COLOR_META_REG[] = {
 	{"__le", color____le},
 	{"__index", color____index},
 	{"__newindex", color____newindex},
+	{"__type", color____type},
 
 	{"r", color_r},
 	{"g", color_g},

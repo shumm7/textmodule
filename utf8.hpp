@@ -1,4 +1,6 @@
 #pragma once
+#include <lua.hpp>
+
 int utf8_byte(lua_State* L);
 int utf8_char(lua_State* L);
 

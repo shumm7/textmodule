@@ -1,21 +1,17 @@
+#include "mecab.hpp"
+
 #include <lua.hpp>
 #include <iostream>
-#include <mecab.h>
 #include <exception>
 #include <vector>
 #include <filesystem>
+#include <mecab.h>
 
-#include "textmodule_lua.h"
-#include "textmodule_string.h"
-#include "textmodule.h"
+#include "textmodule_lua.hpp"
+#include "textmodule_string.hpp"
+#include "textmodule.hpp"
 
 #pragma comment(lib, "libmecab.lib")
-
-#define MECAB_PARAM_N 3
-#define MECAB_PARAM_A MODULE_NAME
-#define MECAB_PARAM_R "-r.\\textmodule\\MeCab\\etc\\mecabrc"
-#define MECAB_PARAM_D "-d.\\textmodule\\MeCab\\dic\\ipadic"
-#define MECAB_PARAM_O "-Ochasen"
 
 void mecab_check(MeCab::Model* model) {
 	if (model == nullptr) {
@@ -53,7 +49,7 @@ const MeCab::Node* mecab_getNode(MeCab::Tagger* tagger, lua_Wstring w_input) {
 	return node;
 }
 
-lua_Wstring mecab_getYomigana(MeCab::Tagger* tagger, lua_Wstring w_input) {
+lua_Wstring mecab_getRuby(MeCab::Tagger* tagger, lua_Wstring w_input) {
 	mecab_check(tagger);
 
 	const MeCab::Node* node = mecab_getNode(tagger, w_input);
@@ -70,6 +66,25 @@ lua_Wstring mecab_getYomigana(MeCab::Tagger* tagger, lua_Wstring w_input) {
 
 	return res;
 }
+
+lua_Wstring mecab_getYomi(MeCab::Tagger* tagger, lua_Wstring w_input) {
+	mecab_check(tagger);
+
+	const MeCab::Node* node = mecab_getNode(tagger, w_input);
+	mecab_check(node);
+
+	lua_Wstring res;
+	for (; node; node = node->next) {
+		std::vector<lua_Wstring> v = split(StrToWstr(node->feature), L',');
+		if (v.size() != 1) {
+			if (v[0] != L"BOS/EOS")
+				res += v[8];
+		}
+	}
+
+	return res;
+}
+
 
 int mecab_node(lua_State* L) {
 	try {
@@ -133,7 +148,7 @@ int mecab_node(lua_State* L) {
 	}
 }
 
-int mecab_yomi_hiragana(lua_State* L) {
+int mecab_ruby_h(lua_State* L) {
 	try {
 		lua_Wstring text = tm_towstring(L, 1);
 
@@ -147,8 +162,8 @@ int mecab_yomi_hiragana(lua_State* L) {
 		mecab_check(model);
 		MeCab::Tagger* tagger = model->createTagger();
 		mecab_check(tagger);
-		std::wstring yomiKatakana = mecab_getYomigana(tagger, text);
-		lua_pushwstring(L, toKatakana(yomiKatakana, true));
+		std::wstring yomi = mecab_getRuby(tagger, text);
+		lua_pushustring(L, HiraganaToKatakana(WstrToUstr(yomi)));
 
 		delete model;
 		delete tagger;
@@ -160,7 +175,7 @@ int mecab_yomi_hiragana(lua_State* L) {
 	}
 }
 
-int mecab_yomi_katakana(lua_State* L) {
+int mecab_ruby_k(lua_State* L) {
 	try {
 		lua_Wstring text = tm_towstring(L, 1);
 
@@ -174,8 +189,35 @@ int mecab_yomi_katakana(lua_State* L) {
 		mecab_check(model);
 		MeCab::Tagger* tagger = model->createTagger();
 		mecab_check(tagger);
-		std::wstring yomiKatakana = mecab_getYomigana(tagger, text);
-		lua_pushwstring(L, toKatakana(yomiKatakana, false));
+		std::wstring yomi = mecab_getRuby(tagger, text);
+		lua_pushustring(L, HiraganaToKatakana(WstrToUstr(yomi)));
+
+		delete model;
+		delete tagger;
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int mecab_yomi(lua_State* L) {
+	try {
+		lua_Wstring text = tm_towstring(L, 1);
+
+		char* c[MECAB_PARAM_N] = {
+		const_cast<char*>(MECAB_PARAM_A),
+		const_cast<char*>(MECAB_PARAM_R),
+		const_cast<char*>(MECAB_PARAM_D),
+		};
+
+		MeCab::Model* model = MeCab::Model::create(MECAB_PARAM_N, c);
+		mecab_check(model);
+		MeCab::Tagger* tagger = model->createTagger();
+		mecab_check(tagger);
+		std::wstring yomi = mecab_getYomi(tagger, text);
+		lua_pushwstring(L, yomi);
 
 		delete model;
 		delete tagger;
