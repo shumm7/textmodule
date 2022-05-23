@@ -30,7 +30,8 @@
     "object": true,
     "ease": true,
     "device": true,
-    "time": true
+    "time": true,
+    "json": true
   },
   "api-alias": {
     "tmstring": true,
