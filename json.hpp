@@ -7,6 +7,7 @@ int json_size(lua_State* L);
 
 
 void luaReg_json(lua_State* L, const char* name, bool reg);
+void luaGlobal_json(lua_State* L, const char* name, bool reg);
 
 static luaL_Reg TEXTMODULE_JSON_REG[] = {
 	{"parse", json_parse},

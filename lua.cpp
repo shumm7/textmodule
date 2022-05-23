@@ -106,6 +106,7 @@ void luaGlobal(lua_State* L, nlohmann::json o) {
 	luaGlobal_clipboard(L, API_CLIPBOARD, getOptionParamB(o, OPTION_VAPI_GLOBAL, API_CLIPBOARD));
 	luaGlobal_hash(L, API_HASH, getOptionParamB(o, OPTION_VAPI_GLOBAL, API_HASH));
 	luaGlobal_http(L, API_HTTP, getOptionParamB(o, OPTION_VAPI_GLOBAL, API_HTTP));
+	luaGlobal_json(L, API_JSON, getOptionParamB(o, OPTION_VAPI_GLOBAL, API_JSON));
 
 	//geometry
 	luaGlobal_complex(L, API_COMPLEX, getOptionParamB(o, OPTION_VAPI_GLOBAL, API_GEOMETRY, API_COMPLEX));

@@ -74,3 +74,11 @@ void luaReg_json(lua_State* L, const char* name, bool reg) {
 		lua_setfield(L, -2, name);
 	}
 }
+
+void luaGlobal_json(lua_State* L, const char* name, bool reg) {
+	if (reg) {
+		lua_newtable(L);
+		luaL_register(L, NULL, TEXTMODULE_JSON_REG);
+		lua_setglobal(L, name);
+	}
+}
