@@ -418,6 +418,54 @@ int vector4____type(lua_State* L) {
 	}
 }
 
+int vector4____call(lua_State* L) {
+	try {
+		lua_Vector4* val = lua_tovector4(L, 1);
+		int idx = tm_tointeger(L, 2);
+
+		if (lua_isnoneornil(L, 3)) {
+			switch (idx) {
+			case 1:
+				lua_pushnumber(L, val->x());
+				return 1;
+			case 2:
+				lua_pushnumber(L, val->y());
+				return 1;
+			case 3:
+				lua_pushnumber(L, val->z());
+				return 1;
+			case 4:
+				lua_pushnumber(L, val->w());
+				return 1;
+			default:
+				return 0;
+			}
+		}
+		else {
+			switch (idx) {
+			case 1:
+				val->x() = tm_tonumber(L, 3);
+				return 0;
+			case 2:
+				val->y() = tm_tonumber(L, 3);
+				return 0;
+			case 3:
+				val->z() = tm_tonumber(L, 3);
+				return 0;
+			case 4:
+				val->w() = tm_tonumber(L, 3);
+				return 0;
+			default:
+				return 0;
+			}
+		}
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
 int vector4__abs(lua_State* L) {
 	try {
 		lua_Vector4* val1 = tm_tovector4(L, 1);

@@ -5,12 +5,7 @@
 
 //device
 #define JOYSTICK_NOTFOUND "the specified joystick is not connected"
-#define CARD_NO_SERVICE "the smart card resource manager is not running"
-#define CARD_UNAVAILABLE "the smart card resource manager has thrown an unknown error: "
-#define CARD_NO_CONTEXT "failed to get the context"
-#define CARD_NO_READER "the readers not found"
-#define CARD_FAILED_TO_GET_READER "failed to get the reader"
-#define CARD_NO_CONNECTION "can't connect to the card: "
+#define GET_OSVERSION_FAILED "failed to get the os version"
 
 //cmath
 #define CLAMP_OUT_OF_RANGE "the value which you tried to clamp is out of range"

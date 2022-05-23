@@ -50,6 +50,7 @@ int cmath_sph_bessel(lua_State* L);
 int cmath_sph_legendre(lua_State* L);
 int cmath_sph_neumann(lua_State* L);
 int cmath_bezier(lua_State* L);
+int cmath_equation(lua_State* L);
 
 void luaReg_cmath(lua_State* L, const char* name, bool reg);
 
@@ -104,5 +105,6 @@ static luaL_Reg TEXTMODULE_CMATH_REG[] = {
 	{"sph_neumann", cmath_sph_neumann},
 
 	{"bezier", cmath_bezier},
+	{"equation", cmath_equation},
 	{ nullptr, nullptr }
 };

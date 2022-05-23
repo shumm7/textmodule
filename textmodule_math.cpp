@@ -1,9 +1,15 @@
 #include "textmodule_math.hpp"
 
+#include <iostream>
 #include <cmath>
+#include <vector>
+#include <complex>
+#include <Eigen/Dense>
 
 #include "textmodule_type.hpp"
 #include "textmodule_exception.hpp"
+
+using namespace Eigen;
 
 double range(double n, double min, double max) {
 	if (n < min) {
@@ -111,4 +117,21 @@ dec_float circular_permutation(int n) {
 
 double bernstein(double t, int n, int i) {
 	return (double)combination(n, i) * std::pow(t, i) * std::pow(1 - t, n - i);
+}
+
+Eigen::VectorXcd equation(Eigen::VectorXd number) {
+	int dim = number.size();
+
+	MatrixXd A = MatrixXd::Zero(dim, dim);
+	for (int i = 0; i < dim - 1; i++)
+		A(i, i + 1) = 1;
+
+	for (int i = 0; i < dim; i++)
+		A(dim - 1, i) = -number[(dim-1)-i];
+
+	EigenSolver<MatrixXd> es(A);
+	es.compute(A, false);
+	
+	VectorXcd ret = es.eigenvalues();
+	return ret;
 }

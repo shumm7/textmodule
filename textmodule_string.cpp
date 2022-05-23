@@ -345,6 +345,24 @@ std::vector<std::wstring> split(std::wstring str, wchar_t del) {
 	return result;
 }
 
+std::vector<std::string> split(std::string str, char del) {
+	std::vector<std::string> result;
+	std::string subStr;
+
+	for (const char c : str) {
+		if (c == del) {
+			result.push_back(subStr);
+			subStr.clear();
+		}
+		else {
+			subStr += c;
+		}
+	}
+
+	result.push_back(subStr);
+	return result;
+}
+
 //デバッグ用関数
 void debug_string(std::wstring message) {
 	OutputDebugString(WstrToStr(message).c_str());

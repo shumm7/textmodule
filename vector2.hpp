@@ -24,6 +24,7 @@ int vector2____le(lua_State* L);
 int vector2____index(lua_State* L);
 int vector2____newindex(lua_State* L);
 int vector2____type(lua_State* L);
+int vector2____call(lua_State* L);
 
 int vector2__abs(lua_State* L);
 int vector2__norm(lua_State* L);
@@ -82,6 +83,7 @@ static luaL_Reg TEXTMODULE_VECTOR2_META_REG[] = {
 	//{"__index", vector2____index},
 	{"__newindex", vector2____newindex},
 	{"__type", vector2____type},
+	{"__call", vector2____call},
 
 	{"abs", vector2__abs},
 	{"norm", vector2__norm},

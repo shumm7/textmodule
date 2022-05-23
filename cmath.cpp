@@ -5,6 +5,7 @@
 #include <cmath>
 #include <numbers>
 #include <numeric>
+#include <Eigen/Dense>
 
 #include "textmodule_lua.hpp"
 #include "textmodule_math.hpp"
@@ -651,6 +652,33 @@ int cmath_bezier(lua_State* L) {
 	}
 }
 
+int cmath_equation(lua_State* L) {
+	try {
+		int n = lua_gettop(L);
+		if (n <= 1) return 0;
+
+		Eigen::VectorXd v(n-1);
+
+		double a0 = tm_tonumber(L, 1);
+		for (int i = 1; i < n; i++)
+			v[i-1] = tm_tonumber(L, i + 1) / a0;
+
+		Eigen::VectorXcd a = equation(v);
+
+		for (int i = 0; i < a.size(); i++) {
+			if(a[i].imag()==0)
+				lua_pushnumber(L, a[i].real());
+			else
+				lua_pushcomplex(L, a[i]);
+		}
+
+		return a.size();
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
 
 void luaReg_const_cmath(lua_State* L) {
 	lua_settablevalue(L, "rad_to_deg", 180.0 / std::numbers::pi);
@@ -666,9 +694,13 @@ void luaReg_const_cmath(lua_State* L) {
 	lua_settablevalue(L, "ln10", std::numbers::ln10);
 	lua_settablevalue(L, "sqrt2", std::numbers::sqrt2);
 	lua_settablevalue(L, "sqrt3", std::numbers::sqrt3);
+	lua_settablevalue(L, "zeta2", boost::math::constants::zeta_two<lua_Number>());
+	lua_settablevalue(L, "zeta3", boost::math::constants::zeta_three<lua_Number>());
 	lua_settablevalue(L, "inv_sqrt3", std::numbers::inv_sqrt3);
+	lua_settablevalue(L, "euler", std::numbers::egamma);
 	lua_settablevalue(L, "egamma", std::numbers::egamma);
 	lua_settablevalue(L, "phi", std::numbers::phi);
+	lua_settablevalue(L, "gauss", boost::math::constants::gauss<lua_Number>());
 	lua_settablevalue(L, "huge", HUGE_VAL);
 	lua_settablevalue(L, "infinity", std::numeric_limits<lua_Number>::infinity());
 	lua_settablevalue(L, "negative_infinity", -std::numeric_limits<lua_Number>::infinity());
@@ -684,12 +716,6 @@ void luaReg_const_cmath(lua_State* L) {
 
 void luaReg_cmath(lua_State* L, const char* name, bool reg) {
 	if (reg) {
-		lua_newtable(L);
-		luaReg_const_cmath(L);
-		luaL_register(L, NULL, TEXTMODULE_CMATH_REG);
-		luaL_register(L, NULL, TEXTMODULE_BIGNUMBER_REG);
-		lua_setfield(L, -2, name);
-
 		//bignumber (metatable)
 		luaL_newmetatable(L, TEXTMODULE_BIGNUMBER); //add metatable
 		luaL_register(L, NULL, TEXTMODULE_BIGNUMBER_META_REG);
@@ -700,5 +726,16 @@ void luaReg_cmath(lua_State* L, const char* name, bool reg) {
 		lua_settable(L, -3);
 
 		lua_pop(L, 1); //remove metatable
+
+
+		//constant
+		lua_newtable(L);
+		luaReg_const_cmath(L);
+		luaReg_const_bignumber(L);
+
+		//function
+		luaL_register(L, NULL, TEXTMODULE_CMATH_REG);
+		luaL_register(L, NULL, TEXTMODULE_BIGNUMBER_REG);
+		lua_setfield(L, -2, name);
 	}
 }

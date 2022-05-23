@@ -6,6 +6,7 @@
 #include <stdexcept>
 #include <cmath>
 #include <bit>
+#include <sstream>
 
 #include "textmodule_lua.hpp"
 #include "textmodule_exception.hpp"
@@ -75,6 +76,29 @@ int device_push_joystickvalue(lua_State* L, JOYINFOEX info, bool raw) {
 	}
 
 	return 1;
+}
+
+lua_Sstring device_get_osname(int major, int minor, int build) {
+	if (major == 5 && minor == 0)
+		return "Windows 2000";
+	else if (major == 5 && minor == 1)
+		return "Windows XP";
+	else if (major == 6 && minor == 0)
+		return "Windows Vista";
+	else if (major == 6 && minor == 1)
+		return "Windows 7";
+	else if (major == 6 && minor == 2)
+		return "Windows 8";
+	else if (major == 6 && minor == 3)
+		return "Windows 8.1";
+	else if (major == 10 && minor == 0) {
+		if (build >= 22000)
+			return "Windows 11";
+		else
+			return "Windows 10";
+	}
+	else
+		return "Unknown";
 }
 
 
@@ -243,6 +267,57 @@ int device_joystick(lua_State* L) {
 		}
 
 		return 0;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int device_version(lua_State* L) {
+	try {
+		const auto hModule = LoadLibrary(TEXT("ntdll.dll"));
+		if (!hModule) throw std::runtime_error(GET_OSVERSION_FAILED);
+
+		if (const auto address = GetProcAddress(hModule, "RtlGetVersion"))
+		{
+			using RtlGetVersionType = NTSTATUS(WINAPI*)(OSVERSIONINFOEXW*);
+			const auto RtlGetVersion = reinterpret_cast<RtlGetVersionType>(address);
+
+			OSVERSIONINFOEXW ver = { sizeof(ver) };
+			if (!FAILED(RtlGetVersion(&ver)))
+			{
+				if (tm_toboolean_s(L, 1, false)) { //table (raw)
+					lua_newtable(L);
+					lua_settablevalue(L, "major", (lua_Integer)ver.dwMajorVersion);
+					lua_settablevalue(L, "minor", (lua_Integer)ver.dwMinorVersion);
+					lua_settablevalue(L, "build", (lua_Integer)ver.dwBuildNumber);
+					lua_settablevalue(L, "service_major", (lua_Integer)ver.wServicePackMajor);
+					lua_settablevalue(L, "service_minor", (lua_Integer)ver.wServicePackMinor);
+					lua_settablevalue(L, "csd", std::wstring(ver.szCSDVersion));
+
+					lua_settablevalue(L, "product", (lua_Integer)ver.wProductType);
+					lua_settablevalue(L, "platform", (lua_Integer)ver.dwPlatformId);
+				}
+				else { //string
+					//os name
+					lua_pushsstring(L, device_get_osname(ver.dwMajorVersion, ver.dwMinorVersion, ver.dwBuildNumber));
+
+					//version
+					std::wstringstream s;
+					s << ver.dwMajorVersion << "." << ver.dwMinorVersion << "." << ver.dwBuildNumber << " " << std::wstring(ver.szCSDVersion);
+					lua_pushwstring(L, s.str());
+
+					return 2;
+				}
+			}
+			else
+				throw std::runtime_error(GET_OSVERSION_FAILED);
+		}
+
+		FreeLibrary(hModule);
+
+		return 1;
 	}
 	catch (std::exception& e) {
 		luaL_error(L, e.what());

@@ -40,6 +40,7 @@ std::wstring upperString(std::wstring type);
 std::string upperString(std::string type);
 
 std::vector<std::wstring> split(std::wstring str, wchar_t del);
+std::vector<std::string> split(std::string str, char del);
 
 void debug_string(std::wstring message);
 void debug_string(std::string message);

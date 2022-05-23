@@ -376,6 +376,42 @@ int vector2____type(lua_State* L) {
 	}
 }
 
+int vector2____call(lua_State* L) {
+	try {
+		lua_Vector2* val = lua_tovector2(L, 1);
+		int idx = tm_tointeger(L, 2);
+
+		if (lua_isnoneornil(L, 3)) {
+			switch (idx) {
+			case 1:
+				lua_pushnumber(L, val->x());
+				return 1;
+			case 2:
+				lua_pushnumber(L, val->y());
+				return 1;
+			default:
+				return 0;
+			}
+		}
+		else {
+			switch (idx) {
+			case 1:
+				val->x() = tm_tonumber(L, 3);
+				return 0;
+			case 2:
+				val->y() = tm_tonumber(L, 3);
+				return 0;
+			default:
+				return 0;
+			}
+		}
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
 int vector2__abs(lua_State* L) {
 	try {
 		lua_pushnumber(L, g_vector2_abs(*tm_tovector2(L, 1)));

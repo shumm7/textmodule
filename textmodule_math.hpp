@@ -21,3 +21,4 @@ dec_float repetition_permutation(int n, int r);
 dec_float circular_permutation(int n);
 
 double bernstein(double t, int n, int i);
+Eigen::VectorXcd equation(Eigen::VectorXd number);

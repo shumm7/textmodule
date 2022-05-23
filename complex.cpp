@@ -332,6 +332,55 @@ int complex____type(lua_State* L) {
 	}
 }
 
+int complex____tonumber(lua_State* L) {
+	try {
+		lua_Complex* val = lua_tocomplex(L, 1);
+		lua_Wstring ret = tostring_n(val->real()) + L"+" + tostring_n(val->imag()) + L"i";
+		lua_pushwstring(L, ret);
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int complex____call(lua_State* L) {
+	try {
+		lua_Complex* val = lua_tocomplex(L, 1);
+		int idx = tm_tointeger(L, 2);
+
+		if (lua_isnoneornil(L, 3)) {
+			switch (idx) {
+			case 1:
+				lua_pushnumber(L, val->real());
+				return 1;
+			case 2:
+				lua_pushnumber(L, val->imag());
+				return 1;
+			default:
+				return 0;
+			}
+		}
+		else {
+			switch (idx) {
+			case 1:
+				val->real(tm_tonumber(L, 3));
+				return 0;
+			case 2:
+				val->imag(tm_tonumber(L, 3));
+				return 0;
+			default:
+				return 0;
+			}
+		}
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
 int complex__abs(lua_State* L) {
 	try {
 		lua_Complex* val1 = tm_tocomplex(L, 1);

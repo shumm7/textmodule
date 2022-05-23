@@ -387,6 +387,12 @@ void lua_settablevalue(lua_State* L, int key, lua_Wstring value) {
 	lua_settable(L, -3);
 }
 
+void lua_settablevalue(lua_State* L, int key, lua_Bignumber value) {
+	lua_pushinteger(L, key);
+	lua_pushbignumber(L, value);
+	lua_settable(L, -3);
+}
+
 void lua_settablevalue(lua_State* L, const char* key, lua_Number value) {
 	lua_pushnumber(L, value);
 	lua_setfield(L, -2, key);
@@ -414,6 +420,11 @@ void lua_settablevalue(lua_State* L, const char* key, lua_Sstring value) {
 
 void lua_settablevalue(lua_State* L, const char* key, lua_Wstring value) {
 	lua_pushwstring(L, value);
+	lua_setfield(L, -2, key);
+}
+
+void lua_settablevalue(lua_State* L, const char* key, lua_Bignumber value) {
+	lua_pushbignumber(L, value);
 	lua_setfield(L, -2, key);
 }
 
