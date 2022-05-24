@@ -24,6 +24,7 @@
 #define TEXTMODULE_IMAGE "st_imgpixel*"
 #define TEXTMODULE_CLOCK "std::chrono::utc_clock::time_point*"
 #define TEXTMODULE_BIGNUMBER "boost::multiprecision::number<boost::multiprecision::cpp_dec_float<1024>>"
+#define TEXTMODULE_BIGNUMBER_TABLE "table bignumber"
 
 //Type for wide string (std::wstring)
 typedef std::wstring lua_Wstring;

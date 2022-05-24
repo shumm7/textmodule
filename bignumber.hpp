@@ -19,7 +19,7 @@ int bignumber___type(lua_State* L);
 void luaReg_const_bignumber(lua_State* L);
 
 static luaL_Reg TEXTMODULE_BIGNUMBER_REG[]{
-	{"bignumber", bignumber_bignumber},
+	{"__call", bignumber_bignumber},
 	{nullptr, nullptr}
 };
 

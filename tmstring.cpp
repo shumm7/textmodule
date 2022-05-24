@@ -566,6 +566,46 @@ int tmstring_chars(lua_State* L) {
 	}
 }
 
+int tmstring_count(lua_State* L) {
+	try {
+		lua_Wstring str = tm_towstring(L, 1);
+		lua_Wstring pattern = tm_towstring(L, 2);
+		bool plain = tm_toboolean_s(L, 3, false);
+		int count = 0;
+
+		if (str == L"" && pattern == L"") {
+			lua_pushnumber(L, 1);
+			return 1;
+		}
+
+		if (pattern == L"") {
+			lua_pushnumber(L, 0);
+			return 1;
+		}
+
+		if (plain) {
+			while (str.find(pattern) != std::wstring::npos) {
+				str = str.replace(str.find(pattern), pattern.length(), L"");
+				count++;
+			}
+		}
+		else {
+			std::wsmatch match;
+			while (std::regex_search(str, match, std::wregex(pattern))) {
+				str = str.replace(match.position(), match.length(), L"");
+				count++;
+			}
+		}
+
+		lua_pushnumber(L, count);
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
 
 void luaReg_tmstring(lua_State* L, const char* name, bool reg) {
 	if (reg) {

@@ -49,6 +49,7 @@ int tmstring_anagram(lua_State* L);
 int tmstring_gsplit(lua_State* L);
 int tmstring_lines(lua_State* L);
 int tmstring_chars(lua_State* L);
+int tmstring_count(lua_State* L);
 
 void luaReg_tmstring(lua_State* L, const char* name, bool reg);
 
@@ -77,5 +78,6 @@ static luaL_Reg TEXTMODULE_TMSTRING_REG[] = {
 	{"gsplit", tmstring_gsplit},
 	{"lines", tmstring_lines},
 	{"chars", tmstring_chars},
+	{"count", tmstring_count},
 	{ nullptr, nullptr }
 };

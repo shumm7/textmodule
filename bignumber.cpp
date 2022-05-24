@@ -10,7 +10,9 @@
 
 int bignumber_bignumber(lua_State* L) {
 	try {
-		lua_pushbignumber(L, tm_tobignumber(L, 1));
+		luaL_argcheck(L, lua_isstring(L, 2) || lua_isnumber(L, 2) || (lua_isuserdata(L, 2) && luaL_checkmetatable(L, 2, TEXTMODULE_BIGNUMBER)), 1, "string/number/bignumber expected");
+		
+		lua_pushbignumber(L, tm_tobignumber(L, 2));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -175,7 +177,6 @@ int bignumber___type(lua_State* L) {
 
 
 void luaReg_const_bignumber(lua_State* L) {
-	lua_newtable(L);
 	lua_settablevalue(L, "rad_to_deg", boost::math::constants::radian<lua_Bignumber>());
 	lua_settablevalue(L, "deg_to_rad", boost::math::constants::degree<lua_Bignumber>());
 	lua_settablevalue(L, "e", boost::math::constants::e<lua_Bignumber>());
@@ -196,6 +197,4 @@ void luaReg_const_bignumber(lua_State* L) {
 	lua_settablevalue(L, "egamma", boost::math::constants::euler<lua_Bignumber>());
 	lua_settablevalue(L, "phi", boost::math::constants::phi<lua_Bignumber>());
 	lua_settablevalue(L, "gauss", boost::math::constants::gauss<lua_Bignumber>());
-
-	lua_setfield(L, -2, "constant");
 }

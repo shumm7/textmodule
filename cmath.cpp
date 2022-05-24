@@ -727,15 +727,32 @@ void luaReg_cmath(lua_State* L, const char* name, bool reg) {
 
 		lua_pop(L, 1); //remove metatable
 
+		//table bignumber (metatable)
+		luaL_newmetatable(L, TEXTMODULE_BIGNUMBER_TABLE);
+		luaL_register(L, NULL, TEXTMODULE_BIGNUMBER_REG);
 
-		//constant
+		lua_pushstring(L, "__index"); //add __index
+		lua_newtable(L);
+		luaL_register(L, NULL, TEXTMODULE_BIGNUMBER_META_REG);
+		lua_settable(L, -3);
+
+		lua_pop(L, 1);
+
+
+		//const
 		lua_newtable(L);
 		luaReg_const_cmath(L);
+
+		//bignumber
+		lua_newtable(L);
+		luaL_register(L, NULL, TEXTMODULE_BIGNUMBER_REG);
 		luaReg_const_bignumber(L);
+		luaL_getmetatable(L, TEXTMODULE_BIGNUMBER_TABLE);
+		lua_setmetatable(L, -2);
+		lua_setfield(L, -2, "bignumber");
 
 		//function
 		luaL_register(L, NULL, TEXTMODULE_CMATH_REG);
-		luaL_register(L, NULL, TEXTMODULE_BIGNUMBER_REG);
 		lua_setfield(L, -2, name);
 	}
 }
