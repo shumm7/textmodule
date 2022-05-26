@@ -17,6 +17,42 @@
 static const int sentinel_ = 0;
 #define sentinel        ((void *)&sentinel_)
 
+int pairsaux(lua_State* L, const char* method, int iszero, lua_CFunction iter) {
+	if (!luaL_getmetafield(L, 1, method)) {  /* no metamethod? */
+		luaL_checktype(L, 1, LUA_TTABLE);  /* argument must be a table */
+		lua_pushcfunction(L, iter);  /* will return generator, */
+		lua_pushvalue(L, 1);  /* state, */
+		if (iszero) lua_pushinteger(L, 0);  /* and initial value */
+		else lua_pushnil(L);
+	}
+	else {
+		lua_pushvalue(L, 1);  /* argument 'self' to metamethod */
+		lua_call(L, 1, 3);  /* get 3 values from metamethod */
+	}
+	return 3;
+}
+
+int nextaux(lua_State* L) {
+	luaL_checktype(L, 1, LUA_TTABLE);
+	lua_settop(L, 2);  /* create a 2nd argument if there isn't one */
+	if (lua_next(L, 1))
+		return 2;
+	else {
+		lua_pushnil(L);
+		return 1;
+	}
+}
+
+int ipairsaux(lua_State* L) {
+	int i = luaL_checkint(L, 2);
+	luaL_checktype(L, 1, LUA_TTABLE);
+	i++;  /* next value */
+	lua_pushinteger(L, i);
+	lua_rawgeti(L, 1, i);
+	return (lua_isnil(L, -1)) ? 1 : 2;
+}
+
+
 int base_getinfo(lua_State* L) {
 	try {
 		lua_Wstring t = tm_towstring(L, 1);
@@ -129,6 +165,25 @@ int base_showmetatable(lua_State* L) {
 	}
 }
 
+int base_maketable(lua_State* L) {
+	try {
+		int n = lua_gettop(L);
+
+		lua_newtable(L);
+		for (int i = 0; i < n; i++) {
+			lua_pushinteger(L, i+1);
+			lua_pushvalue(L, n + 1);
+			lua_settable(L, -3);
+		}
+
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
 int base_debug_print(lua_State* L) {
 	try {
 		int i = 1;
@@ -136,8 +191,7 @@ int base_debug_print(lua_State* L) {
 
 		if (lua_type(L, i) == LUA_TNONE) {
 			debug_string(ret);
-			lua_pushwstring(L, ret);
-			return 1;
+			return 0;
 		}
 
 		for (int i = 1; i <= lua_gettop(L); i++) {
@@ -145,8 +199,8 @@ int base_debug_print(lua_State* L) {
 		}
 		ret = ret.substr(0, ret.length() - 1);
 		debug_string(ret);
-		lua_pushwstring(L, ret);
-		return 1;
+
+		return 0;
 	}
 	catch (std::exception& e) {
 		luaL_error(L, e.what());
@@ -156,34 +210,17 @@ int base_debug_print(lua_State* L) {
 
 int base_type(lua_State* L) {
 	try {
-		int stacksize = lua_gettop(L);
-		if (stacksize <= 1) {
-			if (luaL_callmeta(L, 1, "__type"))
-				return 1;
-
+		int n= lua_gettop(L);
+		if (n <= 0) {
 			lua_pushstring(L, tm_typename(L, 1));
 			return 1;
 		}
-		else {
-			int i = 1;
-			std::vector<std::string> res;
-			while (lua_type(L, i) != LUA_TNONE) {
-				if (luaL_callmeta(L, i, "__type")) {
-					int d = lua_gettop(L) - stacksize;
-					res.push_back(lua_tostring(L, -d));
-					lua_pop(L, d);
-				}
-				else {
-					res.push_back(tm_typename(L, i));
-				}
-				i++;
-			}
 
-			lua_newtable(L);
-			for (int j = 0; j < (i - 1); j++)
-				lua_settablevalue(L, j + 1, res.at(j));
-			return 1;
-		}
+
+		for (int i = 0; i < n; i++)
+			lua_pushstring(L, tm_typename(L, i+1));
+
+		return n;
 	}
 	catch (std::exception& e) {
 		luaL_error(L, e.what());
@@ -344,6 +381,59 @@ int base_pointer(lua_State* L) {
 		std::string s = fmt::format("{0:p}", lua_topointer(L, 1));
 		lua_pushsstring(L, s);
 		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int base_getglobal(lua_State* L) {
+	try {
+		lua_getglobal(L, tm_tostring(L, 1));
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int base_setglobal(lua_State* L) {
+	try {
+		lua_pushvalue(L, 1);
+		lua_setglobal(L, tm_tostring(L, 2));
+		return 0;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int base_pairs(lua_State* L) {
+	try {
+		return pairsaux(L, "__pairs", 0, nextaux);
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int base_ipairs(lua_State* L) {
+	try {
+		return pairsaux(L, "__ipairs", 1, ipairsaux);
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int base_next(lua_State* L){
+	try {
+		return nextaux(L);
 	}
 	catch (std::exception& e) {
 		luaL_error(L, e.what());

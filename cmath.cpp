@@ -13,9 +13,400 @@
 #include "textmodule_exception.hpp"
 #include "bignumber.hpp"
 
-int cmath_cbrt(lua_State* L) {
+int cmath_sin(lua_State* L) {
 	try {
-		lua_pushnumber(L, std::cbrt(tm_tonumber(L, 1)));
+		if (luaL_callmeta(L, 1, "__sin"))
+			return 1;
+
+		lua_pushnumber(L, std::sin(tm_tonumber(L, 1)));
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int cmath_sinh(lua_State* L) {
+	try {
+		if (luaL_callmeta(L, 1, "__sinh"))
+			return 1;
+
+		lua_pushnumber(L, std::sinh(tm_tonumber(L, 1)));
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int cmath_cos(lua_State* L) {
+	try {
+		if (luaL_callmeta(L, 1, "__cos"))
+			return 1;
+
+		lua_pushnumber(L, std::cos(tm_tonumber(L, 1)));
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int cmath_cosh(lua_State* L) {
+	try {
+		if (luaL_callmeta(L, 1, "__cosh"))
+			return 1;
+
+		lua_pushnumber(L, std::cosh(tm_tonumber(L, 1)));
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int cmath_tan(lua_State* L) {
+	try {
+		if (luaL_callmeta(L, 1, "__tan"))
+			return 1;
+
+		lua_pushnumber(L, std::tan(tm_tonumber(L, 1)));
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int cmath_tanh(lua_State* L) {
+	try {
+		if (luaL_callmeta(L, 1, "__tanh"))
+			return 1;
+
+		lua_pushnumber(L, std::tanh(tm_tonumber(L, 1)));
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int cmath_asin(lua_State* L) {
+	try {
+		if (luaL_callmeta(L, 1, "__asin"))
+			return 1;
+
+		lua_pushnumber(L, std::asin(tm_tonumber(L, 1)));
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int cmath_asinh(lua_State* L) {
+	try {
+		if (luaL_callmeta(L, 1, "__asinh"))
+			return 1;
+
+		lua_pushnumber(L, std::asinh(tm_tonumber(L, 1)));
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int cmath_acos(lua_State* L) {
+	try {
+		if (luaL_callmeta(L, 1, "__acos"))
+			return 1;
+
+		lua_pushnumber(L, std::acos(tm_tonumber(L, 1)));
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int cmath_acosh(lua_State* L) {
+	try {
+		if (luaL_callmeta(L, 1, "__acosh"))
+			return 1;
+
+		lua_pushnumber(L, std::acosh(tm_tonumber(L, 1)));
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int cmath_atan(lua_State* L) {
+	try {
+		if (luaL_callmeta(L, 1, "__atan"))
+			return 1;
+
+		lua_pushnumber(L, std::atan(tm_tonumber(L, 1)));
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int cmath_atanh(lua_State* L) {
+	try {
+		if (luaL_callmeta(L, 1, "__atanh"))
+			return 1;
+
+		lua_pushnumber(L, std::atanh(tm_tonumber(L, 1)));
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+
+int cmath_abs(lua_State* L) {
+	try {
+		if (luaL_callmeta(L, 1, "__abs"))
+			return 1;
+
+		lua_pushnumber(L, std::fabs(tm_tonumber(L, 1)));
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int cmath_ceil(lua_State* L) {
+	try {
+		if (luaL_callmeta(L, 1, "__ceil"))
+			return 1;
+
+		lua_pushnumber(L, std::ceil(tm_tonumber(L, 1)));
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int cmath_deg(lua_State* L) {
+	try {
+		if (luaL_callmeta(L, 1, "__deg"))
+			return 1;
+
+		lua_pushnumber(L, tm_tonumber(L, 1) * boost::math::constants::radian<lua_Number>());
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int cmath_exp(lua_State* L) {
+	try {
+		if (luaL_callmeta(L, 1, "__exp"))
+			return 1;
+
+		lua_pushnumber(L, std::exp(tm_tonumber(L, 1)));
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int cmath_floor(lua_State* L) {
+	try {
+		if (luaL_callmeta(L, 1, "__floor"))
+			return 1;
+
+		lua_pushnumber(L, std::floor(tm_tonumber(L, 1)));
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int cmath_fmod(lua_State* L) {
+	try {
+		if (luaL_callmeta(L, 1, "__fmod"))
+			return 1;
+
+		lua_pushnumber(L, std::fmod(tm_tonumber(L, 1), tm_tonumber(L, 2)));
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int cmath_frexp(lua_State* L) {
+	try {
+		if (luaL_callmeta(L, 1, "__frexp"))
+			return 2;
+
+		int e = 0;
+		lua_pushnumber(L, std::frexp(tm_tonumber(L, 1), &e));
+		lua_pushinteger(L, e);
+		return 2;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int cmath_ldexp(lua_State* L) {
+	try {
+		if (luaL_callmeta(L, 1, "__ldexp"))
+			return 1;
+
+		lua_pushnumber(L, std::ldexp(tm_tonumber(L, 1), tm_tonumber(L, 2)));
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int cmath_log(lua_State* L) {
+	try {
+		if (luaL_callmeta(L, 1, "__log"))
+			return 1;
+
+		lua_pushnumber(L, std::log(tm_tonumber(L, 1)) / std::log(tm_tonumber_s(L, 2, boost::math::constants::e<lua_Number>())));
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int cmath_max(lua_State* L) {
+	try {
+		if (luaL_callmeta(L, 1, "__max"))
+			return 1;
+
+		int n = lua_gettop(L);
+		lua_Number dmax = tm_tonumber(L, 1);
+		int i;
+		for (i = 2; i <= n; i++) {
+			lua_Number d =tm_tonumber(L, i);
+			if (d > dmax)
+				dmax = d;
+		}
+		lua_pushnumber(L, dmax);
+
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int cmath_min(lua_State* L) {
+	try {
+		if (luaL_callmeta(L, 1, "__min"))
+			return 1;
+
+		int n = lua_gettop(L);
+		lua_Number dmin = tm_tonumber(L, 1);
+		int i;
+		for (i = 2; i <= n; i++) {
+			lua_Number d = tm_tonumber(L, i);
+			if (d < dmin)
+				dmin = d;
+		}
+		lua_pushnumber(L, dmin);
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int cmath_modf(lua_State* L) {
+	try {
+		if (luaL_callmeta(L, 1, "__min"))
+			return 2;
+
+		lua_Number i = 0;
+		lua_Number f = std::modf(tm_tonumber(L, 1), &i);
+
+		lua_pushnumber(L, i);
+		lua_pushnumber(L, f);
+		return 2;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int cmath_pow(lua_State* L) {
+	try {
+		if (luaL_callmeta(L, 1, "__pow"))
+			return 1;
+
+		lua_pushnumber(L, std::pow(tm_tonumber(L, 1), tm_tonumber(L, 2)));
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int cmath_rad(lua_State* L) {
+	try {
+		if (luaL_callmeta(L, 1, "__rad"))
+			return 1;
+
+		lua_pushnumber(L, tm_tonumber(L, 1) * boost::math::constants::degree<lua_Number>());
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int cmath_sqrt(lua_State* L) {
+	try {
+		if (luaL_callmeta(L, 1, "__sqrt"))
+			return 1;
+
+		lua_pushnumber(L, std::sqrt(tm_tonumber(L, 1)));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -26,7 +417,52 @@ int cmath_cbrt(lua_State* L) {
 
 int cmath_trunc(lua_State* L) {
 	try {
+		if (luaL_callmeta(L, 1, "__trunc"))
+			return 1;
+
 		lua_pushnumber(L, std::trunc(tm_tonumber(L, 1)));
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int cmath_round(lua_State* L) {
+	try {
+		if (luaL_callmeta(L, 1, "__round"))
+			return 1;
+
+		lua_pushnumber(L, std::round(tm_tonumber(L, 1)));
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int cmath_norm(lua_State* L) {
+	try {
+		if (luaL_callmeta(L, 1, "__norm"))
+			return 1;
+
+		lua_pushnumber(L, std::norm(tm_tonumber(L, 1)));
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int cmath_conj(lua_State* L) {
+	try {
+		if (luaL_callmeta(L, 1, "__conj"))
+			return 1;
+
+		lua_pushcomplex(L, std::conj(tm_tonumber(L, 1)));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -37,7 +473,22 @@ int cmath_trunc(lua_State* L) {
 
 int cmath_lerp(lua_State* L) {
 	try {
+		if (luaL_callmeta(L, 1, "__lerp"))
+			return 1;
+
 		lua_pushnumber(L, std::lerp(tm_tonumber(L, 1), tm_tonumber(L, 2), tm_tonumber(L, 3)));
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+
+int cmath_cbrt(lua_State* L) {
+	try {
+		lua_pushnumber(L, std::cbrt(tm_tonumber(L, 1)));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -679,6 +1130,7 @@ int cmath_equation(lua_State* L) {
 		return 1;
 	}
 }
+
 
 void luaReg_const_cmath(lua_State* L) {
 	lua_settablevalue(L, "rad_to_deg", 180.0 / std::numbers::pi);

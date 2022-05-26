@@ -36,6 +36,7 @@ std::wstring getVersionNum(int num) {
 	case 28: return L"1.3.5";
 	case 29: return L"1.3.6";
 	case 30: return L"1.3.7";
+	case 31: return L"1.4.0";
 
 	default: return L"";
 	}

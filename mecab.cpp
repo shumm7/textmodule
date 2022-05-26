@@ -163,7 +163,7 @@ int mecab_ruby_h(lua_State* L) {
 		MeCab::Tagger* tagger = model->createTagger();
 		mecab_check(tagger);
 		std::wstring yomi = mecab_getRuby(tagger, text);
-		lua_pushustring(L, HiraganaToKatakana(WstrToUstr(yomi)));
+		lua_pushwstring(L, yomi);
 
 		delete model;
 		delete tagger;

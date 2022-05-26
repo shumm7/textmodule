@@ -974,12 +974,22 @@ const char* tm_convtostring(lua_State* L, int idx) {
 }
 
 const char* tm_typename(lua_State* L, int idx) {
-	int tp = lua_type(L, idx);
-	if (tp == LUA_TUSERDATA) {
-		if (luaL_checkmetatable(L, idx, LUA_FILEHANDLE))
-			return "filehandle";
+	int n = lua_gettop(L);
+
+	if (luaL_callmeta(L, idx, "__type")) {
+		if (lua_type(L, -(lua_gettop(L) - n)) == LUA_TSTRING) {
+			const char* c = lua_tostring(L, -(lua_gettop(L) - n));
+			lua_pop(L, lua_gettop(L) - n);
+			return c;
+		}
+		else {
+			lua_pop(L, lua_gettop(L) - n);
+			luaL_argerror(L, idx, "invalid argument type of name");
+			return "";
+		}
 	}
-	return lua_typename(L, tp);
+
+	return lua_typename(L, lua_type(L, idx));
 }
 
 void lua_printstack(lua_State* L)
