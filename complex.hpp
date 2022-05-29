@@ -45,7 +45,6 @@ int complex__atanh(lua_State* L);
 
 int complex__exp(lua_State* L);
 int complex__log(lua_State* L);
-int complex__log10(lua_State* L);
 int complex__sqrt(lua_State* L);
 
 int complex__table(lua_State* L);
@@ -61,32 +60,12 @@ static luaL_Reg TEXTMODULE_COMPLEX_REG[] = {
 
 	{"real", complex__real},
 	{"imag", complex__imag},
+	{"r", complex__real},
+	{"i", complex__imag},
 
-	{"abs", complex__abs},
 	{"arg", complex__arg},
-	{"norm", complex__norm},
-	{"conj", complex__conj},
 	{"proj", complex__proj},
 	{"polar", complex__polar},
-
-	{"cos", complex__cos},
-	{"sin", complex__sin},
-	{"tan", complex__tan},
-	{"cosh", complex__cosh},
-	{"sinh", complex__sinh},
-	{"tanh", complex__tanh},
-	{"acos", complex__acos},
-	{"asin", complex__asin},
-	{"atan", complex__atan},
-	{"acosh", complex__acosh},
-	{"asinh", complex__asinh},
-	{"atanh", complex__atanh},
-
-	{"exp", complex__exp},
-	{"log", complex__log},
-	{"log10", complex__log10},
-	{"pow", complex____pow},
-	{"sqrt", complex__sqrt},
 
 	{"table", complex__table},
 	{"vector2", complex_vector2},
@@ -97,6 +76,8 @@ static luaL_Reg TEXTMODULE_COMPLEX_REG[] = {
 static luaL_Reg TEXTMODULE_COMPLEX_META_REG[] = {
 	{"real", complex__real},
 	{"imag", complex__imag},
+	{"r", complex__real},
+	{"i", complex__imag},
 
 	{"__tostring", complex____tostring},
 	{"__add", complex____add},
@@ -113,31 +94,30 @@ static luaL_Reg TEXTMODULE_COMPLEX_META_REG[] = {
 	{"__tonumber", complex____tonumber},
 	{"__call", complex____call},
 
-	{"abs", complex__abs},
+	{"__abs", complex__abs},
+	{"__norm", complex__norm},
+	{"__conj", complex__conj},
+
+	{"__cos", complex__cos},
+	{"__sin", complex__sin},
+	{"__tan", complex__tan},
+	{"__cosh", complex__cosh},
+	{"__sinh", complex__sinh},
+	{"__tanh", complex__tanh},
+	{"__acos", complex__acos},
+	{"__asin", complex__asin},
+	{"__atan", complex__atan},
+	{"__acosh", complex__acosh},
+	{"__asinh", complex__asinh},
+	{"__atanh", complex__atanh},
+
+	{"__exp", complex__exp},
+	{"__log", complex__log},
+	{"__sqrt", complex__sqrt},
+
 	{"arg", complex__arg},
-	{"norm", complex__norm},
-	{"conj", complex__conj},
 	{"proj", complex__proj},
 	{"polar", complex__polar},
-
-	{"cos", complex__cos},
-	{"sin", complex__sin},
-	{"tan", complex__tan},
-	{"cosh", complex__cosh},
-	{"sinh", complex__sinh},
-	{"tanh", complex__tanh},
-	{"acos", complex__acos},
-	{"asin", complex__asin},
-	{"atan", complex__atan},
-	{"acosh", complex__acosh},
-	{"asinh", complex__asinh},
-	{"atanh", complex__atanh},
-
-	{"exp", complex__exp},
-	{"log", complex__log},
-	{"log10", complex__log10},
-	{"pow", complex____pow},
-	{"sqrt", complex__sqrt},
 
 	{"table", complex__table},
 	{"vector2", complex_vector2},

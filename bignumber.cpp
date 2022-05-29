@@ -175,6 +175,17 @@ int bignumber___type(lua_State* L) {
 	}
 }
 
+int bignumber___abs(lua_State* L) {
+	try {
+		lua_pushbignumber(L, boost::multiprecision::fabs(tm_tobignumber(L, 1)));
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
 
 void luaReg_const_bignumber(lua_State* L) {
 	lua_settablevalue(L, "rad_to_deg", boost::math::constants::radian<lua_Bignumber>());

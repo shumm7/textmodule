@@ -632,21 +632,9 @@ int complex__exp(lua_State* L) {
 int complex__log(lua_State* L) {
 	try {
 		lua_Complex* val1 = tm_tocomplex(L, 1);
+		lua_Complex* val2 = tm_tocomplex(L, 2);
 
-		lua_pushcomplex(L, std::log(*val1));
-		return 1;
-	}
-	catch (std::exception& e) {
-		luaL_error(L, e.what());
-		return 1;
-	}
-}
-
-int complex__log10(lua_State* L) {
-	try {
-		lua_Complex* val1 = tm_tocomplex(L, 1);
-
-		lua_pushcomplex(L, std::log10(*val1));
+		lua_pushcomplex(L, std::log(*val1) / std::log(*val2));
 		return 1;
 	}
 	catch (std::exception& e) {

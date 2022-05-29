@@ -12,6 +12,7 @@ int cmath_asinh(lua_State* L);
 int cmath_acos(lua_State* L);
 int cmath_acosh(lua_State* L);
 int cmath_atan(lua_State* L);
+int cmath_atan2(lua_State* L);
 int cmath_atanh(lua_State* L);
 
 int cmath_abs(lua_State* L);
@@ -34,6 +35,11 @@ int cmath_round(lua_State* L);
 int cmath_norm(lua_State* L);
 int cmath_conj(lua_State* L);
 int cmath_lerp(lua_State* L);
+int cmath_dot(lua_State* L);
+int cmath_cross(lua_State* L);
+int cmath_scale(lua_State* L);
+int cmath_distance(lua_State* L);
+int cmath_normalize(lua_State* L);
 
 int cmath_cbrt(lua_State* L);
 int cmath_rep(lua_State* L);
@@ -81,8 +87,11 @@ int cmath_riemann_zeta(lua_State* L);
 int cmath_sph_bessel(lua_State* L);
 int cmath_sph_legendre(lua_State* L);
 int cmath_sph_neumann(lua_State* L);
+int cmath_zeta(lua_State* L);
 int cmath_bezier(lua_State* L);
 int cmath_equation(lua_State* L);
+int cmath_fibonacci(lua_State* L);
+int cmath_prime(lua_State* L);
 
 void luaReg_cmath(lua_State* L, const char* name, bool reg);
 
@@ -91,6 +100,7 @@ static luaL_Reg TEXTMODULE_CMATH_REG[] = {
 	{"acos",cmath_acos},
 	{"asin",cmath_asin},
 	{"atan",cmath_atan},
+	{"atan2",cmath_atan2},
 	{"atanh", cmath_atanh},
 	{"ceil",cmath_ceil},
 	{"cosh", cmath_cosh},
@@ -117,6 +127,11 @@ static luaL_Reg TEXTMODULE_CMATH_REG[] = {
 	{"norm", cmath_norm},
 	{"conj", cmath_conj},
 	{"lerp", cmath_lerp},
+	{"dot", cmath_dot},
+	{"cross", cmath_cross},
+	{"scale", cmath_scale},
+	{"distance", cmath_distance},
+	{"normalize", cmath_normalize},
 
 	{"cbrt", cmath_cbrt},
 	{"clamp", cmath_clamp},
@@ -167,5 +182,7 @@ static luaL_Reg TEXTMODULE_CMATH_REG[] = {
 
 	{"bezier", cmath_bezier},
 	{"equation", cmath_equation},
+	{"fibonacci", cmath_fibonacci},
+	{"prime", cmath_prime},
 	{ nullptr, nullptr }
 };

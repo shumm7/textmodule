@@ -7,6 +7,9 @@
 #include <numeric>
 #include <Eigen/Dense>
 
+#include <boost/math/special_functions/fibonacci.hpp>
+#include <boost/math/special_functions/prime.hpp>
+
 #include "textmodule_lua.hpp"
 #include "textmodule_math.hpp"
 #include "textmodule_geometry.hpp"
@@ -159,6 +162,20 @@ int cmath_atan(lua_State* L) {
 			return 1;
 
 		lua_pushnumber(L, std::atan(tm_tonumber(L, 1)));
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int cmath_atan2(lua_State* L) {
+	try {
+		if (luaL_callmeta(L, 1, "__atan2"))
+			return 1;
+
+		lua_pushnumber(L, std::atan2(tm_tonumber(L, 1), tm_tonumber(L, 2)));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -462,7 +479,7 @@ int cmath_conj(lua_State* L) {
 		if (luaL_callmeta(L, 1, "__conj"))
 			return 1;
 
-		lua_pushcomplex(L, std::conj(tm_tonumber(L, 1)));
+		lua_pushnumber(L, tm_tonumber(L, 1));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -484,6 +501,81 @@ int cmath_lerp(lua_State* L) {
 		return 1;
 	}
 }
+
+int cmath_dot(lua_State* L) {
+	try {
+		if (luaL_callmeta(L, 1, "__dot"))
+			return 1;
+
+		lua_pushnumber(L, tm_tonumber(L, 1) * tm_tonumber(L, 2));
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int cmath_cross(lua_State* L) {
+	try {
+		if (luaL_callmeta(L, 1, "__cross"))
+			return 1;
+
+		tm_tonumber(L, 1);
+		tm_tonumber(L, 2);
+
+		lua_pushnumber(L, 0);
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int cmath_scale(lua_State* L) {
+	try {
+		if (luaL_callmeta(L, 1, "__scale"))
+			return 1;
+
+		lua_pushnumber(L, tm_tonumber(L, 1) * tm_tonumber(L, 2));
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int cmath_distance(lua_State* L) {
+	try {
+		if (luaL_callmeta(L, 1, "__distance"))
+			return 1;
+
+		lua_pushnumber(L, std::fabs(tm_tonumber(L, 1) - tm_tonumber(L, 2)));
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int cmath_normalize(lua_State* L) {
+	try {
+		if (luaL_callmeta(L, 1, "__normalize"))
+			return 1;
+
+		lua_Number d = tm_tonumber(L, 1);
+		lua_pushnumber(L, d / std::fabs(d));
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
 
 
 int cmath_cbrt(lua_State* L) {
@@ -1046,6 +1138,18 @@ int cmath_sph_neumann(lua_State* L) {
 	}
 }
 
+
+int cmath_zeta(lua_State* L) {
+	try {
+		lua_pushnumber(L, boost::math::zeta(tm_tonumber(L, 1)));
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
 int cmath_bezier(lua_State* L) {
 	try {
 		lua_Number t = tm_tonumber(L, 1);
@@ -1131,10 +1235,88 @@ int cmath_equation(lua_State* L) {
 	}
 }
 
+int cmath_fibonacci_aux(lua_State* L) {
+	try {
+		lua_Integer n = tm_tointeger(L, lua_upvalueindex(1));
+		lua_pushnumber(L, boost::math::fibonacci<lua_Number>(n));
+
+		lua_pushinteger(L, n + 1);
+		lua_replace(L, lua_upvalueindex(1));
+		return 1;
+	}
+	catch (std::overflow_error) {
+		return 0;
+	}
+}
+
+int cmath_fibonacci(lua_State* L) {
+	try {
+		if (lua_gettop(L)>0) {
+			lua_pushnumber(L, boost::math::fibonacci<lua_Number>(tm_tointeger(L, 1)));
+			return 1;
+		}
+		else {
+			lua_settop(L, 0);
+			lua_pushinteger(L, 0);
+			lua_pushcclosure(L, cmath_fibonacci_aux, 1);
+			return 1;
+		}
+	}
+	catch (std::overflow_error) {
+		return 0;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int cmath_prime_aux(lua_State* L) {
+	try {
+		lua_Integer n = tm_tointeger(L, lua_upvalueindex(1));
+		lua_pushnumber(L, boost::math::prime(n-1));
+
+		lua_pushinteger(L, n + 1);
+		lua_replace(L, lua_upvalueindex(1));
+		return 1;
+	}
+	catch (std::overflow_error) {
+		return 0;
+	}
+	catch (std::out_of_range) {
+		return 0;
+	}
+}
+
+int cmath_prime(lua_State* L) {
+	try {
+		if (lua_gettop(L) > 0) {
+			lua_pushnumber(L, boost::math::prime(tm_tointeger(L, 1)-1));
+			return 1;
+		}
+		else {
+			lua_settop(L, 0);
+			lua_pushinteger(L, 0);
+			lua_pushcclosure(L, cmath_prime_aux, 1);
+			return 1;
+		}
+	}
+	catch (std::overflow_error) {
+		return 0;
+	}
+	catch (std::out_of_range) {
+		return 0;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
 
 void luaReg_const_cmath(lua_State* L) {
-	lua_settablevalue(L, "rad_to_deg", 180.0 / std::numbers::pi);
-	lua_settablevalue(L, "deg_to_rad", std::numbers::pi / 180.0);
+	lua_settablevalue(L, "rad_to_deg", boost::math::constants::radian<lua_Number>());
+	lua_settablevalue(L, "deg_to_rad", boost::math::constants::degree<lua_Number>());
 	lua_settablevalue(L, "e", std::numbers::e);
 	lua_settablevalue(L, "napier", std::numbers::e);
 	lua_settablevalue(L, "log2e", std::numbers::log2e);
@@ -1153,12 +1335,14 @@ void luaReg_const_cmath(lua_State* L) {
 	lua_settablevalue(L, "egamma", std::numbers::egamma);
 	lua_settablevalue(L, "phi", std::numbers::phi);
 	lua_settablevalue(L, "gauss", boost::math::constants::gauss<lua_Number>());
+
 	lua_settablevalue(L, "huge", HUGE_VAL);
 	lua_settablevalue(L, "infinity", std::numeric_limits<lua_Number>::infinity());
 	lua_settablevalue(L, "negative_infinity", -std::numeric_limits<lua_Number>::infinity());
 	lua_settablevalue(L, "nan", NAN);
 	lua_settablevalue(L, "quiet_nan", std::numeric_limits<lua_Number>::quiet_NaN());
 	lua_settablevalue(L, "signaling_nan", std::numeric_limits<lua_Number>::signaling_NaN());
+
 	lua_settablevalue(L, "min_exponent", std::numeric_limits<lua_Number>::min_exponent10);
 	lua_settablevalue(L, "max_exponent", std::numeric_limits<lua_Number>::max_exponent10);
 	lua_settablevalue(L, "digits", std::numeric_limits<lua_Number>::digits10);

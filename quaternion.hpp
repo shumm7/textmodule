@@ -59,16 +59,9 @@ static luaL_Reg TEXTMODULE_QUATERNION_REG[] = {
 	{"y", quaternion__y},
 	{"z", quaternion__z},
 
-	{"abs", quaternion__abs},
-	{"norm", quaternion__norm},
-	{"conj", quaternion__conj},
 	{"euler", quaternion__euler},
 	{"inverse", quaternion__inverse},
-	{"normalize", quaternion__normalize},
-	{"dot", quaternion__dot},
-	{"cross", quaternion__cross},
 	{"table", quaternion__table},
-	{"slerp", quaternion__slerp},
 	{"vector4", quaternion__vector4},
 	{ nullptr, nullptr }
 };
@@ -93,16 +86,15 @@ static luaL_Reg TEXTMODULE_QUATERNION_META_REG[] = {
 	{"__tonumber", quaternion____tonumber},
 	{"__call", quaternion____call},
 
-	{"abs", quaternion__abs},
-	{"norm", quaternion__norm},
-	{"conj", quaternion__conj},
-	{"euler", quaternion__euler},
-	{"inverse", quaternion__inverse},
-	{"normalize", quaternion__normalize},
-	{"dot", quaternion__dot},
-	{"cross", quaternion__cross},
+	{"__abs", quaternion__abs},
+	{"__norm", quaternion__norm},
+	{"__conj", quaternion__conj},
+	{"__dot", quaternion__dot},
+	{"__cross", quaternion__cross},
+	{"__lerp", quaternion__slerp},
+	{"__normalize", quaternion__normalize},
+
 	{"table", quaternion__table},
-	{"slerp", quaternion__slerp},
 	{"vector4", quaternion__vector4},
 	{nullptr, nullptr}
 };
