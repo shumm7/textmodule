@@ -8,6 +8,7 @@
 #include <fmt/chrono.h>
 #include <vector>
 
+#include "tmstring.hpp"
 #include "textmodule_lua.hpp"
 #include "textmodule_string.hpp"
 #include "textmodule_math.hpp"
@@ -322,35 +323,6 @@ int string_gmatch(lua_State* L) {
 	}
 }
 
-int string_split(lua_State* L) {
-	try {
-		lua_Wstring str = tm_towstring(L, 1);
-		lua_Wstring pattern = tm_towstring(L, 2);
-		lua_Integer n = tm_tointeger_s(L, 3, -1);
-
-		std::wsmatch result;
-		int count = 0;
-
-		lua_newtable(L);
-		while (std::regex_search(str, result, std::wregex(pattern)) && (count < n || n < 1)) {
-			int p = result.position();
-			lua_settablevalue(L, count + 1, str.substr(0, p));
-
-			str = str.substr(p + result[0].str().length());
-			count++;
-		}
-
-		if (str.length() > 0)
-			lua_settablevalue(L, count + 1, str);
-
-		return 1;
-	}
-	catch (std::exception& e) {
-		luaL_error(L, e.what());
-		return 1;
-	}
-}
-
 int string_rep(lua_State* L) {
 	try {
 		lua_Wstring s = tm_towstring(L, 1);
@@ -413,10 +385,28 @@ int string_format(lua_State* L) {
 	}
 }
 
+int string_dump_writer(lua_State* L, const void* b, size_t size, void* B) {
+	(void)L;
+	luaL_addlstring((luaL_Buffer*)B, (const char*)b, size);
+	return 0;
+}
+
+int string_dump(lua_State* L) {
+	luaL_Buffer b;
+	luaL_checktype(L, 1, LUA_TFUNCTION);
+	lua_settop(L, 1);
+	luaL_buffinit(L, &b);
+	if (lua_dump(L, string_dump_writer, &b) != 0)
+		luaL_error(L, "unable to dump given function");
+	luaL_pushresult(&b);
+	return 1;
+}
+
 void luaReg_string(lua_State* L, const char* name, bool reg) {
 	if (reg) {
 		lua_newtable(L);
 		luaL_register(L, NULL, TEXTMODULE_STRING_REG);
+		luaReg_tmstring(L);
 		lua_setfield(L, -2, name);
 	}
 }

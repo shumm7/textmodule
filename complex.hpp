@@ -94,10 +94,6 @@ static luaL_Reg TEXTMODULE_COMPLEX_META_REG[] = {
 	{"__tonumber", complex____tonumber},
 	{"__call", complex____call},
 
-	{"__abs", complex__abs},
-	{"__norm", complex__norm},
-	{"__conj", complex__conj},
-
 	{"__cos", complex__cos},
 	{"__sin", complex__sin},
 	{"__tan", complex__tan},
@@ -110,11 +106,16 @@ static luaL_Reg TEXTMODULE_COMPLEX_META_REG[] = {
 	{"__acosh", complex__acosh},
 	{"__asinh", complex__asinh},
 	{"__atanh", complex__atanh},
-
 	{"__exp", complex__exp},
 	{"__log", complex__log},
 	{"__sqrt", complex__sqrt},
+	{"__abs", complex__abs},
+	{"__norm", complex__norm},
+	{"__conj", complex__conj},
 
+	{"abs", complex__abs},
+	{"norm", complex__norm},
+	{"conj", complex__conj},
 	{"arg", complex__arg},
 	{"proj", complex__proj},
 	{"polar", complex__polar},

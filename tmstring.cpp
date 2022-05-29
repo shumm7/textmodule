@@ -15,6 +15,29 @@
 #include "textmodule_lua.hpp"
 #include "textmodule_string.hpp"
 
+#define S_NUMBER "0123456789"
+#define S_HEX_DIGITS "0123456789abcdefABCDEF"
+#define S_ALPHABET "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+#define S_SMALL_ALPHABET "abcdefghijklmnopqrstuvwxyz"
+#define S_CAPITAL_ALPHABET "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+#define S_ALPHABET_NUMBER "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+#define S_FULL_NUMBER "０１２３４５６７８９"
+#define S_FULL_ALPHABET "ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ"
+#define S_FULL_SMALL_ALPHABET "ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ"
+#define S_FULL_CAPITAL_ALPHABET "ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ"
+#define S_FULL_ALPHABET_NUMBER "ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ０１２３４５６７８９"
+#define S_SYMBOL "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~"
+#define S_ASCII "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~"
+#define S_HALF_KATAKANA "ｦｧｨｩｪｫｬｭｮｯｰｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝﾞﾟ"
+#define S_KATAKANA "ァアィイゥウェエォオカガキギクグケゲコゴサザシジスズセゼソゾタダチヂッツヅテデトドナニヌネノハバパヒビピフブプヘベペホボポマミムメモャヤュユョヨラリルレロヮワヰヱヲンヴヵヶ"
+#define S_HIRAGANA "ぁあぃいぅうぇえぉおかがきぎくぐけげこごさざしじすずせぜそぞただちぢっつづてでとどなにぬねのはばぱひびぴふぶぷへべぺほぼぽまみむめもゃやゅゆょよらりるれろゎわゐゑをん"
+#define S_HIRAGANA_N "あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをん"
+#define S_IROHA "	いろはにほへとちりぬるをわかよたれそつねならむうゐのおくやまけふこえてあさきゆめみしゑひもせすん"
+#define S_QUICK_BROWN_FOX "The quick brown fox jumps over the lazy dog"
+#define S_PIPE "─│┌┐┘└├┬┤┴┼━┃┏┓┛┗┣┳┫┻╋┠┯┨┷┿┝┰┥┸╂"
+#define S_LOREM_IPSUM "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+#define S_POLANO "あのイーハトーヴォのすきとおった風、夏でも底に冷たさをもつ青いそら、うつくしい森で飾られたモリーオ市、郊外のぎらぎらひかる草の波。"
+
 int tmstring_hiragana(lua_State* L) {
 	try {
 		lua_Ustring str = tm_toustring(L, 1);
@@ -124,6 +147,35 @@ int tmstring_latin_k(lua_State* L) {
 }
 
 
+int tmstring_split(lua_State* L) {
+	try {
+		lua_Wstring str = tm_towstring(L, 1);
+		lua_Wstring pattern = tm_towstring(L, 2);
+		lua_Integer n = tm_tointeger_s(L, 3, -1);
+
+		std::wsmatch result;
+		int count = 0;
+
+		lua_newtable(L);
+		while (std::regex_search(str, result, std::wregex(pattern)) && (count < n || n < 1)) {
+			int p = result.position();
+			lua_settablevalue(L, count + 1, str.substr(0, p));
+
+			str = str.substr(p + result[0].str().length());
+			count++;
+		}
+
+		if (str.length() > 0)
+			lua_settablevalue(L, count + 1, str);
+
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
 int tmstring_mojibake(lua_State* L) {
 	try {
 		lua_Wstring str = tm_towstring(L, 1);
@@ -232,7 +284,7 @@ int tmstring_right(lua_State* L) {
 	}
 }
 
-int tmstring_cshift(lua_State* L) {
+int tmstring_shift(lua_State* L) {
 	try {
 		lua_Sstring str = tm_tostring(L, 1);
 		lua_Integer shift = tm_tointeger_s(L, 2, 1);
@@ -260,7 +312,7 @@ int tmstring_cshift(lua_State* L) {
 	}
 }
 
-int tmstring_wcshift(lua_State* L) {
+int tmstring_wshift(lua_State* L) {
 	try {
 		lua_Wstring str = tm_towstring(L, 1);
 		lua_Integer shift = tm_tointeger_s(L, 2, 1);
@@ -531,7 +583,7 @@ int tmstring_lines(lua_State* L) {
 	}
 }
 
-int tmstring_chars_aux(lua_State* L) {
+int tmstring_character_aux(lua_State* L) {
 	try {
 		lua_Wstring str = lua_towstring(L, lua_upvalueindex(1));
 		lua_Integer idx = lua_tointeger(L, lua_upvalueindex(2));
@@ -552,12 +604,12 @@ int tmstring_chars_aux(lua_State* L) {
 	}
 }
 
-int tmstring_chars(lua_State* L) {
+int tmstring_character(lua_State* L) {
 	try {
 		luaL_checkstring(L, 1);
 		lua_settop(L, 1);
 		lua_pushinteger(L, 0);
-		lua_pushcclosure(L, tmstring_chars_aux, 2);
+		lua_pushcclosure(L, tmstring_character_aux, 2);
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -607,9 +659,7 @@ int tmstring_count(lua_State* L) {
 }
 
 
-void luaReg_tmstring(lua_State* L, const char* name, bool reg) {
-	if (reg) {
-		lua_newtable(L);
+void luaReg_tmstring(lua_State* L) {
 		luaL_register(L, NULL, TEXTMODULE_TMSTRING_REG);
 		luaL_register(L, NULL, TEXTMODULE_MECAB_REG);
 
@@ -656,7 +706,4 @@ void luaReg_tmstring(lua_State* L, const char* name, bool reg) {
 		lua_settablevalue(L, "bell", "\a");
 		lua_settablevalue(L, "null", "\0");
 		lua_settablevalue(L, "form_feed", "\f");
-
-		lua_setfield(L, -2, name);
-	}
 }

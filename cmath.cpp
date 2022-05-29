@@ -577,7 +577,6 @@ int cmath_normalize(lua_State* L) {
 }
 
 
-
 int cmath_cbrt(lua_State* L) {
 	try {
 		lua_pushnumber(L, std::cbrt(tm_tonumber(L, 1)));

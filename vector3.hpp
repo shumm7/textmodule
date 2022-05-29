@@ -83,7 +83,6 @@ static luaL_Reg TEXTMODULE_VECTOR3_META_REG[] = {
 	{"__newindex", vector3____newindex},
 	{"__type", vector3____type},
 	{"__call", vector3____call},
-
 	{"__abs", vector3__abs},
 	{"__norm", vector3__norm},
 	{"__normalize", vector3__normalize},
@@ -93,6 +92,14 @@ static luaL_Reg TEXTMODULE_VECTOR3_META_REG[] = {
 	{"__scale", vector3__scale},
 	{"__distance", vector3__distance},
 
+	{"abs", vector3__abs},
+	{"norm", vector3__norm},
+	{"normalize", vector3__normalize},
+	{"dot", vector3__dot},
+	{"cross", vector3__cross},
+	{"conj", vector3__conj},
+	{"scale", vector3__scale},
+	{"distance", vector3__distance},
 	{"table", vector3__table},
 	{"vector2", vector3__vector2},
 	{"vector4", vector3__vector4},

@@ -15,6 +15,7 @@ int string_gmatch(lua_State* L);
 int string_split(lua_State* L);
 int string_rep(lua_State* L);
 int string_format(lua_State* L);
+int string_dump(lua_State* L);
 
 void luaReg_string(lua_State* L, const char* name, bool reg);
 
@@ -33,5 +34,6 @@ static luaL_Reg TEXTMODULE_STRING_REG[] = {
 	{"split", string_split},
 	{"rep", string_rep},
 	{"format", string_format},
+	{"dump", string_dump},
 	{ nullptr, nullptr }
 };

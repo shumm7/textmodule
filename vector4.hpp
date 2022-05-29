@@ -75,7 +75,6 @@ static luaL_Reg TEXTMODULE_VECTOR4_META_REG[] = {
 	{"__newindex", vector4____newindex},
 	{"__type", vector4____type},
 	{"__call", vector4____call},
-
 	{"__abs", vector4__abs},
 	{"__norm", vector4__norm},
 	{"__normalize", vector4__normalize},
@@ -83,6 +82,14 @@ static luaL_Reg TEXTMODULE_VECTOR4_META_REG[] = {
 	{"__conj", vector4__conj},
 	{"__scale", vector4__scale},
 	{"__distance", vector4__distance},
+
+	{"abs", vector4__abs},
+	{"norm", vector4__norm},
+	{"normalize", vector4__normalize},
+	{"dot", vector4__dot},
+	{"conj", vector4__conj},
+	{"scale", vector4__scale},
+	{"distance", vector4__distance},
 
 	{"table", vector4__table},
 	{"quaternion", vector4__quaternion},
