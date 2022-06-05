@@ -213,6 +213,194 @@ lua_String tm_tolstring_s(lua_State* L, int idx, size_t* len) {
 	return tm_tolstring_s(L, idx, len, "");
 }
 
+
+// String table
+lua_SJIS lua_tosjis(lua_State* L, int idx) {
+	lua_SJIS ret;
+
+	int cnt = 1;
+	while(1) {
+		lua_rawgeti(L, idx, cnt);
+		if (!lua_isnumber(L, -1)) {
+			lua_pop(L, 1);
+			break;
+		}
+		unsigned char c = tm_tonumber(L, -1);
+		ret += (char)c;
+		lua_pop(L, 1);
+
+		cnt++;
+	}
+
+	return ret;
+}
+
+lua_SJIS tm_tosjis(lua_State* L, int idx) {
+	luaL_argcheck(L, lua_istable(L, idx) && luaL_checkmetatable(L, idx, TEXTMODULE_STRING_SJIS), idx, "string (shift-jis) expected");
+	return lua_tosjis(L, idx);
+}
+
+void lua_pushsjis(lua_State* L, lua_SJIS str) {
+	int len = str.length();
+
+	lua_newtable(L);
+	for (int i = 0; i < len; i++) {
+		lua_settablevalue(L, i+1, (unsigned char)str[i]);
+	}
+
+	luaL_getmetatable(L, TEXTMODULE_STRING_SJIS);
+	lua_setmetatable(L, -2);
+}
+
+lua_UTF8 lua_toutf8(lua_State* L, int idx) {
+	lua_UTF8 ret;
+
+	int cnt = 1;
+	while (1) {
+		lua_rawgeti(L, idx, cnt);
+		if (!lua_isnumber(L, -1)) {
+			lua_pop(L, 1);
+			break;
+		}
+		unsigned char c = tm_tonumber(L, -1);
+		ret += (char8_t)c;
+		lua_pop(L, 1);
+
+		cnt++;
+	}
+
+	return ret;
+}
+
+lua_UTF8 tm_toutf8(lua_State* L, int idx) {
+	luaL_argcheck(L, lua_istable(L, idx) && luaL_checkmetatable(L, idx, TEXTMODULE_STRING_UTF8), idx, "string (utf-8) expected");
+	return lua_toutf8(L, idx);
+}
+
+void lua_pushutf8(lua_State* L, lua_UTF8 str) {
+	int len = str.length();
+
+	lua_newtable(L);
+	for (int i = 0; i < len; i++) {
+		lua_settablevalue(L, i + 1, (lua_Number)str[i]);
+	}
+
+	luaL_getmetatable(L, TEXTMODULE_STRING_UTF8);
+	lua_setmetatable(L, -2);
+}
+
+lua_UTF16 lua_toutf16(lua_State* L, int idx) {
+	lua_UTF16 ret;
+
+	int cnt = 1;
+	while (1) {
+		lua_rawgeti(L, idx, cnt);
+		if (!lua_isnumber(L, -1)) {
+			lua_pop(L, 1);
+			break;
+		}
+		wchar_t c = tm_tonumber(L, -1);
+		ret += c;
+		lua_pop(L, 1);
+
+		cnt++;
+	}
+
+	return ret;
+}
+
+lua_UTF16 tm_toutf16(lua_State* L, int idx) {
+	luaL_argcheck(L, lua_istable(L, idx) && luaL_checkmetatable(L, idx, TEXTMODULE_STRING_UTF16), idx, "string (utf-16) expected");
+	return lua_toutf16(L, idx);
+}
+
+void lua_pushutf16(lua_State* L, lua_UTF16 str) {
+	int len = str.length();
+
+	lua_newtable(L);
+	for (int i = 0; i < len; i++) {
+		lua_settablevalue(L, i + 1, (lua_Number)str[i]);
+	}
+
+	luaL_getmetatable(L, TEXTMODULE_STRING_UTF16);
+	lua_setmetatable(L, -2);
+}
+
+lua_UTF32 lua_toutf32(lua_State* L, int idx) {
+	lua_UTF32 ret;
+
+	int cnt = 1;
+	while (1) {
+		lua_rawgeti(L, idx, cnt);
+		if (!lua_isnumber(L, -1)) {
+			lua_pop(L, 1);
+			break;
+		}
+		unsigned int c = tm_tonumber(L, -1);
+		ret += (char32_t)c;
+		lua_pop(L, 1);
+
+		cnt++;
+	}
+
+	return ret;
+}
+
+lua_UTF32 tm_toutf32(lua_State* L, int idx) {
+	luaL_argcheck(L, lua_istable(L, idx) && luaL_checkmetatable(L, idx, TEXTMODULE_STRING_UTF32), idx, "string (utf-32) expected");
+	return lua_toutf32(L, idx);
+}
+
+void lua_pushutf32(lua_State* L, lua_UTF32 str) {
+	int len = str.length();
+
+	lua_newtable(L);
+	for (int i = 0; i < len; i++) {
+		lua_settablevalue(L, i + 1, (lua_Number)str[i]);
+	}
+
+	luaL_getmetatable(L, TEXTMODULE_STRING_UTF32);
+	lua_setmetatable(L, -2);
+}
+
+lua_EUCJP lua_toeucjp(lua_State* L, int idx) {
+	lua_EUCJP ret;
+
+	int cnt = 1;
+	while (1) {
+		lua_rawgeti(L, idx, cnt);
+		if (!lua_isnumber(L, -1)) {
+			lua_pop(L, 1);
+			break;
+		}
+		unsigned char c = tm_tonumber(L, -1);
+		ret += (char)c;
+		lua_pop(L, 1);
+
+		cnt++;
+	}
+
+	return ret;
+}
+
+lua_EUCJP tm_toeucjp(lua_State* L, int idx) {
+	luaL_argcheck(L, lua_istable(L, idx) && luaL_checkmetatable(L, idx, TEXTMODULE_STRING_EUCJP), idx, "string (euc-jp) expected");
+	return lua_toeucjp(L, idx);
+}
+
+void lua_pusheucjp(lua_State* L, lua_EUCJP str) {
+	int len = str.length();
+
+	lua_newtable(L);
+	for (int i = 0; i < len; i++) {
+		lua_settablevalue(L, i + 1, (unsigned char)str[i]);
+	}
+
+	luaL_getmetatable(L, TEXTMODULE_STRING_EUCJP);
+	lua_setmetatable(L, -2);
+}
+
+
 //Number
 lua_Integer tm_tointeger(lua_State* L, int idx) {
 	return luaL_checkinteger(L, idx);
@@ -265,6 +453,7 @@ lua_Float tm_tofloat(lua_State* L, int idx) {
 lua_Unsigned tm_tounsigned(lua_State* L, int idx) {
 	return static_cast<unsigned long>(luaL_checkinteger(L, idx));
 }
+
 
 // Bignumber
 lua_Bignumber lua_tobignumber(lua_State* L, int idx) {
@@ -457,6 +646,7 @@ bool lua_isarray(lua_State* L, int idx) {
 	lua_settop(L, h);
 	return ret;
 }
+
 
 // Clock
 lua_Clock* lua_toclock(lua_State* L, int idx) {
@@ -785,6 +975,55 @@ lua_Vector4* lua_pushvector4(lua_State* L, lua_Vector4 vector) {
 
 lua_Vector4* lua_pushvector4(lua_State* L) {
 	return lua_pushvector4(L, 0, 0, 0, 0);
+}
+
+
+// Matrix2
+lua_Matrix2* lua_tomatrix2(lua_State* L, int idx) {
+	return reinterpret_cast<Matrix2*>(luaL_checkudata(L, idx, TEXTMODULE_MATRIX2));
+}
+
+lua_Matrix2* tm_tomatrix2(lua_State* L, int idx) {
+	luaL_argcheck(L, lua_type(L, idx) == LUA_TUSERDATA && luaL_checkmetatable(L, idx, TEXTMODULE_MATRIX2), idx, "matrix2 expected");
+	return lua_tomatrix2(L, idx);
+}
+
+lua_Matrix2* tm_tomatrix2_s(lua_State* L, int idx, lua_Matrix2 def) {
+	int tp = lua_type(L, idx);
+	luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNONE, idx, "matrix2/none expected");
+	Matrix2* val = new Matrix2();
+
+	if (tp == LUA_TUSERDATA) {
+		val = lua_tomatrix2(L, idx);
+	}
+	else if (tp == LUA_TNONE) {
+		(*val)(0, 0) = def(0,0);
+		(*val)(0, 1) = def(0,1);
+		(*val)(1, 0) = def(1,0);
+		(*val)(1, 1) = def(1,1);
+	}
+
+	return val;
+}
+
+lua_Matrix2* tm_tomatrix2_s(lua_State* L, int idx) {
+	return tm_tomatrix2_s(L, idx, Matrix2::Zero());
+}
+
+lua_Matrix2* lua_pushmatrix2(lua_State* L, lua_Matrix2 matrix) {
+	Matrix2* ret = reinterpret_cast<Matrix2*>(lua_newuserdata(L, sizeof(Matrix2)));
+	luaL_getmetatable(L, TEXTMODULE_MATRIX2);
+	lua_setmetatable(L, -2);
+
+	(*ret)(0, 0) = matrix(0, 0);
+	(*ret)(0, 1) = matrix(0, 1);
+	(*ret)(1, 0) = matrix(1, 0);
+	(*ret)(1, 1) = matrix(1, 1);
+	return ret;
+}
+
+lua_Matrix2* lua_pushmatrix2(lua_State* L) {
+	return lua_pushmatrix2(L, Matrix2::Zero());
 }
 
 
@@ -1195,7 +1434,7 @@ lua_Json tm_tabletojson(lua_State* L, int idx) {
 }
 
 void tm_pushjson(lua_State* L, lua_Json* j) {
-	auto x = *j;
+	lua_Json x = *j;
 
 	if (x.is_null()) {
 		lua_pushnil(L);

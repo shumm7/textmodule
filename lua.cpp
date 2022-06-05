@@ -8,7 +8,6 @@
 #include "base.hpp"
 #include "string.hpp"
 #include "debug.hpp"
-#include "utf8.hpp"
 #include "os.hpp"
 #include "tmstring.hpp"
 #include "clipboard.hpp"
@@ -37,11 +36,6 @@
 #include "image.hpp"
 
 void luaAlias(lua_State* L, nlohmann::json o) {
-	luaReg_tmstring(L,
-		ALIAS_API_TMSTRING,
-		getOptionParamB(o, OPTION_VAPI_ALIAS, API_TMSTRING) && getOptionParamB(o, OPTION_VAPI, API_TMSTRING)
-	);
-
 	luaReg_filesystem(L,
 		ALIAS_API_FILESYSTEM,
 		getOptionParamB(o, OPTION_VAPI_ALIAS, API_FILESYSTEM) && getOptionParamB(o, OPTION_VAPI, API_FILESYSTEM)
@@ -69,9 +63,7 @@ void luaReg(lua_State* L, nlohmann::json o, const char* module) {
 	luaReg_base(L, getOptionParamB(o, OPTION_VAPI, API_BASE)); //base
 	luaReg_debug(L, API_DEBUG, true); //debug
 	luaReg_string(L, API_STRING, getOptionParamB(o, OPTION_VAPI, API_STRING)); //string
-	luaReg_tmstring(L, API_TMSTRING, getOptionParamB(o, OPTION_VAPI, API_TMSTRING)); //tmstring
 	luaReg_os(L, API_OS, getOptionParamB(o, OPTION_VAPI, API_OS)); //os
-	luaReg_utf8(L, API_UTF8, getOptionParamB(o, OPTION_VAPI, API_UTF8)); //utf8
 	luaReg_clipboard(L, API_CLIPBOARD, getOptionParamB(o, OPTION_VAPI, API_CLIPBOARD)); //clipboard
 	luaReg_filesystem(L, API_FILESYSTEM, getOptionParamB(o, OPTION_VAPI, API_FILESYSTEM)); //filesystem
 	luaReg_hash(L, API_HASH, getOptionParamB(o, OPTION_VAPI, API_HASH)); //hash

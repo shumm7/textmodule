@@ -12,7 +12,6 @@ int string_match(lua_State* L);
 int string_byte(lua_State* L);
 int string_char(lua_State* L);
 int string_gmatch(lua_State* L);
-int string_split(lua_State* L);
 int string_rep(lua_State* L);
 int string_format(lua_State* L);
 int string_dump(lua_State* L);
@@ -31,7 +30,6 @@ static luaL_Reg TEXTMODULE_STRING_REG[] = {
 	{"byte", string_byte},
 	{"char", string_char},
 	{"gmatch", string_gmatch},
-	{"split", string_split},
 	{"rep", string_rep},
 	{"format", string_format},
 	{"dump", string_dump},

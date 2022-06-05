@@ -8,7 +8,7 @@
 #include "textmodule_type.hpp"
 #include "textmodule_lua.hpp"
 
-int bignumber_bignumber(lua_State* L) {
+int bignumber_new(lua_State* L) {
 	try {
 		luaL_argcheck(L, lua_isstring(L, 2) || lua_isnumber(L, 2) || (lua_isuserdata(L, 2) && luaL_checkmetatable(L, 2, TEXTMODULE_BIGNUMBER)), 1, "string/number/bignumber expected");
 		

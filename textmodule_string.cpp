@@ -7,6 +7,7 @@
 #include <vector>
 #include <algorithm>
 #include <exception>
+#include <codecvt>
 
 #include <windows.h>
 #include <atlconv.h>
@@ -20,13 +21,21 @@
 #include <unicode/dtptngen.h>
 #include <unicode/dtitvfmt.h>
 #include <unicode/translit.h>
+#include <unicode/ucnv.h>
 
 #include <boost/shared_ptr.hpp>
+#include <cpprest/http_client.h>
+#include <cpprest/filestream.h>
 
 #include "textmodule_exception.hpp"
+#include "textmodule_type.hpp"
 
 #pragma comment(lib, "atls.lib")
 #pragma comment(lib, "afxnmcd.lib")
+#pragma comment(lib, "icuuc.lib")
+
+#define isU16charLowSurrogate(ch) (0xDC00 <= ch && ch < 0xE000)
+#define isU16charHighSurrogate(ch) (0xD800 <= ch && ch < 0xDC00)
 
 using namespace icu;
 
@@ -75,6 +84,151 @@ icu::UnicodeString WstrToUstr(std::wstring str) {
 	return icu::UnicodeString(str.c_str());
 }
 
+std::u8string StrToU8str(std::string str) {
+	icu::UnicodeString d(str.c_str(), "shift_jis");
+	int length = d.extract(0, str.length(), NULL, "utf8");
+
+	std::vector<char> result(length + 1);
+	d.extract(0, str.length(), &result[0], "utf8");
+
+	return std::u8string(result.begin(), result.end() - 1);
+}
+
+std::u8string WstrToU8str(std::wstring str) {
+	return StrToU8str(WstrToStr(str));
+}
+
+std::string U8strToStr(std::u8string str) {
+	icu::UnicodeString d((const char*)str.c_str(), "utf8");
+	int length = d.extract(0, str.length(), NULL, "shift_jis");
+
+	std::vector<char> result(length + 1);
+	d.extract(0, str.length(), &result[0], "shift_jis");
+
+	return std::string(result.begin(), result.end() - 1);
+}
+
+std::wstring U8strToWstr(std::u8string str) {
+	return StrToWstr(U8strToStr(str));
+}
+
+bool convU32charToU16char(const char32_t u32Ch, std::array<char16_t, 2>& u16Ch) {
+	if (u32Ch < 0 || u32Ch > 0x10FFFF) {
+		return false;
+	}
+
+	if (u32Ch < 0x10000) {
+		u16Ch[0] = char16_t(u32Ch);
+		u16Ch[1] = 0;
+	}
+	else {
+		u16Ch[0] = char16_t((u32Ch - 0x10000) / 0x400 + 0xD800);
+		u16Ch[1] = char16_t((u32Ch - 0x10000) % 0x400 + 0xDC00);
+	}
+
+	return true;
+}
+
+bool convU16charToU32char(const std::array<char16_t, 2>& u16Ch, char32_t& u32Ch) {
+	if (isU16charHighSurrogate(u16Ch[0])) {
+		if (isU16charLowSurrogate(u16Ch[1])) {
+			u32Ch = 0x10000 + (char32_t(u16Ch[0]) - 0xD800) * 0x400 +
+				(char32_t(u16Ch[1]) - 0xDC00);
+		}
+		else if (u16Ch[1] == 0) {
+			u32Ch = u16Ch[0];
+		}
+		else {
+			return false;
+		}
+	}
+	else if (isU16charLowSurrogate(u16Ch[0])) {
+		if (u16Ch[1] == 0) {
+			u32Ch = u16Ch[0];
+		}
+		else {
+			return false;
+		}
+	}
+	else {
+		u32Ch = u16Ch[0];
+	}
+
+	return true;
+}
+
+std::u32string StrToU32str(std::string str) {
+	return WstrToU32str(StrToWstr(str));
+}
+
+std::u32string WstrToU32str(std::wstring str) {
+	std::u32string ret;
+
+	for (auto u16It = str.begin(); u16It != str.end(); ++u16It) {
+		std::array<char16_t, 2> u16Ch;
+		if (isU16charHighSurrogate((*u16It))) {
+			u16Ch[0] = (*u16It);
+			++u16It;
+			if (u16It == str.end())
+				throw std::runtime_error(STRING_COVERSION_FAILED);
+
+			u16Ch[1] = (*u16It);
+		}
+		else {
+			u16Ch[0] = (*u16It);
+			u16Ch[1] = 0;
+		}
+
+		char32_t u32Ch;
+		if (!convU16charToU32char(u16Ch, u32Ch))
+			throw std::runtime_error(STRING_COVERSION_FAILED);
+
+		ret.push_back(u32Ch);
+	}
+
+	return ret;
+}
+
+std::string U32strToStr(std::u32string str) {
+	return WstrToStr(U32strToWstr(str));
+}
+
+std::wstring U32strToWstr(std::u32string str) {
+	std::wstring ret;
+
+	for (auto u32It = str.begin(); u32It != str.end(); ++u32It) {
+		std::array<char16_t, 2> u16Ch;
+		if (!convU32charToU16char((*u32It), u16Ch))
+			throw std::runtime_error(STRING_COVERSION_FAILED);
+
+		if (u16Ch[0] != 0)
+			ret.push_back(u16Ch[0]);
+		if (u16Ch[1] != 0)
+			ret.push_back(u16Ch[1]);
+	}
+	return ret;
+}
+
+std::string StrToEUCstr(std::string str) {
+	icu::UnicodeString d(str.c_str(), "shift_jis");
+	int length = d.extract(0, str.length(), NULL, "euc_jp");
+
+	std::vector<char> result(length + 1);
+	d.extract(0, str.length(), &result[0], "euc_jp");
+
+	return eucstring(result.begin(), result.end() - 1);
+}
+
+std::string EUCstrToStr(std::string str) {
+	icu::UnicodeString d(str.c_str(), "euc_jp");
+	int length = d.extract(0, str.length(), NULL, "shift_jis");
+
+	std::vector<char> result(length + 1);
+	d.extract(0, str.length(), &result[0], "shift_jis");
+
+	return std::string(result.begin(), result.end() - 1);
+}
+
 
 //íuä∑
 std::wstring _jreplace(std::wstring String1, std::wstring String2, std::wstring String3, bool invert)
@@ -107,105 +261,7 @@ icu::UnicodeString StrTransliterate(icu::UnicodeString str, const char* conversi
 }
 
 
-//ï∂éöóÒÉçÅ[ÉJÉâÉCÉY
-icu::UnicodeString HiraganaToKatakana(icu::UnicodeString str) {
-	return StrTransliterate(str, "Hiragana-Katakana");
-}
 
-icu::UnicodeString KatakanaToHiragana(icu::UnicodeString str) {
-	return StrTransliterate(str, "Hiragana-Katakana");
-}
-
-icu::UnicodeString LatinToHiragana(icu::UnicodeString str) {
-	return StrTransliterate(str, "Latin-Hiragana");
-}
-
-icu::UnicodeString LatinToKatakana(icu::UnicodeString str) {
-	return StrTransliterate(str, "Latin-Katakana");
-}
-
-icu::UnicodeString LatinBGNToHiragana(icu::UnicodeString str) {
-	return StrTransliterate(str, "Latin/BGN-Hiragana");
-}
-
-icu::UnicodeString LatinBGNToKatakana(icu::UnicodeString str) {
-	return StrTransliterate(str, "Latin/BGN-Katakana");
-}
-
-icu::UnicodeString HiraganaToLatin(icu::UnicodeString str) {
-	return StrTransliterate(str, "Hiragana-Latin");
-}
-
-icu::UnicodeString KatakanaToLatin(icu::UnicodeString str) {
-	return StrTransliterate(str, "Katakana-Latin");
-}
-
-icu::UnicodeString HiraganaToLatinBGN(icu::UnicodeString str) {
-	return StrTransliterate(str, "Hiragana-Latin/BGN");
-}
-
-icu::UnicodeString KatakanaToLatinBGN(icu::UnicodeString str) {
-	return StrTransliterate(str, "Katakana-Latin/BGN");
-}
-
-icu::UnicodeString HalfwidthToFullwidth(icu::UnicodeString str) {
-	return StrTransliterate(str, "Halfwidth-Fullwidth");
-}
-
-icu::UnicodeString FullwidthToHalfwidth(icu::UnicodeString str) {
-	return StrTransliterate(str, "Fullwidth-Halfwidth");
-}
-
-
-std::wstring toRoundNumber(std::wstring string, bool invert)
-{
-	string = _jreplace(string, L"20", L"áS", invert);
-	string = _jreplace(string, L"19", L"áR", invert);
-	string = _jreplace(string, L"18", L"áQ", invert);
-	string = _jreplace(string, L"17", L"áP", invert);
-	string = _jreplace(string, L"16", L"áO", invert);
-	string = _jreplace(string, L"15", L"áN", invert);
-	string = _jreplace(string, L"14", L"áM", invert);
-	string = _jreplace(string, L"13", L"áL", invert);
-	string = _jreplace(string, L"12", L"áK", invert);
-	string = _jreplace(string, L"11", L"áJ", invert);
-	string = _jreplace(string, L"10", L"áI", invert);
-	string = _jreplace(string, L"9", L"áH", invert);
-	string = _jreplace(string, L"8", L"áG", invert);
-	string = _jreplace(string, L"7", L"áF", invert);
-	string = _jreplace(string, L"6", L"áE", invert);
-	string = _jreplace(string, L"5", L"áD", invert);
-	string = _jreplace(string, L"4", L"áC", invert);
-	string = _jreplace(string, L"3", L"áB", invert);
-	string = _jreplace(string, L"2", L"áA", invert);
-	string = _jreplace(string, L"1", L"á@", invert);
-
-	string = _jreplace(string, L"ÇQÇO", L"áS", invert);
-	string = _jreplace(string, L"ÇPÇX", L"áR", invert);
-	string = _jreplace(string, L"ÇPÇW", L"áQ", invert);
-	string = _jreplace(string, L"ÇPÇV", L"áP", invert);
-	string = _jreplace(string, L"ÇPÇU", L"áO", invert);
-	string = _jreplace(string, L"ÇPÇT", L"áN", invert);
-	string = _jreplace(string, L"ÇPÇS", L"áM", invert);
-	string = _jreplace(string, L"ÇPÇR", L"áL", invert);
-	string = _jreplace(string, L"ÇPÇQ", L"áK", invert);
-	string = _jreplace(string, L"ÇPÇP", L"áJ", invert);
-	string = _jreplace(string, L"ÇPÇO", L"áI", invert);
-	string = _jreplace(string, L"ÇX", L"áH", invert);
-	string = _jreplace(string, L"ÇW", L"áG", invert);
-	string = _jreplace(string, L"ÇV", L"áF", invert);
-	string = _jreplace(string, L"ÇU", L"áE", invert);
-	string = _jreplace(string, L"ÇT", L"áD", invert);
-	string = _jreplace(string, L"ÇS", L"áC", invert);
-	string = _jreplace(string, L"ÇR", L"áB", invert);
-	string = _jreplace(string, L"ÇQ", L"áA", invert);
-	string = _jreplace(string, L"ÇP", L"á@", invert);
-
-	return string;
-}
-
-
-//Unicode  - UTF8Å@ëäå›ïœä∑
 unsigned long long UnicodeToUTF8(unsigned long long code) {
 
 	std::string bin;
@@ -262,6 +318,56 @@ unsigned long long UTF8ToUnicode(unsigned long long code) {
 	}
 
 	return std::stoull(ret, 0, 2);
+}
+
+
+//ï∂éöóÒÉçÅ[ÉJÉâÉCÉY
+icu::UnicodeString HiraganaToKatakana(icu::UnicodeString str) {
+	return StrTransliterate(str, "Hiragana-Katakana");
+}
+
+icu::UnicodeString KatakanaToHiragana(icu::UnicodeString str) {
+	return StrTransliterate(str, "Hiragana-Katakana");
+}
+
+icu::UnicodeString LatinToHiragana(icu::UnicodeString str) {
+	return StrTransliterate(str, "Latin-Hiragana");
+}
+
+icu::UnicodeString LatinToKatakana(icu::UnicodeString str) {
+	return StrTransliterate(str, "Latin-Katakana");
+}
+
+icu::UnicodeString LatinBGNToHiragana(icu::UnicodeString str) {
+	return StrTransliterate(str, "Latin/BGN-Hiragana");
+}
+
+icu::UnicodeString LatinBGNToKatakana(icu::UnicodeString str) {
+	return StrTransliterate(str, "Latin/BGN-Katakana");
+}
+
+icu::UnicodeString HiraganaToLatin(icu::UnicodeString str) {
+	return StrTransliterate(str, "Hiragana-Latin");
+}
+
+icu::UnicodeString KatakanaToLatin(icu::UnicodeString str) {
+	return StrTransliterate(str, "Katakana-Latin");
+}
+
+icu::UnicodeString HiraganaToLatinBGN(icu::UnicodeString str) {
+	return StrTransliterate(str, "Hiragana-Latin/BGN");
+}
+
+icu::UnicodeString KatakanaToLatinBGN(icu::UnicodeString str) {
+	return StrTransliterate(str, "Katakana-Latin/BGN");
+}
+
+icu::UnicodeString HalfwidthToFullwidth(icu::UnicodeString str) {
+	return StrTransliterate(str, "Halfwidth-Fullwidth");
+}
+
+icu::UnicodeString FullwidthToHalfwidth(icu::UnicodeString str) {
+	return StrTransliterate(str, "Fullwidth-Halfwidth");
 }
 
 //å^ïœä∑

@@ -9,8 +9,11 @@ typedef Eigen::Quaterniond Quat;
 typedef Eigen::Vector2d Vector2;
 typedef Eigen::Vector3d Vector3;
 typedef Eigen::Vector4d Vector4;
+typedef Eigen::Matrix2d Matrix2;
 typedef Eigen::Matrix3d Matrix3;
 typedef Eigen::AngleAxisd AngleAxis;
+
+typedef std::string eucstring;
 
 typedef struct ColorItem { std::wstring color = L""; std::wstring name = L""; std::wstring japanese = L""; std::wstring english = L""; };
 typedef std::vector<ColorItem> ColorList;

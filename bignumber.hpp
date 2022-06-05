@@ -1,7 +1,7 @@
 #pragma once
 #include <lua.hpp>
 
-int bignumber_bignumber(lua_State* L);
+int bignumber_new(lua_State* L);
 int bignumber___tostring(lua_State* L);
 int bignumber___tonumber(lua_State* L);
 int bignumber___add(lua_State* L);
@@ -19,7 +19,7 @@ int bignumber___type(lua_State* L);
 void luaReg_const_bignumber(lua_State* L);
 
 static luaL_Reg TEXTMODULE_BIGNUMBER_REG[]{
-	{"__call", bignumber_bignumber},
+	{"__call", bignumber_new},
 	{nullptr, nullptr}
 };
 

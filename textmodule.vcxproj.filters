@@ -52,30 +52,39 @@
     <Filter Include="ソース ファイル\lib\fmt">
       <UniqueIdentifier>{f780111b-e71c-441c-ae7b-3cc85c77faff}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\function\submodule">
+    <Filter Include="ヘッダー ファイル\function\string">
+      <UniqueIdentifier>{ca4d1690-2991-413b-a3dd-1810de2ab458}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\function\math">
+      <UniqueIdentifier>{7bf8ba7d-85ed-49d7-8bef-137c22530770}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\function\math">
       <UniqueIdentifier>{754c626d-f847-4c78-a5e9-960db680b5df}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ヘッダー ファイル\function\submodule">
-      <UniqueIdentifier>{7bf8ba7d-85ed-49d7-8bef-137c22530770}</UniqueIdentifier>
+    <Filter Include="ソース ファイル\function\string">
+      <UniqueIdentifier>{8c496589-537a-4787-9c29-15df40806860}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\lib\MultipartEncoder">
+      <UniqueIdentifier>{1e105d6b-198f-4ba2-8249-4e7ab52905af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\lib\MultipartEncoder">
+      <UniqueIdentifier>{d03bd074-ad28-4f1c-b119-f7589d6c3e2b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\function\debug">
+      <UniqueIdentifier>{a3af797d-2d0a-4d5d-8a34-8e99b1710385}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\function\debug">
+      <UniqueIdentifier>{5dc26710-317c-405d-8957-5c79051ed261}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="lua.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="string.cpp">
-      <Filter>ソース ファイル\function</Filter>
-    </ClCompile>
     <ClCompile Include="base.cpp">
       <Filter>ソース ファイル\function</Filter>
     </ClCompile>
-    <ClCompile Include="utf8.cpp">
-      <Filter>ソース ファイル\function</Filter>
-    </ClCompile>
     <ClCompile Include="os.cpp">
-      <Filter>ソース ファイル\function</Filter>
-    </ClCompile>
-    <ClCompile Include="tmstring.cpp">
       <Filter>ソース ファイル\function</Filter>
     </ClCompile>
     <ClCompile Include="clipboard.cpp">
@@ -123,9 +132,6 @@
     <ClCompile Include="http.cpp">
       <Filter>ソース ファイル\function</Filter>
     </ClCompile>
-    <ClCompile Include="cmath.cpp">
-      <Filter>ソース ファイル\function</Filter>
-    </ClCompile>
     <ClCompile Include="colorlist.cpp">
       <Filter>ソース ファイル\function\color</Filter>
     </ClCompile>
@@ -145,9 +151,6 @@
       <Filter>ソース ファイル\function</Filter>
     </ClCompile>
     <ClCompile Include="random.cpp">
-      <Filter>ソース ファイル\function</Filter>
-    </ClCompile>
-    <ClCompile Include="debug.cpp">
       <Filter>ソース ファイル\function</Filter>
     </ClCompile>
     <ClCompile Include="QR-Code-generator\qrcodegen.cpp">
@@ -195,27 +198,54 @@
     <ClCompile Include="textmodule_time.cpp">
       <Filter>ソース ファイル\lib</Filter>
     </ClCompile>
-    <ClCompile Include="mecab.cpp">
-      <Filter>ソース ファイル\function\submodule</Filter>
-    </ClCompile>
     <ClCompile Include="bignumber.cpp">
-      <Filter>ソース ファイル\function\submodule</Filter>
+      <Filter>ソース ファイル\function\math</Filter>
     </ClCompile>
     <ClCompile Include="json.cpp">
       <Filter>ソース ファイル\function</Filter>
     </ClCompile>
+    <ClCompile Include="mecab.cpp">
+      <Filter>ソース ファイル\function\string</Filter>
+    </ClCompile>
+    <ClCompile Include="tmstring.cpp">
+      <Filter>ソース ファイル\function\string</Filter>
+    </ClCompile>
+    <ClCompile Include="string.cpp">
+      <Filter>ソース ファイル\function\string</Filter>
+    </ClCompile>
+    <ClCompile Include="cmath.cpp">
+      <Filter>ソース ファイル\function\math</Filter>
+    </ClCompile>
+    <ClCompile Include="matrix2.cpp">
+      <Filter>ソース ファイル\function\geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="matrix3.cpp">
+      <Filter>ソース ファイル\function\geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="MultipartEncoder\multipart_parser.cpp">
+      <Filter>ソース ファイル\lib\MultipartEncoder</Filter>
+    </ClCompile>
+    <ClCompile Include="debug.cpp">
+      <Filter>ソース ファイル\function\debug</Filter>
+    </ClCompile>
+    <ClCompile Include="sjis.cpp">
+      <Filter>ソース ファイル\function\string</Filter>
+    </ClCompile>
+    <ClCompile Include="utf8.cpp">
+      <Filter>ソース ファイル\function\string</Filter>
+    </ClCompile>
+    <ClCompile Include="uft16.cpp">
+      <Filter>ソース ファイル\function\string</Filter>
+    </ClCompile>
+    <ClCompile Include="utf32.cpp">
+      <Filter>ソース ファイル\function\string</Filter>
+    </ClCompile>
+    <ClCompile Include="eucjp.cpp">
+      <Filter>ソース ファイル\function\string</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="string.hpp">
-      <Filter>ヘッダー ファイル\function</Filter>
-    </ClInclude>
-    <ClInclude Include="utf8.hpp">
-      <Filter>ヘッダー ファイル\function</Filter>
-    </ClInclude>
     <ClInclude Include="os.hpp">
-      <Filter>ヘッダー ファイル\function</Filter>
-    </ClInclude>
-    <ClInclude Include="tmstring.hpp">
       <Filter>ヘッダー ファイル\function</Filter>
     </ClInclude>
     <ClInclude Include="clipboard.hpp">
@@ -269,9 +299,6 @@
     <ClInclude Include="http.hpp">
       <Filter>ヘッダー ファイル\function</Filter>
     </ClInclude>
-    <ClInclude Include="cmath.hpp">
-      <Filter>ヘッダー ファイル\function</Filter>
-    </ClInclude>
     <ClInclude Include="colorlist.hpp">
       <Filter>ヘッダー ファイル\function\color</Filter>
     </ClInclude>
@@ -291,9 +318,6 @@
       <Filter>ヘッダー ファイル\function</Filter>
     </ClInclude>
     <ClInclude Include="random.hpp">
-      <Filter>ヘッダー ファイル\function</Filter>
-    </ClInclude>
-    <ClInclude Include="debug.hpp">
       <Filter>ヘッダー ファイル\function</Filter>
     </ClInclude>
     <ClInclude Include="QR-Code-generator\qrcodegen.hpp">
@@ -344,17 +368,53 @@
     <ClInclude Include="textmodule_time.hpp">
       <Filter>ヘッダー ファイル\lib</Filter>
     </ClInclude>
-    <ClInclude Include="mecab.hpp">
-      <Filter>ヘッダー ファイル\function\submodule</Filter>
-    </ClInclude>
     <ClInclude Include="bignumber.hpp">
-      <Filter>ヘッダー ファイル\function\submodule</Filter>
+      <Filter>ヘッダー ファイル\function\math</Filter>
     </ClInclude>
     <ClInclude Include="textmodule_type.hpp">
       <Filter>ヘッダー ファイル\lib</Filter>
     </ClInclude>
     <ClInclude Include="json.hpp">
       <Filter>ヘッダー ファイル\function</Filter>
+    </ClInclude>
+    <ClInclude Include="mecab.hpp">
+      <Filter>ヘッダー ファイル\function\string</Filter>
+    </ClInclude>
+    <ClInclude Include="tmstring.hpp">
+      <Filter>ヘッダー ファイル\function\string</Filter>
+    </ClInclude>
+    <ClInclude Include="string.hpp">
+      <Filter>ヘッダー ファイル\function\string</Filter>
+    </ClInclude>
+    <ClInclude Include="cmath.hpp">
+      <Filter>ヘッダー ファイル\function\math</Filter>
+    </ClInclude>
+    <ClInclude Include="matrix2.hpp">
+      <Filter>ヘッダー ファイル\function\geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="matrix3.hpp">
+      <Filter>ヘッダー ファイル\function\geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="MultipartEncoder\multipart_parser.h">
+      <Filter>ヘッダー ファイル\lib\MultipartEncoder</Filter>
+    </ClInclude>
+    <ClInclude Include="debug.hpp">
+      <Filter>ヘッダー ファイル\function\debug</Filter>
+    </ClInclude>
+    <ClInclude Include="sjis.hpp">
+      <Filter>ヘッダー ファイル\function\string</Filter>
+    </ClInclude>
+    <ClInclude Include="utf8.hpp">
+      <Filter>ヘッダー ファイル\function\string</Filter>
+    </ClInclude>
+    <ClInclude Include="utf16.hpp">
+      <Filter>ヘッダー ファイル\function\string</Filter>
+    </ClInclude>
+    <ClInclude Include="utf32.hpp">
+      <Filter>ヘッダー ファイル\function\string</Filter>
+    </ClInclude>
+    <ClInclude Include="eucjp.hpp">
+      <Filter>ヘッダー ファイル\function\string</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -22,14 +22,13 @@ int tmstring_squeeze(lua_State* L);
 int tmstring_capitalize(lua_State* L);
 int tmstring_capitalize_words(lua_State* L);
 int tmstring_random(lua_State* L);
-int tmstring_roundnumber(lua_State* L);
 int tmstring_anagram(lua_State* L);
 int tmstring_gsplit(lua_State* L);
 int tmstring_lines(lua_State* L);
 int tmstring_character(lua_State* L);
 int tmstring_count(lua_State* L);
 
-void luaReg_tmstring(lua_State* L);
+void luaReg_const_tmstring(lua_State* L);
 
 static luaL_Reg TEXTMODULE_TMSTRING_REG[] = {
 	{"hiragana", tmstring_hiragana},

@@ -22,3 +22,4 @@
 
 //string
 #define STRING_COVERSION_FAILED "string conversion failed"
+#define INVALID_CHARACTER "invalid character"

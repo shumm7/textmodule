@@ -10,7 +10,6 @@
 #include <format>
 #include <unicode/translit.h>
 
-#include "mecab.hpp"
 #include "textmodule_exception.hpp"
 #include "textmodule_lua.hpp"
 #include "textmodule_string.hpp"
@@ -452,19 +451,6 @@ int tmstring_random(lua_State* L) {
 	}
 }
 
-int tmstring_roundnumber(lua_State* L) {
-	try {
-		lua_Wstring str = tm_towstring(L, 1);
-
-		lua_pushwstring(L, toRoundNumber(str, false));
-		return 1;
-	}
-	catch (std::exception& e) {
-		luaL_error(L, e.what());
-		return 1;
-	}
-}
-
 int tmstring_anagram(lua_State* L) {
 	try {
 		lua_Wstring str = tm_towstring(L, 1);
@@ -658,11 +644,7 @@ int tmstring_count(lua_State* L) {
 	}
 }
 
-
-void luaReg_tmstring(lua_State* L) {
-		luaL_register(L, NULL, TEXTMODULE_TMSTRING_REG);
-		luaL_register(L, NULL, TEXTMODULE_MECAB_REG);
-
+void luaReg_const_tmstring(lua_State* L) {
 		lua_settablevalue(L, "number", S_NUMBER);
 		lua_settablevalue(L, "hex_digits", S_HEX_DIGITS);
 		lua_settablevalue(L, "alphabet", S_ALPHABET);

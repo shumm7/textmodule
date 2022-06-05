@@ -163,6 +163,7 @@
     <ClCompile Include="debug.cpp" />
     <ClCompile Include="device.cpp" />
     <ClCompile Include="ease.cpp" />
+    <ClCompile Include="eucjp.cpp" />
     <ClCompile Include="filesystem.cpp" />
     <ClCompile Include="hash-library\crc32.cpp" />
     <ClCompile Include="hash-library\digest.cpp" />
@@ -177,7 +178,10 @@
     <ClCompile Include="json.cpp" />
     <ClCompile Include="lua.cpp" />
     <ClCompile Include="cmath.cpp" />
+    <ClCompile Include="matrix2.cpp" />
+    <ClCompile Include="matrix3.cpp" />
     <ClCompile Include="mecab.cpp" />
+    <ClCompile Include="MultipartEncoder\multipart_parser.cpp" />
     <ClCompile Include="obj.cpp" />
     <ClCompile Include="pixel.cpp" />
     <ClCompile Include="QR-Code-generator\qrcodegen.cpp" />
@@ -185,6 +189,7 @@
     <ClCompile Include="quaternion.cpp" />
     <ClCompile Include="random.cpp" />
     <ClCompile Include="color.cpp" />
+    <ClCompile Include="sjis.cpp" />
     <ClCompile Include="string.cpp" />
     <ClCompile Include="textmodule.cpp" />
     <ClCompile Include="textmodule_color.cpp" />
@@ -197,6 +202,8 @@
     <ClCompile Include="textmodule_time.cpp" />
     <ClCompile Include="time.cpp" />
     <ClCompile Include="tmstring.cpp" />
+    <ClCompile Include="uft16.cpp" />
+    <ClCompile Include="utf32.cpp" />
     <ClCompile Include="utf8.cpp" />
     <ClCompile Include="vector2.cpp" />
     <ClCompile Include="vector3.cpp" />
@@ -213,6 +220,7 @@
     <ClInclude Include="debug.hpp" />
     <ClInclude Include="device.hpp" />
     <ClInclude Include="ease.hpp" />
+    <ClInclude Include="eucjp.hpp" />
     <ClInclude Include="filesystem.hpp" />
     <ClInclude Include="hash-library\crc32.h" />
     <ClInclude Include="hash-library\hash.h" />
@@ -226,7 +234,10 @@
     <ClInclude Include="http.hpp" />
     <ClInclude Include="image.hpp" />
     <ClInclude Include="json.hpp" />
+    <ClInclude Include="matrix2.hpp" />
+    <ClInclude Include="matrix3.hpp" />
     <ClInclude Include="mecab.hpp" />
+    <ClInclude Include="MultipartEncoder\multipart_parser.h" />
     <ClInclude Include="obj.hpp" />
     <ClInclude Include="pixel.hpp" />
     <ClInclude Include="QR-Code-generator\qrcodegen.hpp" />
@@ -234,6 +245,7 @@
     <ClInclude Include="quaternion.hpp" />
     <ClInclude Include="random.hpp" />
     <ClInclude Include="color.hpp" />
+    <ClInclude Include="sjis.hpp" />
     <ClInclude Include="string.hpp" />
     <ClInclude Include="textmodule.hpp" />
     <ClInclude Include="textmodule_color.hpp" />
@@ -250,6 +262,8 @@
     <ClInclude Include="textmodule_type.hpp" />
     <ClInclude Include="time.hpp" />
     <ClInclude Include="tmstring.hpp" />
+    <ClInclude Include="utf16.hpp" />
+    <ClInclude Include="utf32.hpp" />
     <ClInclude Include="utf8.hpp" />
     <ClInclude Include="vector2.hpp" />
     <ClInclude Include="vector3.hpp" />

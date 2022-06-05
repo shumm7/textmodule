@@ -8,13 +8,24 @@
 #include <fmt/chrono.h>
 #include <vector>
 
+#include "mecab.hpp"
 #include "tmstring.hpp"
+
+#include "sjis.hpp"
+#include "utf8.hpp"
+#include "utf16.hpp"
+#include "utf32.hpp"
+#include "eucjp.hpp"
+
 #include "textmodule_lua.hpp"
 #include "textmodule_string.hpp"
 #include "textmodule_math.hpp"
 
 int string_find(lua_State* L) {
 	try {
+		if (luaL_callmeta(L, 1, "__find"))
+			return 2;
+
 		lua_Wstring text = tm_towstring(L, 1);
 		lua_Wstring pattern = tm_towstring(L, 2);
 		lua_Integer init = tm_tointeger_s(L, 3, 1);
@@ -91,6 +102,9 @@ int string_find(lua_State* L) {
 
 int string_sub(lua_State* L) {
 	try {
+		if (luaL_callmeta(L, 1, "__sub"))
+			return 1;
+
 		lua_Wstring text = tm_towstring(L, 1);
 		lua_Integer start = tm_tointeger(L, 2) - 1;
 		lua_Integer end = tm_tointeger_s(L, 3, text.length()) - 1;
@@ -106,6 +120,10 @@ int string_sub(lua_State* L) {
 
 int string_gsub(lua_State* L) {
 	try {
+		int st = lua_gettop(L);
+		if (luaL_callmeta(L, 1, "__gsub"))
+			return lua_gettop(L) - st;
+
 		lua_Wstring text = tm_towstring(L, 1);
 		lua_Wstring pattern = tm_towstring(L, 2);
 		lua_Wstring repl = tm_towstring(L, 3);
@@ -138,6 +156,9 @@ int string_gsub(lua_State* L) {
 
 int string_len(lua_State* L) {
 	try {
+		if (luaL_callmeta(L, 1, "__len"))
+			return 1;
+
 		lua_Wstring text = tm_towstring(L, 1);
 		lua_pushinteger(L, text.length());
 		return 1;
@@ -150,6 +171,9 @@ int string_len(lua_State* L) {
 
 int string_reverse(lua_State* L) {
 	try {
+		if (luaL_callmeta(L, 1, "__reverse"))
+			return 1;
+
 		lua_Wstring text = tm_towstring(L, 1);
 		lua_Wstring ret;
 		for (unsigned int i = 0; i < text.length(); i++)
@@ -166,6 +190,9 @@ int string_reverse(lua_State* L) {
 
 int string_upper(lua_State* L) {
 	try {
+		if (luaL_callmeta(L, 1, "__upper"))
+			return 1;
+
 		lua_pushwstring(L, upperString(tm_towstring(L, 1)));
 		return 1;
 	}
@@ -177,6 +204,9 @@ int string_upper(lua_State* L) {
 
 int string_lower(lua_State* L) {
 	try {
+		if (luaL_callmeta(L, 1, "__lower"))
+			return 1;
+
 		lua_pushwstring(L, lowerString(tm_towstring(L, 1)));
 		return 1;
 	}
@@ -188,6 +218,9 @@ int string_lower(lua_State* L) {
 
 int string_match(lua_State* L) {
 	try {
+		if (luaL_callmeta(L, 1, "__match"))
+			return 1;
+
 		lua_Wstring text = tm_towstring(L, 1);
 		lua_Wstring pattern = tm_towstring(L, 2);
 		lua_Integer start = tm_tointeger_s(L, 3, 1) - 1;
@@ -214,6 +247,10 @@ int string_match(lua_State* L) {
 
 int string_byte(lua_State* L) {
 	try {
+		int st = lua_gettop(L);
+		if (luaL_callmeta(L, 1, "__byte"))
+			return lua_gettop(L) - st;
+
 		lua_Wstring text = tm_towstring(L, 1);
 		lua_Integer i = tm_tointeger_s(L, 2, 1) - 1;
 		lua_Integer j = tm_tointeger_s(L, 3, 1) - 1;
@@ -231,7 +268,7 @@ int string_byte(lua_State* L) {
 		for (int k = i; k <= j; k++)
 		{
 			unsigned long long c = text[k];
-			lua_pushinteger(L, c);
+			lua_pushnumber(L, c);
 		}
 		return j - i + 1;
 	}
@@ -243,26 +280,14 @@ int string_byte(lua_State* L) {
 
 int string_char(lua_State* L) {
 	try {
-		int cnt = 1;
-		std::vector<unsigned long long> list;
+		if (luaL_callmeta(L, 1, "__char"))
+			return 1;
 
-		while (true) {
-			if (lua_type(L, cnt) == LUA_TNUMBER)
-				list.push_back(lua_tonumber(L, cnt));
-			else
-				break;
-			cnt++;
-		}
-
-		if (list.size() < 1)
-			return 0;
-
-		wchar_t temp;
+		int n = lua_gettop(L);
 		lua_Wstring ret;
-		for (unsigned int i = 0; i < list.size(); i++)
-		{
-			temp = list[i];
-			ret += temp;
+		for (int i = 0; i < n; i++) {
+			unsigned long long c = tm_tonumber(L, i + 1);
+			ret += (wchar_t)c;
 		}
 
 		lua_pushwstring(L, ret);
@@ -310,6 +335,9 @@ int string_gmatch_aux(lua_State* L) {
 
 int string_gmatch(lua_State* L) {
 	try {
+		if (luaL_callmeta(L, 1, "__gmatch"))
+			return 1;
+
 		luaL_checkstring(L, 1);
 		luaL_checkstring(L, 2);
 		lua_settop(L, 2);
@@ -325,6 +353,10 @@ int string_gmatch(lua_State* L) {
 
 int string_rep(lua_State* L) {
 	try {
+		int st = lua_gettop(L);
+		if (luaL_callmeta(L, 1, "__rep"))
+			return 1;
+
 		lua_Wstring s = tm_towstring(L, 1);
 		lua_Integer n = tm_tointeger(L, 2);
 		lua_Wstring ret;
@@ -344,6 +376,9 @@ int string_rep(lua_State* L) {
 
 int string_format(lua_State* L) {
 	try {
+		if (luaL_callmeta(L, 1, "__format"))
+			return 1;
+
 		lua_Sstring str = tm_tosstring(L, 1);
 		try {
 			fmt::dynamic_format_arg_store<fmt::format_context> store;
@@ -392,6 +427,9 @@ int string_dump_writer(lua_State* L, const void* b, size_t size, void* B) {
 }
 
 int string_dump(lua_State* L) {
+	if (luaL_callmeta(L, 1, "__dump"))
+		return 1;
+
 	luaL_Buffer b;
 	luaL_checktype(L, 1, LUA_TFUNCTION);
 	lua_settop(L, 1);
@@ -402,11 +440,60 @@ int string_dump(lua_State* L) {
 	return 1;
 }
 
+
 void luaReg_string(lua_State* L, const char* name, bool reg) {
 	if (reg) {
+		//string table (metatable)
+		luaReg_sjis(L);
+		luaReg_utf8(L);
+		luaReg_utf16(L);
+		luaReg_utf32(L);
+		luaReg_eucjp(L);
+
+		//string tmstring mecab
 		lua_newtable(L);
 		luaL_register(L, NULL, TEXTMODULE_STRING_REG);
-		luaReg_tmstring(L);
+		luaL_register(L, NULL, TEXTMODULE_TMSTRING_REG);
+		luaL_register(L, NULL, TEXTMODULE_MECAB_REG);
+		luaReg_const_tmstring(L);
+
+		//sjis
+		lua_newtable(L);
+		luaL_register(L, NULL, TEXTMODULE_STRING_SJIS_REG);
+		luaL_getmetatable(L, TEXTMODULE_STRING_SJIS_TABLE);
+		lua_setmetatable(L, -2);
+		lua_setfield(L, -2, "sjis");
+
+		//utf-8
+		lua_newtable(L);
+		luaL_register(L, NULL, TEXTMODULE_STRING_UTF8_REG);
+		lua_pushlstring(L, TEXTMODULE_UTF8PATT, sizeof(TEXTMODULE_UTF8PATT) / sizeof(char) - 1);
+		lua_setfield(L, -2, "charpattern");
+		luaL_getmetatable(L, TEXTMODULE_STRING_UTF8_TABLE);
+		lua_setmetatable(L, -2);
+		lua_setfield(L, -2, "utf8");
+
+		//utf-16
+		lua_newtable(L);
+		luaL_register(L, NULL, TEXTMODULE_STRING_UTF16_REG);
+		luaL_getmetatable(L, TEXTMODULE_STRING_UTF16_TABLE);
+		lua_setmetatable(L, -2);
+		lua_setfield(L, -2, "utf16");
+
+		//utf-32
+		lua_newtable(L);
+		luaL_register(L, NULL, TEXTMODULE_STRING_UTF32_REG);
+		luaL_getmetatable(L, TEXTMODULE_STRING_UTF32_TABLE);
+		lua_setmetatable(L, -2);
+		lua_setfield(L, -2, "utf32");
+
+		//eucjp
+		lua_newtable(L);
+		luaL_register(L, NULL, TEXTMODULE_STRING_EUCJP_REG);
+		luaL_getmetatable(L, TEXTMODULE_STRING_EUCJP_TABLE);
+		lua_setmetatable(L, -2);
+		lua_setfield(L, -2, "eucjp");
+
 		lua_setfield(L, -2, name);
 	}
 }

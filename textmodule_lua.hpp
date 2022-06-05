@@ -15,16 +15,30 @@
 #define TEXTMODULE_VECTOR2 "Eigen::Vector2d*"
 #define TEXTMODULE_VECTOR3 "Eigen::Vector3d*"
 #define TEXTMODULE_VECTOR4 "Eigen::Vector4d*"
+#define TEXTMODULE_MATRIX2 "Eigen::Matrix2d*"
+#define TEXTMODULE_MATRIX3 "Eigen::Matrix3d*"
 #define TEXTMODULE_COMPLEX "std::complex<double>*"
 #define TEXTMODULE_QUATERNION "Eigen::Quaterniond*"
-#define TEXTMODULE_JSON "nlohmann::json*"
+
+#define TEXTMODULE_BIGNUMBER "boost::multiprecision::number<boost::multiprecision::cpp_dec_float<1024>>"
+#define TEXTMODULE_BIGNUMBER_TABLE "table bignumber"
+
+#define TEXTMODULE_STRING_SJIS "string (shift-jis)"
+#define TEXTMODULE_STRING_UTF8 "string (utf-8)"
+#define TEXTMODULE_STRING_UTF16 "string (utf-16)"
+#define TEXTMODULE_STRING_UTF32 "string (utf-32)"
+#define TEXTMODULE_STRING_EUCJP "string (euc-jp)"
+#define TEXTMODULE_STRING_SJIS_TABLE "table string (shift-jis)"
+#define TEXTMODULE_STRING_UTF8_TABLE "table string (utf-8)"
+#define TEXTMODULE_STRING_UTF16_TABLE "table string (utf-16)"
+#define TEXTMODULE_STRING_UTF32_TABLE "table string (utf-32)"
+#define TEXTMODULE_STRING_EUCJP_TABLE "table string (euc-jp)"
+
 #define TEXTMODULE_COLORLIST "table ColorList"
 #define TEXTMODULE_COLOR "st_rgba*"
 #define TEXTMODULE_PIXEL "st_rgba32*"
 #define TEXTMODULE_IMAGE "st_imgpixel*"
 #define TEXTMODULE_CLOCK "std::chrono::utc_clock::time_point*"
-#define TEXTMODULE_BIGNUMBER "boost::multiprecision::number<boost::multiprecision::cpp_dec_float<1024>>"
-#define TEXTMODULE_BIGNUMBER_TABLE "table bignumber"
 
 //Type for wide string (std::wstring)
 typedef std::wstring lua_Wstring;
@@ -47,6 +61,17 @@ typedef dec_float lua_Bignumber;
 // Type for json
 typedef nlohmann::json lua_Json;
 
+// Type of shift-jis string
+typedef std::string lua_SJIS;
+// Type of utf-8 string
+typedef std::u8string lua_UTF8;
+// Type of utf16 string
+typedef std::wstring lua_UTF16;
+// Type of utf32 string
+typedef std::u32string lua_UTF32;
+// Type of euc-jp string
+typedef std::string lua_EUCJP;
+
 //Type for complex class
 typedef Complex lua_Complex;
 //Type for quaternion class
@@ -57,6 +82,10 @@ typedef Vector2	lua_Vector2;
 typedef Vector3	lua_Vector3;
 //Type for vector4 class
 typedef Vector4	lua_Vector4;
+//Type for matrix2 class
+typedef Matrix2	lua_Matrix2;
+//Type for matrix3 class
+typedef Matrix3	lua_Matrix3;
 
 //Type for rgba class
 typedef st_rgba lua_Color;
@@ -106,6 +135,23 @@ lua_String tm_tostring_s(lua_State* L, int idx);
 lua_String tm_tolstring(lua_State* L, int idx, size_t* len);
 lua_String tm_tolstring_s(lua_State* L, int idx, size_t* len, lua_String def);
 lua_String tm_tolstring_s(lua_State* L, int idx, size_t* len);
+
+// String table
+lua_SJIS lua_tosjis(lua_State* L, int idx);
+lua_SJIS tm_tosjis(lua_State* L, int idx);
+void lua_pushsjis(lua_State* L, lua_SJIS str);
+lua_UTF8 lua_toutf8(lua_State* L, int idx);
+lua_UTF8 tm_toutf8(lua_State* L, int idx);
+void lua_pushutf8(lua_State* L, lua_UTF8 str);
+lua_UTF16 lua_toutf16(lua_State* L, int idx);
+lua_UTF16 tm_toutf16(lua_State* L, int idx);
+void lua_pushutf16(lua_State* L, lua_UTF16 str);
+lua_UTF32 lua_toutf32(lua_State* L, int idx);
+lua_UTF32 tm_toutf32(lua_State* L, int idx);
+void lua_pushutf32(lua_State* L, lua_UTF32 str);
+lua_EUCJP lua_toeucjp(lua_State* L, int idx);
+lua_EUCJP tm_toeucjp(lua_State* L, int idx);
+void lua_pusheucjp(lua_State* L, lua_EUCJP str);
 
 // Number
 lua_Integer tm_tointeger(lua_State* L, int idx);
