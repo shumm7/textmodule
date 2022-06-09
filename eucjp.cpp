@@ -20,6 +20,8 @@ int eucjp_new(lua_State* L) {
 			str = StrToEUCstr(tm_tosstring(L, 2));
 		else if (lua_istable(L, 2) && luaL_checkmetatable(L, 2, TEXTMODULE_STRING_EUCJP))
 			str = tm_toeucjp(L, 2);
+		else if (lua_istable(L, 2))
+			str = lua_toeucjp(L, 2);
 		else
 			return luaL_argerror(L, 2, "string/number/string (euc-jp) expected");
 

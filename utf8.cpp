@@ -20,10 +20,36 @@ int utf8_new(lua_State* L) {
 			str = StrToU8str(tm_tosstring(L, 2));
 		else if (lua_istable(L, 2) && luaL_checkmetatable(L, 2, TEXTMODULE_STRING_UTF8))
 			str = tm_toutf8(L, 2);
+		else if (lua_istable(L, 2))
+			str = lua_toutf8(L, 2);
 		else
 			return luaL_argerror(L, 2, "string/number/string (utf-8) expected");
 
 		lua_pushutf8(L, str);
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int utf8___concat(lua_State* L) {
+	try {
+		lua_UTF8 s1;
+		lua_UTF8 s2;
+
+		if (lua_type(L, 1) == LUA_TTABLE && luaL_checkmetatable(L, 1, TEXTMODULE_STRING_SJIS))
+			s1 = tm_toutf8(L, 1);
+		else if (lua_type(L, 1) == LUA_TSTRING)
+			s1 = StrToU8str(tm_tosstring(L, 1));
+
+		if (lua_type(L, 2) == LUA_TTABLE && luaL_checkmetatable(L, 2, TEXTMODULE_STRING_SJIS))
+			s2 = tm_toutf8(L, 2);
+		else if (lua_type(L, 2) == LUA_TSTRING)
+			s2 = StrToU8str(tm_tosstring(L, 2));
+
+		lua_pushsstring(L, U8strToStr(s1 + s2));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -71,6 +97,7 @@ int utf8_raw(lua_State* L) {
 		return 1;
 	}
 }
+
 
 void luaReg_utf8(lua_State* L) {
 	//utf8 (metatable)

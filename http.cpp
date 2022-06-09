@@ -4,6 +4,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <regex>
 #include <stdexcept>
 #include <streambuf>
 
@@ -14,6 +15,7 @@
 
 #include "textmodule_lua.hpp"
 #include "textmodule_string.hpp"
+#include "textmodule_exception.hpp"
 
 using namespace utility;
 using namespace web;
@@ -208,6 +210,40 @@ int http_decode(lua_State* L) {
 	try {
 		std::wstring decoded = web::uri::decode(tm_towstring(L, 1));
 		lua_pushwstring(L, decoded);
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int http_base64(lua_State* L) {
+	try {
+		std::string str = tm_tosstring(L, 1);
+		std::vector<unsigned char> data;
+		for (int i = 0; i < str.size(); i++)
+			data.push_back(str[i]);
+
+		std::wstring decoded = utility::conversions::to_base64(data);
+		lua_pushwstring(L, decoded);
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int http_frombase64(lua_State* L) {
+	try {
+		std::vector<unsigned char> data = utility::conversions::from_base64(tm_towstring(L, 1));
+
+		std::string ret;
+		for (int i = 0; i < data.size(); i++)
+			ret += data[i];
+
+		lua_pushsstring(L, ret);
 		return 1;
 	}
 	catch (std::exception& e) {

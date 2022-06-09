@@ -1,6 +1,5 @@
 #pragma once
 #include <lua.hpp>
-#define TEXTMODULE_UTF8PATT "[\0-\x7F\xC2-\xFD][\x80-\xBF]*"
 
 int utf8_new(lua_State* L);
 int utf8___tostring(lua_State* L);

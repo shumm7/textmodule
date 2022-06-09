@@ -6,6 +6,8 @@
 #include "textmodule_string.hpp"
 #include "textmodule_exception.hpp"
 
+#include <windows.h>
+
 static luaL_Reg TEXTMODULE_DEBUG_REG[] = {
 	{ nullptr, nullptr }
 };

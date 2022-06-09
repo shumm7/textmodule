@@ -188,6 +188,7 @@ int bignumber___abs(lua_State* L) {
 
 
 void luaReg_const_bignumber(lua_State* L) {
+	// Constant
 	lua_settablevalue(L, "rad_to_deg", boost::math::constants::radian<lua_Bignumber>());
 	lua_settablevalue(L, "deg_to_rad", boost::math::constants::degree<lua_Bignumber>());
 	lua_settablevalue(L, "e", boost::math::constants::e<lua_Bignumber>());
@@ -208,4 +209,49 @@ void luaReg_const_bignumber(lua_State* L) {
 	lua_settablevalue(L, "egamma", boost::math::constants::euler<lua_Bignumber>());
 	lua_settablevalue(L, "phi", boost::math::constants::phi<lua_Bignumber>());
 	lua_settablevalue(L, "gauss", boost::math::constants::gauss<lua_Bignumber>());
+
+	lua_settablevalue(L, "huge", std::numeric_limits<lua_Bignumber>::infinity());
+	lua_settablevalue(L, "infinity", std::numeric_limits<lua_Bignumber>::infinity());
+	lua_settablevalue(L, "negative_infinity", -std::numeric_limits<lua_Bignumber>::infinity());
+	lua_settablevalue(L, "nan", std::numeric_limits<lua_Bignumber>::quiet_NaN());
+	lua_settablevalue(L, "quiet_nan", std::numeric_limits<lua_Bignumber>::quiet_NaN());
+	lua_settablevalue(L, "signaling_nan", std::numeric_limits<lua_Bignumber>::signaling_NaN());
+
+	lua_settablevalue(L, "min_exponent", std::numeric_limits<lua_Bignumber>::min_exponent10);
+	lua_settablevalue(L, "max_exponent", std::numeric_limits<lua_Bignumber>::max_exponent10);
+	lua_settablevalue(L, "digits", std::numeric_limits<lua_Bignumber>::digits10);
+	lua_settablevalue(L, "denorm_min", std::numeric_limits<lua_Bignumber>::denorm_min());
+	lua_settablevalue(L, "epsilon", std::numeric_limits<lua_Bignumber>::epsilon());
+
+	// SI Prefix
+	lua_settablevalue(L, "yotta", boost::multiprecision::pow(lua_Bignumber(10), 24));
+	lua_settablevalue(L, "zetta", boost::multiprecision::pow(lua_Bignumber(10), 21));
+	lua_settablevalue(L, "exa", boost::multiprecision::pow(lua_Bignumber(10), 18));
+	lua_settablevalue(L, "peta", boost::multiprecision::pow(lua_Bignumber(10), 15));
+	lua_settablevalue(L, "tera", boost::multiprecision::pow(lua_Bignumber(10), 12));
+	lua_settablevalue(L, "giga", boost::multiprecision::pow(lua_Bignumber(10), 9));
+	lua_settablevalue(L, "mega", boost::multiprecision::pow(lua_Bignumber(10), 6));
+	lua_settablevalue(L, "kilo", boost::multiprecision::pow(lua_Bignumber(10), 3));
+	lua_settablevalue(L, "hecto", boost::multiprecision::pow(lua_Bignumber(10), 2));
+	lua_settablevalue(L, "deca", boost::multiprecision::pow(lua_Bignumber(10), 1));
+	lua_settablevalue(L, "deci", boost::multiprecision::pow(lua_Bignumber(10), -1));
+	lua_settablevalue(L, "centi", boost::multiprecision::pow(lua_Bignumber(10), -2));
+	lua_settablevalue(L, "milli", boost::multiprecision::pow(lua_Bignumber(10), -3));
+	lua_settablevalue(L, "micro", boost::multiprecision::pow(lua_Bignumber(10), -6));
+	lua_settablevalue(L, "nano", boost::multiprecision::pow(lua_Bignumber(10), -9));
+	lua_settablevalue(L, "pico", boost::multiprecision::pow(lua_Bignumber(10), -12));
+	lua_settablevalue(L, "femto", boost::multiprecision::pow(lua_Bignumber(10), -15));
+	lua_settablevalue(L, "atto", boost::multiprecision::pow(lua_Bignumber(10), -18));
+	lua_settablevalue(L, "zepto", boost::multiprecision::pow(lua_Bignumber(10), -21));
+	lua_settablevalue(L, "yocto", boost::multiprecision::pow(lua_Bignumber(10), -24));
+
+	// Binary Prefix
+	lua_settablevalue(L, "kibi", boost::multiprecision::pow(lua_Bignumber(2), 10));
+	lua_settablevalue(L, "mebi", boost::multiprecision::pow(lua_Bignumber(2), 20));
+	lua_settablevalue(L, "gibi", boost::multiprecision::pow(lua_Bignumber(2), 30));
+	lua_settablevalue(L, "tebi", boost::multiprecision::pow(lua_Bignumber(2), 40));
+	lua_settablevalue(L, "pebi", boost::multiprecision::pow(lua_Bignumber(2), 50));
+	lua_settablevalue(L, "exbi", boost::multiprecision::pow(lua_Bignumber(2), 60));
+	lua_settablevalue(L, "zebi", boost::multiprecision::pow(lua_Bignumber(2), 70));
+	lua_settablevalue(L, "yobi", boost::multiprecision::pow(lua_Bignumber(2), 80));
 }

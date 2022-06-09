@@ -20,6 +20,8 @@ int utf32_new(lua_State* L) {
 			str = WstrToU32str(tm_towstring(L, 2));
 		else if (lua_istable(L, 2) && luaL_checkmetatable(L, 2, TEXTMODULE_STRING_UTF16))
 			str = tm_toutf32(L, 2);
+		else if (lua_istable(L, 2))
+			str = lua_toutf32(L, 2);
 		else
 			return luaL_argerror(L, 2, "string/number/string (utf-32) expected");
 

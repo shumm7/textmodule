@@ -3,6 +3,7 @@
 #include <iostream>
 #include <chrono>
 
+#include <opencv2/opencv.hpp>
 #include <Eigen/Geometry>
 #include <unicode/unistr.h>
 #include <unicode/ustring.h>
@@ -51,7 +52,7 @@ typedef const char* lua_String;
 //Type for float number
 typedef float lua_Float;
 //Type for unsigned integer
-typedef unsigned long lua_Unsigned;
+typedef unsigned long long lua_Unsigned;
 //Type for boolean
 typedef bool lua_Boolean;
 //Type for time point
@@ -139,18 +140,23 @@ lua_String tm_tolstring_s(lua_State* L, int idx, size_t* len);
 // String table
 lua_SJIS lua_tosjis(lua_State* L, int idx);
 lua_SJIS tm_tosjis(lua_State* L, int idx);
+lua_SJIS tm_tosjis_s(lua_State* L, int idx);
 void lua_pushsjis(lua_State* L, lua_SJIS str);
 lua_UTF8 lua_toutf8(lua_State* L, int idx);
 lua_UTF8 tm_toutf8(lua_State* L, int idx);
+lua_UTF8 tm_toutf8_s(lua_State* L, int idx);
 void lua_pushutf8(lua_State* L, lua_UTF8 str);
 lua_UTF16 lua_toutf16(lua_State* L, int idx);
 lua_UTF16 tm_toutf16(lua_State* L, int idx);
+lua_UTF16 tm_toutf16_s(lua_State* L, int idx);
 void lua_pushutf16(lua_State* L, lua_UTF16 str);
 lua_UTF32 lua_toutf32(lua_State* L, int idx);
 lua_UTF32 tm_toutf32(lua_State* L, int idx);
+lua_UTF32 tm_toutf32_s(lua_State* L, int idx);
 void lua_pushutf32(lua_State* L, lua_UTF32 str);
 lua_EUCJP lua_toeucjp(lua_State* L, int idx);
 lua_EUCJP tm_toeucjp(lua_State* L, int idx);
+lua_EUCJP tm_toeucjp_s(lua_State* L, int idx);
 void lua_pusheucjp(lua_State* L, lua_EUCJP str);
 
 // Number
@@ -288,7 +294,10 @@ void lua_printstack(lua_State* L);
 int lua_pushtmstruct(lua_State* L, std::tm* tmstruct);
 void lua_totmstruct(lua_State* L, int idx, std::tm* out);
 bool tm_callmeta(lua_State* L, int obj, const char* event);
+bool tm_callmetan(lua_State* L, int obj, const char* event, int nargs, int namount);
 bool tm_callmetan(lua_State* L, int obj, const char* event, int nargs);
+bool tm_callmetan(lua_State* L, int obj, const char* event);
+void lua_pushsomenil(lua_State* L, int amount);
 
 // Json Utility
 lua_Json tm_jsonparse(lua_Sstring str);

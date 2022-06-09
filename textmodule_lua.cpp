@@ -19,6 +19,7 @@
 
 #include <fmt/core.h>
 #include <fmt/format.h>
+#include <Windows.h>
 
 #include <boost/multiprecision/cpp_bin_float.hpp>
 
@@ -240,6 +241,17 @@ lua_SJIS tm_tosjis(lua_State* L, int idx) {
 	return lua_tosjis(L, idx);
 }
 
+lua_SJIS tm_tosjis_s(lua_State* L, int idx) {
+	if (lua_type(L, idx) == LUA_TSTRING)
+		return lua_tostring(L, idx);
+	else if (lua_type(L, idx) == LUA_TTABLE && luaL_checkmetatable(L, idx, TEXTMODULE_STRING_SJIS))
+		return tm_tosjis(L, idx);
+	else {
+		luaL_argerror(L, idx, "string/string (shift-jis) expected");
+		return "";
+	}
+}
+
 void lua_pushsjis(lua_State* L, lua_SJIS str) {
 	int len = str.length();
 
@@ -275,6 +287,17 @@ lua_UTF8 lua_toutf8(lua_State* L, int idx) {
 lua_UTF8 tm_toutf8(lua_State* L, int idx) {
 	luaL_argcheck(L, lua_istable(L, idx) && luaL_checkmetatable(L, idx, TEXTMODULE_STRING_UTF8), idx, "string (utf-8) expected");
 	return lua_toutf8(L, idx);
+}
+
+lua_UTF8 tm_toutf8_s(lua_State* L, int idx) {
+	if (lua_type(L, idx) == LUA_TSTRING)
+		return StrToU8str(lua_tostring(L, idx));
+	else if (lua_type(L, idx) == LUA_TTABLE && luaL_checkmetatable(L, idx, TEXTMODULE_STRING_UTF8))
+		return tm_toutf8(L, idx);
+	else {
+		luaL_argerror(L, idx, "string/string (utf-8) expected");
+		return u8"";
+	}
 }
 
 void lua_pushutf8(lua_State* L, lua_UTF8 str) {
@@ -314,6 +337,17 @@ lua_UTF16 tm_toutf16(lua_State* L, int idx) {
 	return lua_toutf16(L, idx);
 }
 
+lua_UTF16 tm_toutf16_s(lua_State* L, int idx) {
+	if (lua_type(L, idx) == LUA_TSTRING)
+		return lua_towstring(L, 1);
+	else if (lua_type(L, idx) == LUA_TTABLE && luaL_checkmetatable(L, idx, TEXTMODULE_STRING_UTF16))
+		return tm_toutf16(L, idx);
+	else {
+		luaL_argerror(L, idx, "string/string (utf-16) expected");
+		return L"";
+	}
+}
+
 void lua_pushutf16(lua_State* L, lua_UTF16 str) {
 	int len = str.length();
 
@@ -351,6 +385,17 @@ lua_UTF32 tm_toutf32(lua_State* L, int idx) {
 	return lua_toutf32(L, idx);
 }
 
+lua_UTF32 tm_toutf32_s(lua_State* L, int idx) {
+	if (lua_type(L, idx) == LUA_TSTRING)
+		return StrToU32str(lua_tostring(L, 1));
+	else if (lua_type(L, idx) == LUA_TTABLE && luaL_checkmetatable(L, idx, TEXTMODULE_STRING_UTF32))
+		return tm_toutf32(L, idx);
+	else {
+		luaL_argerror(L, idx, "string/string (utf-32) expected");
+		return U"";
+	}
+}
+
 void lua_pushutf32(lua_State* L, lua_UTF32 str) {
 	int len = str.length();
 
@@ -386,6 +431,17 @@ lua_EUCJP lua_toeucjp(lua_State* L, int idx) {
 lua_EUCJP tm_toeucjp(lua_State* L, int idx) {
 	luaL_argcheck(L, lua_istable(L, idx) && luaL_checkmetatable(L, idx, TEXTMODULE_STRING_EUCJP), idx, "string (euc-jp) expected");
 	return lua_toeucjp(L, idx);
+}
+
+lua_EUCJP tm_toeucjp_s(lua_State* L, int idx) {
+	if (lua_type(L, idx) == LUA_TSTRING)
+		return StrToEUCstr(lua_tostring(L, 1));
+	else if (lua_type(L, idx) == LUA_TTABLE && luaL_checkmetatable(L, idx, TEXTMODULE_STRING_EUCJP))
+		return tm_toeucjp(L, idx);
+	else {
+		luaL_argerror(L, idx, "string/string (euc-jp) expected");
+		return "";
+	}
 }
 
 void lua_pusheucjp(lua_State* L, lua_EUCJP str) {
@@ -1233,10 +1289,9 @@ const char* tm_typename(lua_State* L, int idx) {
 
 void lua_printstack(lua_State* L)
 {
-	int i;
 	int stackSize = lua_gettop(L);
 
-	for (i = stackSize; i >= 1; i--) {
+	for (int i = stackSize; i >= 1; i--) {
 		int type = lua_type(L, i);
 		std::cout << WstrToStr(tostring_n(i)) << "\t" << lua_typename(L, type) << "\t" << tm_convtostring(L, i) << std::endl;
 	}
@@ -1290,29 +1345,46 @@ bool tm_callmeta(lua_State* L, int obj, const char* event) {
 	return true;
 }
 
-bool tm_callmetan(lua_State* L, int obj, const char* event, int nargs) {
+bool tm_callmetan(lua_State* L, int obj, const char* event, int nargs, int namount) {
 	/* argn: number of arguments (including itself) */
 	if (nargs < 1)
 		return false;
-	if (lua_gettop(L) < nargs)
-		return false;
-
 	obj = abs_index(L, obj);
 
 	bool f;
 	for (int i = 0; i < nargs; i++) {
-		if (luaL_getmetafield(L, obj, event)) {
-			f = true;
-			break;
+		if (lua_type(L, obj + i) != LUA_TNONE) {
+			if (luaL_getmetafield(L, obj + i, event)) {
+				f = true;
+				break;
+			}
 		}
 	}
 
 	if (!f) return false; /* no metafield? */
+	if (lua_type(L, -1) != LUA_TFUNCTION) return false;
 
-	for (int i = 0; i < nargs; i++)
-		lua_pushvalue(L, obj+i);
-	lua_call(L, nargs, 1);
+	int p = nargs;
+	for (int i = 0; i < p; i++) {
+		if (lua_type(L, obj + i) != LUA_TNONE)
+			lua_pushvalue(L, obj + i);
+	}
+	lua_call(L, nargs, namount);
 	return true;
+}
+
+bool tm_callmetan(lua_State* L, int obj, const char* event, int nargs) {
+	return tm_callmetan(L, obj, event, nargs, LUA_MULTRET);
+}
+
+bool tm_callmetan(lua_State* L, int obj, const char* event) {
+	int n = lua_gettop(L);
+	return tm_callmetan(L, obj, event, n);
+}
+
+void lua_pushsomenil(lua_State* L, int amount) {
+	for (int i = 0; i < amount; i++)
+		lua_pushnil(L);
 }
 
 

@@ -23,3 +23,6 @@
 //string
 #define STRING_COVERSION_FAILED "string conversion failed"
 #define INVALID_CHARACTER "invalid character"
+
+//http
+#define BASE64_INVALID_CHARACTER "the string to be encoded contains characters must be alphabet ,\"+\", or \"/\"."

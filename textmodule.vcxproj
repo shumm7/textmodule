@@ -191,6 +191,7 @@
     <ClCompile Include="color.cpp" />
     <ClCompile Include="sjis.cpp" />
     <ClCompile Include="string.cpp" />
+    <ClCompile Include="string_aux.cpp" />
     <ClCompile Include="textmodule.cpp" />
     <ClCompile Include="textmodule_color.cpp" />
     <ClCompile Include="textmodule_geometry.cpp" />
@@ -202,6 +203,7 @@
     <ClCompile Include="textmodule_time.cpp" />
     <ClCompile Include="time.cpp" />
     <ClCompile Include="tmstring.cpp" />
+    <ClCompile Include="u8.cpp" />
     <ClCompile Include="uft16.cpp" />
     <ClCompile Include="utf32.cpp" />
     <ClCompile Include="utf8.cpp" />
@@ -247,6 +249,7 @@
     <ClInclude Include="color.hpp" />
     <ClInclude Include="sjis.hpp" />
     <ClInclude Include="string.hpp" />
+    <ClInclude Include="string_aux.hpp" />
     <ClInclude Include="textmodule.hpp" />
     <ClInclude Include="textmodule_color.hpp" />
     <ClInclude Include="textmodule_ease.hpp" />
@@ -262,6 +265,7 @@
     <ClInclude Include="textmodule_type.hpp" />
     <ClInclude Include="time.hpp" />
     <ClInclude Include="tmstring.hpp" />
+    <ClInclude Include="u8.hpp" />
     <ClInclude Include="utf16.hpp" />
     <ClInclude Include="utf32.hpp" />
     <ClInclude Include="utf8.hpp" />

@@ -243,6 +243,12 @@
     <ClCompile Include="eucjp.cpp">
       <Filter>ソース ファイル\function\string</Filter>
     </ClCompile>
+    <ClCompile Include="u8.cpp">
+      <Filter>ソース ファイル\function</Filter>
+    </ClCompile>
+    <ClCompile Include="string_aux.cpp">
+      <Filter>ソース ファイル\lib</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="os.hpp">
@@ -415,6 +421,12 @@
     </ClInclude>
     <ClInclude Include="eucjp.hpp">
       <Filter>ヘッダー ファイル\function\string</Filter>
+    </ClInclude>
+    <ClInclude Include="u8.hpp">
+      <Filter>ヘッダー ファイル\function</Filter>
+    </ClInclude>
+    <ClInclude Include="string_aux.hpp">
+      <Filter>ヘッダー ファイル\lib</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

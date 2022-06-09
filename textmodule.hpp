@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <windows.h>
 
 #define MODULE_NAME "textmodule"
 #define MODULE_VERSION 31
@@ -23,7 +24,7 @@
 #define API_EASE "ease"
 #define API_DEVICE "device"
 #define API_TIME "time"
-#define API_JSON "json"
+#define API_JSON "json" 
 
 //API_COLOR
 #define API_COLOR "color"
@@ -48,3 +49,4 @@
 
 std::wstring getVersionNum(int num);
 void SetDllPath();
+HWND GetAviUtlWindowHandle();

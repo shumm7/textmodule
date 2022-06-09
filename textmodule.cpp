@@ -45,3 +45,19 @@ std::wstring getVersionNum(int num) {
 void SetDllPath() {
 	SetDllDirectory(std::filesystem::canonical(DLLDIR).string().c_str());
 }
+
+HWND GetAviUtlWindowHandle() {
+	DWORD dwProcessId = GetCurrentProcessId();
+	HWND hWnd = GetTopWindow(0);
+	DWORD pid;
+
+	do {
+		if (GetWindowLongA(hWnd, GWL_HWNDPARENT) == NULL) {
+			GetWindowThreadProcessId(hWnd, &pid);
+			if ((&pid)[0] == dwProcessId) break;
+		}
+		hWnd = GetWindow(hWnd, GW_HWNDNEXT);
+	} while (hWnd != NULL);
+
+	return hWnd;
+}

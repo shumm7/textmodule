@@ -23,6 +23,7 @@
 #include "device.hpp"
 #include "time.hpp"
 #include "json.hpp"
+#include "u8.hpp"
 
 #include "complex.hpp"
 #include "vector2.hpp"
@@ -76,7 +77,8 @@ void luaReg(lua_State* L, nlohmann::json o, const char* module) {
 	luaReg_ease(L, API_EASE, getOptionParamB(o, OPTION_VAPI, API_EASE)); //ease
 	luaReg_device(L, API_DEVICE, getOptionParamB(o, OPTION_VAPI, API_DEVICE)); //device
 	luaReg_time(L, API_TIME, getOptionParamB(o, OPTION_VAPI, API_TIME)); //time
-	luaReg_json(L, API_JSON, getOptionParamB(o, OPTION_VAPI, API_JSON)); //time
+	luaReg_json(L, API_JSON, getOptionParamB(o, OPTION_VAPI, API_JSON)); //json
+	luaReg_u8(L, API_UTF8, getOptionParamB(o, OPTION_VAPI, API_UTF8));
 
 	//color
 	luaReg_color(L, API_COLOR, getOptionParamB(o, OPTION_VAPI, API_COLOR, API_COLOR)); //color

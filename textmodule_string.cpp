@@ -216,7 +216,7 @@ std::string StrToEUCstr(std::string str) {
 	std::vector<char> result(length + 1);
 	d.extract(0, str.length(), &result[0], "euc_jp");
 
-	return eucstring(result.begin(), result.end() - 1);
+	return std::string(result.begin(), result.end() - 1);
 }
 
 std::string EUCstrToStr(std::string str) {

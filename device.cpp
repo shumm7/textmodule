@@ -7,13 +7,26 @@
 #include <cmath>
 #include <bit>
 #include <sstream>
+#include <tchar.h>
+#include <format>
 
+#include "textmodule.hpp"
 #include "textmodule_lua.hpp"
 #include "textmodule_exception.hpp"
 #include "textmodule_string.hpp"
 
 #pragma comment(lib, "winmm.lib")
 
+struct FONT_INFO {
+	std::string FullName;
+	std::string Style;
+	std::string Script;
+	std::string FontType;
+	long Width;
+	long Height;
+};
+
+std::vector<FONT_INFO*> fonts;
 
 bool device_check_keystate(BYTE keystate) {
 	return (bool)(keystate & 0x80);
@@ -101,6 +114,42 @@ lua_Sstring device_get_osname(int major, int minor, int build) {
 		return "Unknown";
 }
 
+int CALLBACK EnumFontFamProc(const LOGFONT* lpelf, const TEXTMETRIC FAR* lpntm, DWORD FontType, LPARAM lParam) {
+	ENUMLOGFONTEX* lpelfe = (ENUMLOGFONTEX*)lpelf;
+	
+	FONT_INFO* fip = new FONT_INFO;
+	char buf[256] = "";
+	sprintf_s(buf, sizeof(buf), _TEXT("%s"), lpelfe->elfFullName);
+	fip->FullName = std::string(buf);
+
+	sprintf_s(buf, sizeof(buf), _TEXT("%s"), lpelfe->elfStyle);
+	fip->Style = std::string(buf);
+
+	sprintf_s(buf, sizeof(buf), _TEXT("%s"), lpelfe->elfScript);
+	fip->Script = std::string(buf);
+
+	switch (FontType) {
+	case DEVICE_FONTTYPE:
+		fip->FontType = "device";
+		break;
+	case RASTER_FONTTYPE:
+		fip->FontType = "raster";
+		break;
+	case TRUETYPE_FONTTYPE:
+		fip->FontType = "truetype";
+		break;
+	default:
+		fip->FontType = "";
+		break;
+	}
+
+	fip->Width = lpelf->lfWidth;
+	fip->Height = lpelf->lfHeight;
+
+	fonts.push_back(fip);
+	return 1;
+}
+
 
 int device_key(lua_State* L) {
 	try {
@@ -141,6 +190,8 @@ int device_mouse(lua_State* L) {
 
 		BYTE lpKeyState[256];
 		BOOL ret = GetKeyboardState(lpKeyState);
+		lua_Number x = pt.x;
+		lua_Number y = pt.y;
 
 		int tp = lua_type(L, 1);
 
@@ -148,9 +199,9 @@ int device_mouse(lua_State* L) {
 			lua_Sstring i = lua_tosstring(L, 1);
 
 			if (i == "x")
-				lua_pushnumber(L, pt.x);
+				lua_pushnumber(L, x);
 			else if (i == "y")
-				lua_pushnumber(L, pt.y);
+				lua_pushnumber(L, y);
 			else
 				return 0;
 			return 1;
@@ -158,7 +209,7 @@ int device_mouse(lua_State* L) {
 		else if (tp == LUA_TNUMBER) {
 			lua_Integer n = lua_tointeger(L, 1);
 			if (n == 0)
-				lua_pushvector2(L, (lua_Number)pt.x, (lua_Number)pt.y);
+				lua_pushvector2(L, x, y);
 			else if (n == 1)
 				lua_pushboolean(L, (bool)(lpKeyState[0x01] & 0x80));
 			else if (n == 2)
@@ -176,8 +227,8 @@ int device_mouse(lua_State* L) {
 		else if (tp == LUA_TNONE) {
 			lua_newtable(L);
 
-			lua_settablevalue(L, "x", (lua_Number)pt.x);
-			lua_settablevalue(L, "y", (lua_Number)pt.y);
+			lua_settablevalue(L, "x", x);
+			lua_settablevalue(L, "y", y);
 			lua_settablevalue(L, 1, (bool)(lpKeyState[0x01] & 0x80));
 			lua_settablevalue(L, 2, (bool)(lpKeyState[0x02] & 0x80));
 			lua_settablevalue(L, 3, (bool)(lpKeyState[0x04] & 0x80));
@@ -317,6 +368,38 @@ int device_version(lua_State* L) {
 
 		FreeLibrary(hModule);
 
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int device_font(lua_State* L) {
+	try {
+		fonts.clear();
+
+		LOGFONT lf;
+		HDC hdc = GetDC(0);
+		lf.lfFaceName[0] = _T('\0'); // 全てのフォント名
+		lf.lfPitchAndFamily = DEFAULT_PITCH;
+		lf.lfCharSet = tm_tonumber_s(L, 1, SHIFTJIS_CHARSET);
+		EnumFontFamiliesEx(hdc, &lf, (FONTENUMPROC)EnumFontFamProc, (LONG_PTR)&lf, 0);
+		ReleaseDC(0, hdc);
+
+		lua_newtable(L);
+		for (int n = 0; n < fonts.size(); n++) {
+			lua_pushinteger(L, n+1);
+			lua_newtable(L);
+			lua_settablevalue(L, "name", fonts[n]->FullName);
+			lua_settablevalue(L, "script", fonts[n]->Script);
+			lua_settablevalue(L, "style", fonts[n]->Style);
+			lua_settablevalue(L, "type", fonts[n]->FontType);
+			lua_settablevalue(L, "height", (lua_Number)(fonts[n]->Height));
+			lua_settablevalue(L, "width", (lua_Number)(fonts[n]->Width));
+			lua_settable(L, -3);
+		}
 		return 1;
 	}
 	catch (std::exception& e) {

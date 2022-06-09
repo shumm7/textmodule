@@ -271,7 +271,7 @@ int cmath_floor(lua_State* L) {
 
 int cmath_fmod(lua_State* L) {
 	try {
-		if (luaL_callmeta(L, 1, "__fmod"))
+		if (tm_callmetan(L, 1, "__fmod"))
 			return 1;
 
 		lua_pushnumber(L, std::fmod(tm_tonumber(L, 1), tm_tonumber(L, 2)));
@@ -285,7 +285,7 @@ int cmath_fmod(lua_State* L) {
 
 int cmath_frexp(lua_State* L) {
 	try {
-		if (luaL_callmeta(L, 1, "__frexp"))
+		if (tm_callmetan(L, 1, "__frexp"))
 			return 2;
 
 		int e = 0;
@@ -301,7 +301,7 @@ int cmath_frexp(lua_State* L) {
 
 int cmath_ldexp(lua_State* L) {
 	try {
-		if (luaL_callmeta(L, 1, "__ldexp"))
+		if (tm_callmetan(L, 1, "__ldexp"))
 			return 1;
 
 		lua_pushnumber(L, std::ldexp(tm_tonumber(L, 1), tm_tonumber(L, 2)));
@@ -315,7 +315,7 @@ int cmath_ldexp(lua_State* L) {
 
 int cmath_log(lua_State* L) {
 	try {
-		if (luaL_callmeta(L, 1, "__log"))
+		if (tm_callmetan(L, 1, "__log"))
 			return 1;
 
 		lua_pushnumber(L, std::log(tm_tonumber(L, 1)) / std::log(tm_tonumber_s(L, 2, boost::math::constants::e<lua_Number>())));
@@ -329,7 +329,7 @@ int cmath_log(lua_State* L) {
 
 int cmath_max(lua_State* L) {
 	try {
-		if (luaL_callmeta(L, 1, "__max"))
+		if (tm_callmetan(L, 1, "__max"))
 			return 1;
 
 		int n = lua_gettop(L);
@@ -352,7 +352,7 @@ int cmath_max(lua_State* L) {
 
 int cmath_min(lua_State* L) {
 	try {
-		if (luaL_callmeta(L, 1, "__min"))
+		if (tm_callmetan(L, 1, "__min"))
 			return 1;
 
 		int n = lua_gettop(L);
@@ -374,7 +374,7 @@ int cmath_min(lua_State* L) {
 
 int cmath_modf(lua_State* L) {
 	try {
-		if (luaL_callmeta(L, 1, "__min"))
+		if (tm_callmetan(L, 1, "__min"))
 			return 2;
 
 		lua_Number i = 0;
@@ -392,7 +392,7 @@ int cmath_modf(lua_State* L) {
 
 int cmath_pow(lua_State* L) {
 	try {
-		if (luaL_callmeta(L, 1, "__pow"))
+		if (tm_callmetan(L, 1, "__pow"))
 			return 1;
 
 		lua_pushnumber(L, std::pow(tm_tonumber(L, 1), tm_tonumber(L, 2)));
@@ -490,7 +490,7 @@ int cmath_conj(lua_State* L) {
 
 int cmath_lerp(lua_State* L) {
 	try {
-		if (luaL_callmeta(L, 1, "__lerp"))
+		if (tm_callmetan(L, 1, "__lerp"))
 			return 1;
 
 		lua_pushnumber(L, std::lerp(tm_tonumber(L, 1), tm_tonumber(L, 2), tm_tonumber(L, 3)));
@@ -504,7 +504,7 @@ int cmath_lerp(lua_State* L) {
 
 int cmath_dot(lua_State* L) {
 	try {
-		if (luaL_callmeta(L, 1, "__dot"))
+		if (tm_callmetan(L, 1, "__dot"))
 			return 1;
 
 		lua_pushnumber(L, tm_tonumber(L, 1) * tm_tonumber(L, 2));
@@ -518,7 +518,7 @@ int cmath_dot(lua_State* L) {
 
 int cmath_cross(lua_State* L) {
 	try {
-		if (luaL_callmeta(L, 1, "__cross"))
+		if (tm_callmetan(L, 1, "__cross"))
 			return 1;
 
 		tm_tonumber(L, 1);
@@ -535,7 +535,7 @@ int cmath_cross(lua_State* L) {
 
 int cmath_scale(lua_State* L) {
 	try {
-		if (luaL_callmeta(L, 1, "__scale"))
+		if (tm_callmetan(L, 1, "__scale"))
 			return 1;
 
 		lua_pushnumber(L, tm_tonumber(L, 1) * tm_tonumber(L, 2));
@@ -549,7 +549,7 @@ int cmath_scale(lua_State* L) {
 
 int cmath_distance(lua_State* L) {
 	try {
-		if (luaL_callmeta(L, 1, "__distance"))
+		if (tm_callmetan(L, 1, "__distance"))
 			return 1;
 
 		lua_pushnumber(L, std::fabs(tm_tonumber(L, 1) - tm_tonumber(L, 2)));
@@ -1312,8 +1312,8 @@ int cmath_prime(lua_State* L) {
 	}
 }
 
-
 void luaReg_const_cmath(lua_State* L) {
+    // Constant
 	lua_settablevalue(L, "rad_to_deg", boost::math::constants::radian<lua_Number>());
 	lua_settablevalue(L, "deg_to_rad", boost::math::constants::degree<lua_Number>());
 	lua_settablevalue(L, "e", std::numbers::e);
@@ -1335,10 +1335,10 @@ void luaReg_const_cmath(lua_State* L) {
 	lua_settablevalue(L, "phi", std::numbers::phi);
 	lua_settablevalue(L, "gauss", boost::math::constants::gauss<lua_Number>());
 
-	lua_settablevalue(L, "huge", HUGE_VAL);
+	lua_settablevalue(L, "huge", std::numeric_limits<lua_Number>::infinity());
 	lua_settablevalue(L, "infinity", std::numeric_limits<lua_Number>::infinity());
 	lua_settablevalue(L, "negative_infinity", -std::numeric_limits<lua_Number>::infinity());
-	lua_settablevalue(L, "nan", NAN);
+	lua_settablevalue(L, "nan", std::numeric_limits<lua_Number>::quiet_NaN());
 	lua_settablevalue(L, "quiet_nan", std::numeric_limits<lua_Number>::quiet_NaN());
 	lua_settablevalue(L, "signaling_nan", std::numeric_limits<lua_Number>::signaling_NaN());
 
@@ -1347,6 +1347,38 @@ void luaReg_const_cmath(lua_State* L) {
 	lua_settablevalue(L, "digits", std::numeric_limits<lua_Number>::digits10);
 	lua_settablevalue(L, "denorm_min", std::numeric_limits<lua_Number>::denorm_min());
 	lua_settablevalue(L, "epsilon", std::numeric_limits<lua_Number>::epsilon());
+
+	// SI Prefix
+	lua_settablevalue(L, "yotta", std::pow(10, 24));
+	lua_settablevalue(L, "zetta", std::pow(10, 21));
+	lua_settablevalue(L, "exa", std::pow(10, 18));
+	lua_settablevalue(L, "peta", std::pow(10, 15));
+	lua_settablevalue(L, "tera", std::pow(10, 12));
+	lua_settablevalue(L, "giga", std::pow(10, 9));
+	lua_settablevalue(L, "mega", std::pow(10, 6));
+	lua_settablevalue(L, "kilo", std::pow(10, 3));
+	lua_settablevalue(L, "hecto", std::pow(10, 2));
+	lua_settablevalue(L, "deca", std::pow(10, 1));
+	lua_settablevalue(L, "deci", std::pow(10, -1));
+	lua_settablevalue(L, "centi", std::pow(10, -2));
+	lua_settablevalue(L, "milli", std::pow(10, -3));
+	lua_settablevalue(L, "micro", std::pow(10, -6));
+	lua_settablevalue(L, "nano", std::pow(10, -9));
+	lua_settablevalue(L, "pico", std::pow(10, -12));
+	lua_settablevalue(L, "femto", std::pow(10, -15));
+	lua_settablevalue(L, "atto", std::pow(10, -18));
+	lua_settablevalue(L, "zepto", std::pow(10, -21));
+	lua_settablevalue(L, "yocto", std::pow(10, -24));
+
+	// Binary Prefix
+	lua_settablevalue(L, "kibi", std::pow(2, 10));
+	lua_settablevalue(L, "mebi", std::pow(2, 20));
+	lua_settablevalue(L, "gibi", std::pow(2, 30));
+	lua_settablevalue(L, "tebi", std::pow(2, 40));
+	lua_settablevalue(L, "pebi", std::pow(2, 50));
+	lua_settablevalue(L, "exbi", std::pow(2, 60));
+	lua_settablevalue(L, "zebi", std::pow(2, 70));
+	lua_settablevalue(L, "yobi", std::pow(2, 80));
 }
 
 void luaReg_cmath(lua_State* L, const char* name, bool reg) {
