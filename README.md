@@ -7,6 +7,14 @@ textmoduleは、AviUtlでワイド文字列を処理する関数などを複数�
 2. AviUtl側からrequire("textmodule")をする。
 3. textmoduleという名前のテーブルがグローバルに登録されるので、使用したい関数を呼び出す。
 
+# 使用されているスクリプト
+- カラオケテキスト （https://github.com/shumm7/AviUtl-KaraokeText ）
+- 年月日カウンター （https://github.com/shumm7/AviUtl-DateCounter ）
+- 一括画像編集 （https://github.com/shumm7/AviUtl-BulkImageEdit ）
+- テキスト遷移 （https://github.com/shumm7/AviUtl-TextTransition ）
+- オセロ （https://github.com/shumm7/AviUtl-Othello ）
+- マインスイーパ （https://github.com/shumm7/AviUtl-MineSweeper ）
+
 # Licence
 textmoduleの著作権は、しゅう（ https://twitter.com/shulmj_ ）にあります。  
 
