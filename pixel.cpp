@@ -411,22 +411,47 @@ int pixel_color(lua_State* L) {
 	return 1;
 }
 
+
+static luaL_Reg TEXTMODULE_PIXEL_REG[] = {
+	{"new", pixel_new},
+
+	{"r", pixel_r},
+	{"g", pixel_g},
+	{"b", pixel_b},
+	{"a", pixel_a},
+
+	{"color", pixel_color},
+	{nullptr, nullptr}
+};
+
+static luaL_Reg TEXTMODULE_PIXEL_META_REG[] = {
+	{"__tostring", pixel____tostring},
+	{"__add", pixel____add},
+	{"__sub", pixel____sub},
+	{"__mul", pixel____mul},
+	{"__div", pixel____div},
+	{"__lt", pixel____lt},
+	{"__le", pixel____le},
+	{"__index", pixel____index},
+	{"__newindex", pixel____newindex},
+	{"__type", pixel____type},
+
+	{"r", pixel_r},
+	{"g", pixel_g},
+	{"b", pixel_b},
+	{"a", pixel_a},
+
+	{"color", pixel_color},
+
+	{nullptr, nullptr}
+};
+
 void luaReg_pixel(lua_State* L, const char* name, bool reg) {
 	if (reg) {
-		//pixel
+		luaL_newmetatable(L, TEXTMODULE_PIXEL, TEXTMODULE_PIXEL_META_REG);
+
 		lua_newtable(L);
 		luaL_register(L, NULL, TEXTMODULE_PIXEL_REG);
 		lua_setfield(L, -2, name);
-
-		//pixel (metatable)
-		luaL_newmetatable(L, TEXTMODULE_PIXEL); //add metatable
-		luaL_register(L, NULL, TEXTMODULE_PIXEL_META_REG);
-
-		lua_pushstring(L, "__index"); //add __index
-		lua_newtable(L);
-		luaL_register(L, NULL, TEXTMODULE_PIXEL_META_REG);
-		lua_settable(L, -3);
-
-		lua_pop(L, 1); //remove metatable
 	}
 }

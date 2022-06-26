@@ -69,22 +69,27 @@ int image_setpixel(lua_State* L) {
 	}
 }
 
+
+static luaL_Reg TEXTMODULE_IMAGE_REG[] = {
+	{"set", image_set},
+
+	{ "getpixel", image_getpixel },
+	{ "setpixel", image_setpixel },
+	{ nullptr, nullptr }
+};
+
+static luaL_Reg TEXTMODULE_IMAGE_META_REG[] = {
+	{ "getpixel", image_getpixel },
+	{ "setpixel", image_setpixel },
+	{nullptr, nullptr}
+};
+
 void luaReg_image(lua_State* L, const char* name, bool reg) {
 	if (reg) {
-		//image
 		lua_newtable(L);
 		luaL_register(L, NULL, TEXTMODULE_IMAGE_REG);
 		lua_setfield(L, -2, name);
 
-		//image (metatable)
-		luaL_newmetatable(L, TEXTMODULE_IMAGE); //add metatable
-		luaL_register(L, NULL, TEXTMODULE_IMAGE_META_REG);
-
-		lua_pushstring(L, "__index"); //add __index
-		lua_newtable(L);
-		luaL_register(L, NULL, TEXTMODULE_IMAGE_META_REG);
-		lua_settable(L, -3);
-
-		lua_pop(L, 1); //remove metatable
+		luaL_newmetatable(L, TEXTMODULE_IMAGE, TEXTMODULE_IMAGE_META_REG);
 	}
 }

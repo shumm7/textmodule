@@ -591,6 +591,15 @@ void luaReg_const_keycode(lua_State* L, const char* name) {
 	lua_setfield(L, -2, name);
 }
 
+static luaL_Reg TEXTMODULE_DEVICE_REG[] = {
+	{"key", device_key},
+	{"joystick", device_joystick},
+	{"mouse", device_mouse},
+	{"version", device_version},
+	{"font", device_font},
+	{ nullptr, nullptr }
+};
+
 void luaReg_device(lua_State* L, const char* name, bool reg) {
 	if (reg) {
 		lua_newtable(L);

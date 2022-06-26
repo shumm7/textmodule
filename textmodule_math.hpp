@@ -22,3 +22,13 @@ dec_float circular_permutation(int n);
 
 double bernstein(double t, int n, int i);
 Eigen::VectorXcd equation(Eigen::VectorXd number);
+
+double array_sum(std::vector<double> v);
+double array_mean(std::vector<double> v);
+double array_max(std::vector<double> v);
+double array_min(std::vector<double> v);
+double array_var(std::vector<double> v);
+double array_uvar(std::vector<double> v);
+double array_median(std::vector<double> v);
+double array_mode(std::vector<double> v);
+std::vector<double> array_normalize(std::vector<double> v);

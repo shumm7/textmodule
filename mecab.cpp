@@ -13,6 +13,12 @@
 
 #pragma comment(lib, "libmecab.lib")
 
+#define MECAB_PARAM_N 3
+#define MECAB_PARAM_A MODULE_NAME
+#define MECAB_PARAM_R "-r.\\textmodule\\MeCab\\etc\\mecabrc"
+#define MECAB_PARAM_D "-d.\\textmodule\\MeCab\\dic\\ipadic"
+#define MECAB_PARAM_O "-Ochasen"
+
 void mecab_check(MeCab::Model* model) {
 	if (model == nullptr) {
 		throw std::exception(MeCab::getLastError());
@@ -263,4 +269,17 @@ int mecab_words(lua_State* L) {
 		luaL_error(L, e.what());
 		return 1;
 	}
+}
+
+static luaL_Reg TEXTMODULE_MECAB_REG[]{
+	{"node", mecab_node},
+	{"ruby_h", mecab_ruby_h},
+	{"ruby_k", mecab_ruby_k},
+	{"yomi", mecab_yomi},
+	{"words", mecab_words},
+	{nullptr, nullptr}
+};
+
+void luaReg_mecab(lua_State* L) {
+	luaL_register(L, NULL, TEXTMODULE_MECAB_REG);
 }

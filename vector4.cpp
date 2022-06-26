@@ -11,6 +11,9 @@
 
 int vector4_new(lua_State* L) {
 	try {
+		if (tm_callmetan(L, 1, "__vector4"))
+			return 1;
+
 		lua_Number x = tm_tonumber_s(L, 1, 0);
 		lua_Number y = tm_tonumber_s(L, 2, 0);
 		lua_Number z = tm_tonumber_s(L, 3, 0);
@@ -618,30 +621,66 @@ int vector4__vector3(lua_State* L) {
 }
 
 
+static luaL_Reg TEXTMODULE_VECTOR4_REG[] = {
+	{"new", vector4_new},
+	{"identity", vector4_identity},
+	{"one", vector4_one},
+	{"zero", vector4_zero},
+
+	{"x", vector4__x},
+	{"y", vector4__y},
+	{"z", vector4__z},
+	{"w", vector4__w},
+	{ nullptr, nullptr }
+};
+
+static luaL_Reg TEXTMODULE_VECTOR4_META_REG[] = {
+	{"x", vector4__x},
+	{"y", vector4__y},
+	{"z", vector4__z},
+	{"w", vector4__w},
+
+	{"__tostring", vector4____tostring},
+	{"__add", vector4____add},
+	{"__sub", vector4____sub},
+	{"__mul", vector4____mul},
+	{"__div", vector4____div},
+	{"__unm", vector4____unm},
+	{"__lt", vector4____lt},
+	{"__le", vector4____le},
+	//{"__index", vector4____index},
+	{"__newindex", vector4____newindex},
+	{"__type", vector4____type},
+	{"__call", vector4____call},
+	{"__abs", vector4__abs},
+	{"__norm", vector4__norm},
+	{"__normalize", vector4__normalize},
+	{"__dot", vector4__dot},
+	{"__conj", vector4__conj},
+	{"__scale", vector4__scale},
+	{"__distance", vector4__distance},
+	{"__table", vector4__table},
+	{"__quaternion", vector4__quaternion},
+	{"__vector2", vector4__vector2},
+	{"__vector3", vector4__vector3},
+
+	{"abs", vector4__abs},
+	{"norm", vector4__norm},
+	{"normalize", vector4__normalize},
+	{"dot", vector4__dot},
+	{"conj", vector4__conj},
+	{"scale", vector4__scale},
+	{"distance", vector4__distance},
+
+	{nullptr, nullptr}
+};
+
 void luaReg_vector4(lua_State* L, const char* name, bool reg) {
 	if (reg) {
-		//vector4
+		luaL_newmetatable(L, TEXTMODULE_VECTOR4, TEXTMODULE_VECTOR4_META_REG);
+
 		lua_newtable(L);
 		luaL_register(L, NULL, TEXTMODULE_VECTOR4_REG);
 		lua_setfield(L, -2, name);
-
-		//vector4 (metatable)
-		luaL_newmetatable(L, TEXTMODULE_VECTOR4); //add metatable
-		luaL_register(L, NULL, TEXTMODULE_VECTOR4_META_REG);
-
-		lua_pushstring(L, "__index"); //add __index
-		lua_newtable(L);
-		luaL_register(L, NULL, TEXTMODULE_VECTOR4_META_REG);
-		lua_settable(L, -3);
-
-		lua_pop(L, 1); //remove metatable
-	}
-}
-
-void luaGlobal_vector4(lua_State* L, const char* name, bool reg) {
-	if (reg) {
-		lua_newtable(L);
-		luaL_register(L, NULL, TEXTMODULE_VECTOR4_REG);
-		lua_setglobal(L, name);
 	}
 }

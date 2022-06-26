@@ -257,3 +257,30 @@ int colorlist___type(lua_State* L) {
 		return 1;
 	}
 }
+
+static luaL_Reg TEXTMODULE_COLORLIST_REG[] = {
+	{"getlist", colorlist_getlist},
+	{"search", colorlist_search},
+	{"makepalette", colorlist_makepalette},
+	{"loadpalette", colorlist_loadpalette},
+	{ nullptr, nullptr }
+};
+
+static luaL_Reg TEXTMODULE_COLORLIST_META_REG[] = {
+	{"__type", colorlist___type},
+
+	{"search", colorlist_search},
+	{"makepalette", colorlist_makepalette},
+	{"loadpalette", colorlist_loadpalette},
+	{ nullptr, nullptr }
+};
+
+void luaReg_colorlist(lua_State* L, const char* name, bool reg) {
+	if (reg) {
+		luaL_newmetatable(L, TEXTMODULE_COLORLIST, TEXTMODULE_COLORLIST_META_REG);
+
+		lua_newtable(L);
+		luaL_register(L, NULL, TEXTMODULE_COLORLIST_REG);
+		lua_setfield(L, -2, name);
+	}
+}

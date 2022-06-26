@@ -501,6 +501,109 @@ int random_student_t(lua_State* L) {
 	}
 }
 
+int random_discrete(lua_State* L) {
+	try {
+		std::vector<lua_Number> p = lua_tosequence(L, 1);
+		std::discrete_distribution<std::size_t> dist(p.begin(), p.end());
+
+		if (lua_type(L, 2) == LUA_TNUMBER) {
+			std::default_random_engine engine(tm_tointeger(L, 2));
+			lua_pushnumber(L, dist(engine));
+		}
+		else {
+			std::random_device seed_gen;
+			std::default_random_engine engine(seed_gen());
+			lua_pushnumber(L, dist(engine));
+		}
+
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int random_piecewise_constant(lua_State* L) {
+	try {
+		std::vector<lua_Number> i = lua_tosequence(L, 1);
+		std::vector<lua_Number> d = lua_tosequence(L, 2);
+		std::piecewise_constant_distribution<> dist(i.begin(), i.end(), d.begin());
+
+		if (lua_type(L, 2) == LUA_TNUMBER) {
+			std::default_random_engine engine(tm_tointeger(L, 2));
+			lua_pushnumber(L, dist(engine));
+		}
+		else {
+			std::random_device seed_gen;
+			std::default_random_engine engine(seed_gen());
+			lua_pushnumber(L, dist(engine));
+		}
+
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int random_piecewise_linear(lua_State* L) {
+	try {
+		std::vector<lua_Number> i = lua_tosequence(L, 1);
+		std::vector<lua_Number> d = lua_tosequence(L, 2);
+		std::piecewise_linear_distribution<> dist(i.begin(), i.end(), d.begin());
+
+		if (lua_type(L, 2) == LUA_TNUMBER) {
+			std::default_random_engine engine(tm_tointeger(L, 2));
+			lua_pushnumber(L, dist(engine));
+		}
+		else {
+			std::random_device seed_gen;
+			std::default_random_engine engine(seed_gen());
+			lua_pushnumber(L, dist(engine));
+		}
+
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+
+static luaL_Reg TEXTMODULE_RANDOM_REG[] = {
+	{"minstd_rand0", random_minstd_rand0},
+	{"minstd_rand", random_minstd_rand},
+	{"mt19937", random_mt19937},
+	{"mt19937_64", random_mt19937_64},
+	{"ranlux24", random_ranlux24},
+	{"ranlux48", random_ranlux48},
+	{"knuth_b", random_knuth_b},
+
+	{"uniform", random_uniform},
+	{"bernoulli", random_bernoulli},
+	{"binomial", random_binomial},
+	{"geometric", random_geometric},
+	{"negative_binomial", random_negative_binomial},
+	{"poisson", random_poisson},
+	{"exponential", random_exponential},
+	{"gamma", random_gamma},
+	{"weibull", random_weibull},
+	{"extreme_value", random_extreme_value},
+	{"normal", random_normal},
+	{"lognormal", random_lognormal},
+	{"chi_squared", random_chi_squared},
+	{"cauchy", random_cauchy},
+	{"fisher_f", random_fisher_f},
+	{"student_t", random_student_t},
+
+	{"discrete", random_discrete},
+	{"piecewise_constant", random_piecewise_constant},
+	{"piecewise_linear", random_piecewise_linear},
+	{ nullptr, nullptr }
+};
 
 void luaReg_random(lua_State* L, const char* name, bool reg) {
 	if (reg) {

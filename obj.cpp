@@ -23,6 +23,14 @@
 #define REG_CTRL_QUESTION L"(<[\?](.*?)[\?]>)"
 #define REG_CTRL L"(" REG_CTRL_SHARP L"|" REG_CTRL_S L"|" REG_CTRL_R L"|" REG_CTRL_W L"|" REG_CTRL_C L"|" REG_CTRL_P L"|" REG_CTRL_QUESTION L")"
 
+#define FIGURE_BACKGROUND "背景"
+#define FIGURE_CIRCLE "円"
+#define FIGURE_SQUARE "四角形"
+#define FIGURE_TRIANGLE "三角形"
+#define FIGURE_PENTAGON "五角形"
+#define FIGURE_HEXAGON "六角形"
+#define FIGURE_STAR "星型"
+
 typedef struct {};
 
 int font_count = 0;
@@ -192,6 +200,14 @@ void luaReg_const_blend(lua_State* L, const char* name) {
 
 	lua_setfield(L, -2, name);
 }
+
+
+static luaL_Reg TEXTMODULE_OBJ_REG[] = {
+	{"remove_ctrl", obj_remove_ctrl},
+	{"find_ctrl", obj_find_ctrl},
+	{"cbool", obj_cbool},
+	{nullptr, nullptr}
+};
 
 void luaReg_obj(lua_State* L, const char* name, bool reg) {
 	if (reg) {

@@ -9,6 +9,9 @@
 
 int bit_lshift(lua_State* L) {
     try {
+        if (tm_callmetan(L, 1, "__shl"))
+            return 1;
+
         lua_pushnumber(L, tm_tounsigned(L, 1) << tm_tointeger(L, 2));
         return 1;
     }
@@ -20,6 +23,9 @@ int bit_lshift(lua_State* L) {
 
 int bit_rshift(lua_State* L) {
     try {
+        if (tm_callmetan(L, 1, "__shr"))
+            return 1;
+
         lua_pushnumber(L, tm_tounsigned(L, 1) >> tm_tointeger(L, 2));
         return 1;
     }
@@ -53,6 +59,9 @@ int bit_rrotate(lua_State* L) {
 
 int bit_not(lua_State* L) {
     try {
+        if (tm_callmetan(L, 1, "__bnot"))
+            return 1;
+
         lua_pushnumber(L, ~tm_tounsigned(L, 1));
         return 1;
     }
@@ -64,6 +73,9 @@ int bit_not(lua_State* L) {
 
 int bit_and(lua_State* L) {
     try {
+        if (tm_callmetan(L, 1, "__band"))
+            return 1;
+
         lua_Unsigned ret = tm_tounsigned(L, 1) & tm_tounsigned(L, 2);
         int idx = 3;
         while (lua_type(L, idx) == LUA_TNUMBER) {
@@ -82,6 +94,9 @@ int bit_and(lua_State* L) {
 
 int bit_or(lua_State* L) {
     try {
+        if (tm_callmetan(L, 1, "__bor"))
+            return 1;
+
         unsigned long ret = tm_tounsigned(L, 1) | tm_tounsigned(L, 2);
         int idx = 3;
         while (lua_type(L, idx) == LUA_TNUMBER) {
@@ -100,6 +115,9 @@ int bit_or(lua_State* L) {
 
 int bit_xor(lua_State* L) {
     try {
+        if (tm_callmetan(L, 1, "__bxor"))
+            return 1;
+
         unsigned long ret = tm_tounsigned(L, 1) ^ tm_tounsigned(L, 2);
         int idx = 3;
         while (lua_type(L, idx) == LUA_TNUMBER) {
@@ -149,7 +167,7 @@ int bit_popcount(lua_State* L) {
     }
 }
 
-int bit_string(lua_State* L) {
+int bit_binary(lua_State* L) {
     try {
         lua_Unsigned v = tm_tounsigned(L, 1);
         std::wstringstream ss;
@@ -163,6 +181,23 @@ int bit_string(lua_State* L) {
         return 1;
     }
 }
+
+
+static luaL_Reg TEXTMODULE_BIT_REG[] = {
+  {"rshift", bit_rshift},
+  {"lshift", bit_lshift},
+  {"rrotate", bit_rrotate},
+  {"lrotate", bit_lrotate},
+  {"band", bit_and},
+  {"bnot", bit_not},
+  {"bor", bit_or},
+  {"bxor", bit_xor},
+  {"ceil", bit_ceil},
+  {"floor", bit_floor},
+  {"popcount", bit_popcount},
+  {"binary", bit_binary},
+  {nullptr, nullptr}
+};
 
 void luaReg_bit(lua_State* L, const char* name, bool reg) {
     if (reg) {

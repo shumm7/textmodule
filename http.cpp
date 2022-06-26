@@ -252,18 +252,25 @@ int http_frombase64(lua_State* L) {
 	}
 }
 
+
+static luaL_Reg TEXTMODULE_HTTP_REG[] = {
+	{"get", http_get},
+	{"head", http_head},
+	{"post", http_post},
+	{"put", http_put},
+	{"delete", http_delete},
+	{"download", http_download},
+	{"encode", http_encode},
+	{"decode", http_decode},
+	{"base64", http_base64},
+	{"frombase64", http_frombase64},
+	{ nullptr, nullptr }
+};
+
 void luaReg_http(lua_State* L, const char* name, bool reg) {
 	if (reg) {
 		lua_newtable(L);
 		luaL_register(L, NULL, TEXTMODULE_HTTP_REG);
 		lua_setfield(L, -2, name);
-	}
-}
-
-void luaGlobal_http(lua_State* L, const char* name, bool reg) {
-	if (reg) {
-		lua_newtable(L);
-		luaL_register(L, NULL, TEXTMODULE_HTTP_REG);
-		lua_setglobal(L, name);
 	}
 }

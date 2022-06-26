@@ -34,6 +34,20 @@ int utf32_new(lua_State* L) {
 	}
 }
 
+int utf32___concat(lua_State* L) {
+	try {
+		lua_UTF32 s1 = tm_toutf32_s(L, 1);
+		lua_UTF32 s2 = tm_toutf32_s(L, 2);
+
+		lua_pushutf32(L, s1 + s2);
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
 int utf32___tostring(lua_State* L) {
 	try {
 		lua_UTF32 s = tm_toutf32(L, 1);
@@ -58,27 +72,29 @@ int utf32___type(lua_State* L) {
 }
 
 
+static luaL_Reg TEXTMODULE_STRING_UTF32_TABLE_REG[]{
+	{"__call", utf32_new},
+	{nullptr, nullptr}
+};
+
+static luaL_Reg TEXTMODULE_STRING_UTF32_REG[]{
+	{nullptr, nullptr}
+};
+
+static luaL_Reg TEXTMODULE_STRING_UTF32_META_REG[]{
+	{"__concat", utf32___concat},
+	{"__tostring", utf32___tostring},
+	{"__type", utf32___type},
+	{nullptr, nullptr}
+};
+
 void luaReg_utf32(lua_State* L) {
-	//utf32 (metatable)
-	luaL_newmetatable(L, TEXTMODULE_STRING_UTF32); //add metatable
-	luaL_register(L, NULL, TEXTMODULE_STRING_UTF32_META_REG);
+	luaL_newmetatable(L, TEXTMODULE_STRING_UTF32, TEXTMODULE_STRING_UTF32_META_REG);
+	luaL_newmetatable(L, TEXTMODULE_STRING_UTF32_TABLE, TEXTMODULE_STRING_UTF32_TABLE_REG);
 
-	lua_pushstring(L, "__index"); //add __index
 	lua_newtable(L);
-	luaL_register(L, NULL, TEXTMODULE_STRING_UTF32_META_REG);
-	lua_settable(L, -3);
-
-	lua_pop(L, 1); //remove metatable
-
-
-	//utf32 (metatable)
-	luaL_newmetatable(L, TEXTMODULE_STRING_UTF32_TABLE); //add metatable
-	luaL_register(L, NULL, TEXTMODULE_STRING_UTF32_TABLE_REG);
-
-	lua_pushstring(L, "__index"); //add __index
-	lua_newtable(L);
-	luaL_register(L, NULL, TEXTMODULE_STRING_UTF32_TABLE_REG);
-	lua_settable(L, -3);
-
-	lua_pop(L, 1); //remove metatable
+	luaL_register(L, NULL, TEXTMODULE_STRING_UTF32_REG);
+	luaL_getmetatable(L, TEXTMODULE_STRING_UTF32_TABLE);
+	lua_setmetatable(L, -2);
+	lua_setfield(L, -2, "utf32");
 }

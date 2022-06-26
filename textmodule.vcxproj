@@ -28,13 +28,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
     <UseOfMfc>Dynamic</UseOfMfc>
@@ -42,13 +42,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
@@ -87,7 +87,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\Visual Studio 2019\source\repos\textmodule\lua\include;D:\Visual Studio 2019\source\repos\textmodule\eigen;D:\Visual Studio 2019\source\repos\textmodule\MeCab\sdk;D:\Visual Studio 2019\source\repos\textmodule\cpprestsdk.v142.2.10.15\include;D:\Visual Studio 2019\source\repos\textmodule\fast-cpp-csv-parser;D:\Visual Studio 2019\source\repos\textmodule\icu\include;D:\Visual Studio 2019\source\repos\boost_1_79_0\include\boost-1_79;D:\Visual Studio 2019\source\repos\opencv\cbuild\install\include;D:\Visual Studio 2019\source\repos\textmodule\json\single_include;D:\Visual Studio 2019\source\repos\textmodule\icu\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Visual Studio 2019\source\repos\textmodule\lua\include;D:\Visual Studio 2019\source\repos\textmodule\eigen;D:\Visual Studio 2019\source\repos\textmodule\MeCab\sdk;D:\Visual Studio 2019\source\repos\textmodule\cpprestsdk.v142.2.10.15\include;D:\Visual Studio 2019\source\repos\textmodule\fast-cpp-csv-parser;D:\Visual Studio 2019\source\repos\textmodule\icu\include;D:\Visual Studio 2019\source\repos\boost_1_79_0\include\boost-1_79;D:\Visual Studio 2019\source\repos\opencv\cbuild\install\include;D:\Visual Studio 2019\source\repos\textmodule\hash-library;D:\Visual Studio 2019\source\repos\textmodule\QR-Code-generator;D:\Visual Studio 2019\source\repos\textmodule\json\single_include;D:\Visual Studio 2019\source\repos\textmodule\icu\include</AdditionalIncludeDirectories>
       <ExceptionHandling>Async</ExceptionHandling>
       <AssemblerOutput>All</AssemblerOutput>
       <LanguageStandard>stdcpplatest</LanguageStandard>
@@ -121,7 +121,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\Visual Studio 2019\source\repos\textmodule\lua\include;D:\Visual Studio 2019\source\repos\textmodule\eigen;D:\Visual Studio 2019\source\repos\textmodule\MeCab\sdk;D:\Visual Studio 2019\source\repos\textmodule\cpprestsdk.v142.2.10.15\include;D:\Visual Studio 2019\source\repos\textmodule\fast-cpp-csv-parser;D:\Visual Studio 2019\source\repos\textmodule\icu\include;D:\Visual Studio 2019\source\repos\boost_1_79_0\include\boost-1_79;D:\Visual Studio 2019\source\repos\opencv\cbuild\install\include;D:\Visual Studio 2019\source\repos\textmodule\json\single_include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Visual Studio 2019\source\repos\textmodule\lua\include;D:\Visual Studio 2019\source\repos\textmodule\eigen;D:\Visual Studio 2019\source\repos\textmodule\MeCab\sdk;D:\Visual Studio 2019\source\repos\textmodule\cpprestsdk.v142.2.10.15\include;D:\Visual Studio 2019\source\repos\textmodule\fast-cpp-csv-parser;D:\Visual Studio 2019\source\repos\textmodule\icu\include;D:\Visual Studio 2019\source\repos\boost_1_79_0\include\boost-1_79;D:\Visual Studio 2019\source\repos\opencv\cbuild\install\include;D:\Visual Studio 2019\source\repos\textmodule\hash-library;D:\Visual Studio 2019\source\repos\textmodule\QR-Code-generator;D:\Visual Studio 2019\source\repos\textmodule\json\single_include;</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <ExceptionHandling>Async</ExceptionHandling>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
@@ -182,6 +182,7 @@
     <ClCompile Include="matrix3.cpp" />
     <ClCompile Include="mecab.cpp" />
     <ClCompile Include="MultipartEncoder\multipart_parser.cpp" />
+    <ClCompile Include="numeric.cpp" />
     <ClCompile Include="obj.cpp" />
     <ClCompile Include="pixel.cpp" />
     <ClCompile Include="QR-Code-generator\qrcodegen.cpp" />
@@ -189,9 +190,12 @@
     <ClCompile Include="quaternion.cpp" />
     <ClCompile Include="random.cpp" />
     <ClCompile Include="color.cpp" />
+    <ClCompile Include="sequence.cpp" />
     <ClCompile Include="sjis.cpp" />
     <ClCompile Include="string.cpp" />
-    <ClCompile Include="string_aux.cpp" />
+    <ClCompile Include="table.cpp" />
+    <ClCompile Include="textmodule_exception.cpp" />
+    <ClCompile Include="textmodule_strtmp.cpp" />
     <ClCompile Include="textmodule.cpp" />
     <ClCompile Include="textmodule_color.cpp" />
     <ClCompile Include="textmodule_geometry.cpp" />
@@ -203,7 +207,6 @@
     <ClCompile Include="textmodule_time.cpp" />
     <ClCompile Include="time.cpp" />
     <ClCompile Include="tmstring.cpp" />
-    <ClCompile Include="u8.cpp" />
     <ClCompile Include="uft16.cpp" />
     <ClCompile Include="utf32.cpp" />
     <ClCompile Include="utf8.cpp" />
@@ -240,6 +243,7 @@
     <ClInclude Include="matrix3.hpp" />
     <ClInclude Include="mecab.hpp" />
     <ClInclude Include="MultipartEncoder\multipart_parser.h" />
+    <ClInclude Include="numeric.hpp" />
     <ClInclude Include="obj.hpp" />
     <ClInclude Include="pixel.hpp" />
     <ClInclude Include="QR-Code-generator\qrcodegen.hpp" />
@@ -247,9 +251,11 @@
     <ClInclude Include="quaternion.hpp" />
     <ClInclude Include="random.hpp" />
     <ClInclude Include="color.hpp" />
+    <ClInclude Include="sequence.hpp" />
     <ClInclude Include="sjis.hpp" />
     <ClInclude Include="string.hpp" />
-    <ClInclude Include="string_aux.hpp" />
+    <ClInclude Include="table.hpp" />
+    <ClInclude Include="textmodule_strtmp.hpp" />
     <ClInclude Include="textmodule.hpp" />
     <ClInclude Include="textmodule_color.hpp" />
     <ClInclude Include="textmodule_ease.hpp" />
@@ -265,7 +271,6 @@
     <ClInclude Include="textmodule_type.hpp" />
     <ClInclude Include="time.hpp" />
     <ClInclude Include="tmstring.hpp" />
-    <ClInclude Include="u8.hpp" />
     <ClInclude Include="utf16.hpp" />
     <ClInclude Include="utf32.hpp" />
     <ClInclude Include="utf8.hpp" />

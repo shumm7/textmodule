@@ -99,27 +99,30 @@ int utf8_raw(lua_State* L) {
 }
 
 
+static luaL_Reg TEXTMODULE_STRING_UTF8_TABLE_REG[]{
+	{"__call", utf8_new},
+	{nullptr, nullptr}
+};
+
+static luaL_Reg TEXTMODULE_STRING_UTF8_REG[]{
+	{"raw", utf8_raw},
+	{nullptr, nullptr}
+};
+
+static luaL_Reg TEXTMODULE_STRING_UTF8_META_REG[]{
+	{"__tostring", utf8___tostring},
+	{"__type", utf8___type},
+	{"raw", utf8_raw},
+	{nullptr, nullptr}
+};
+
 void luaReg_utf8(lua_State* L) {
-	//utf8 (metatable)
-	luaL_newmetatable(L, TEXTMODULE_STRING_UTF8); //add metatable
-	luaL_register(L, NULL, TEXTMODULE_STRING_UTF8_META_REG);
+	luaL_newmetatable(L, TEXTMODULE_STRING_UTF8, TEXTMODULE_STRING_UTF8_META_REG);
+	luaL_newmetatable(L, TEXTMODULE_STRING_UTF8_TABLE, TEXTMODULE_STRING_UTF8_TABLE_REG);
 
-	lua_pushstring(L, "__index"); //add __index
 	lua_newtable(L);
-	luaL_register(L, NULL, TEXTMODULE_STRING_UTF8_META_REG);
-	lua_settable(L, -3);
-
-	lua_pop(L, 1); //remove metatable
-
-
-	//table utf8 (metatable)
-	luaL_newmetatable(L, TEXTMODULE_STRING_UTF8_TABLE); //add metatable
-	luaL_register(L, NULL, TEXTMODULE_STRING_UTF8_TABLE_REG);
-
-	lua_pushstring(L, "__index"); //add __index
-	lua_newtable(L);
-	luaL_register(L, NULL, TEXTMODULE_STRING_UTF8_TABLE_REG);
-	lua_settable(L, -3);
-
-	lua_pop(L, 1); //remove metatable
+	luaL_register(L, NULL, TEXTMODULE_STRING_UTF8_REG);
+	luaL_getmetatable(L, TEXTMODULE_STRING_UTF8_TABLE);
+	lua_setmetatable(L, -2);
+	lua_setfield(L, -2, "utf8");
 }

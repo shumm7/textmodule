@@ -11,6 +11,9 @@
 
 int vector3_new(lua_State* L) {
 	try {
+		if (tm_callmetan(L, 1, "__vector3"))
+			return 1;
+
 		lua_Number x = tm_tonumber_s(L, 1, 0);
 		lua_Number y = tm_tonumber_s(L, 2, 0);
 		lua_Number z = tm_tonumber_s(L, 3, 0);
@@ -638,30 +641,74 @@ int vector3__vector4(lua_State* L) {
 }
 
 
+static luaL_Reg TEXTMODULE_VECTOR3_REG[] = {
+	{"new", vector3_new},
+	{"identity", vector3_identity},
+	{"back", vector3_back},
+	{"down", vector3_down},
+	{"forward", vector3_forward},
+	{"left", vector3_left},
+	{"one", vector3_one},
+	{"right", vector3_right},
+	{"up", vector3_up},
+	{"zero", vector3_zero},
+
+	{"x", vector3__x},
+	{"y", vector3__y},
+	{"z", vector3__z},
+
+	{"table", vector3__table},
+	{"vector2", vector3__vector2},
+	{"vector4", vector3__vector4},
+	{ nullptr, nullptr }
+};
+
+static luaL_Reg TEXTMODULE_VECTOR3_META_REG[] = {
+	{"x", vector3__x},
+	{"y", vector3__y},
+	{"z", vector3__z},
+
+	{"__tostring", vector3____tostring},
+	{"__add", vector3____add},
+	{"__sub", vector3____sub},
+	{"__mul", vector3____mul},
+	{"__div", vector3____div},
+	{"__unm", vector3____unm},
+	{"__lt", vector3____lt},
+	{"__le", vector3____le},
+	//{"__index", vector3____index},
+	{"__newindex", vector3____newindex},
+	{"__type", vector3____type},
+	{"__call", vector3____call},
+	{"__abs", vector3__abs},
+	{"__norm", vector3__norm},
+	{"__normalize", vector3__normalize},
+	{"__dot", vector3__dot},
+	{"__cross", vector3__cross},
+	{"__conj", vector3__conj},
+	{"__scale", vector3__scale},
+	{"__distance", vector3__distance},
+	{"__table", vector3__table},
+	{"__vector2", vector3__vector2},
+	{"__vector4", vector3__vector4},
+
+	{"abs", vector3__abs},
+	{"norm", vector3__norm},
+	{"normalize", vector3__normalize},
+	{"dot", vector3__dot},
+	{"cross", vector3__cross},
+	{"conj", vector3__conj},
+	{"scale", vector3__scale},
+	{"distance", vector3__distance},
+	{nullptr, nullptr}
+};
+
 void luaReg_vector3(lua_State* L, const char* name, bool reg) {
 	if (reg) {
-		//vector3
+		luaL_newmetatable(L, TEXTMODULE_VECTOR3, TEXTMODULE_VECTOR3_META_REG);
+
 		lua_newtable(L);
 		luaL_register(L, NULL, TEXTMODULE_VECTOR3_REG);
 		lua_setfield(L, -2, name);
-
-		//vector3 (metatable)
-		luaL_newmetatable(L, TEXTMODULE_VECTOR3); //add metatable
-		luaL_register(L, NULL, TEXTMODULE_VECTOR3_META_REG);
-
-		lua_pushstring(L, "__index"); //add __index
-		lua_newtable(L);
-		luaL_register(L, NULL, TEXTMODULE_VECTOR3_META_REG);
-		lua_settable(L, -3);
-
-		lua_pop(L, 1); //remove metatable
-	}
-}
-
-void luaGlobal_vector3(lua_State* L, const char* name, bool reg) {
-	if (reg) {
-		lua_newtable(L);
-		luaL_register(L, NULL, TEXTMODULE_VECTOR3_REG);
-		lua_setglobal(L, name);
 	}
 }

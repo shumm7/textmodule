@@ -66,19 +66,19 @@ int json_size(lua_State* L) {
 }
 
 
+static luaL_Reg TEXTMODULE_JSON_REG[] = {
+	{"parse", json_parse},
+	{"dump", json_dump},
+	{"lint", json_lint},
+	{"size", json_size},
+	{nullptr, nullptr}
+};
+
 void luaReg_json(lua_State* L, const char* name, bool reg) {
 	if (reg) {
 		//json
 		lua_newtable(L);
 		luaL_register(L, NULL, TEXTMODULE_JSON_REG);
 		lua_setfield(L, -2, name);
-	}
-}
-
-void luaGlobal_json(lua_State* L, const char* name, bool reg) {
-	if (reg) {
-		lua_newtable(L);
-		luaL_register(L, NULL, TEXTMODULE_JSON_REG);
-		lua_setglobal(L, name);
 	}
 }

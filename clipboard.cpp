@@ -106,18 +106,17 @@ int clipboard_clear(lua_State* L) {
 }
 
 
+static luaL_Reg TEXTMODULE_CLIPBOARD_REG[] = {
+	{"get", clipboard_get},
+	{"set", clipboard_set},
+	{"clear", clipboard_clear},
+	{ nullptr, nullptr }
+};
+
 void luaReg_clipboard(lua_State* L, const char* name, bool reg) {
 	if (reg) {
 		lua_newtable(L);
 		luaL_register(L, NULL, TEXTMODULE_CLIPBOARD_REG);
 		lua_setfield(L, -2, name);
-	}
-}
-
-void luaGlobal_clipboard(lua_State* L, const char* name, bool reg) {
-	if (reg) {
-		lua_newtable(L);
-		luaL_register(L, NULL, TEXTMODULE_CLIPBOARD_REG);
-		lua_setglobal(L, name);
 	}
 }

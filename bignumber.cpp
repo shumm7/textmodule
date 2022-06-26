@@ -255,3 +255,32 @@ void luaReg_const_bignumber(lua_State* L) {
 	lua_settablevalue(L, "zebi", boost::multiprecision::pow(lua_Bignumber(2), 70));
 	lua_settablevalue(L, "yobi", boost::multiprecision::pow(lua_Bignumber(2), 80));
 }
+
+static luaL_Reg TEXTMODULE_BIGNUMBER_REG[]{
+	{"__call", bignumber_new},
+	{nullptr, nullptr}
+};
+
+static luaL_Reg TEXTMODULE_BIGNUMBER_META_REG[]{
+	{"__tostring", bignumber___tostring},
+	{"__tonumber", bignumber___tonumber},
+	{"__add", bignumber___add},
+	{"__sub", bignumber___sub},
+	{"__mul", bignumber___mul},
+	{"__div", bignumber___div},
+	{"__mod", bignumber___mod},
+	{"__pow", bignumber___pow},
+	{"__unm", bignumber___unm},
+	{"__lt", bignumber___lt},
+	{"__le", bignumber___le},
+	{"__eq", bignumber___eq},
+	{"__type", bignumber___type},
+	{nullptr, nullptr}
+};
+
+void luaReg_bignumber(lua_State* L) {
+	luaL_newmetatable(L, TEXTMODULE_BIGNUMBER, TEXTMODULE_BIGNUMBER_META_REG);
+	luaL_newmetatable(L, TEXTMODULE_BIGNUMBER_TABLE, TEXTMODULE_BIGNUMBER_REG);
+
+	luaL_register(L, NULL, TEXTMODULE_BIGNUMBER_REG);
+}

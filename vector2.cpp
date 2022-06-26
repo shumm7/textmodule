@@ -11,6 +11,9 @@
 
 int vector2_new(lua_State* L) {
 	try {
+		if (tm_callmetan(L, 1, "__vector2"))
+			return 1;
+
 		lua_Number x = tm_tonumber_s(L, 1, 0);
 		lua_Number y = tm_tonumber_s(L, 2, 0);
 
@@ -558,30 +561,59 @@ int vector2__vector4(lua_State* L) {
 }
 
 
+static luaL_Reg TEXTMODULE_VECTOR2_REG[] = {
+	{"new", vector2_new},
+	{"identity", vector2_identity},
+	{"down", vector2_down},
+	{"left", vector2_left},
+	{"one", vector2_one},
+	{"right", vector2_right},
+	{"up", vector2_up},
+	{"zero", vector2_zero},
+
+	{"x", vector2__x},
+	{"y", vector2__y},
+	{ nullptr, nullptr }
+};
+
+static luaL_Reg TEXTMODULE_VECTOR2_META_REG[] = {
+	{"x", vector2__x},
+	{"y", vector2__y},
+
+	{"__tostring", vector2____tostring},
+	{"__add", vector2____add},
+	{"__sub", vector2____sub},
+	{"__mul", vector2____mul},
+	{"__div", vector2____div},
+	{"__unm", vector2____unm},
+	{"__lt", vector2____lt},
+	{"__le", vector2____le},
+	//{"__index", vector2____index},
+	{"__newindex", vector2____newindex},
+	{"__type", vector2____type},
+	{"__call", vector2____call},
+
+	{"__abs", vector2__abs},
+	{"__norm", vector2__norm},
+	{"__normalize", vector2__normalize},
+	{"__dot", vector2__dot},
+	{"__conj", vector2__conj},
+	{"__scale", vector2__scale},
+	{"__distance", vector2__distance},
+
+	{"__table", vector2__table},
+	{"__complex", vector2__complex},
+	{"__vector3", vector2__vector3},
+	{"__vector4", vector2__vector4},
+	{nullptr, nullptr}
+};
+
 void luaReg_vector2(lua_State* L, const char* name, bool reg) {
 	if (reg) {
-		//vector2
+		luaL_newmetatable(L, TEXTMODULE_VECTOR2, TEXTMODULE_VECTOR2_META_REG);
+
 		lua_newtable(L);
 		luaL_register(L, NULL, TEXTMODULE_VECTOR2_REG);
 		lua_setfield(L, -2, name);
-
-		//vector2 (metatable)
-		luaL_newmetatable(L, TEXTMODULE_VECTOR2); //add metatable
-		luaL_register(L, NULL, TEXTMODULE_VECTOR2_META_REG);
-
-		lua_pushstring(L, "__index"); //add __index
-		lua_newtable(L);
-		luaL_register(L, NULL, TEXTMODULE_VECTOR2_META_REG);
-		lua_settable(L, -3);
-
-		lua_pop(L, 1); //remove metatable
-	}
-}
-
-void luaGlobal_vector2(lua_State* L, const char* name, bool reg) {
-	if (reg) {
-		lua_newtable(L);
-		luaL_register(L, NULL, TEXTMODULE_VECTOR2_REG);
-		lua_setglobal(L, name);
 	}
 }

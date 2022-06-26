@@ -2,6 +2,7 @@
 #include <nlohmann/json.hpp>
 
 #include "textmodule.hpp"
+#include "textmodule_lua.hpp"
 #include "textmodule_string.hpp"
 #include "textmodule_option.hpp"
 
@@ -23,7 +24,7 @@
 #include "device.hpp"
 #include "time.hpp"
 #include "json.hpp"
-#include "u8.hpp"
+#include "table.hpp"
 
 #include "complex.hpp"
 #include "vector2.hpp"
@@ -36,78 +37,47 @@
 #include "pixel.hpp"
 #include "image.hpp"
 
-void luaAlias(lua_State* L, nlohmann::json o) {
-	luaReg_filesystem(L,
-		ALIAS_API_FILESYSTEM,
-		getOptionParamB(o, OPTION_VAPI_ALIAS, API_FILESYSTEM) && getOptionParamB(o, OPTION_VAPI, API_FILESYSTEM)
-	);
-
-	luaReg_random(L,
-		ALIAS_API_RANDOM,
-		getOptionParamB(o, OPTION_VAPI_ALIAS, API_RANDOM) && getOptionParamB(o, OPTION_VAPI, API_RANDOM)
-	);
-
-	luaReg_obj(L,
-		ALIAS_API_OBJ,
-		getOptionParamB(o, OPTION_VAPI_ALIAS, API_OBJ) && getOptionParamB(o, OPTION_VAPI, API_OBJ)
-	);
-}
-
 void luaReg(lua_State* L, nlohmann::json o, const char* module) {
 	//create base table
 	static luaL_Reg none[] = {
 		{nullptr, nullptr}
 	};
 	luaL_register(L, module, none);
+	
+	auto api = o["api"];
 
 	//module
-	luaReg_base(L, getOptionParamB(o, OPTION_VAPI, API_BASE)); //base
-	luaReg_debug(L, API_DEBUG, true); //debug
-	luaReg_string(L, API_STRING, getOptionParamB(o, OPTION_VAPI, API_STRING)); //string
-	luaReg_os(L, API_OS, getOptionParamB(o, OPTION_VAPI, API_OS)); //os
-	luaReg_clipboard(L, API_CLIPBOARD, getOptionParamB(o, OPTION_VAPI, API_CLIPBOARD)); //clipboard
-	luaReg_filesystem(L, API_FILESYSTEM, getOptionParamB(o, OPTION_VAPI, API_FILESYSTEM)); //filesystem
-	luaReg_hash(L, API_HASH, getOptionParamB(o, OPTION_VAPI, API_HASH)); //hash
-	luaReg_http(L, API_HTTP, getOptionParamB(o, OPTION_VAPI, API_HTTP)); //http
-	luaReg_cmath(L, API_CMATH, getOptionParamB(o, OPTION_VAPI, API_CMATH)); //math
-	luaReg_random(L, API_RANDOM, getOptionParamB(o, OPTION_VAPI, API_RANDOM)); //random
-	luaReg_bit(L, API_BIT, getOptionParamB(o, OPTION_VAPI, API_BIT)); //bit
-	luaReg_qrcode(L, API_QRCODE, getOptionParamB(o, OPTION_VAPI, API_QRCODE)); //qrcode
-	luaReg_obj(L, API_OBJ, getOptionParamB(o, OPTION_VAPI, API_OBJ)); //obj
-	luaReg_ease(L, API_EASE, getOptionParamB(o, OPTION_VAPI, API_EASE)); //ease
-	luaReg_device(L, API_DEVICE, getOptionParamB(o, OPTION_VAPI, API_DEVICE)); //device
-	luaReg_time(L, API_TIME, getOptionParamB(o, OPTION_VAPI, API_TIME)); //time
-	luaReg_json(L, API_JSON, getOptionParamB(o, OPTION_VAPI, API_JSON)); //json
-	luaReg_u8(L, API_UTF8, getOptionParamB(o, OPTION_VAPI, API_UTF8));
+	luaReg_base(L, api["base"]); //base
+	luaReg_debug(L, "debug", true); //debug
+	luaReg_string(L, "string", api["string"]); //string
+	luaReg_os(L, "os", api["os"]); //os
+	luaReg_clipboard(L, "clipboard", api["clipboard"]); //clipboard
+	luaReg_filesystem(L, "filesystem", api["filesystem"]); //filesystem
+	luaReg_hash(L, "hash", api["hash"]); //hash
+	luaReg_http(L, "http", api["http"]); //http
+	luaReg_cmath(L, "math", api["math"]); //math
+	luaReg_random(L, "random", api["random"]); //random
+	luaReg_bit(L, "bit", api["bit"]); //bit
+	luaReg_qrcode(L, "qrcode", api["qrcode"]); //qrcode
+	luaReg_obj(L, "object", api["object"]); //obj
+	luaReg_ease(L, "ease", api["ease"]); //ease
+	luaReg_device(L, "device", api["device"]); //device
+	luaReg_time(L, "time", api["time"]); //time
+	luaReg_json(L, "json", api["json"]); //json
+	luaReg_table(L, "table", api["table"]); //table
 
 	//color
-	luaReg_color(L, API_COLOR, getOptionParamB(o, OPTION_VAPI, API_COLOR, API_COLOR)); //color
-	luaReg_pixel(L, API_PIXEL, getOptionParamB(o, OPTION_VAPI, API_COLOR, API_PIXEL)); //pixel
-	//luaReg_image(L, API_IMAGE, getOptionParamB(o, OPTION_VAPI, API_COLOR, API_IMAGE)); //image
+	luaReg_color(L, "color", api["color"]["color"]); //color
+	luaReg_colorlist(L, "colorlist", api["color"]["colorlist"]); //colorlist
+	luaReg_pixel(L, "pixel", api["color"]["pixel"]); //pixel
+	//luaReg_image(L, "image", api["color"]["image"]); //image
 
 	//geometry
-	luaReg_complex(L, API_COMPLEX, getOptionParamB(o, OPTION_VAPI, API_GEOMETRY, API_COMPLEX)); //complex
-	luaReg_vector2(L, API_VECTOR2, getOptionParamB(o, OPTION_VAPI, API_GEOMETRY, API_VECTOR2)); //vector2
-	luaReg_vector3(L, API_VECTOR3, getOptionParamB(o, OPTION_VAPI, API_GEOMETRY, API_VECTOR3)); //vector3
-	luaReg_vector4(L, API_VECTOR4, getOptionParamB(o, OPTION_VAPI, API_GEOMETRY, API_VECTOR4)); //vector4
-	luaReg_quaternion(L, API_QUATERNION, getOptionParamB(o, OPTION_VAPI, API_GEOMETRY, API_QUATERNION)); //quaternion
-
-	// alias
-	luaAlias(L, o);
-}
-
-void luaGlobal(lua_State* L, nlohmann::json o) {
-	luaGlobal_clipboard(L, API_CLIPBOARD, getOptionParamB(o, OPTION_VAPI_GLOBAL, API_CLIPBOARD));
-	luaGlobal_hash(L, API_HASH, getOptionParamB(o, OPTION_VAPI_GLOBAL, API_HASH));
-	luaGlobal_http(L, API_HTTP, getOptionParamB(o, OPTION_VAPI_GLOBAL, API_HTTP));
-	luaGlobal_json(L, API_JSON, getOptionParamB(o, OPTION_VAPI_GLOBAL, API_JSON));
-
-	//geometry
-	luaGlobal_complex(L, API_COMPLEX, getOptionParamB(o, OPTION_VAPI_GLOBAL, API_GEOMETRY, API_COMPLEX));
-	luaGlobal_vector2(L, API_VECTOR2, getOptionParamB(o, OPTION_VAPI_GLOBAL, API_GEOMETRY, API_VECTOR2));
-	luaGlobal_vector3(L, API_VECTOR3, getOptionParamB(o, OPTION_VAPI_GLOBAL, API_GEOMETRY, API_VECTOR3));
-	luaGlobal_vector3(L, API_VECTOR4, getOptionParamB(o, OPTION_VAPI_GLOBAL, API_GEOMETRY, API_VECTOR4));
-	luaGlobal_quaternion(L, API_QUATERNION, getOptionParamB(o, OPTION_VAPI_GLOBAL, API_GEOMETRY, API_QUATERNION));
+	luaReg_complex(L, "complex", api["geometry"]["complex"]); //complex
+	luaReg_quaternion(L, "quaternion", api["geometry"]["quaternion"]); //quaternion
+	luaReg_vector2(L, "vector2", api["geometry"]["vector2"]); //vector2
+	luaReg_vector3(L, "vector3", api["geometry"]["vector3"]); //vector3
+	luaReg_vector4(L, "vector4", api["geometry"]["vector4"]); //vector4
 }
 
 
@@ -115,18 +85,16 @@ int luaSetup(lua_State* L) {
 	nlohmann::json option = getOption();
 
 	// Luaインスタンスに変数を登録
-	if (getOptionParamB(option, OPTION_VMODULE)) {
+	if (option[OPTION_VMODULE]) {
 		luaReg(L, option, MODULE_NAME); //main module
 
-		if(getOptionParamB(option, OPTION_VMODULE_ALIAS)) // tm alias
+		if(option[OPTION_VMODULE_ALIAS]) // tm alias
 			luaReg(L, option, ALIAS_MODULE_NAME);
-
-		luaGlobal(L, option); //global
 	}
 
 	// バージョンチェック
 	int n = 0;
-	if (getOptionParamB(option, OPTION_VVER_CHECK)) {
+	if (option[OPTION_VVER_CHECK]) {
 		n = versionCheck();
 		if (n == VERSION_CHECK_ERROR) {
 			luaL_error(L, VERSION_CHECK_MSG_ERROR);
@@ -147,9 +115,13 @@ extern "C" {
 
 			return 1 + n;
 		}
+		catch (nlohmann::json::exception& j) {
+			luaL_error(L, "invalid json format or value: config.json");
+			return 0;
+		}
 		catch (std::exception& e) {
 			luaL_error(L, e.what());
-			return 1;
+			return 0;
 		}
 	}
 }

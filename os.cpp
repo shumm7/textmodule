@@ -65,10 +65,12 @@ int os_date(lua_State* L) {
 		std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
 
 		tp = lua_type(L, 2);
-		luaL_argcheck(L, tp == LUA_TNONE || tp == LUA_TNUMBER, 2, "number/none expected");
+		luaL_argcheck(L, tp == LUA_TNONE || tp == LUA_TNUMBER || lua_isbignumber(L, 2), 2, "number/bignumber/none expected");
 
 		if (tp == LUA_TNUMBER)
 			time_t = static_cast<__time64_t>(lua_tonumber(L, 2));
+		else if (tp == LUA_TUSERDATA)
+			time_t = static_cast<__time64_t>(lua_tobignumber(L, 2));
 		else
 			time_t = std::chrono::system_clock::to_time_t(now);
 
@@ -153,6 +155,16 @@ int os_sleep(lua_State* L) {
 		return 1;
 	}
 }
+
+
+static luaL_Reg TEXTMODULE_OS_REG[] = {
+	{"time", os_time},
+	{"date", os_date},
+	{"difftime", os_difftime},
+	{"clock", os_clock},
+	{"sleep", os_sleep},
+	{ nullptr, nullptr }
+};
 
 void luaReg_os(lua_State* L, const char* name, bool reg) {
 	if (reg) {

@@ -441,6 +441,27 @@ int base_next(lua_State* L){
 	}
 }
 
+static luaL_Reg TEXTMODULE_BASE_REG[] = {
+	{"getinfo", base_getinfo},
+	{"showtable", base_showtable},
+	{"showmetatable", base_showmetatable},
+	{"maketable", base_maketable},
+	{"debug_print", base_debug_print},
+	{"type", base_type},
+	{"print", base_print},
+	{"printf", base_printf},
+	{"exception", base_exception},
+	{"versioncheck", base_versioncheck},
+	{"tostring", base_tostring},
+	{"tonumber", base_tonumber},
+	{"pointer", base_pointer},
+	{"getglobal", base_getglobal},
+	{"setglobal", base_setglobal},
+	{"pairs", base_pairs},
+	{"ipairs", base_ipairs},
+	{"next", base_next},
+	{ nullptr, nullptr }
+};
 
 void luaReg_base(lua_State* L, bool reg) {
 	if (reg) {

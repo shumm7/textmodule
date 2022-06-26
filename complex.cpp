@@ -12,23 +12,24 @@
 
 int complex_new(lua_State* L) {
 	try {
-		int tp = lua_type(L, 1);
-		luaL_argcheck(L, tp == LUA_TNUMBER || tp == LUA_TUSERDATA || tp==LUA_TNONE, 1, "number/vector2/none expected");
+		if (tm_callmetan(L, 1, "__complex"))
+			return 1;
 
-		lua_Number r;
-		lua_Number i;
+		int tp = lua_type(L, 1);
+		luaL_argcheck(L, tp == LUA_TNUMBER || tp == LUA_TUSERDATA || tp==LUA_TNONE, 1, "number/complex expected");
+
+		lua_Number r = 0;
+		lua_Number i = 0;
 
 		if (tp == LUA_TNUMBER || tp==LUA_TNONE) {
 			r = tm_tonumber_s(L, 1, 0);
 			i = tm_tonumber_s(L, 2, 0);
 		}
-		else if (tp == LUA_TUSERDATA) {
-			lua_Vector2* v = tm_tovector2(L, 1);
-			r = v->x();
-			i = v->y();
+		else if (tp == LUA_TUSERDATA && lua_iscomplex(L, 1)) {
+			auto c = tm_tocomplex(L, 1);
+			r = c->real();
+			i = c->imag();
 		}
-		else
-			return 0;
 		
 		lua_pushcomplex(L, r, i);
 		return 1;
@@ -58,7 +59,7 @@ int complex__real(lua_State* L) {
 		lua_Complex* val = lua_tocomplex(L, 1);
 
 		int tp = lua_type(L, 2);
-		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 2, "number/none expected");
+		luaL_argcheck(L, tp == LUA_TNONE || tp == LUA_TNUMBER, 2, "number/none expected");
 
 		if (tp == LUA_TNUMBER) {
 			val->real(lua_tonumber(L, 2));
@@ -81,7 +82,7 @@ int complex__imag(lua_State* L) {
 	try {
 		lua_Complex* val = lua_tocomplex(L, 1);
 		int tp = lua_type(L, 2);
-		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 2, "number/none expected");
+		luaL_argcheck(L, tp == LUA_TNONE || tp == LUA_TNUMBER, 2, "number/none expected");
 
 		if (tp == LUA_TNUMBER) {
 			val->imag(lua_tonumber(L, 2));
@@ -671,43 +672,80 @@ int complex__table(lua_State* L) {
 	}
 }
 
-int complex_vector2(lua_State* L) {
-	try {
-		lua_Complex* val1 = tm_tocomplex(L, 1);
 
-		lua_pushvector2(L, val1->real(), val1->imag());
-		return 1;
-	}
-	catch (std::exception& e) {
-		luaL_error(L, e.what());
-		return 1;
-	}
-}
+static luaL_Reg TEXTMODULE_COMPLEX_REG[] = {
+	{"new", complex_new},
+	{"polar_new", complex_polar_new},
+	{"pnew", complex_polar_new},
+
+	{"real", complex__real},
+	{"imag", complex__imag},
+	{"r", complex__real},
+	{"i", complex__imag},
+
+	{"arg", complex__arg},
+	{"proj", complex__proj},
+	{"polar", complex__polar},
+
+	{ nullptr, nullptr }
+};
+
+static luaL_Reg TEXTMODULE_COMPLEX_META_REG[] = {
+	{"real", complex__real},
+	{"imag", complex__imag},
+	{"r", complex__real},
+	{"i", complex__imag},
+
+	{"__tostring", complex____tostring},
+	{"__add", complex____add},
+	{"__sub", complex____sub},
+	{"__mul", complex____mul},
+	{"__div", complex____div},
+	{"__pow", complex____pow},
+	{"__unm", complex____unm},
+	{"__lt", complex____lt},
+	{"__le", complex____le},
+	//{"__index", complex____index},
+	{"__newindex", complex____newindex},
+	{"__type", complex____type},
+	{"__tonumber", complex____tonumber},
+	{"__call", complex____call},
+
+	{"__cos", complex__cos},
+	{"__sin", complex__sin},
+	{"__tan", complex__tan},
+	{"__cosh", complex__cosh},
+	{"__sinh", complex__sinh},
+	{"__tanh", complex__tanh},
+	{"__acos", complex__acos},
+	{"__asin", complex__asin},
+	{"__atan", complex__atan},
+	{"__acosh", complex__acosh},
+	{"__asinh", complex__asinh},
+	{"__atanh", complex__atanh},
+	{"__exp", complex__exp},
+	{"__log", complex__log},
+	{"__sqrt", complex__sqrt},
+	{"__abs", complex__abs},
+	{"__norm", complex__norm},
+	{"__conj", complex__conj},
+	{"__table", complex__table},
+
+	{"abs", complex__abs},
+	{"norm", complex__norm},
+	{"conj", complex__conj},
+	{"arg", complex__arg},
+	{"proj", complex__proj},
+	{"polar", complex__polar},
+	{nullptr, nullptr}
+};
 
 void luaReg_complex(lua_State* L, const char* name, bool reg) {
 	if (reg) {
-		//complex
+		luaL_newmetatable(L, TEXTMODULE_COMPLEX, TEXTMODULE_COMPLEX_META_REG);
+
 		lua_newtable(L);
 		luaL_register(L, NULL, TEXTMODULE_COMPLEX_REG);
 		lua_setfield(L, -2, name);
-
-		//complex (metatable)
-		luaL_newmetatable(L, TEXTMODULE_COMPLEX); //add metatable
-		luaL_register(L, NULL, TEXTMODULE_COMPLEX_META_REG);
-		
-		lua_pushstring(L, "__index"); //add __index
-		lua_newtable(L);
-		luaL_register(L, NULL, TEXTMODULE_COMPLEX_META_REG);
-		lua_settable(L, -3);
-		
-		lua_pop(L, 1); //remove metatable
-	}
-}
-
-void luaGlobal_complex(lua_State* L, const char* name, bool reg) {
-	if (reg) {
-		lua_newtable(L);
-		luaL_register(L, NULL, TEXTMODULE_COMPLEX_REG);
-		lua_setglobal(L, name);
 	}
 }

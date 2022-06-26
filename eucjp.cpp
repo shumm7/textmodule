@@ -34,6 +34,20 @@ int eucjp_new(lua_State* L) {
 	}
 }
 
+int eucjp___concat(lua_State* L) {
+	try {
+		lua_EUCJP s1 = tm_toeucjp_s(L, 1);
+		lua_EUCJP s2 = tm_toeucjp_s(L, 2);
+
+		lua_pusheucjp(L, s1 + s2);
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
 int eucjp___tostring(lua_State* L) {
 	try {
 		lua_EUCJP s = tm_toeucjp(L, 1);
@@ -70,27 +84,32 @@ int eucjp_raw(lua_State* L) {
 	}
 }
 
+
+static luaL_Reg TEXTMODULE_STRING_EUCJP_TABLE_REG[]{
+	{"__call", eucjp_new},
+	{nullptr, nullptr}
+};
+
+static luaL_Reg TEXTMODULE_STRING_EUCJP_REG[]{
+	{"raw", eucjp_raw},
+	{nullptr, nullptr}
+};
+
+static luaL_Reg TEXTMODULE_STRING_EUCJP_META_REG[]{
+	{"__concat", eucjp___concat},
+	{"__tostring", eucjp___tostring},
+	{"__type", eucjp___type},
+	{"raw", eucjp_raw},
+	{nullptr, nullptr}
+};
+
 void luaReg_eucjp(lua_State* L) {
-	//eucjp (metatable)
-	luaL_newmetatable(L, TEXTMODULE_STRING_EUCJP); //add metatable
-	luaL_register(L, NULL, TEXTMODULE_STRING_EUCJP_META_REG);
+	luaL_newmetatable(L, TEXTMODULE_STRING_EUCJP, TEXTMODULE_STRING_EUCJP_META_REG);
+	luaL_newmetatable(L, TEXTMODULE_STRING_EUCJP_TABLE, TEXTMODULE_STRING_EUCJP_TABLE_REG);
 
-	lua_pushstring(L, "__index"); //add __index
 	lua_newtable(L);
-	luaL_register(L, NULL, TEXTMODULE_STRING_EUCJP_META_REG);
-	lua_settable(L, -3);
-
-	lua_pop(L, 1); //remove metatable
-
-
-	//table eucjp (metatable)
-	luaL_newmetatable(L, TEXTMODULE_STRING_EUCJP_TABLE); //add metatable
-	luaL_register(L, NULL, TEXTMODULE_STRING_EUCJP_TABLE_REG);
-
-	lua_pushstring(L, "__index"); //add __index
-	lua_newtable(L);
-	luaL_register(L, NULL, TEXTMODULE_STRING_EUCJP_TABLE_REG);
-	lua_settable(L, -3);
-
-	lua_pop(L, 1); //remove metatable
+	luaL_register(L, NULL, TEXTMODULE_STRING_EUCJP_REG);
+	luaL_getmetatable(L, TEXTMODULE_STRING_EUCJP_TABLE);
+	lua_setmetatable(L, -2);
+	lua_setfield(L, -2, "eucjp");
 }

@@ -14,7 +14,7 @@
 #include "utf32.hpp"
 #include "eucjp.hpp"
 
-#include "string_aux.hpp"
+#include "textmodule_strtmp.hpp"
 #include "textmodule_lua.hpp"
 #include "textmodule_string.hpp"
 #include "textmodule_math.hpp"
@@ -24,7 +24,7 @@ int string_find(lua_State* L) {
 		if (tm_callmetan(L, 1, "__find"))
 			return 2;
 
-		auto c = string_template_find(L, tm_towstring(L, 1), tm_towstring(L, 2), tm_tointeger_s(L, 3, 1), tm_toboolean_s(L, 4, false));
+		auto c = string_template_find<lua_Wstring>(L, tm_towstring(L, 1), tm_towstring(L, 2), tm_tointeger_s(L, 3, 1), tm_toboolean_s(L, 4, false));
 
 		if (c.first < 0)
 			lua_pushnil(L);
@@ -53,7 +53,7 @@ int string_sub(lua_State* L) {
 			return 1;
 
 		lua_Wstring text = tm_towstring(L, 1);
-		lua_pushwstring(L, string_template_sub(L, text, tm_tointeger(L, 2) - 1, tm_tointeger_s(L, 3, text.length()) - 1));
+		lua_pushwstring(L, string_template_sub<lua_Wstring>(L, text, tm_tointeger(L, 2) - 1, tm_tointeger_s(L, 3, text.length()) - 1));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -68,7 +68,7 @@ int string_gsub(lua_State* L) {
 		if (tm_callmetan(L, 1, "__gsub"))
 			return 1;
 
-		lua_pushwstring(L, string_template_gsub(L, tm_towstring(L, 1), tm_towstring(L, 2), tm_towstring(L, 3), tm_tointeger_s(L, 4, 1)));
+		lua_pushwstring(L, string_template_gsub<lua_Wstring>(L, tm_towstring(L, 1), tm_towstring(L, 2), tm_towstring(L, 3), tm_tointeger_s(L, 4, 1)));
 		return 1;
 	}
 	catch (std::regex_error) {
@@ -85,7 +85,7 @@ int string_len(lua_State* L) {
 		if (tm_callmeta(L, 1, "__len"))
 			return 1;
 
-		lua_pushnumber(L, string_template_len(L, tm_towstring(L, 1)));
+		lua_pushnumber(L, string_template_len<lua_Wstring>(L, tm_towstring(L, 1)));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -99,7 +99,7 @@ int string_reverse(lua_State* L) {
 		if (tm_callmeta(L, 1, "__reverse"))
 			return 1;
 
-		lua_pushwstring(L, string_template_reverse(L, tm_towstring(L, 1)));
+		lua_pushwstring(L, string_template_reverse<lua_Wstring>(L, tm_towstring(L, 1)));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -113,7 +113,7 @@ int string_upper(lua_State* L) {
 		if (tm_callmeta(L, 1, "__upper"))
 			return 1;
 
-		lua_pushwstring(L, string_template_upper(L, tm_towstring(L, 1)));
+		lua_pushwstring(L, string_template_upper<lua_Wstring>(L, tm_towstring(L, 1)));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -127,7 +127,7 @@ int string_lower(lua_State* L) {
 		if (tm_callmeta(L, 1, "__lower"))
 			return 1;
 
-		lua_pushwstring(L, string_template_lower(L, tm_towstring(L, 1)));
+		lua_pushwstring(L, string_template_lower<lua_Wstring>(L, tm_towstring(L, 1)));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -141,7 +141,7 @@ int string_match(lua_State* L) {
 		if (tm_callmetan(L, 1, "__match"))
 			return 1;
 
-		lua_pushwstring(L, string_template_match(L, tm_towstring(L, 1), tm_towstring(L, 2), tm_tointeger_s(L, 3, 1) - 1));
+		lua_pushwstring(L, string_template_match<lua_Wstring>(L, tm_towstring(L, 1), tm_towstring(L, 2), tm_tointeger_s(L, 3, 1) - 1));
 		return 1;
 	}
 	catch (std::regex_error) {
@@ -159,9 +159,9 @@ int string_byte(lua_State* L) {
 		if (tm_callmetan(L, 1, "__byte"))
 			return lua_gettop(L) - st;
 
-		auto c = string_template_byte(L, tm_towstring(L, 1), tm_tointeger_s(L, 2, 1) - 1, tm_tointeger_s(L, 3, 1) - 1);
+		auto c = string_template_byte<lua_Wstring>(L, tm_towstring(L, 1), tm_tointeger_s(L, 2, 1) - 1, tm_tointeger_s(L, 3, 1) - 1);
 		for (int i = 0; i < c.size(); i++)
-			lua_pushnumber(L, c[i]);
+			lua_pushnumber(L, c.at(i));
 		return c.size();
 	}
 	catch (std::exception& e) {
@@ -176,11 +176,11 @@ int string_char(lua_State* L) {
 			return 1;
 
 		int n = lua_gettop(L);
-		std::vector<wchar_t> chars;
+		std::vector<uint32_t> chars;
 		for (int i = 0; i < n; i++)
 			chars.push_back(tm_tonumber(L, i + 1));
 
-		lua_pushwstring(L, string_template_char(L, chars));
+		lua_pushwstring(L, string_template_char<lua_Wstring>(L, chars));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -247,7 +247,7 @@ int string_rep(lua_State* L) {
 		if (tm_callmetan(L, 1, "__rep"))
 			return 1;
 
-		lua_pushwstring(L, string_template_rep(L, tm_towstring(L, 1), tm_tointeger(L, 2)));
+		lua_pushwstring(L, string_template_rep<lua_Wstring>(L, tm_towstring(L, 1), tm_tointeger(L, 2)));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -285,56 +285,39 @@ int string_dump(lua_State* L) {
 }
 
 
+static luaL_Reg TEXTMODULE_STRING_REG[] = {
+	{"find", string_find},
+	{"sub", string_sub},
+	{"gsub", string_gsub},
+	{"len", string_len},
+	{"reverse", string_reverse},
+	{"upper", string_upper},
+	{"lower", string_lower},
+	{"match", string_match},
+	{"byte", string_byte},
+	{"char", string_char},
+	{"gmatch", string_gmatch},
+	{"rep", string_rep},
+	{"format", string_format},
+	{"dump", string_dump},
+	{ nullptr, nullptr }
+};
+
 void luaReg_string(lua_State* L, const char* name, bool reg) {
 	if (reg) {
-		//string table (metatable)
+		lua_newtable(L);
+
+		//string tmstring mecab
+		luaL_register(L, NULL, TEXTMODULE_STRING_REG);
+		luaReg_tmstring(L);
+		luaReg_mecab(L);
+
+		//string table
 		luaReg_sjis(L);
 		luaReg_utf8(L);
 		luaReg_utf16(L);
 		luaReg_utf32(L);
 		luaReg_eucjp(L);
-
-		//string tmstring mecab
-		lua_newtable(L);
-		luaL_register(L, NULL, TEXTMODULE_STRING_REG);
-		luaL_register(L, NULL, TEXTMODULE_TMSTRING_REG);
-		luaL_register(L, NULL, TEXTMODULE_MECAB_REG);
-		luaReg_const_tmstring(L);
-
-		//sjis
-		lua_newtable(L);
-		luaL_register(L, NULL, TEXTMODULE_STRING_SJIS_REG);
-		luaL_getmetatable(L, TEXTMODULE_STRING_SJIS_TABLE);
-		lua_setmetatable(L, -2);
-		lua_setfield(L, -2, "sjis");
-
-		//utf-8
-		lua_newtable(L);
-		luaL_register(L, NULL, TEXTMODULE_STRING_UTF8_REG);
-		luaL_getmetatable(L, TEXTMODULE_STRING_UTF8_TABLE);
-		lua_setmetatable(L, -2);
-		lua_setfield(L, -2, "utf8");
-
-		//utf-16
-		lua_newtable(L);
-		luaL_register(L, NULL, TEXTMODULE_STRING_UTF16_REG);
-		luaL_getmetatable(L, TEXTMODULE_STRING_UTF16_TABLE);
-		lua_setmetatable(L, -2);
-		lua_setfield(L, -2, "utf16");
-
-		//utf-32
-		lua_newtable(L);
-		luaL_register(L, NULL, TEXTMODULE_STRING_UTF32_REG);
-		luaL_getmetatable(L, TEXTMODULE_STRING_UTF32_TABLE);
-		lua_setmetatable(L, -2);
-		lua_setfield(L, -2, "utf32");
-
-		//eucjp
-		lua_newtable(L);
-		luaL_register(L, NULL, TEXTMODULE_STRING_EUCJP_REG);
-		luaL_getmetatable(L, TEXTMODULE_STRING_EUCJP_TABLE);
-		lua_setmetatable(L, -2);
-		lua_setfield(L, -2, "eucjp");
 
 		lua_setfield(L, -2, name);
 	}

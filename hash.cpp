@@ -125,18 +125,22 @@ int hash_hmac(lua_State* L) {
 	}
 }
 
+
+static luaL_Reg TEXTMODULE_HASH_REG[] = {
+	{"sha256", hash_sha256},
+	{"sha3", hash_sha3},
+	{"sha1", hash_sha1},
+	{"md5", hash_md5},
+	{"keccak", hash_keccak},
+	{"crc32", hash_crc32},
+	{"hmac", hash_hmac},
+	{ nullptr, nullptr }
+};
+
 void luaReg_hash(lua_State* L, const char* name, bool reg) {
 	if (reg) {
 		lua_newtable(L);
 		luaL_register(L, NULL, TEXTMODULE_HASH_REG);
 		lua_setfield(L, -2, name);
-	}
-}
-
-void luaGlobal_hash(lua_State* L, const char* name, bool reg) {
-	if (reg) {
-		lua_newtable(L);
-		luaL_register(L, NULL, TEXTMODULE_HASH_REG);
-		lua_setglobal(L, name);
 	}
 }

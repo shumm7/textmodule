@@ -493,34 +493,59 @@ int color_pixel(lua_State* L) {
 	return 1;
 }
 
+
+static luaL_Reg TEXTMODULE_COLOR_REG[] = {
+	{"new", color_new},
+
+	{"r", color_r},
+	{"g", color_g},
+	{"b", color_b},
+	{"a", color_a},
+
+	{"opposite", color_opposite},
+	{"comp", color_comp},
+	{"average", color_average},
+	{"max", color_max},
+	{"min", color_min},
+	{"clamp", color_clamp},
+	{"pixel", color_pixel},
+	{nullptr, nullptr}
+};
+
+static luaL_Reg TEXTMODULE_COLOR_META_REG[] = {
+	{"__tostring", color____tostring},
+	{"__add", color____add},
+	{"__sub", color____sub},
+	{"__mul", color____mul},
+	{"__div", color____div},
+	{"__lt", color____lt},
+	{"__le", color____le},
+	{"__index", color____index},
+	{"__newindex", color____newindex},
+	{"__type", color____type},
+
+	{"r", color_r},
+	{"g", color_g},
+	{"b", color_b},
+	{"a", color_a},
+
+	{"opposite", color_opposite},
+	{"comp", color_comp},
+	{"average", color_average},
+	{"max", color_max},
+	{"min", color_min},
+	{"clamp", color_clamp},
+	{"pixel", color_pixel},
+
+	{nullptr, nullptr}
+};
+
 void luaReg_color(lua_State* L, const char* name, bool reg) {
 	if (reg) {
-		//color
+		luaL_newmetatable(L, TEXTMODULE_COLOR, TEXTMODULE_COLOR_META_REG);
+
 		lua_newtable(L);
 		luaL_register(L, NULL, TEXTMODULE_COLOR_REG);
-		luaL_register(L, NULL, TEXTMODULE_COLORLIST_REG);
 		lua_setfield(L, -2, name);
-
-		//color (metatable)
-		luaL_newmetatable(L, TEXTMODULE_COLOR); //add metatable
-		luaL_register(L, NULL, TEXTMODULE_COLOR_META_REG);
-
-		lua_pushstring(L, "__index"); //add __index
-		lua_newtable(L);
-		luaL_register(L, NULL, TEXTMODULE_COLOR_META_REG);
-		lua_settable(L, -3);
-
-		lua_pop(L, 1); //remove metatable
-
-		//colorlist (metatable)
-		luaL_newmetatable(L, TEXTMODULE_COLORLIST); //add metatable
-		luaL_register(L, NULL, TEXTMODULE_COLORLIST_META_REG);
-
-		lua_pushstring(L, "__index"); //add __index
-		lua_newtable(L);
-		luaL_register(L, NULL, TEXTMODULE_COLORLIST_META_REG);
-		lua_settable(L, -3);
-
-		lua_pop(L, 1); //remove metatable
 	}
 }

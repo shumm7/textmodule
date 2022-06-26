@@ -285,34 +285,6 @@ int tmstring_right(lua_State* L) {
 
 int tmstring_shift(lua_State* L) {
 	try {
-		lua_Sstring str = tm_tostring(L, 1);
-		lua_Integer shift = tm_tointeger_s(L, 2, 1);
-		lua_Integer pos = tm_tointeger_s(L, 3, 1);
-		lua_Integer len = tm_tointeger_s(L, 4, 1);;
-
-
-		for (int i = 0; i < len; i++) {
-			int p = (pos - 1) + i;
-			if (p<0 || p>(str.size() - 1)) {
-				break;
-			}
-
-			char s = str[p];
-			s += shift;
-			str[p] = s;
-		}
-
-		lua_pushsstring(L, str);
-		return 1;
-	}
-	catch (std::exception& e) {
-		luaL_error(L, e.what());
-		return 1;
-	}
-}
-
-int tmstring_wshift(lua_State* L) {
-	try {
 		lua_Wstring str = tm_towstring(L, 1);
 		lua_Integer shift = tm_tointeger_s(L, 2, 1);
 		lua_Integer pos = tm_tointeger_s(L, 3, 1);
@@ -688,4 +660,38 @@ void luaReg_const_tmstring(lua_State* L) {
 		lua_settablevalue(L, "bell", "\a");
 		lua_settablevalue(L, "null", "\0");
 		lua_settablevalue(L, "form_feed", "\f");
+}
+
+static luaL_Reg TEXTMODULE_TMSTRING_REG[] = {
+	{"hiragana", tmstring_hiragana},
+	{"katakana", tmstring_katakana},
+	{"halfwidth", tmstring_halfwidth},
+	{"fullwidth", tmstring_fullwidth},
+	{"fromlatin_h", tmstring_fromlatin_h},
+	{"fromlatin_k", tmstring_fromlatin_k},
+	{"latin_h", tmstring_latin_h},
+	{"latin_k", tmstring_latin_k},
+
+	{"split", tmstring_split},
+	{"mojibake", tmstring_mojibake},
+	{"swapcase", tmstring_swapcase},
+	{"left", tmstring_left},
+	{"right", tmstring_right},
+	{"shift", tmstring_shift},
+	{"squeeze", tmstring_squeeze},
+	{"capitalize", tmstring_capitalize},
+	{"capitalize_words", tmstring_capitalize_words},
+	{"random", tmstring_random},
+	//{"roundnumber",  tmstring_roundnumber},
+	{"anagram", tmstring_anagram},
+	{"gsplit", tmstring_gsplit},
+	{"lines", tmstring_lines},
+	{"character", tmstring_character},
+	{"count", tmstring_count},
+	{ nullptr, nullptr }
+};
+
+void luaReg_tmstring(lua_State* L) {
+	luaL_register(L, NULL, TEXTMODULE_TMSTRING_REG);
+	luaReg_const_tmstring(L);
 }

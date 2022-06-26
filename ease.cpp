@@ -777,6 +777,63 @@ int ease_outInBounce(lua_State* L) {
 	}
 }
 
+
+static luaL_Reg TEXTMODULE_EASE_REG[] = {
+	{"linear", ease_linear},
+
+	{"inQuad", ease_inQuad},
+	{"outQuad", ease_outQuad},
+	{"inOutQuad", ease_inOutQuad},
+	{"outInQuad", ease_outInQuad},
+
+	{"inCubic", ease_inCubic},
+	{"outCubic", ease_outCubic},
+	{"inOutCubic", ease_inOutCubic},
+	{"outInCubic", ease_outInCubic},
+
+	{"inQuart", ease_inQuart},
+	{"outQuart", ease_outQuart},
+	{"inOutQuart", ease_inOutQuart},
+	{"outInQuart", ease_outInQuart},
+
+	{"inQuint", ease_inQuint},
+	{"outQuint", ease_outQuint},
+	{"inOutQuint", ease_inOutQuint},
+	{"outInQuint", ease_outInQuint},
+
+	{"inSine", ease_inSine},
+	{"outSine", ease_outSine},
+	{"inOutSine", ease_inOutSine},
+	{"outInSine", ease_outInSine},
+
+	{"inExpo", ease_inExpo},
+	{"outExpo", ease_outExpo},
+	{"inOutExpo", ease_inOutExpo},
+	{"outInExpo", ease_outInExpo},
+
+	{"inCirc", ease_inCirc},
+	{"outCirc", ease_outCirc},
+	{"inOutCirc", ease_inOutCirc},
+	{"outInCirc", ease_outInCirc},
+
+	{"inElastic", ease_inElastic},
+	{"outElastic", ease_outElastic},
+	{"inOutElastic", ease_inOutElastic},
+	{"outInElastic", ease_outInElastic},
+
+	{"inBack", ease_inBack},
+	{"outBack", ease_outBack},
+	{"inOutBack", ease_inOutBack},
+	{"outInBack", ease_outInBack},
+
+	{"outBounce", ease_outBounce},
+	{"inBounce", ease_inBounce},
+	{"inOutBounce", ease_inOutBounce},
+	{"outInBounce", ease_outInBounce},
+
+	{nullptr, nullptr}
+};
+
 void luaReg_ease(lua_State* L, const char* name, bool reg) {
 	if (reg) {
 		lua_newtable(L);

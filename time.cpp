@@ -9,12 +9,22 @@
 #include <windows.h>
 #include <ctime>
 
+#include <unicode/datefmt.h>
+#include <unicode/dtfmtsym.h>
+#include <unicode/gregocal.h>
+#include <unicode/timezone.h>
+#include <unicode/unistr.h>
+#include <unicode/ustring.h>
+#include <unicode/dtptngen.h>
+#include <unicode/dtitvfmt.h>
+
 #include "textmodule_lua.hpp"
 #include "textmodule_string.hpp"
 #include "textmodule_exception.hpp"
 #include "textmodule_time.hpp"
 
 namespace chrono = std::chrono;
+using namespace icu;
 
 int time_now(lua_State* L) {
 	try {
@@ -49,7 +59,7 @@ int time_totime(lua_State* L) {
 		chrono::system_clock::time_point now = chrono::utc_clock::to_sys(clock);
 		__time64_t now_c = chrono::system_clock::to_time_t(now);
 
-		lua_pushnumber(L, (lua_Number)now_c);
+		lua_pushbignumber(L, now_c);
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -242,10 +252,10 @@ int time_localize(lua_State* L) {
 		Locale loc = Locale(tm_tostring_s(L, 3, "en"));
 
 		// タイムゾーンを設定
-		TimeZone* timezone = TimeZone::createTimeZone(UnicodeString(tm_toustring_s(L, 4, "UTC")));
+		icu::TimeZone* timezone = icu::TimeZone::createTimeZone(UnicodeString(tm_toustring_s(L, 4, "UTC")));
 
 		// カレンダーを作成
-		SimpleDateFormat* df = new SimpleDateFormat(UnicodeString("yyyy-MM-dd hh:mm:ss zzzz"), UnicodeString(time_f.c_str()), status);
+		icu::SimpleDateFormat* df = new icu::SimpleDateFormat(UnicodeString("yyyy-MM-dd hh:mm:ss zzzz"), UnicodeString(time_f.c_str()), status);
 		UnicodeString uin = UnicodeString(time_f.c_str());
 		UDate inDate = df->parse(uin, status);
 
@@ -302,26 +312,43 @@ void luaReg_const_unit(lua_State* L, const char* name) {
 	lua_setfield(L, -2, name);
 }
 
+
+static luaL_Reg TEXTMODULE_TIME_REG[] = {
+	{"now", time_now},
+	{"totime", time_totime},
+	{"fromtime", time_fromtime},
+	{"totable", time_totable},
+	{"fromtable", time_fromtable},
+	{"duration", time_duration},
+	{"epoch", time_epoch},
+	{"localize", time_localize},
+	{"locale_pattern", time_locale_pattern},
+	{ nullptr, nullptr }
+};
+
+static luaL_Reg TEXTMODULE_TIME_META_REG[] = {
+	{"totime", time_totime},
+	{"totable", time_totable},
+
+	{ "__tostring", time___tostring },
+	{ "__add", time___add },
+	{ "__sub", time___sub },
+	{"__type", time___type},
+	{"__tonumber", time___tonumber},
+
+	{"duration", time_duration},
+	{"epoch", time_epoch},
+	{"localize", time_localize},
+	{nullptr, nullptr}
+};
+
 void luaReg_time(lua_State* L, const char* name, bool reg) {
 	if (reg) {
-		//time
+		luaL_newmetatable(L, TEXTMODULE_CLOCK, TEXTMODULE_TIME_META_REG);
+
 		lua_newtable(L);
 		luaL_register(L, NULL, TEXTMODULE_TIME_REG);
-
 		luaReg_const_unit(L, "unit");
-
 		lua_setfield(L, -2, name);
-
-
-		//time (metatable)
-		luaL_newmetatable(L, TEXTMODULE_CLOCK); //add metatable
-		luaL_register(L, NULL, TEXTMODULE_TIME_META_REG);
-
-		lua_pushstring(L, "__index"); //add __index
-		lua_newtable(L);
-		luaL_register(L, NULL, TEXTMODULE_TIME_META_REG);
-		lua_settable(L, -3);
-
-		lua_pop(L, 1); //remove metatable
 	}
 }

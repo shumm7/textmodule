@@ -243,11 +243,20 @@
     <ClCompile Include="eucjp.cpp">
       <Filter>ソース ファイル\function\string</Filter>
     </ClCompile>
-    <ClCompile Include="u8.cpp">
-      <Filter>ソース ファイル\function</Filter>
-    </ClCompile>
-    <ClCompile Include="string_aux.cpp">
+    <ClCompile Include="textmodule_strtmp.cpp">
       <Filter>ソース ファイル\lib</Filter>
+    </ClCompile>
+    <ClCompile Include="numeric.cpp">
+      <Filter>ソース ファイル\function\math</Filter>
+    </ClCompile>
+    <ClCompile Include="sequence.cpp">
+      <Filter>ソース ファイル\function\math</Filter>
+    </ClCompile>
+    <ClCompile Include="textmodule_exception.cpp">
+      <Filter>ソース ファイル\lib</Filter>
+    </ClCompile>
+    <ClCompile Include="table.cpp">
+      <Filter>ソース ファイル\function</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -422,11 +431,17 @@
     <ClInclude Include="eucjp.hpp">
       <Filter>ヘッダー ファイル\function\string</Filter>
     </ClInclude>
-    <ClInclude Include="u8.hpp">
-      <Filter>ヘッダー ファイル\function</Filter>
-    </ClInclude>
-    <ClInclude Include="string_aux.hpp">
+    <ClInclude Include="textmodule_strtmp.hpp">
       <Filter>ヘッダー ファイル\lib</Filter>
+    </ClInclude>
+    <ClInclude Include="numeric.hpp">
+      <Filter>ヘッダー ファイル\function\math</Filter>
+    </ClInclude>
+    <ClInclude Include="sequence.hpp">
+      <Filter>ヘッダー ファイル\function\math</Filter>
+    </ClInclude>
+    <ClInclude Include="table.hpp">
+      <Filter>ヘッダー ファイル\function</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1,7 +1,18 @@
 #pragma once
+#include <lua.hpp>
+#include <iostream>
+#include <vector>
+
+const char* lua_typeexception(std::vector<std::string> type);
+const char* lua_typeexception(std::string type);
+int luaL_argerror(lua_State* L, int numarg, std::string extramsg);
+int luaL_typeexception(lua_State* L, int numarg, std::vector<std::string> type);
+int luaL_typeexception(lua_State* L, int numarg, std::string type);
 
 //general
 #define WRONG_NUMBER_OF_ARGS "wrong number of arguments"
+#define INVALID_TYPE "invalid type of argument"
+#define OUT_OF_RANGE "the value is out of range"
 
 //device
 #define JOYSTICK_NOTFOUND "the specified joystick is not connected"
@@ -15,6 +26,7 @@
 #define FACTORIAL_ZERO "factorial less than 0 is undefined"
 #define PERMUTATION_ZERO "permutation less than 0 undefined"
 #define CIRCULAR_PERMUTATION_ONE "circular permutation less than 1 is undefined"
+#define NOT_SEQUENCE "must be a sequence containing 2 or more numbers"
 
 //color
 #define INVALID_SEARCH_MODE "invalid search mode"
@@ -23,6 +35,3 @@
 //string
 #define STRING_COVERSION_FAILED "string conversion failed"
 #define INVALID_CHARACTER "invalid character"
-
-//http
-#define BASE64_INVALID_CHARACTER "the string to be encoded contains characters must be alphabet ,\"+\", or \"/\"."

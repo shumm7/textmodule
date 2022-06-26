@@ -5,6 +5,8 @@
 #include <vector>
 #include <complex>
 #include <Eigen/Dense>
+#include <numeric>
+#include <algorithm>
 
 #include "textmodule_type.hpp"
 #include "textmodule_exception.hpp"
@@ -134,4 +136,84 @@ Eigen::VectorXcd equation(Eigen::VectorXd number) {
 	
 	VectorXcd ret = es.eigenvalues();
 	return ret;
+}
+
+
+double array_size(std::vector<double> v) {
+	return static_cast<double>(v.size());
+}
+
+double array_sum(std::vector<double> v) {
+	return std::accumulate(v.begin(), v.end(), 0);
+}
+
+double array_mean(std::vector<double> v) {
+	return array_sum(v) / array_size(v);
+}
+
+double array_max(std::vector<double> v) {
+	double max = *max_element(v.begin(), v.end());
+	return max;
+}
+
+double array_min(std::vector<double> v) {
+	double min = *min_element(v.begin(), v.end());
+	return min;
+}
+
+double array_var(std::vector<double> v) {
+	double s = 0;
+	double m = array_mean(v);
+	for (int i = 0; i < v.size(); i++) {
+		s += std::pow(v.at(i) - m, 2);
+	}
+	return s / array_size(v);
+}
+
+double array_uvar(std::vector<double> v) {
+	double s = 0;
+	double m = array_mean(v);
+	for (int i = 0; i < v.size(); i++) {
+		s += std::pow(v.at(i) - m, 2);
+	}
+	return s / (array_size(v)-1);
+}
+
+double array_median(std::vector<double> v) {
+	std::sort(v.begin(), v.end());
+	size_t index = array_size(v) / 2;
+	double median = (v.size() % 2 == 0
+		? static_cast<double>(v.at(index) + v.at(index - 1)) / 2
+		: v.at(index));
+	return median;
+}
+
+double array_mode(std::vector<double> v) {
+	std::sort(v.begin(), v.end());
+	typename decltype(v)::value_type mode{};
+	size_t n{}, count{ 1 };
+	for (auto iter = std::adjacent_find(v.begin(), v.end()),
+		last = v.end(),
+		next = v.end();
+		iter != last;
+		) {
+		next = std::upper_bound(iter, last, *iter);
+		count = std::distance(iter, next);
+		if (n < count) n = count, mode = *iter;
+		iter = std::adjacent_find(next, last);
+	}
+
+	return mode;
+}
+
+std::vector<double> array_normalize(std::vector<double> v) {
+	double average = array_mean(v);
+	double sd = std::sqrt(array_var(v));
+
+	std::vector<double> norm_data(std::size(v));
+	std::transform(v.begin(), v.end(), norm_data.begin(), [&average, &sd](const auto& e) {
+		return (e - average) / sd;
+	});
+
+	return norm_data;
 }

@@ -2,6 +2,7 @@
 #include <lua.hpp>
 #include <iostream>
 #include <chrono>
+#include <vector>
 
 #include <opencv2/opencv.hpp>
 #include <Eigen/Geometry>
@@ -142,22 +143,27 @@ lua_SJIS lua_tosjis(lua_State* L, int idx);
 lua_SJIS tm_tosjis(lua_State* L, int idx);
 lua_SJIS tm_tosjis_s(lua_State* L, int idx);
 void lua_pushsjis(lua_State* L, lua_SJIS str);
+bool lua_issjis(lua_State* L, int idx);
 lua_UTF8 lua_toutf8(lua_State* L, int idx);
 lua_UTF8 tm_toutf8(lua_State* L, int idx);
 lua_UTF8 tm_toutf8_s(lua_State* L, int idx);
 void lua_pushutf8(lua_State* L, lua_UTF8 str);
+bool lua_isutf8(lua_State* L, int idx);
 lua_UTF16 lua_toutf16(lua_State* L, int idx);
 lua_UTF16 tm_toutf16(lua_State* L, int idx);
 lua_UTF16 tm_toutf16_s(lua_State* L, int idx);
 void lua_pushutf16(lua_State* L, lua_UTF16 str);
+bool lua_isutf16(lua_State* L, int idx);
 lua_UTF32 lua_toutf32(lua_State* L, int idx);
 lua_UTF32 tm_toutf32(lua_State* L, int idx);
 lua_UTF32 tm_toutf32_s(lua_State* L, int idx);
 void lua_pushutf32(lua_State* L, lua_UTF32 str);
+bool lua_isutf32(lua_State* L, int idx);
 lua_EUCJP lua_toeucjp(lua_State* L, int idx);
 lua_EUCJP tm_toeucjp(lua_State* L, int idx);
 lua_EUCJP tm_toeucjp_s(lua_State* L, int idx);
 void lua_pusheucjp(lua_State* L, lua_EUCJP str);
+bool lua_iseucjp(lua_State* L, int idx);
 
 // Number
 lua_Integer tm_tointeger(lua_State* L, int idx);
@@ -182,6 +188,7 @@ lua_Bignumber tm_tobignumber_s(lua_State* L, int idx, lua_Bignumber def);
 lua_Bignumber tm_tobignumber_s(lua_State* L, int idx);
 lua_Bignumber lua_pushbignumber(lua_State* L, lua_Bignumber value);
 lua_Bignumber lua_pushbignumber(lua_State* L);
+bool lua_isbignumber(lua_State* L, int idx);
 
 // Table
 void lua_settablevalue(lua_State* L, int key, lua_Number value);
@@ -191,6 +198,7 @@ void lua_settablevalue(lua_State* L, int key, lua_String value);
 void lua_settablevalue(lua_State* L, int key, lua_Sstring value);
 void lua_settablevalue(lua_State* L, int key, lua_Wstring value);
 void lua_settablevalue(lua_State* L, int key, lua_Bignumber value);
+void lua_settablevalue(lua_State* L, int key, lua_Complex value);
 void lua_settablevalue(lua_State* L, const char* key, lua_Number value);
 void lua_settablevalue(lua_State* L, const char* key, lua_Integer value);
 void lua_settablevalue(lua_State* L, const char* key, lua_Boolean value);
@@ -198,9 +206,14 @@ void lua_settablevalue(lua_State* L, const char* key, lua_String value);
 void lua_settablevalue(lua_State* L, const char* key, lua_Sstring value);
 void lua_settablevalue(lua_State* L, const char* key, lua_Wstring value);
 void lua_settablevalue(lua_State* L, const char* key, lua_Bignumber value);
+void lua_settablevalue(lua_State* L, const char* key, lua_Complex value);
 void lua_setfield(lua_State* L, int idx, lua_Sstring k);
 void lua_setfield(lua_State* L, int idx, lua_Wstring k);
 bool lua_isarray(lua_State* L, int idx);
+std::vector<lua_Number> lua_tosequence(lua_State* L, int idx, int start);
+std::vector<lua_Number> lua_tosequence(lua_State* L, int idx);
+std::vector<lua_Complex> lua_tocsequence(lua_State* L, int idx, int start);
+std::vector<lua_Complex> lua_tocsequence(lua_State* L, int idx);
 
 // Clock
 lua_Clock* lua_toclock(lua_State* L, int idx);
@@ -209,6 +222,7 @@ lua_Clock* tm_toclock_s(lua_State* L, int idx, lua_Clock def);
 lua_Clock* tm_toclock_s(lua_State* L, int idx);
 lua_Clock* lua_pushclock(lua_State* L, lua_Clock clock);
 lua_Clock* lua_pushclock(lua_State* L);
+bool lua_isclock(lua_State* L, int idx);
 
 // Complex
 lua_Complex* lua_tocomplex(lua_State* L, int idx);
@@ -218,6 +232,7 @@ lua_Complex* tm_tocomplex_s(lua_State* L, int idx);
 lua_Complex* lua_pushcomplex(lua_State* L, double real, double imag);
 lua_Complex* lua_pushcomplex(lua_State* L, lua_Complex complex);
 lua_Complex* lua_pushcomplex(lua_State* L);
+bool lua_iscomplex(lua_State* L, int idx);
 
 // Quaternion
 lua_Quaternion* lua_toquaternion(lua_State* L, int idx);
@@ -227,6 +242,7 @@ lua_Quaternion* tm_toquaternion_s(lua_State* L, int idx);
 lua_Quaternion* lua_pushquaternion(lua_State* L, double w, double x, double y, double z);
 lua_Quaternion* lua_pushquaternion(lua_State* L, lua_Quaternion quaternion);
 lua_Quaternion* lua_pushquaternion(lua_State* L);
+bool lua_isquaternion(lua_State* L, int idx);
 
 // Vector2
 lua_Vector2* lua_tovector2(lua_State* L, int idx);
@@ -237,6 +253,7 @@ lua_Vector2* tm_tovector2_s(lua_State* L, int idx);
 lua_Vector2* lua_pushvector2(lua_State* L, double x, double y);
 lua_Vector2* lua_pushvector2(lua_State* L, lua_Vector2 vector);
 lua_Vector2* lua_pushvector2(lua_State* L);
+bool lua_isvector2(lua_State* L, int idx);
 
 // Vector3
 lua_Vector3* lua_tovector3(lua_State* L, int idx);
@@ -247,6 +264,7 @@ lua_Vector3* tm_tovector3_s(lua_State* L, int idx);
 lua_Vector3* lua_pushvector3(lua_State* L, double x, double y, double z);
 lua_Vector3* lua_pushvector3(lua_State* L, lua_Vector3 vector);
 lua_Vector3* lua_pushvector3(lua_State* L);
+bool lua_isvector3(lua_State* L, int idx);
 
 // Vector4
 lua_Vector4* lua_tovector4(lua_State* L, int idx);
@@ -257,6 +275,7 @@ lua_Vector4* tm_tovector4_s(lua_State* L, int idx);
 lua_Vector4* lua_pushvector4(lua_State* L, double x, double y, double z, double w);
 lua_Vector4* lua_pushvector4(lua_State* L, lua_Vector4 vector);
 lua_Vector4* lua_pushvector4(lua_State* L);
+bool lua_isvector4(lua_State* L, int idx);
 
 // Color
 lua_Color* lua_tocolor(lua_State* L, int idx);
@@ -288,6 +307,7 @@ lua_Image* lua_convertcache(lua_State* L, int idx);
 
 // Misc
 bool luaL_checkmetatable(lua_State* L, int ud, const char* tname);
+void luaL_newmetatable(lua_State* L, const char* name, const luaL_Reg* methods);
 const char* tm_convtostring(lua_State* L, int idx);
 const char* tm_typename(lua_State* L, int idx);
 void lua_printstack(lua_State* L);

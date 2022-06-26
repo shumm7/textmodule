@@ -26,6 +26,7 @@
 #include "textmodule_string.hpp"
 #include "textmodule_math.hpp"
 #include "textmodule_time.hpp"
+#include "textmodule_exception.hpp"
 
 #define abs_index(L, i)         ((i) > 0 || (i) <= LUA_REGISTRYINDEX ? (i) : lua_gettop(L) + (i) + 1)
 
@@ -264,6 +265,10 @@ void lua_pushsjis(lua_State* L, lua_SJIS str) {
 	lua_setmetatable(L, -2);
 }
 
+bool lua_issjis(lua_State* L, int idx) {
+	return (lua_istable(L, idx) && luaL_checkmetatable(L, idx, TEXTMODULE_STRING_SJIS));
+}
+
 lua_UTF8 lua_toutf8(lua_State* L, int idx) {
 	lua_UTF8 ret;
 
@@ -310,6 +315,10 @@ void lua_pushutf8(lua_State* L, lua_UTF8 str) {
 
 	luaL_getmetatable(L, TEXTMODULE_STRING_UTF8);
 	lua_setmetatable(L, -2);
+}
+
+bool lua_isutf8(lua_State* L, int idx) {
+	return (lua_istable(L, idx) && luaL_checkmetatable(L, idx, TEXTMODULE_STRING_UTF8));
 }
 
 lua_UTF16 lua_toutf16(lua_State* L, int idx) {
@@ -360,6 +369,10 @@ void lua_pushutf16(lua_State* L, lua_UTF16 str) {
 	lua_setmetatable(L, -2);
 }
 
+bool lua_isutf16(lua_State* L, int idx) {
+	return (lua_istable(L, idx) && luaL_checkmetatable(L, idx, TEXTMODULE_STRING_UTF16));
+}
+
 lua_UTF32 lua_toutf32(lua_State* L, int idx) {
 	lua_UTF32 ret;
 
@@ -408,6 +421,10 @@ void lua_pushutf32(lua_State* L, lua_UTF32 str) {
 	lua_setmetatable(L, -2);
 }
 
+bool lua_isutf32(lua_State* L, int idx) {
+	return (lua_istable(L, idx) && luaL_checkmetatable(L, idx, TEXTMODULE_STRING_UTF32));
+}
+
 lua_EUCJP lua_toeucjp(lua_State* L, int idx) {
 	lua_EUCJP ret;
 
@@ -454,6 +471,10 @@ void lua_pusheucjp(lua_State* L, lua_EUCJP str) {
 
 	luaL_getmetatable(L, TEXTMODULE_STRING_EUCJP);
 	lua_setmetatable(L, -2);
+}
+
+bool lua_iseucjp(lua_State* L, int idx) {
+	return (lua_istable(L, idx) && luaL_checkmetatable(L, idx, TEXTMODULE_STRING_EUCJP));
 }
 
 
@@ -570,6 +591,10 @@ lua_Bignumber lua_pushbignumber(lua_State* L) {
 	lua_pushbignumber(L, 0);
 }
 
+bool lua_isbignumber(lua_State* L, int idx) {
+	return lua_isuserdata(L, idx) && luaL_checkmetatable(L, idx, TEXTMODULE_BIGNUMBER);
+}
+
 
 // Boolean
 lua_Boolean tm_toboolean(lua_State* L, int idx) {
@@ -638,6 +663,12 @@ void lua_settablevalue(lua_State* L, int key, lua_Bignumber value) {
 	lua_settable(L, -3);
 }
 
+void lua_settablevalue(lua_State* L, int key, lua_Complex value) {
+	lua_pushinteger(L, key);
+	lua_pushcomplex(L, value);
+	lua_settable(L, -3);
+}
+
 void lua_settablevalue(lua_State* L, const char* key, lua_Number value) {
 	lua_pushnumber(L, value);
 	lua_setfield(L, -2, key);
@@ -673,6 +704,11 @@ void lua_settablevalue(lua_State* L, const char* key, lua_Bignumber value) {
 	lua_setfield(L, -2, key);
 }
 
+void lua_settablevalue(lua_State* L, const char* key, lua_Complex value) {
+	lua_pushcomplex(L, value);
+	lua_setfield(L, -2, key);
+}
+
 void lua_setfield(lua_State* L, int idx, lua_Sstring k) {
 	lua_setfield(L, idx, k.c_str());
 }
@@ -695,12 +731,62 @@ bool lua_isarray(lua_State* L, int idx) {
 		}
 		else ret = false;
 
-		i = i + 1;
+		i++;
 		lua_pop(L, 1);
 	}
 
 	lua_settop(L, h);
 	return ret;
+}
+
+std::vector<lua_Number> lua_tosequence(lua_State* L, int idx, int start) {
+	int i = start;
+	std::vector<lua_Number> vec;
+
+	if (!lua_istable(L, idx)) {
+		luaL_argerror(L, idx, "table expected");
+		return vec;
+	}
+
+	while (1) {
+		lua_rawgeti(L, idx, i);
+		if (lua_isnumber(L, -1))
+			vec.push_back(lua_tonumber(L, -1));
+		else
+			break;
+		i++;
+	}
+
+	return vec;
+}
+
+std::vector<lua_Number> lua_tosequence(lua_State* L, int idx) {
+	return lua_tosequence(L, idx, 1);
+}
+
+std::vector<lua_Complex> lua_tocsequence(lua_State* L, int idx, int start) {
+	int i = start;
+	std::vector<lua_Complex> vec;
+
+	if (!lua_istable(L, idx)) {
+		luaL_argerror(L, idx, "table expected");
+		return vec;
+	}
+
+	while (1) {
+		lua_rawgeti(L, idx, i);
+		if (lua_isnumber(L, -1) || lua_iscomplex(L, -1))
+			vec.push_back(*lua_tocomplex(L, -1));
+		else
+			break;
+		i++;
+	}
+
+	return vec;
+}
+
+std::vector<lua_Complex> lua_tocsequence(lua_State* L, int idx) {
+	return lua_tocsequence(L, idx, 1);
 }
 
 
@@ -739,6 +825,10 @@ lua_Clock* lua_pushclock(lua_State* L, lua_Clock clock) {
 
 lua_Clock* lua_pushclock(lua_State* L) {
 	return lua_pushclock(L, std::chrono::utc_clock::now());
+}
+
+bool lua_isclock(lua_State* L, int idx) {
+	return lua_type(L, idx) == LUA_TUSERDATA && luaL_checkmetatable(L, idx, TEXTMODULE_CLOCK);
 }
 
 
@@ -804,6 +894,11 @@ lua_Complex* lua_pushcomplex(lua_State* L, lua_Complex complex) {
 lua_Complex* lua_pushcomplex(lua_State* L) {
 	return lua_pushcomplex(L, 0, 0);
 }
+
+bool lua_iscomplex(lua_State* L, int idx) {
+	return lua_type(L, idx) == LUA_TUSERDATA && luaL_checkmetatable(L, idx, TEXTMODULE_COMPLEX);
+}
+
 
 // Quaternion
 lua_Quaternion* lua_toquaternion(lua_State* L, int idx) {
@@ -871,6 +966,10 @@ lua_Quaternion* lua_pushquaternion(lua_State* L) {
 	return lua_pushquaternion(L, 0, 0, 0, 0);
 }
 
+bool lua_isquaternion(lua_State* L, int idx) {
+	return lua_type(L, idx) == LUA_TUSERDATA && luaL_checkmetatable(L, idx, TEXTMODULE_QUATERNION);
+}
+
 // Vector2
 lua_Vector2* lua_tovector2(lua_State* L, int idx) {
 	return reinterpret_cast<Vector2*>(luaL_checkudata(L, idx, TEXTMODULE_VECTOR2));
@@ -921,6 +1020,10 @@ lua_Vector2* lua_pushvector2(lua_State* L, lua_Vector2 vector) {
 
 lua_Vector2* lua_pushvector2(lua_State* L) {
 	return lua_pushvector2(L, 0, 0);
+}
+
+bool lua_isvector2(lua_State* L, int idx) {
+	return lua_type(L, idx) == LUA_TUSERDATA && luaL_checkmetatable(L, idx, TEXTMODULE_VECTOR2);
 }
 
 // Vector3
@@ -976,6 +1079,11 @@ lua_Vector3* lua_pushvector3(lua_State* L, lua_Vector3 vector) {
 lua_Vector3* lua_pushvector3(lua_State* L) {
 	return lua_pushvector3(L, 0, 0, 0);
 }
+
+bool lua_isvector3(lua_State* L, int idx) {
+	return lua_type(L, idx) == LUA_TUSERDATA && luaL_checkmetatable(L, idx, TEXTMODULE_VECTOR3);
+}
+
 
 // Vector4
 lua_Vector4* lua_tovector4(lua_State* L, int idx) {
@@ -1033,6 +1141,10 @@ lua_Vector4* lua_pushvector4(lua_State* L) {
 	return lua_pushvector4(L, 0, 0, 0, 0);
 }
 
+bool lua_isvector4(lua_State* L, int idx) {
+	return lua_type(L, idx) == LUA_TUSERDATA && luaL_checkmetatable(L, idx, TEXTMODULE_VECTOR4);
+}
+
 
 // Matrix2
 lua_Matrix2* lua_tomatrix2(lua_State* L, int idx) {
@@ -1080,6 +1192,10 @@ lua_Matrix2* lua_pushmatrix2(lua_State* L, lua_Matrix2 matrix) {
 
 lua_Matrix2* lua_pushmatrix2(lua_State* L) {
 	return lua_pushmatrix2(L, Matrix2::Zero());
+}
+
+bool lua_ismatrix2(lua_State* L, int idx) {
+	return lua_type(L, idx) == LUA_TUSERDATA && luaL_checkmetatable(L, idx, TEXTMODULE_MATRIX2);
 }
 
 
@@ -1238,6 +1354,18 @@ bool luaL_checkmetatable(lua_State* L, int ud, const char* tname) {
 	return false;
 }
 
+void luaL_newmetatable(lua_State* L, const char* name, const luaL_Reg* methods) {
+	luaL_newmetatable(L, name); //add metatable
+	luaL_register(L, NULL, methods);
+
+	lua_pushstring(L, "__index"); //add __index
+	lua_newtable(L);
+	luaL_register(L, NULL, methods);
+	lua_settable(L, -3);
+
+	lua_pop(L, 1); //remove metatable
+}
+
 const char* tm_convtostring(lua_State* L, int idx) {
 	if (lua_type(L, idx) == LUA_TNONE)
 		return "none";
@@ -1325,15 +1453,14 @@ int lua_pushtmstruct(lua_State* L, std::tm* tmstruct) {
 
 void lua_totmstruct(lua_State* L, int idx, std::tm* out) {
 	luaL_checktype(L, idx, LUA_TTABLE);
-	std::tm Time = *out;
 
-	Time.tm_isdst = time_tm_getfield(L, idx, "isdst", false);
-	Time.tm_year = time_tm_getfield(L, idx, "year", -1) - 1900;
-	Time.tm_mon = time_tm_getfield(L, idx, "month", -1) - 1;
-	Time.tm_mday = time_tm_getfield(L, idx, "day", -1);
-	Time.tm_hour = time_tm_getfield(L, idx, "hour", 12);
-	Time.tm_min = time_tm_getfield(L, idx, "min", 0);
-	Time.tm_sec = time_tm_getfield(L, idx, "sec", 0);
+	(*out).tm_isdst = time_tm_getfield(L, idx, "isdst", false);
+	(*out).tm_year = time_tm_getfield(L, idx, "year", -1) - 1900;
+	(*out).tm_mon = time_tm_getfield(L, idx, "month", -1) - 1;
+	(*out).tm_mday = time_tm_getfield(L, idx, "day", -1);
+	(*out).tm_hour = time_tm_getfield(L, idx, "hour", 12);
+	(*out).tm_min = time_tm_getfield(L, idx, "min", 0);
+	(*out).tm_sec = time_tm_getfield(L, idx, "sec", 0);
 }
 
 bool tm_callmeta(lua_State* L, int obj, const char* event) {

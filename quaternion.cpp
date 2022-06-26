@@ -11,13 +11,16 @@
 
 int quaternion_new(lua_State* L) {
 	try {
-		int tp = lua_type(L, 1);
-		luaL_argcheck(L, tp == LUA_TNUMBER || tp == LUA_TUSERDATA || tp == LUA_TNONE, 1, "number/vector4/none expected");
+		if (tm_callmetan(L, 1, "__quaternion"))
+			return 1;
 
-		lua_Number w;
-		lua_Number x;
-		lua_Number y;
-		lua_Number z;
+		int tp = lua_type(L, 1);
+		luaL_argcheck(L, tp == LUA_TNUMBER || tp == LUA_TUSERDATA || tp == LUA_TNONE, 1, "number/quaternion expected");
+
+		lua_Number w = 0;
+		lua_Number x = 0;
+		lua_Number y = 0;
+		lua_Number z = 0;
 
 		if (tp == LUA_TNUMBER || tp == LUA_TNONE) {
 			w = tm_tonumber_s(L, 1, 0);
@@ -25,15 +28,13 @@ int quaternion_new(lua_State* L) {
 			y = tm_tonumber_s(L, 3, 0);
 			z = tm_tonumber_s(L, 4, 0);
 		}
-		else if (tp == LUA_TUSERDATA) {
-			lua_Vector4* v = tm_tovector4(L, 1);
-			w = v->x();
-			x = v->y();
-			y = v->z();
-			z = v->w();
+		else if (tp == LUA_TUSERDATA && lua_isquaternion(L, 1)) {
+			auto q = tm_toquaternion(L, 1);
+			w = q->w();
+			x = q->x();
+			y = q->y();
+			z = q->z();
 		}
-		else
-			return 0;
 
 		lua_pushquaternion(L, w, x, y, z);
 		return 1;
@@ -670,8 +671,8 @@ int quaternion__normalize(lua_State* L) {
 
 int quaternion__dot(lua_State* L) {
 	try {
-		lua_Quaternion* val1 = tm_toquaternion_s(L, 1);
-		lua_Quaternion* val2 = tm_toquaternion_s(L, 2);
+		lua_Quaternion* val1 = tm_toquaternion(L, 1);
+		lua_Quaternion* val2 = tm_toquaternion(L, 2);
 
 		lua_pushnumber(L, val1->dot(*val2));
 		return 1;
@@ -684,8 +685,8 @@ int quaternion__dot(lua_State* L) {
 
 int quaternion__cross(lua_State* L) {
 	try {
-		lua_Quaternion* val1 = tm_toquaternion_s(L, 1);
-		lua_Quaternion* val2 = tm_toquaternion_s(L, 2);
+		lua_Quaternion* val1 = tm_toquaternion(L, 1);
+		lua_Quaternion* val2 = tm_toquaternion(L, 2);
 
 		lua_pushquaternion(L, (*val1) * (*val2));
 		return 1;
@@ -698,8 +699,8 @@ int quaternion__cross(lua_State* L) {
 
 int quaternion__slerp(lua_State* L) {
 	try {
-		lua_Quaternion* val1 = tm_toquaternion_s(L, 1);
-		lua_Quaternion* val2 = tm_toquaternion_s(L, 2);
+		lua_Quaternion* val1 = tm_toquaternion(L, 1);
+		lua_Quaternion* val2 = tm_toquaternion(L, 2);
 
 		lua_Quaternion res(val1->w(), val1->x(), val1->y(), val1->z());
 		lua_Quaternion p(val2->w(), val2->x(), val2->y(), val2->z());
@@ -732,44 +733,74 @@ int quaternion__table(lua_State* L) {
 	}
 }
 
-int quaternion__vector4(lua_State* L) {
-	try {
-		lua_Quaternion* val1 = tm_toquaternion_s(L, 1);
 
-		lua_pushvector4(L, val1->w(), val1->x(), val1->y(), val1->z());
-		return 1;
-	}
-	catch (std::exception& e) {
-		luaL_error(L, e.what());
-		return 1;
-	}
-}
+static luaL_Reg TEXTMODULE_QUATERNION_REG[] = {
+	{"new", quaternion_new},
+	{"euler_new", quaternion_euler_new},
+	{"enew", quaternion_euler_new},
+	{"angleaxis", quaternion_angleaxis},
+	{"twovectors", quaternion_twovectors},
+	{"lookrot", quaternion_lookrot},
+	{"identity", quaternion_identity},
+	{"zero", quaternion_zero},
 
+	{"w", quaternion__w},
+	{"x", quaternion__x},
+	{"y", quaternion__y},
+	{"z", quaternion__z},
+
+	{"slerp", quaternion__slerp},
+	{"euler", quaternion__euler},
+	{"inverse", quaternion__inverse},
+	{ nullptr, nullptr }
+};
+
+static luaL_Reg TEXTMODULE_QUATERNION_META_REG[] = {
+	{"w", quaternion__w},
+	{"x", quaternion__x},
+	{"y", quaternion__y},
+	{"z", quaternion__z},
+
+	{"__tostring", quaternion____tostring},
+	{"__add", quaternion____add},
+	{"__sub", quaternion____sub},
+	{"__mul", quaternion____mul},
+	{"__div", quaternion____div},
+	{"__unm", quaternion____unm},
+	{"__lt", quaternion____lt},
+	{"__le", quaternion____le},
+	//{"__index", quaternion____index},
+	{"__newindex", quaternion____newindex},
+	{"__type", quaternion____type},
+	{"__tonumber", quaternion____tonumber},
+	{"__call", quaternion____call},
+	{"__abs", quaternion__abs},
+	{"__norm", quaternion__norm},
+	{"__conj", quaternion__conj},
+	{"__dot", quaternion__dot},
+	{"__cross", quaternion__cross},
+	{"__normalize", quaternion__normalize},
+	{"__lerp", quaternion__slerp},
+	{"__table", quaternion__table},
+
+	{"abs", quaternion__abs},
+	{"norm", quaternion__norm},
+	{"conj", quaternion__conj},
+	{"dot", quaternion__dot},
+	{"cross", quaternion__cross},
+	{"normalize", quaternion__normalize},
+	{"slerp", quaternion__slerp},
+	{"euler", quaternion__euler},
+	{"inverse", quaternion__inverse},
+	{nullptr, nullptr}
+};
 
 void luaReg_quaternion(lua_State* L, const char* name, bool reg) {
 	if (reg) {
-		//quaternion
+		luaL_newmetatable(L, TEXTMODULE_QUATERNION, TEXTMODULE_QUATERNION_META_REG);
+
 		lua_newtable(L);
 		luaL_register(L, NULL, TEXTMODULE_QUATERNION_REG);
 		lua_setfield(L, -2, name);
-
-		//quaternion (metatable)
-		luaL_newmetatable(L, TEXTMODULE_QUATERNION); //add metatable
-		luaL_register(L, NULL, TEXTMODULE_QUATERNION_META_REG);
-
-		lua_pushstring(L, "__index"); //add __index
-		lua_newtable(L);
-		luaL_register(L, NULL, TEXTMODULE_QUATERNION_META_REG);
-		lua_settable(L, -3);
-
-		lua_pop(L, 1); //remove metatable
-	}
-}
-
-void luaGlobal_quaternion(lua_State* L, const char* name, bool reg) {
-	if (reg) {
-		lua_newtable(L);
-		luaL_register(L, NULL, TEXTMODULE_QUATERNION_REG);
-		lua_setglobal(L, name);
 	}
 }

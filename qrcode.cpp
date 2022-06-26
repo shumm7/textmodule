@@ -3,7 +3,7 @@
 #include <lua.hpp>
 #include <iostream>
 #include <vector>
-#include "QR-Code-generator/qrcodegen.hpp"
+#include <qrcodegen.hpp>
 
 #include "textmodule_lua.hpp"
 #include "textmodule_string.hpp"
@@ -60,6 +60,13 @@ int qrcode_encode_string(lua_State* L) {
 	lua_pushwstring(L, ret);
 	return 1;
 }
+
+
+static luaL_Reg TEXTMODULE_QRCODE_REG[] = {
+	{"encode", qrcode_encode},
+	{"encode_string", qrcode_encode_string},
+	{ nullptr, nullptr }
+};
 
 void luaReg_qrcode(lua_State* L, const char* name, bool reg) {
 	if (reg) {
