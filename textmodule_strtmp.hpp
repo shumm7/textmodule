@@ -11,7 +11,7 @@
 #include "textmodule_string.hpp"
 #include "textmodule_exception.hpp"
 
-template <typename String>
+template <class String>
 std::pair<lua_Integer, lua_Integer> string_template_find(lua_State* L, String text, String pattern, lua_Integer init, lua_Boolean plain) {
 	bool rev = false;
 
@@ -46,10 +46,10 @@ std::pair<lua_Integer, lua_Integer> string_template_find(lua_State* L, String te
 		}
 	}
 	else {
-		std::match_results<String::const_iterator> results;
+		std::match_results<typename String::const_iterator> results;
 		if (!rev) {
 			String temp = text.substr(init);
-			bool sresult = std::regex_search(temp, results, std::basic_regex<String::value_type>(pattern));
+			bool sresult = std::regex_search(temp, results, std::basic_regex<typename String::value_type>(pattern));
 			if (sresult) {
 				lua_Integer n = results.position() + 1 + init;
 				return { n, n + results.length() - 1 };
@@ -57,7 +57,7 @@ std::pair<lua_Integer, lua_Integer> string_template_find(lua_State* L, String te
 		}
 		else {
 			String temp = text.substr(text.length() - init - 1);
-			bool sresult = std::regex_search(temp, results, std::basic_regex<String::value_type>(pattern));
+			bool sresult = std::regex_search(temp, results, std::basic_regex<typename String::value_type>(pattern));
 			if (sresult) {
 				lua_Integer n = results.position() + text.length() - init;
 				return { n, n + results.length() - 1 };
@@ -68,17 +68,17 @@ std::pair<lua_Integer, lua_Integer> string_template_find(lua_State* L, String te
 	return { -1, -1 };
 }
 
-template <typename String>
+template <class String>
 String string_template_sub(lua_State* L, String text, lua_Integer start, lua_Integer end) {
 	return text.substr(start, end - start + 1);
 }
 
-template <typename String>
+template <class String>
 String string_template_gsub(lua_State* L, String text, String pattern, String repl, lua_Integer num) {
 	for (int i = 0; i < num; i++)
 	{
-		std::match_results<String::const_iterator> results;
-		bool l = std::regex_search(text, results, std::basic_regex<String::value_type>(pattern));
+		std::match_results<typename String::const_iterator> results;
+		bool l = std::regex_search(text, results, std::basic_regex<typename String::value_type>(pattern));
 
 		if (l) {
 			int s = results.position();
@@ -91,12 +91,12 @@ String string_template_gsub(lua_State* L, String text, String pattern, String re
 	return text;
 }
 
-template <typename String>
+template <class String>
 size_t string_template_len(lua_State* L, String text) {
 	return text.length();
 }
 
-template <typename String>
+template <class String>
 String string_template_reverse(lua_State* L, String text) {
 	String ret;
 	for (unsigned int i = 0; i < text.length(); i++)
@@ -104,23 +104,23 @@ String string_template_reverse(lua_State* L, String text) {
 	return ret;
 }
 
-template <typename String>
+template <class String>
 String string_template_upper(lua_State* L, String text) {
 	std::transform(text.cbegin(), text.cend(), text.begin(), toupper);
 	return text;
 }
 
-template <typename String>
+template <class String>
 String string_template_lower(lua_State* L, String text) {
 	std::transform(text.cbegin(), text.cend(), text.begin(), tolower);
 	return text;
 }
 
-template <typename String>
+template <class String>
 String string_template_match(lua_State* L, String text, String pattern, lua_Integer start) {
 	text = text.substr(start);
-	std::match_results<String::const_iterator> results;
-	bool l = std::regex_search(text, results, std::basic_regex<String::value_type>(pattern));
+	std::match_results<typename String::const_iterator> results;
+	bool l = std::regex_search(text, results, std::basic_regex<typename String::value_type>(pattern));
 
 	if (l)
 		return results.str();
@@ -128,10 +128,10 @@ String string_template_match(lua_State* L, String text, String pattern, lua_Inte
 		throw std::regex_error(std::regex_constants::error_ctype);
 }
 
-template <typename String>
+template <class String>
 auto string_template_byte(lua_State* L, String text, lua_Integer i, lua_Integer j) {
 	int length = text.length();
-	std::vector<String::value_type> ret;
+	std::vector<typename String::value_type> ret;
 	
 	if (length < 1)
 		return ret;
@@ -147,15 +147,15 @@ auto string_template_byte(lua_State* L, String text, lua_Integer i, lua_Integer 
 	return ret;
 }
 
-template <typename String>
-String string_template_char(lua_State* L, std::vector<uint32_t> chars) {
+template <class String>
+String string_template_char(lua_State* L, std::vector<typename String::value_type> chars) {
 	String ret;
 	for (int i = 0; i < chars.size(); i++)
 		ret += chars[i];
 	return ret;
 }
 
-template <typename String>
+template <class String>
 String string_template_rep(lua_State* L, String s, lua_Integer n) {
 	String ret;
 

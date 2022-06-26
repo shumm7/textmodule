@@ -44,7 +44,7 @@ void luaReg(lua_State* L, nlohmann::json o, const char* module) {
 	};
 	luaL_register(L, module, none);
 	
-	auto api = o["api"];
+	nlohmann::json api = o["api"];
 
 	//module
 	luaReg_base(L, api["base"]); //base

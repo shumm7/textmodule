@@ -247,28 +247,7 @@ int base_printf(lua_State* L) {
 		lua_Sstring str = tm_tosstring(L, 1);
 		fmt::dynamic_format_arg_store<fmt::format_context> store;
 
-		int i = 2;
-		while (true) {
-			int tp = lua_type(L, i);
-
-			if (tp == LUA_TNUMBER)
-				store.push_back(lua_tonumber(L, i));
-			else if (tp == LUA_TBOOLEAN)
-				store.push_back(lua_toboolean(L, i));
-			else if (tp == LUA_TSTRING)
-				store.push_back(lua_tostring(L, i));
-			else if (tp == LUA_TNIL)
-				store.push_back("nil");
-			else if (tp == LUA_TNONE)
-				break;
-			else if (tp == LUA_TUSERDATA) {
-				store.push_back(lua_topointer(L, i));
-			}
-			else
-				store.push_back(lua_topointer(L, i));
-
-			i++;
-		};
+		lua_formatargs_store(L, &store, 2, lua_gettop(L));
 
 		std::cout << fmt::vformat(str, store) << std::endl;
 		return 0;

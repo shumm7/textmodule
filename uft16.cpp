@@ -196,7 +196,7 @@ int utf16___byte(lua_State* L) {
 int utf16___char(lua_State* L) {
 	try {
 		int n = lua_gettop(L);
-		std::vector<uint32_t> chars;
+		std::vector<wchar_t> chars;
 		for (int i = 0; i < n; i++)
 			chars.push_back(tm_tonumber(L, i + 1));
 

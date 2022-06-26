@@ -9,6 +9,7 @@
 #include <unicode/unistr.h>
 #include <unicode/ustring.h>
 #include <boost/multiprecision/cpp_dec_float.hpp>
+#include <fmt/core.h>
 
 #include <nlohmann/json.hpp>
 
@@ -318,6 +319,7 @@ bool tm_callmetan(lua_State* L, int obj, const char* event, int nargs, int namou
 bool tm_callmetan(lua_State* L, int obj, const char* event, int nargs);
 bool tm_callmetan(lua_State* L, int obj, const char* event);
 void lua_pushsomenil(lua_State* L, int amount);
+void lua_formatargs_store(lua_State* L, fmt::dynamic_format_arg_store<fmt::format_context>* ret, int startIdx, int endIdx);
 
 // Json Utility
 lua_Json tm_jsonparse(lua_Sstring str);

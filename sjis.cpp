@@ -211,9 +211,11 @@ int sjis___byte(lua_State* L) {
 int sjis___char(lua_State* L) {
 	try {
 		int n = lua_gettop(L);
-		std::vector<uint32_t> chars;
-		for (int i = 0; i < n; i++)
-			chars.push_back(tm_tonumber(L, i + 1));
+		std::vector<char> chars;
+		for (int i = 0; i < n; i++) {
+			unsigned char c = tm_tonumber(L, i + 1);
+			chars.push_back((char)c);
+		}
 
 		lua_pushsjis(L, string_template_char<lua_SJIS>(L, chars));
 		return 1;

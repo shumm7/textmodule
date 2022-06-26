@@ -2,7 +2,6 @@
 
 #include <lua.hpp>
 #include <iostream>
-#include <chrono>
 
 #include <unicode/datefmt.h>
 #include <unicode/dtfmtsym.h>
@@ -13,14 +12,16 @@
 #include <unicode/dtptngen.h>
 #include <unicode/dtitvfmt.h>
 
+#include <fmt/core.h>
+#include <fmt/chrono.h>
+#include <fmt/format.h>
+#include <chrono>
+
 #include <complex>
 #include <Eigen/Geometry>
 #include <Eigen/Dense>
 
-#include <fmt/core.h>
-#include <fmt/format.h>
 #include <Windows.h>
-
 #include <boost/multiprecision/cpp_bin_float.hpp>
 
 #include "textmodule_string.hpp"
@@ -1389,7 +1390,10 @@ const char* tm_convtostring(lua_State* L, int idx) {
 		case LUA_TNIL:
 			return "nil";
 		default:
-			lua_Sstring _f = fmt::format("{0:s}: {1:p}", luaL_typename(L, idx), lua_topointer(L, idx));
+			fmt::dynamic_format_arg_store<fmt::format_context> store;
+			store.push_back(luaL_typename(L, idx));
+			store.push_back(lua_topointer(L, idx));
+			lua_Sstring _f = fmt::vformat("{0:s}: {1:p}", store);
 			const char* f = _f.c_str();
 			return f;
 		}
@@ -1512,6 +1516,37 @@ bool tm_callmetan(lua_State* L, int obj, const char* event) {
 void lua_pushsomenil(lua_State* L, int amount) {
 	for (int i = 0; i < amount; i++)
 		lua_pushnil(L);
+}
+
+void lua_formatargs_store(lua_State* L, fmt::dynamic_format_arg_store<fmt::format_context>* ret, int startIdx, int endIdx) {
+	for(int i=startIdx; i<=endIdx; i++){
+		int tp = lua_type(L, i);
+
+		if (tp == LUA_TNUMBER)
+			ret->push_back(lua_tonumber(L, i));
+		else if (tp == LUA_TBOOLEAN)
+			ret->push_back(lua_toboolean(L, i));
+		else if (tp == LUA_TSTRING)
+			ret->push_back(lua_tostring(L, i));
+		else if (tp == LUA_TNIL)
+			ret->push_back("nil");
+		else if (tp == LUA_TNONE)
+			break;
+		else if (tp == LUA_TUSERDATA) {
+			if (lua_isclock(L, i)) {
+				std::tm tm;
+				__time64_t time_t = std::chrono::system_clock::to_time_t(std::chrono::utc_clock::to_sys(*tm_toclock(L, i)));
+				_gmtime64_s(&tm, &time_t);
+				ret->push_back(tm);
+			}
+			else
+				ret->push_back(lua_topointer(L, i));
+		}
+		else
+			ret->push_back(lua_topointer(L, i));
+
+		i++;
+	}
 }
 
 

@@ -176,7 +176,7 @@ int string_char(lua_State* L) {
 			return 1;
 
 		int n = lua_gettop(L);
-		std::vector<uint32_t> chars;
+		std::vector<wchar_t> chars;
 		for (int i = 0; i < n; i++)
 			chars.push_back(tm_tonumber(L, i + 1));
 

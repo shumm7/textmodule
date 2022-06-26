@@ -97,8 +97,8 @@ int os_date(lua_State* L) {
 
 			std::chrono::local_seconds local_time = zone_time.get_local_time();
 
-			
-			f = std::format(f, local_time);
+			std::wstring_view v = f;
+			f = std::vformat(f, std::make_wformat_args(local_time, 1));
 			lua_pushwstring(L, f);
 			return 1;
 		}

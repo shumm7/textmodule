@@ -4,28 +4,7 @@ lua_Sstring string_template_format(lua_State* L, lua_Sstring str, int idx) {
 	try {
 		fmt::dynamic_format_arg_store<fmt::format_context> store;
 
-		int i = idx + 1;
-		while (true) {
-			int tp = lua_type(L, i);
-
-			if (tp == LUA_TNUMBER)
-				store.push_back(lua_tonumber(L, i));
-			else if (tp == LUA_TBOOLEAN)
-				store.push_back(lua_toboolean(L, i));
-			else if (tp == LUA_TSTRING)
-				store.push_back(lua_tostring(L, i));
-			else if (tp == LUA_TNIL)
-				store.push_back("nil");
-			else if (tp == LUA_TNONE)
-				break;
-			else if (tp == LUA_TUSERDATA) {
-					store.push_back(lua_topointer(L, i));
-			}
-			else
-				store.push_back(lua_topointer(L, i));
-
-			i++;
-		};
+		lua_formatargs_store(L, &store, idx+1, lua_gettop(L));
 
 		return fmt::vformat(str, store);
 	}

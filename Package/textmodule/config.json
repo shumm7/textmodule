@@ -5,15 +5,14 @@
   "api": {
     "base": true,
     "string": true,
-    "tmstring": true,
+    "os": true,
     "math": true,
     "random": true,
     "bit": true,
-    "os": true,
-    "utf8": true,
     "color": {
        "color": true,
-       "pixel": true
+       "pixel": true,
+       "colorlist": true
     },
     "geometry": {
        "vector2": true,
@@ -30,26 +29,8 @@
     "object": true,
     "ease": true,
     "device": true,
+    "table": true,
     "time": true,
-    "json": true
-  },
-  "api-alias": {
-    "tmstring": true,
-    "filesystem": true,
-    "random": true,
-    "object": true
-  },
-  "api-global": {
-    "clipboard": true,
-    "geometry": {
-       "vector2": true,
-       "vector3": true,
-       "vector4": true,
-       "complex": true,
-       "quaternion": true
-    },
-    "hash": true,
-    "http": true,
     "json": true
   }
 }
