@@ -37,6 +37,9 @@ int bit_rshift(lua_State* L) {
 
 int bit_lrotate(lua_State* L) {
     try {
+        if (tm_callmetan(L, 1, "__lrot"))
+            return 1;
+
         lua_pushnumber(L, std::rotl(tm_tounsigned(L, 1), tm_tointeger(L, 2)));
         return 1;
     }
@@ -48,6 +51,9 @@ int bit_lrotate(lua_State* L) {
 
 int bit_rrotate(lua_State* L) {
     try {
+        if (tm_callmetan(L, 1, "__rrot"))
+            return 1;
+
         lua_pushnumber(L, std::rotr(tm_tounsigned(L, 1), tm_tointeger(L, 2)));
         return 1;
     }

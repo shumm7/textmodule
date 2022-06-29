@@ -121,7 +121,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\Visual Studio 2019\source\repos\textmodule\lua\include;D:\Visual Studio 2019\source\repos\textmodule\eigen;D:\Visual Studio 2019\source\repos\textmodule\MeCab\sdk;D:\Visual Studio 2019\source\repos\textmodule\cpprestsdk.v142.2.10.15\include;D:\Visual Studio 2019\source\repos\textmodule\fast-cpp-csv-parser;D:\Visual Studio 2019\source\repos\textmodule\icu\include;D:\Visual Studio 2019\source\repos\boost_1_79_0\include\boost-1_79;D:\Visual Studio 2019\source\repos\opencv\cbuild\install\include;D:\Visual Studio 2019\source\repos\textmodule\hash-library;D:\Visual Studio 2019\source\repos\textmodule\QR-Code-generator;D:\Visual Studio 2019\source\repos\textmodule\json\single_include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Visual Studio 2019\source\repos\textmodule\lua\include;D:\Visual Studio 2019\source\repos\textmodule\eigen;D:\Visual Studio 2019\source\repos\textmodule\MeCab\sdk;D:\Visual Studio 2019\source\repos\textmodule\cpprestsdk.v142.2.10.15\include;D:\Visual Studio 2019\source\repos\textmodule\fast-cpp-csv-parser;D:\Visual Studio 2019\source\repos\textmodule\icu\include;D:\Visual Studio 2019\source\repos\boost_1_79_0\include\boost-1_79;D:\Visual Studio 2019\source\repos\opencv\cbuild\install\include;D:\Visual Studio 2019\source\repos\textmodule\hash-library;D:\Visual Studio 2019\source\repos\textmodule\QR-Code-generator;D:\Visual Studio 2019\source\repos\textmodule\json\single_include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <ExceptionHandling>Async</ExceptionHandling>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
@@ -195,6 +195,7 @@
     <ClCompile Include="string.cpp" />
     <ClCompile Include="table.cpp" />
     <ClCompile Include="textmodule_exception.cpp" />
+    <ClCompile Include="textmodule_fmt.cpp" />
     <ClCompile Include="textmodule_strtmp.cpp" />
     <ClCompile Include="textmodule.cpp" />
     <ClCompile Include="textmodule_color.cpp" />
@@ -255,6 +256,7 @@
     <ClInclude Include="sjis.hpp" />
     <ClInclude Include="string.hpp" />
     <ClInclude Include="table.hpp" />
+    <ClInclude Include="textmodule_fmt.hpp" />
     <ClInclude Include="textmodule_strtmp.hpp" />
     <ClInclude Include="textmodule.hpp" />
     <ClInclude Include="textmodule_color.hpp" />

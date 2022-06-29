@@ -59,28 +59,35 @@ int base_getinfo(lua_State* L) {
 		lua_Integer i = tm_tointeger_s(L, 2, 1);
 
 		if (t == L"version") {
-			if (i == 1) {
+			if (i == 1)
 				lua_pushwstring(L, getVersionNum(MODULE_VERSION));
-				return 1;
-			}
-			else if (i == 2) {
+			else if (i == 2)
 				lua_pushinteger(L, MODULE_VERSION);
-				return 1;
-			}
+			else
+				return 0;
+			return 1;
 		}
 		else if (t == L"versions") {
 			lua_Wstring res = getVersionNum(i);
-			if (res != L"") {
+			if (res != L"")
 				lua_pushwstring(L, res);
-				return 1;
-			}
-			else {
+			else
 				return 0;
-			}
-
+			return 1;
 		}
 		else if (t == L"name") {
 			lua_pushstring(L, MODULE_NAME);
+			return 1;
+		}
+		else if (t == L"lua") {
+			if (i == 1)
+				lua_pushstring(L, LUA_VERSION);
+			else if (i == 2)
+				lua_pushstring(L, LUA_RELEASE);
+			else if (i == 3)
+				lua_pushnumber(L, LUA_VERSION_NUM);
+			else
+				return 0;
 			return 1;
 		}
 

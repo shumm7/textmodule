@@ -211,17 +211,15 @@ int vector2____sub(lua_State* L) {
 
 int vector2____mul(lua_State* L) {
 	try {
-		int tp = lua_type(L, 1);
-		luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNUMBER, 1, "number/vector2 expected");
+		luaL_argcheck(L, lua_isvector2(L, 1) || lua_isnumber(L, 1), 1, "number/vector2 expected");
 
-		if (tp == LUA_TUSERDATA) { // Vector2 * Number
+		if (lua_isvector2(L, 1)) {
 			lua_Vector2* val1 = tm_tovector2(L, 1);
 			lua_Number val2 = tm_tonumber(L, 2);
-
 			lua_pushvector2(L, (*val1) * val2);
 			return 1;
 		}
-		else if (tp == LUA_TNUMBER) { // Number * Vector2
+		else if (lua_isnumber(L, 1)) { // Number * Vector2
 			lua_Number val1 = tm_tonumber(L, 1);
 			lua_Vector2* val2 = tm_tovector2(L, 2);
 
@@ -265,7 +263,7 @@ int vector2____unm(lua_State* L) {
 
 int vector2____lt(lua_State* L) {
 	try {
-		lua_pushboolean(L, g_vector2_norm(*tm_tovector2(L, 1)) < g_vector2_norm(*tm_tovector2(L, 2)));
+		lua_pushboolean(L, geometry_norm(*tm_tovector2(L, 1)) < geometry_norm(*tm_tovector2(L, 2)));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -276,7 +274,7 @@ int vector2____lt(lua_State* L) {
 
 int vector2____le(lua_State* L) {
 	try {
-		lua_pushboolean(L, g_vector2_norm(*tm_tovector2(L, 1)) <= g_vector2_norm(*tm_tovector2(L, 2)));
+		lua_pushboolean(L, geometry_norm(*tm_tovector2(L, 1)) <= geometry_norm(*tm_tovector2(L, 2)));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -417,7 +415,7 @@ int vector2____call(lua_State* L) {
 
 int vector2__abs(lua_State* L) {
 	try {
-		lua_pushnumber(L, g_vector2_abs(*tm_tovector2(L, 1)));
+		lua_pushnumber(L, geometry_abs(*tm_tovector2(L, 1)));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -428,7 +426,7 @@ int vector2__abs(lua_State* L) {
 
 int vector2__norm(lua_State* L) {
 	try {
-		lua_pushnumber(L, g_vector2_norm(*tm_tovector2(L, 1)));
+		lua_pushnumber(L, geometry_abs(*tm_tovector2(L, 1)));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -484,7 +482,7 @@ int vector2__distance(lua_State* L) {
 		lua_Vector2* val2 = tm_tovector2(L, 2);
 
 		lua_Vector2 ret = (*val1) - (*val2);
-		lua_pushnumber(L, g_vector2_abs(ret));
+		lua_pushnumber(L, geometry_abs(ret));
 		return 1;
 	}
 	catch (std::exception& e) {

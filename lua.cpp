@@ -27,10 +27,12 @@
 #include "table.hpp"
 
 #include "complex.hpp"
+#include "quaternion.hpp"
 #include "vector2.hpp"
 #include "vector3.hpp"
 #include "vector4.hpp"
-#include "quaternion.hpp"
+#include "matrix2.hpp"
+#include "matrix3.hpp"
 
 #include "colorlist.hpp"
 #include "color.hpp"
@@ -78,6 +80,8 @@ void luaReg(lua_State* L, nlohmann::json o, const char* module) {
 	luaReg_vector2(L, "vector2", api["geometry"]["vector2"]); //vector2
 	luaReg_vector3(L, "vector3", api["geometry"]["vector3"]); //vector3
 	luaReg_vector4(L, "vector4", api["geometry"]["vector4"]); //vector4
+	luaReg_matrix2(L, "matrix2", api["geometry"]["matrix2"]); //matrix2
+	luaReg_matrix3(L, "matrix3", api["geometry"]["matrix3"]); //matrix3
 }
 
 

@@ -18,6 +18,8 @@
        "vector2": true,
        "vector3": true,
        "vector4": true,
+       "matrix2": true,
+       "matrix3": true,
        "complex": true,
        "quaternion": true
     },

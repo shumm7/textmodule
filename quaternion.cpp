@@ -23,10 +23,10 @@ int quaternion_new(lua_State* L) {
 		lua_Number z = 0;
 
 		if (tp == LUA_TNUMBER || tp == LUA_TNONE) {
-			w = tm_tonumber_s(L, 1, 0);
-			x = tm_tonumber_s(L, 2, 0);
-			y = tm_tonumber_s(L, 3, 0);
-			z = tm_tonumber_s(L, 4, 0);
+			w = tm_tonumber(L, 1);
+			x = tm_tonumber(L, 2);
+			y = tm_tonumber(L, 3);
+			z = tm_tonumber(L, 4);
 		}
 		else if (tp == LUA_TUSERDATA && lua_isquaternion(L, 1)) {
 			auto q = tm_toquaternion(L, 1);
@@ -47,12 +47,12 @@ int quaternion_new(lua_State* L) {
 
 int quaternion_euler_new(lua_State* L) {
 	try {
-		lua_Number w = tm_tonumber_s(L, 1, 0);
-		lua_Number x = tm_tonumber_s(L, 2, 0);
-		lua_Number y = tm_tonumber_s(L, 3, 0);
+		lua_Number x = tm_tonumber(L, 1);
+		lua_Number y = tm_tonumber(L, 2);
+		lua_Number z = tm_tonumber(L, 3);
 
 		lua_Quaternion* ret = lua_pushquaternion(L);
-		*ret = AngleAxis(w, Vector3::UnitX()) * AngleAxis(x, Vector3::UnitY()) * AngleAxis(y, Vector3::UnitZ());
+		*ret = AngleAxis(x, Vector3::UnitX()) * AngleAxis(y, Vector3::UnitY()) * AngleAxis(z, Vector3::UnitZ());
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -350,7 +350,7 @@ int quaternion____div(lua_State* L) {
 
 		lua_Quaternion* vret = lua_pushquaternion(L);
 		*vret = (*val1) * ( val2->conjugate());
-		double d = g_quaternion_norm(*val2);
+		double d = geometry_norm(*val2);
 		vret->w() /= d;
 		vret->x() /= d;
 		vret->y() /= d;
@@ -387,7 +387,7 @@ int quaternion____lt(lua_State* L) {
 		lua_Quaternion* val1 = tm_toquaternion(L, 1);
 		lua_Quaternion* val2 = tm_toquaternion(L, 2);
 
-		lua_pushboolean(L, g_quaternion_norm(*val1) < g_quaternion_norm(*val2));
+		lua_pushboolean(L, geometry_norm(*val1) < geometry_norm(*val2));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -401,7 +401,7 @@ int quaternion____le(lua_State* L) {
 		lua_Quaternion* val1 = tm_toquaternion(L, 1);
 		lua_Quaternion* val2 = tm_toquaternion(L, 2);
 
-		lua_pushboolean(L, g_quaternion_norm(*val1) <= g_quaternion_norm(*val2));
+		lua_pushboolean(L, geometry_norm(*val1) <= geometry_norm(*val2));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -595,7 +595,7 @@ int quaternion__abs(lua_State* L) {
 	try {
 		lua_Quaternion* val1 = tm_toquaternion(L, 1);
 
-		lua_pushnumber(L, g_quaternion_abs(*val1));
+		lua_pushnumber(L, geometry_abs(*val1));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -608,7 +608,7 @@ int quaternion__norm(lua_State* L) {
 	try {
 		lua_Quaternion* val1 = tm_toquaternion(L, 1);
 
-		lua_pushnumber(L, g_quaternion_norm(*val1));
+		lua_pushnumber(L, geometry_norm(*val1));
 		return 1;
 	}
 	catch (std::exception& e) {

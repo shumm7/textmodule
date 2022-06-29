@@ -33,12 +33,12 @@ int os_time(lua_State* L) {
 			lua_pushnumber(L, (lua_Number)res);
 			return 1;
 		}
+		return 0;
 	}
 	catch (std::exception& e) {
 		luaL_error(L, e.what());
 		return 1;
 	}
-	return 0;
 }
 
 int os_date(lua_State* L) {

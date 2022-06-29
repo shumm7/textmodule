@@ -320,7 +320,7 @@ int vector3____unm(lua_State* L) {
 
 int vector3____lt(lua_State* L) {
 	try {
-		lua_pushboolean(L, g_vector3_norm(*tm_tovector3(L, 1)) < g_vector3_norm(*tm_tovector3(L, 2)));
+		lua_pushboolean(L, geometry_norm(*tm_tovector3(L, 1)) < geometry_norm(*tm_tovector3(L, 2)));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -331,7 +331,7 @@ int vector3____lt(lua_State* L) {
 
 int vector3____le(lua_State* L) {
 	try {
-		lua_pushboolean(L, g_vector3_norm(*tm_tovector3(L, 1)) <= g_vector3_norm(*tm_tovector3(L, 2)));
+		lua_pushboolean(L, geometry_norm(*tm_tovector3(L, 1)) <= geometry_norm(*tm_tovector3(L, 2)));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -493,7 +493,7 @@ int vector3__abs(lua_State* L) {
 	try {
 		lua_Vector3* val1 = tm_tovector3(L, 1);
 
-		lua_pushnumber(L, g_vector3_abs(*val1));
+		lua_pushnumber(L, geometry_abs(*val1));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -506,7 +506,7 @@ int vector3__norm(lua_State* L) {
 	try {
 		lua_Vector3* val1 = tm_tovector3(L, 1);
 
-		lua_pushnumber(L, g_vector3_norm(*val1));
+		lua_pushnumber(L, geometry_norm(*val1));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -576,7 +576,7 @@ int vector3__distance(lua_State* L) {
 		lua_Vector3* val2 = tm_tovector3(L, 2);
 
 		lua_Vector3 ret = (*val1) - (*val2);
-		lua_pushnumber(L, g_vector3_abs(ret));
+		lua_pushnumber(L, geometry_abs(ret));
 		return 1;
 	}
 	catch (std::exception& e) {

@@ -217,7 +217,7 @@ int complex____lt(lua_State* L) {
 		lua_Complex* val1 = tm_tocomplex(L, 1);
 		lua_Complex* val2 = tm_tocomplex(L, 2);
 
-		lua_pushboolean(L, g_complex_norm(*val1) < g_complex_norm(*val2));
+		lua_pushboolean(L, geometry_norm(*val1) < geometry_norm(*val2));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -231,7 +231,7 @@ int complex____le(lua_State* L) {
 		lua_Complex* val1 = tm_tocomplex(L, 1);
 		lua_Complex* val2 = tm_tocomplex(L, 2);
 
-		lua_pushboolean(L, g_complex_norm(*val1) <= g_complex_norm(*val2));
+		lua_pushboolean(L, geometry_norm(*val1) <= geometry_norm(*val2));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -386,7 +386,7 @@ int complex__abs(lua_State* L) {
 	try {
 		lua_Complex* val1 = tm_tocomplex(L, 1);
 
-		lua_pushnumber(L, g_complex_abs(*val1));
+		lua_pushnumber(L, geometry_abs(*val1));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -412,7 +412,7 @@ int complex__norm(lua_State* L) {
 	try {
 		lua_Complex* val1 = tm_tocomplex(L, 1);
 
-		lua_pushnumber(L, g_complex_norm(*val1));
+		lua_pushnumber(L, geometry_norm(*val1));
 		return 1;
 	}
 	catch (std::exception& e) {
@@ -451,7 +451,7 @@ int complex__polar(lua_State* L) {
 	try {
 		lua_Complex* val1 = tm_tocomplex(L, 1);
 
-		lua_pushnumber(L, g_complex_abs(*val1));
+		lua_pushnumber(L, geometry_abs(*val1));
 		lua_pushnumber(L, std::atan(val1->imag() / val1->real()));
 		return 2;
 	}

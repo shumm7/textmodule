@@ -61,8 +61,6 @@ typedef bool lua_Boolean;
 typedef utc_clock lua_Clock;
 //Type for 1024 bit integer
 typedef dec_float lua_Bignumber;
-// Type for json
-typedef nlohmann::json lua_Json;
 
 // Type of shift-jis string
 typedef std::string lua_SJIS;
@@ -100,6 +98,9 @@ typedef st_rgba32 lua_Pixel;
 typedef unsigned char lua_Pixelvar;
 //Type of 32bit bgra array
 typedef st_imgpixel lua_Image;
+
+// Type for json
+typedef nlohmann::json lua_Json;
 
 // String
 lua_Wstring lua_towstring(lua_State* L, int idx);
@@ -277,6 +278,24 @@ lua_Vector4* lua_pushvector4(lua_State* L, double x, double y, double z, double 
 lua_Vector4* lua_pushvector4(lua_State* L, lua_Vector4 vector);
 lua_Vector4* lua_pushvector4(lua_State* L);
 bool lua_isvector4(lua_State* L, int idx);
+
+// Matrix2
+lua_Matrix2* lua_tomatrix2(lua_State* L, int idx);
+lua_Matrix2* tm_tomatrix2(lua_State* L, int idx);
+lua_Matrix2* tm_tomatrix2_s(lua_State* L, int idx, lua_Matrix2 def);
+lua_Matrix2* tm_tomatrix2_s(lua_State* L, int idx);
+lua_Matrix2* lua_pushmatrix2(lua_State* L, lua_Matrix2 matrix);
+lua_Matrix2* lua_pushmatrix2(lua_State* L);
+bool lua_ismatrix2(lua_State* L, int idx);
+
+// Matrix3
+lua_Matrix3* lua_tomatrix3(lua_State* L, int idx);
+lua_Matrix3* tm_tomatrix3(lua_State* L, int idx);
+lua_Matrix3* tm_tomatrix3_s(lua_State* L, int idx, lua_Matrix3 def);
+lua_Matrix3* tm_tomatrix3_s(lua_State* L, int idx);
+lua_Matrix3* lua_pushmatrix3(lua_State* L, lua_Matrix3 matrix);
+lua_Matrix3* lua_pushmatrix3(lua_State* L);
+bool lua_ismatrix3(lua_State* L, int idx);
 
 // Color
 lua_Color* lua_tocolor(lua_State* L, int idx);
