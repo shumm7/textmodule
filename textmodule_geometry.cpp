@@ -32,6 +32,11 @@ double geometry_norm(Eigen::Matrix3d value) {
 	return std::pow(value.norm(), 2);
 }
 
+double geometry_norm(Eigen::Matrix4d value) {
+	return std::pow(value.norm(), 2);
+}
+
+
 
 double geometry_abs(std::complex<double> value) {
 	return std::abs(value);
@@ -58,6 +63,10 @@ double geometry_abs(Eigen::Matrix2d value) {
 }
 
 double geometry_abs(Eigen::Matrix3d value) {
+	return value.norm();
+}
+
+double geometry_abs(Eigen::Matrix4d value) {
 	return value.norm();
 }
 

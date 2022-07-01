@@ -180,6 +180,7 @@
     <ClCompile Include="cmath.cpp" />
     <ClCompile Include="matrix2.cpp" />
     <ClCompile Include="matrix3.cpp" />
+    <ClCompile Include="matrix4.cpp" />
     <ClCompile Include="mecab.cpp" />
     <ClCompile Include="MultipartEncoder\multipart_parser.cpp" />
     <ClCompile Include="numeric.cpp" />
@@ -193,7 +194,6 @@
     <ClCompile Include="sequence.cpp" />
     <ClCompile Include="sjis.cpp" />
     <ClCompile Include="string.cpp" />
-    <ClCompile Include="table.cpp" />
     <ClCompile Include="textmodule_exception.cpp" />
     <ClCompile Include="textmodule_fmt.cpp" />
     <ClCompile Include="textmodule_strtmp.cpp" />
@@ -240,6 +240,7 @@
     <ClInclude Include="http.hpp" />
     <ClInclude Include="image.hpp" />
     <ClInclude Include="json.hpp" />
+    <ClInclude Include="matrix4.hpp" />
     <ClInclude Include="matrix2.hpp" />
     <ClInclude Include="matrix3.hpp" />
     <ClInclude Include="mecab.hpp" />
@@ -255,7 +256,6 @@
     <ClInclude Include="sequence.hpp" />
     <ClInclude Include="sjis.hpp" />
     <ClInclude Include="string.hpp" />
-    <ClInclude Include="table.hpp" />
     <ClInclude Include="textmodule_fmt.hpp" />
     <ClInclude Include="textmodule_strtmp.hpp" />
     <ClInclude Include="textmodule.hpp" />

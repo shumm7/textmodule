@@ -11,6 +11,7 @@ typedef Eigen::Vector3d Vector3;
 typedef Eigen::Vector4d Vector4;
 typedef Eigen::Matrix2d Matrix2;
 typedef Eigen::Matrix3d Matrix3;
+typedef Eigen::Matrix4d Matrix4;
 typedef Eigen::AngleAxisd AngleAxis;
 
 typedef struct ColorItem { std::wstring color = L""; std::wstring name = L""; std::wstring japanese = L""; std::wstring english = L""; };

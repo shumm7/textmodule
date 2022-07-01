@@ -24,7 +24,6 @@
 #include "device.hpp"
 #include "time.hpp"
 #include "json.hpp"
-#include "table.hpp"
 
 #include "complex.hpp"
 #include "quaternion.hpp"
@@ -33,6 +32,7 @@
 #include "vector4.hpp"
 #include "matrix2.hpp"
 #include "matrix3.hpp"
+#include "matrix4.hpp"
 
 #include "colorlist.hpp"
 #include "color.hpp"
@@ -66,7 +66,6 @@ void luaReg(lua_State* L, nlohmann::json o, const char* module) {
 	luaReg_device(L, "device", api["device"]); //device
 	luaReg_time(L, "time", api["time"]); //time
 	luaReg_json(L, "json", api["json"]); //json
-	luaReg_table(L, "table", api["table"]); //table
 
 	//color
 	luaReg_color(L, "color", api["color"]["color"]); //color
@@ -82,6 +81,7 @@ void luaReg(lua_State* L, nlohmann::json o, const char* module) {
 	luaReg_vector4(L, "vector4", api["geometry"]["vector4"]); //vector4
 	luaReg_matrix2(L, "matrix2", api["geometry"]["matrix2"]); //matrix2
 	luaReg_matrix3(L, "matrix3", api["geometry"]["matrix3"]); //matrix3
+	luaReg_matrix4(L, "matrix4", api["geometry"]["matrix4"]); //matrix4
 }
 
 

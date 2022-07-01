@@ -20,6 +20,7 @@
 #define TEXTMODULE_VECTOR4 "Eigen::Vector4d*"
 #define TEXTMODULE_MATRIX2 "Eigen::Matrix2d*"
 #define TEXTMODULE_MATRIX3 "Eigen::Matrix3d*"
+#define TEXTMODULE_MATRIX4 "Eigen::Matrix4d*"
 #define TEXTMODULE_COMPLEX "std::complex<double>*"
 #define TEXTMODULE_QUATERNION "Eigen::Quaterniond*"
 
@@ -87,6 +88,8 @@ typedef Vector4	lua_Vector4;
 typedef Matrix2	lua_Matrix2;
 //Type for matrix3 class
 typedef Matrix3	lua_Matrix3;
+//Type for matrix4 class
+typedef Matrix4	lua_Matrix4;
 
 //Type for rgba class
 typedef st_rgba lua_Color;
@@ -296,6 +299,15 @@ lua_Matrix3* tm_tomatrix3_s(lua_State* L, int idx);
 lua_Matrix3* lua_pushmatrix3(lua_State* L, lua_Matrix3 matrix);
 lua_Matrix3* lua_pushmatrix3(lua_State* L);
 bool lua_ismatrix3(lua_State* L, int idx);
+
+// Matrix4
+lua_Matrix4* lua_tomatrix4(lua_State* L, int idx);
+lua_Matrix4* tm_tomatrix4(lua_State* L, int idx);
+lua_Matrix4* tm_tomatrix4_s(lua_State* L, int idx, lua_Matrix4 def);
+lua_Matrix4* tm_tomatrix4_s(lua_State* L, int idx);
+lua_Matrix4* lua_pushmatrix4(lua_State* L, lua_Matrix4 matrix);
+lua_Matrix4* lua_pushmatrix4(lua_State* L);
+bool lua_ismatrix4(lua_State* L, int idx);
 
 // Color
 lua_Color* lua_tocolor(lua_State* L, int idx);

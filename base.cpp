@@ -8,6 +8,9 @@
 #include <fmt/format.h>
 #include <fmt/chrono.h>
 
+#include <boost/version.hpp>
+#include <Eigen/Core>
+
 #include "textmodule.hpp"
 #include "textmodule_string.hpp"
 #include "textmodule_exception.hpp"
@@ -16,6 +19,7 @@
 
 static const int sentinel_ = 0;
 #define sentinel        ((void *)&sentinel_)
+#define abs_index(L, i)         ((i) > 0 || (i) <= LUA_REGISTRYINDEX ? (i) : lua_gettop(L) + (i) + 1)
 
 int pairsaux(lua_State* L, const char* method, int iszero, lua_CFunction iter) {
 	if (!luaL_getmetafield(L, 1, method)) {  /* no metamethod? */
@@ -80,14 +84,7 @@ int base_getinfo(lua_State* L) {
 			return 1;
 		}
 		else if (t == L"lua") {
-			if (i == 1)
-				lua_pushstring(L, LUA_VERSION);
-			else if (i == 2)
-				lua_pushstring(L, LUA_RELEASE);
-			else if (i == 3)
-				lua_pushnumber(L, LUA_VERSION_NUM);
-			else
-				return 0;
+			lua_getglobal(L, "_VERSION");
 			return 1;
 		}
 
@@ -99,30 +96,48 @@ int base_getinfo(lua_State* L) {
 	}
 }
 
+void base_showtable_aux(lua_State* L, std::string* ret, int idx, int depth, bool tree) {
+	int p = lua_gettop(L);
+
+	lua_pushnil(L);
+	lua_Sstring key;
+	lua_Sstring value;
+
+	while (lua_next(L, idx) != 0) {
+
+		if (ret->length() != 0)
+			*ret += "\n";
+
+		if (lua_type(L, -2) == LUA_TNUMBER)
+			key = WstrToStr(tostring_n(lua_tonumber(L, -2)));
+		else
+			key = tm_convtostring(L, -2);
+
+		if (lua_type(L, -1) == LUA_TTABLE && tree) {
+			value = tm_convtostring(L, -1);
+			*ret += std::string(depth, '\t') + std::string("[" + key + "] " + value);
+			base_showtable_aux(L, ret, abs_index(L, -1), depth + 1, tree);
+		}
+		else {
+			value = tm_convtostring(L, -1);
+			*ret += std::string(depth, '\t') + std::string("[" + key + "] " + value);
+		}
+
+		lua_pop(L, 1);
+	}
+
+	lua_settop(L, p);
+}
+
 int base_showtable(lua_State* L) {
 	try {
 		if (!lua_istable(L, 1))
 			return luaL_argerror(L, 1, "table expected");
+		bool tree = tm_toboolean_s(L, 2, false);
+		lua_settop(L, 1);
 
-		lua_pushnil(L);
-		lua_Sstring key;
-		lua_Sstring value;
-		lua_Sstring ret = "";
-
-		while (lua_next(L, 1) != 0) {
-			if(ret.length()!=0)
-				ret += "\n";
-
-			if (lua_type(L, -2) == LUA_TNUMBER)
-				key = WstrToStr(tostring_n(lua_tonumber(L, -2)));
-			else
-				key = tm_convtostring(L, -2);
-
-			value = tm_convtostring(L, -1);
-			ret += std::string("[" + key + "] " + value);
-
-			lua_pop(L, 1);
-		}
+		std::string ret = "";
+		base_showtable_aux(L, &ret, 1, 0, tree);
 
 		lua_pushsstring(L, ret);
 		return 1;
@@ -175,6 +190,10 @@ int base_showmetatable(lua_State* L) {
 int base_maketable(lua_State* L) {
 	try {
 		int n = lua_gettop(L);
+		if (n == 1) {
+			if (tm_callmetan(L, 1, "__table"))
+				return 1;
+		}
 
 		lua_newtable(L);
 		for (int i = 0; i < n; i++) {

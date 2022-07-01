@@ -420,14 +420,14 @@ int matrix3__table(lua_State* L) {
 		lua_settablevalue(L, 3, val(0, 2));
 		lua_settable(L, -3);
 
-		lua_pushinteger(L, 1);
+		lua_pushinteger(L, 2);
 		lua_newtable(L);
 		lua_settablevalue(L, 1, val(1, 0));
 		lua_settablevalue(L, 2, val(1, 1));
 		lua_settablevalue(L, 3, val(1, 2));
 		lua_settable(L, -3);
 
-		lua_pushinteger(L, 1);
+		lua_pushinteger(L, 3);
 		lua_newtable(L);
 		lua_settablevalue(L, 1, val(2, 0));
 		lua_settablevalue(L, 2, val(2, 1));

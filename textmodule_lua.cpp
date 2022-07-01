@@ -1263,6 +1263,83 @@ bool lua_ismatrix3(lua_State* L, int idx) {
 }
 
 
+// Matrix4
+lua_Matrix4* lua_tomatrix4(lua_State* L, int idx) {
+	return reinterpret_cast<Matrix4*>(luaL_checkudata(L, idx, TEXTMODULE_MATRIX4));
+}
+
+lua_Matrix4* tm_tomatrix4(lua_State* L, int idx) {
+	luaL_argcheck(L, lua_type(L, idx) == LUA_TUSERDATA && luaL_checkmetatable(L, idx, TEXTMODULE_MATRIX4), idx, "matrix4 expected");
+	return lua_tomatrix4(L, idx);
+}
+
+lua_Matrix4* tm_tomatrix4_s(lua_State* L, int idx, lua_Matrix4 def) {
+	int tp = lua_type(L, idx);
+	luaL_argcheck(L, tp == LUA_TUSERDATA || tp == LUA_TNONE, idx, "matrix4/none expected");
+	Matrix4* val = new Matrix4();
+
+	if (tp == LUA_TUSERDATA) {
+		val = lua_tomatrix4(L, idx);
+	}
+	else if (tp == LUA_TNONE) {
+		(*val)(0, 0) = def(0, 0);
+		(*val)(0, 1) = def(0, 1);
+		(*val)(0, 2) = def(0, 2);
+		(*val)(0, 3) = def(0, 3);
+		(*val)(1, 0) = def(1, 0);
+		(*val)(1, 1) = def(1, 1);
+		(*val)(1, 2) = def(1, 2);
+		(*val)(1, 3) = def(1, 3);
+		(*val)(2, 0) = def(2, 0);
+		(*val)(2, 1) = def(2, 1);
+		(*val)(2, 2) = def(2, 2);
+		(*val)(2, 3) = def(2, 3);
+		(*val)(3, 0) = def(3, 0);
+		(*val)(3, 1) = def(3, 1);
+		(*val)(3, 2) = def(3, 2);
+		(*val)(3, 3) = def(3, 3);
+	}
+
+	return val;
+}
+
+lua_Matrix4* tm_tomatrix4_s(lua_State* L, int idx) {
+	return tm_tomatrix4_s(L, idx, Matrix4::Zero());
+}
+
+lua_Matrix4* lua_pushmatrix4(lua_State* L, lua_Matrix4 matrix) {
+	Matrix4* ret = reinterpret_cast<Matrix4*>(lua_newuserdata(L, sizeof(Matrix4)));
+	luaL_getmetatable(L, TEXTMODULE_MATRIX4);
+	lua_setmetatable(L, -2);
+
+	(*ret)(0, 0) = matrix(0, 0);
+	(*ret)(0, 1) = matrix(0, 1);
+	(*ret)(0, 2) = matrix(0, 2);
+	(*ret)(0, 3) = matrix(0, 3);
+	(*ret)(1, 0) = matrix(1, 0);
+	(*ret)(1, 1) = matrix(1, 1);
+	(*ret)(1, 2) = matrix(1, 2);
+	(*ret)(1, 3) = matrix(1, 3);
+	(*ret)(2, 0) = matrix(2, 0);
+	(*ret)(2, 1) = matrix(2, 1);
+	(*ret)(2, 2) = matrix(2, 2);
+	(*ret)(2, 3) = matrix(2, 3);
+	(*ret)(3, 0) = matrix(3, 0);
+	(*ret)(3, 1) = matrix(3, 1);
+	(*ret)(3, 2) = matrix(3, 2);
+	(*ret)(3, 3) = matrix(3, 3);
+	return ret;
+}
+
+lua_Matrix4* lua_pushmatrix4(lua_State* L) {
+	return lua_pushmatrix4(L, Matrix4::Zero());
+}
+
+bool lua_ismatrix4(lua_State* L, int idx) {
+	return lua_type(L, idx) == LUA_TUSERDATA && luaL_checkmetatable(L, idx, TEXTMODULE_MATRIX4);
+}
+
+
 // Color
 lua_Color* lua_tocolor(lua_State* L, int idx) {
 	return reinterpret_cast<lua_Color*>(luaL_checkudata(L, idx, TEXTMODULE_COLOR));

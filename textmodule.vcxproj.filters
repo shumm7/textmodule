@@ -255,11 +255,11 @@
     <ClCompile Include="textmodule_exception.cpp">
       <Filter>ソース ファイル\lib</Filter>
     </ClCompile>
-    <ClCompile Include="table.cpp">
-      <Filter>ソース ファイル\function</Filter>
-    </ClCompile>
     <ClCompile Include="textmodule_fmt.cpp">
       <Filter>ソース ファイル\lib</Filter>
+    </ClCompile>
+    <ClCompile Include="matrix4.cpp">
+      <Filter>ソース ファイル\function\geometry</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -443,11 +443,11 @@
     <ClInclude Include="sequence.hpp">
       <Filter>ヘッダー ファイル\function\math</Filter>
     </ClInclude>
-    <ClInclude Include="table.hpp">
-      <Filter>ヘッダー ファイル\function</Filter>
-    </ClInclude>
     <ClInclude Include="textmodule_fmt.hpp">
       <Filter>ヘッダー ファイル\lib</Filter>
+    </ClInclude>
+    <ClInclude Include="matrix4.hpp">
+      <Filter>ヘッダー ファイル\function\geometry</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
