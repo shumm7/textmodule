@@ -1,8 +1,8 @@
+#include "textmodule.hpp"
+
 #include <iostream>
 #include <windows.h>
 #include <filesystem>
-
-#define DLLDIR "./textmodule/bin"
 
 std::wstring getVersionNum(int num) {
 	switch (num) {
@@ -37,28 +37,12 @@ std::wstring getVersionNum(int num) {
 	case 29: return L"1.3.6";
 	case 30: return L"1.3.7";
 	case 31: return L"1.4.0";
-	case 32: return L"1.4.1";
+	case 141: return L"1.4.1";
 
 	default: return L"";
 	}
 }
 
 void SetDllPath() {
-	SetDllDirectory(std::filesystem::canonical(DLLDIR).string().c_str());
-}
-
-HWND GetAviUtlWindowHandle() {
-	DWORD dwProcessId = GetCurrentProcessId();
-	HWND hWnd = GetTopWindow(0);
-	DWORD pid;
-
-	do {
-		if (GetWindowLongA(hWnd, GWL_HWNDPARENT) == NULL) {
-			GetWindowThreadProcessId(hWnd, &pid);
-			if ((&pid)[0] == dwProcessId) break;
-		}
-		hWnd = GetWindow(hWnd, GW_HWNDNEXT);
-	} while (hWnd != NULL);
-
-	return hWnd;
+	SetDllDirectory(std::filesystem::canonical(MODULE_DLLDIR).string().c_str());
 }

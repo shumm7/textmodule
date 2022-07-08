@@ -413,10 +413,14 @@ static luaL_Reg TEXTMODULE_FILESYSTEM_REG[] = {
 	{ nullptr, nullptr }
 };
 
-void luaReg_filesystem(lua_State* L, const char* name, bool reg) {
-	if (reg) {
+void luaReg_filesystem(lua_State* L, lua_Option opt) {
+	if (opt["api"]["filesystem"]) {
+		tm_debuglog_apiloaded(opt, "filesystem");
 		lua_newtable(L);
 		luaL_register(L, NULL, TEXTMODULE_FILESYSTEM_REG);
-		lua_setfield(L, -2, name);
+		lua_setfield(L, -2, "filesystem");
+	}
+	else {
+		tm_debuglog_apinoloaded(opt, "filesystem");
 	}
 }

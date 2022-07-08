@@ -616,6 +616,7 @@ int tmstring_count(lua_State* L) {
 	}
 }
 
+
 void luaReg_const_tmstring(lua_State* L) {
 		lua_settablevalue(L, "number", S_NUMBER);
 		lua_settablevalue(L, "hex_digits", S_HEX_DIGITS);

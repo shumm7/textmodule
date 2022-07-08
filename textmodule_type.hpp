@@ -20,6 +20,7 @@ typedef std::vector<ColorItem> ColorList;
 typedef struct { double r; double g; double b; double a; }st_rgba;
 typedef struct { unsigned char r; unsigned char g; unsigned char b; unsigned char a; }st_rgba32;
 typedef struct { unsigned char b; unsigned char g; unsigned char r; unsigned char a; }st_imgpixel;
+typedef struct { st_imgpixel* pixel; int width; int height; }st_img;
 
 typedef std::chrono::utc_clock::time_point utc_clock;
 typedef boost::multiprecision::number<boost::multiprecision::cpp_dec_float<1024>> dec_float;

@@ -2,12 +2,16 @@
 #include <lua.hpp>
 #include <iostream>
 #include <vector>
+#include <nlohmann/json.hpp>
 
 const char* lua_typeexception(std::vector<std::string> type);
 const char* lua_typeexception(std::string type);
 int luaL_argerror(lua_State* L, int numarg, std::string extramsg);
 int luaL_typeexception(lua_State* L, int numarg, std::vector<std::string> type);
 int luaL_typeexception(lua_State* L, int numarg, std::string type);
+
+void tm_debuglog(std::string message, nlohmann::json option);
+
 
 //general
 #define WRONG_NUMBER_OF_ARGS "wrong number of arguments"
@@ -35,3 +39,6 @@ int luaL_typeexception(lua_State* L, int numarg, std::string type);
 //string
 #define STRING_COVERSION_FAILED "string conversion failed"
 #define INVALID_CHARACTER "invalid character"
+
+//obj
+#define EXEDIT_AUF_NOTFOUND "exedit.auf was not found"

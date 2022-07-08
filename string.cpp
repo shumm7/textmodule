@@ -303,8 +303,10 @@ static luaL_Reg TEXTMODULE_STRING_REG[] = {
 	{ nullptr, nullptr }
 };
 
-void luaReg_string(lua_State* L, const char* name, bool reg) {
-	if (reg) {
+void luaReg_string(lua_State* L, lua_Option opt) {
+	if (opt["api"]["string"]) {
+		tm_debuglog_apiloaded(opt, "string");
+
 		lua_newtable(L);
 
 		//string tmstring mecab
@@ -319,6 +321,9 @@ void luaReg_string(lua_State* L, const char* name, bool reg) {
 		luaReg_utf32(L);
 		luaReg_eucjp(L);
 
-		lua_setfield(L, -2, name);
+		lua_setfield(L, -2, "string");
+	}
+	else {
+		tm_debuglog_apinoloaded(opt, "string");
 	}
 }

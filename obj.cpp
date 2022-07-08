@@ -105,7 +105,7 @@ int obj_find_ctrl(lua_State* L) {
 	}
 }
 
-int obj_cbool(lua_State* L) {
+int obj_boolean(lua_State* L) {
 	try {
 		std::string str;
 		switch (lua_type(L, 1))
@@ -139,6 +139,7 @@ int obj_cbool(lua_State* L) {
 		return 1;
 	}
 }
+
 
 void luaReg_const_figure(lua_State* L, const char* name) {
 	lua_newtable(L);
@@ -205,12 +206,14 @@ void luaReg_const_blend(lua_State* L, const char* name) {
 static luaL_Reg TEXTMODULE_OBJ_REG[] = {
 	{"remove_ctrl", obj_remove_ctrl},
 	{"find_ctrl", obj_find_ctrl},
-	{"cbool", obj_cbool},
+	{"boolean", obj_boolean},
 	{nullptr, nullptr}
 };
 
-void luaReg_obj(lua_State* L, const char* name, bool reg) {
-	if (reg) {
+void luaReg_obj(lua_State* L, lua_Option opt) {
+	if (opt["api"]["object"]) {
+		tm_debuglog_apiloaded(opt, "object");
+
 		lua_newtable(L);
 		luaL_register(L, NULL, TEXTMODULE_OBJ_REG);
 
@@ -218,6 +221,9 @@ void luaReg_obj(lua_State* L, const char* name, bool reg) {
 		luaReg_const_object(L, "object");
 		luaReg_const_blend(L, "blend");
 
-		lua_setfield(L, -2, name);
+		lua_setfield(L, -2, "object");
+	}
+	else {
+		tm_debuglog_apinoloaded(opt, "object");
 	}
 }

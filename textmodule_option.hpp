@@ -1,5 +1,6 @@
 #pragma once
 #include <nlohmann/json.hpp>
+#include "textmodule_lua.hpp"
 
 #define OPTION_VMODULE "module"
 #define OPTION_VMODULE_ALIAS "module-alias"
@@ -15,10 +16,11 @@
 #define VERSION_CHECK_MSG_ERROR "version check failed"
 #define VERSION_CHECK_MSG_OUTDATED "textmodule is outdated"
 
+typedef lua_Json lua_Option;
+
 nlohmann::json getOption();
-
-bool getOptionParamB(nlohmann::json j, std::string p1);
-bool getOptionParamB(nlohmann::json j, std::string p1, std::string p2);
-bool getOptionParamB(nlohmann::json j, std::string p1, std::string p2, std::string p3);
-
 int versionCheck();
+
+void tm_debuglog(lua_Option opt, lua_Sstring tag, lua_Sstring log);
+void tm_debuglog_apiloaded(lua_Option opt, lua_Sstring apiname);
+void tm_debuglog_apinoloaded(lua_Option opt, lua_Sstring apiname);

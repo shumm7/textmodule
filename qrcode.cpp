@@ -68,10 +68,14 @@ static luaL_Reg TEXTMODULE_QRCODE_REG[] = {
 	{ nullptr, nullptr }
 };
 
-void luaReg_qrcode(lua_State* L, const char* name, bool reg) {
-	if (reg) {
+void luaReg_qrcode(lua_State* L, lua_Option opt) {
+	if (opt["api"]["qrcode"]) {
+		tm_debuglog_apiloaded(opt, "qrcode");
 		lua_newtable(L);
 		luaL_register(L, NULL, TEXTMODULE_QRCODE_REG);
-		lua_setfield(L, -2, name);
+		lua_setfield(L, -2, "qrcode");
+	}
+	else {
+		tm_debuglog_apinoloaded(opt, "qrcode");
 	}
 }

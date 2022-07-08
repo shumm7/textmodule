@@ -9,8 +9,13 @@
 #include <string>
 #include <regex>
 
+#include <fmt/core.h>
+#include <fmt/format.h>
+#include <fmt/chrono.h>
+
 #include "textmodule.hpp"
 #include "textmodule_string.hpp"
+#include "textmodule_lua.hpp"
 
 #define OPTION_PATH ".\\textmodule\\config.json"
 #define VERSION_CHECK_URL L"https://raw.githubusercontent.com/shumm7/textmodule/main/VERSION"
@@ -28,18 +33,6 @@ nlohmann::json getOption() {
 	return j;
 }
 
-bool getOptionParamB(nlohmann::json j, std::string p1) {
-	return j[p1].get<bool>();
-}
-
-bool getOptionParamB(nlohmann::json j, std::string p1, std::string p2) {
-	return j[p1][p2].get<bool>();
-}
-
-bool getOptionParamB(nlohmann::json j, std::string p1, std::string p2, std::string p3) {
-	return j[p1][p2][p3].get<bool>();
-}
-
 int versionCheck() {
 	try {
 		std::wstring url = VERSION_CHECK_URL;
@@ -50,12 +43,11 @@ int versionCheck() {
 
 		if (response.status_code() == status_codes::OK) {
 			std::wstring v = std::regex_replace(response.extract_string().get(), wregex(L"\n"), L"\0");
-			if (v == tostring_n(MODULE_VERSION)) {
+			if (v == tostring_n(MODULE_VERSION))
 				return VERSION_CHECK_LATEST;
-			}
-			else {
+			else
 				return VERSION_CHECK_OUTDATED;
-			}
+
 		}
 		else {
 			return VERSION_CHECK_ERROR;
@@ -64,4 +56,33 @@ int versionCheck() {
 	catch (std::exception) {
 		return VERSION_CHECK_ERROR;
 	}
+}
+
+
+void tm_debuglog(lua_Option opt, lua_Sstring tag, lua_Sstring log) {
+	if (opt["debug"]) {
+		fmt::dynamic_format_arg_store<fmt::format_context> store;
+
+		std::tm tm;
+		__time64_t time_t = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+		_localtime64_s(&tm, &time_t);
+		store.push_back(tm);
+		store.push_back(tag);
+		store.push_back(log);
+
+		std::string c = fmt::vformat("[{0:%Y-%m-%d %H-%M-%S}] (textmodule): debug log: [{1:s}] {2:s}", store);
+
+		OutputDebugString(c.c_str());
+		std::cout << c << std::endl;
+	}
+}
+
+void tm_debuglog_apiloaded(lua_Option opt, lua_Sstring apiname) {
+	std::string s = apiname + std::string(" was successfully loaded");
+	tm_debuglog(opt, "API", s);
+}
+
+void tm_debuglog_apinoloaded(lua_Option opt, lua_Sstring apiname) {
+	std::string s = apiname + std::string(" was not loaded");
+	tm_debuglog(opt, "API", s);
 }

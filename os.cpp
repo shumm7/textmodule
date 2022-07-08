@@ -156,6 +156,16 @@ int os_sleep(lua_State* L) {
 	}
 }
 
+int os_exit(lua_State* L) {
+	try {
+		exit(luaL_optint(L, 1, EXIT_SUCCESS));
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
 
 static luaL_Reg TEXTMODULE_OS_REG[] = {
 	{"time", os_time},
@@ -163,13 +173,18 @@ static luaL_Reg TEXTMODULE_OS_REG[] = {
 	{"difftime", os_difftime},
 	{"clock", os_clock},
 	{"sleep", os_sleep},
+	{"exit", os_exit},
 	{ nullptr, nullptr }
 };
 
-void luaReg_os(lua_State* L, const char* name, bool reg) {
-	if (reg) {
+void luaReg_os(lua_State* L, lua_Option opt) {
+	if (opt["api"]["os"]) {
+		tm_debuglog_apiloaded(opt, "os");
 		lua_newtable(L);
 		luaL_register(L, NULL, TEXTMODULE_OS_REG);
-		lua_setfield(L, -2, name);
+		lua_setfield(L, -2, "os");
+	}
+	else {
+		tm_debuglog_apinoloaded(opt, "os");
 	}
 }

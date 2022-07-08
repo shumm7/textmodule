@@ -115,12 +115,12 @@ void base_showtable_aux(lua_State* L, std::string* ret, int idx, int depth, bool
 
 		if (lua_type(L, -1) == LUA_TTABLE && tree) {
 			value = tm_convtostring(L, -1);
-			*ret += std::string(depth, '\t') + std::string("[" + key + "] " + value);
+			*ret += std::string(depth, '\t') + std::string("[" + key + "] ") + value;
 			base_showtable_aux(L, ret, abs_index(L, -1), depth + 1, tree);
 		}
 		else {
 			value = tm_convtostring(L, -1);
-			*ret += std::string(depth, '\t') + std::string("[" + key + "] " + value);
+			*ret += std::string(depth, '\t') + std::string("[" + key + "] ") + value;
 		}
 
 		lua_pop(L, 1);
@@ -292,6 +292,26 @@ int base_exception(lua_State* L) {
 	return 0;
 }
 
+int base_error(lua_State* L) {
+	try {
+		int n = lua_gettop(L);
+		switch (n) {
+		case 0:
+			return lua_error(L);
+		case 1:
+			return luaL_error(L, tm_tostring(L, 1));
+		case 2:
+			return luaL_argerror(L, tm_tointeger(L, 1), tm_tostring(L, 2));
+		default:
+			return 0;
+		}
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
 int base_versioncheck(lua_State* L) {
 	try {
 		int res = versionCheck();
@@ -321,12 +341,12 @@ int base_tostring(lua_State* L) {
 	try {
 		int s = lua_gettop(L);
 		if (s < 1) {
-			lua_pushstring(L, tm_convtostring(L, 1));
+			lua_pushsstring(L, tm_convtostring(L, 1));
 			return 1;
 		}
 
 		for (int i = 0; i < s; i++) {
-			lua_pushstring(L, tm_convtostring(L, i+1));
+			lua_pushsstring(L, tm_convtostring(L, i+1));
 		}
 		return s;
 	}
@@ -456,6 +476,7 @@ static luaL_Reg TEXTMODULE_BASE_REG[] = {
 	{"print", base_print},
 	{"printf", base_printf},
 	{"exception", base_exception},
+	{"error", base_error},
 	{"versioncheck", base_versioncheck},
 	{"tostring", base_tostring},
 	{"tonumber", base_tonumber},
@@ -468,8 +489,12 @@ static luaL_Reg TEXTMODULE_BASE_REG[] = {
 	{ nullptr, nullptr }
 };
 
-void luaReg_base(lua_State* L, bool reg) {
-	if (reg) {
+void luaReg_base(lua_State* L, lua_Option opt) {
+	if (opt["api"]["base"]) {
+		tm_debuglog_apiloaded(opt, "base");
 		luaL_register(L, NULL, TEXTMODULE_BASE_REG);
+	}
+	else {
+		tm_debuglog_apinoloaded(opt, "base");
 	}
 }

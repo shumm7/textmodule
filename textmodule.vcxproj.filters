@@ -261,6 +261,12 @@
     <ClCompile Include="matrix4.cpp">
       <Filter>ソース ファイル\function\geometry</Filter>
     </ClCompile>
+    <ClCompile Include="textmodule_aviutl.cpp">
+      <Filter>ソース ファイル\lib</Filter>
+    </ClCompile>
+    <ClCompile Include="exedit.cpp">
+      <Filter>ソース ファイル\function</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="os.hpp">
@@ -448,6 +454,12 @@
     </ClInclude>
     <ClInclude Include="matrix4.hpp">
       <Filter>ヘッダー ファイル\function\geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="textmodule_aviutl.hpp">
+      <Filter>ヘッダー ファイル\lib</Filter>
+    </ClInclude>
+    <ClInclude Include="exedit.hpp">
+      <Filter>ヘッダー ファイル\function</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

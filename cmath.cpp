@@ -633,8 +633,10 @@ static luaL_Reg TEXTMODULE_CMATH_REG[] = {
 	{ nullptr, nullptr }
 };
 
-void luaReg_cmath(lua_State* L, const char* name, bool reg) {
-	if (reg) {
+void luaReg_cmath(lua_State* L, lua_Option opt) {
+	if (opt["api"]["math"]) {
+		tm_debuglog_apiloaded(opt, "math");
+
 		lua_newtable(L);
 
 		//bignumber
@@ -649,6 +651,9 @@ void luaReg_cmath(lua_State* L, const char* name, bool reg) {
 		luaL_register(L, NULL, TEXTMODULE_CMATH_REG);
 		luaReg_numeric(L);
 		luaReg_sequence(L);
-		lua_setfield(L, -2, name);
+		lua_setfield(L, -2, "math");
+	}
+	else {
+		tm_debuglog_apinoloaded(opt, "math");
 	}
 }

@@ -13,6 +13,10 @@
 
 #include <nlohmann/json.hpp>
 
+#pragma comment(lib, "Crypt32.lib")
+#pragma comment(lib, "Bcrypt.lib")
+#pragma comment(lib, "Winhttp.lib")
+
 #include "textmodule_type.hpp"
 
 #define TEXTMODULE_VECTOR2 "Eigen::Vector2d*"
@@ -100,7 +104,9 @@ typedef st_rgba32 lua_Pixel;
 //Type for value of 32bit rgba class
 typedef unsigned char lua_Pixelvar;
 //Type of 32bit bgra array
-typedef st_imgpixel lua_Image;
+typedef st_imgpixel lua_Imagevar;
+//Type of image
+typedef st_img lua_Image;
 
 // Type for json
 typedef nlohmann::json lua_Json;
@@ -204,6 +210,9 @@ void lua_settablevalue(lua_State* L, int key, lua_Sstring value);
 void lua_settablevalue(lua_State* L, int key, lua_Wstring value);
 void lua_settablevalue(lua_State* L, int key, lua_Bignumber value);
 void lua_settablevalue(lua_State* L, int key, lua_Complex value);
+void lua_settablevalue(lua_State* L, int key, lua_Vector2 value);
+void lua_settablevalue(lua_State* L, int key, lua_Vector3 value);
+void lua_settablevalue(lua_State* L, int key, lua_Vector4 value);
 void lua_settablevalue(lua_State* L, const char* key, lua_Number value);
 void lua_settablevalue(lua_State* L, const char* key, lua_Integer value);
 void lua_settablevalue(lua_State* L, const char* key, lua_Boolean value);
@@ -212,6 +221,9 @@ void lua_settablevalue(lua_State* L, const char* key, lua_Sstring value);
 void lua_settablevalue(lua_State* L, const char* key, lua_Wstring value);
 void lua_settablevalue(lua_State* L, const char* key, lua_Bignumber value);
 void lua_settablevalue(lua_State* L, const char* key, lua_Complex value);
+void lua_settablevalue(lua_State* L, const char* key, lua_Vector2 value);
+void lua_settablevalue(lua_State* L, const char* key, lua_Vector3 value);
+void lua_settablevalue(lua_State* L, const char* key, lua_Vector4 value);
 void lua_setfield(lua_State* L, int idx, lua_Sstring k);
 void lua_setfield(lua_State* L, int idx, lua_Wstring k);
 bool lua_isarray(lua_State* L, int idx);
@@ -340,7 +352,7 @@ lua_Image* lua_convertcache(lua_State* L, int idx);
 // Misc
 bool luaL_checkmetatable(lua_State* L, int ud, const char* tname);
 void luaL_newmetatable(lua_State* L, const char* name, const luaL_Reg* methods);
-const char* tm_convtostring(lua_State* L, int idx);
+std::string tm_convtostring(lua_State* L, int idx);
 const char* tm_typename(lua_State* L, int idx);
 void lua_printstack(lua_State* L);
 int lua_pushtmstruct(lua_State* L, std::tm* tmstruct);

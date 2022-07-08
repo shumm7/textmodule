@@ -13,7 +13,7 @@
 
 int image_set(lua_State* L) {
 	try {
-		lua_Image* val = lua_convertcache(L, 1);
+		lua_Imagevar* val = lua_convertcache(L, 1);
 		return 0;
 	}
 	catch (std::exception& e) {

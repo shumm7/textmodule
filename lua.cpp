@@ -24,6 +24,7 @@
 #include "device.hpp"
 #include "time.hpp"
 #include "json.hpp"
+#include "exedit.hpp"
 
 #include "complex.hpp"
 #include "quaternion.hpp"
@@ -39,33 +40,34 @@
 #include "pixel.hpp"
 #include "image.hpp"
 
-void luaReg(lua_State* L, nlohmann::json o, const char* module) {
+void luaReg(lua_State* L, nlohmann::json opt, const char* module) {
 	//create base table
 	static luaL_Reg none[] = {
 		{nullptr, nullptr}
 	};
 	luaL_register(L, module, none);
-	
-	nlohmann::json api = o["api"];
+
+	auto api = opt["api"];
 
 	//module
-	luaReg_base(L, api["base"]); //base
-	luaReg_debug(L, "debug", true); //debug
-	luaReg_string(L, "string", api["string"]); //string
-	luaReg_os(L, "os", api["os"]); //os
-	luaReg_clipboard(L, "clipboard", api["clipboard"]); //clipboard
-	luaReg_filesystem(L, "filesystem", api["filesystem"]); //filesystem
-	luaReg_hash(L, "hash", api["hash"]); //hash
-	luaReg_http(L, "http", api["http"]); //http
-	luaReg_cmath(L, "math", api["math"]); //math
-	luaReg_random(L, "random", api["random"]); //random
-	luaReg_bit(L, "bit", api["bit"]); //bit
-	luaReg_qrcode(L, "qrcode", api["qrcode"]); //qrcode
-	luaReg_obj(L, "object", api["object"]); //obj
+	luaReg_base(L, opt); //base
+	luaReg_debug(L, opt); //debug
+	luaReg_string(L, opt); //string
+	luaReg_os(L, opt); //os
+	luaReg_clipboard(L, opt); //clipboard
+	luaReg_filesystem(L, opt); //filesystem
+	luaReg_hash(L, opt); //hash
+	luaReg_http(L, opt); //http
+	luaReg_cmath(L, opt); //math
+	luaReg_random(L, opt); //random
+	luaReg_bit(L, opt); //bit
+	luaReg_qrcode(L, opt); //qrcode
+	luaReg_obj(L, opt); //obj
 	luaReg_ease(L, "ease", api["ease"]); //ease
 	luaReg_device(L, "device", api["device"]); //device
 	luaReg_time(L, "time", api["time"]); //time
 	luaReg_json(L, "json", api["json"]); //json
+	//luaReg_exedit(L, "exedit", api["exedit"]); //exedit
 
 	//color
 	luaReg_color(L, "color", api["color"]["color"]); //color
@@ -87,26 +89,39 @@ void luaReg(lua_State* L, nlohmann::json o, const char* module) {
 
 int luaSetup(lua_State* L) {
 	nlohmann::json option = getOption();
+	
+	tm_debuglog(option, "INFO", "adding a directory to the search path used to locate DLLs");
+	SetDllPath();
 
 	// Luaインスタンスに変数を登録
 	if (option[OPTION_VMODULE]) {
+		tm_debuglog(option, "INFO", "start module registration: " MODULE_NAME);
 		luaReg(L, option, MODULE_NAME); //main module
 
-		if(option[OPTION_VMODULE_ALIAS]) // tm alias
+		if (option[OPTION_VMODULE_ALIAS]) { // tm alias
+			tm_debuglog(option, "INFO", "start module registration: " ALIAS_MODULE_NAME);
 			luaReg(L, option, ALIAS_MODULE_NAME);
+		}
 	}
 
 	// バージョンチェック
 	int n = 0;
 	if (option[OPTION_VVER_CHECK]) {
-		n = versionCheck();
-		if (n == VERSION_CHECK_ERROR) {
+		tm_debuglog(option, "INFO", "check the module version");
+
+		int v = versionCheck();
+		if (v == VERSION_CHECK_ERROR) {
+			tm_debuglog(option, "VERSION_CHECK", "version check: error");
 			luaL_error(L, VERSION_CHECK_MSG_ERROR);
 			n = 1;
 		}
-		else if (n == VERSION_CHECK_OUTDATED) {
+		else if (v == VERSION_CHECK_OUTDATED) {
+			tm_debuglog(option, "VERSION_CHECK", "version check: outdated");
 			luaL_error(L, VERSION_CHECK_MSG_OUTDATED);
+			n = 1;
 		}
+		else
+			tm_debuglog(option, "VERSION_CHECK", "version check: latest");
 	}
 	return n;
 }
@@ -115,12 +130,12 @@ extern "C" {
 	__declspec(dllexport) int luaopen_textmodule(lua_State* L) {
 		try {
 			int n = luaSetup(L);
-			SetDllPath();
 
 			return 1 + n;
 		}
 		catch (nlohmann::json::exception& j) {
-			luaL_error(L, "invalid json format or value: config.json");
+			std::string what = std::string("invalid json format or value: config.json\n") + std::string(j.what());
+			luaL_error(L, what.c_str());
 			return 0;
 		}
 		catch (std::exception& e) {

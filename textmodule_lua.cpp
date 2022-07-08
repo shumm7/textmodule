@@ -670,6 +670,24 @@ void lua_settablevalue(lua_State* L, int key, lua_Complex value) {
 	lua_settable(L, -3);
 }
 
+void lua_settablevalue(lua_State* L, int key, lua_Vector2 value) {
+	lua_pushinteger(L, key);
+	lua_pushvector2(L, value);
+	lua_settable(L, -3);
+}
+
+void lua_settablevalue(lua_State* L, int key, lua_Vector3 value) {
+	lua_pushinteger(L, key);
+	lua_pushvector3(L, value);
+	lua_settable(L, -3);
+}
+
+void lua_settablevalue(lua_State* L, int key, lua_Vector4 value) {
+	lua_pushinteger(L, key);
+	lua_pushvector4(L, value);
+	lua_settable(L, -3);
+}
+
 void lua_settablevalue(lua_State* L, const char* key, lua_Number value) {
 	lua_pushnumber(L, value);
 	lua_setfield(L, -2, key);
@@ -707,6 +725,21 @@ void lua_settablevalue(lua_State* L, const char* key, lua_Bignumber value) {
 
 void lua_settablevalue(lua_State* L, const char* key, lua_Complex value) {
 	lua_pushcomplex(L, value);
+	lua_setfield(L, -2, key);
+}
+
+void lua_settablevalue(lua_State* L, const char* key, lua_Vector2 value) {
+	lua_pushvector2(L, value);
+	lua_setfield(L, -2, key);
+}
+
+void lua_settablevalue(lua_State* L, const char* key, lua_Vector3 value) {
+	lua_pushvector3(L, value);
+	lua_setfield(L, -2, key);
+}
+
+void lua_settablevalue(lua_State* L, const char* key, lua_Vector4 value) {
+	lua_pushvector4(L, value);
 	lua_setfield(L, -2, key);
 }
 
@@ -1530,12 +1563,11 @@ const char* tm_convtostring(lua_State* L, int idx) {
 		case LUA_TNIL:
 			return "nil";
 		default:
-			fmt::dynamic_format_arg_store<fmt::format_context> store;
 			store.push_back(luaL_typename(L, idx));
 			store.push_back(lua_topointer(L, idx));
 			lua_Sstring _f = fmt::vformat("{0:s}: {1:p}", store);
-			const char* f = _f.c_str();
-			return f;
+			std::cout << _f << std::endl;
+			return _f;
 		}
 	}
 }
