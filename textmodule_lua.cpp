@@ -1540,7 +1540,7 @@ void luaL_newmetatable(lua_State* L, const char* name, const luaL_Reg* methods) 
 	lua_pop(L, 1); //remove metatable
 }
 
-const char* tm_convtostring(lua_State* L, int idx) {
+std::string tm_convtostring(lua_State* L, int idx) {
 	if (lua_type(L, idx) == LUA_TNONE)
 		return "none";
 	else {
@@ -1550,6 +1550,8 @@ const char* tm_convtostring(lua_State* L, int idx) {
 			return s;
 		}
 		const char* n = "";
+		fmt::dynamic_format_arg_store<fmt::format_context> store;
+
 		switch (lua_type(L, idx)) {
 		case LUA_TSTRING:
 			return lua_tostring(L, idx);
