@@ -4,7 +4,6 @@
 #include <chrono>
 #include <vector>
 
-#include <opencv2/opencv.hpp>
 #include <Eigen/Geometry>
 #include <unicode/unistr.h>
 #include <unicode/ustring.h>
@@ -45,7 +44,7 @@
 #define TEXTMODULE_COLORLIST "table ColorList"
 #define TEXTMODULE_COLOR "st_rgba*"
 #define TEXTMODULE_PIXEL "st_rgba32*"
-#define TEXTMODULE_IMAGE "st_imgpixel*"
+#define TEXTMODULE_IMAGE "st_image*"
 #define TEXTMODULE_CLOCK "std::chrono::utc_clock::time_point*"
 
 //Type for wide string (std::wstring)
@@ -104,9 +103,9 @@ typedef st_rgba32 lua_Pixel;
 //Type for value of 32bit rgba class
 typedef unsigned char lua_Pixelvar;
 //Type of 32bit bgra array
-typedef st_imgpixel lua_Imagevar;
-//Type of image
-typedef st_img lua_Image;
+typedef st_imgpixel lua_Cache;
+//Type of 32bit bgra array
+typedef st_image lua_Image;
 
 // Type for json
 typedef nlohmann::json lua_Json;
@@ -343,11 +342,6 @@ lua_Pixel* lua_pushpixel(lua_State* L, unsigned char r, unsigned char g, unsigne
 lua_Pixel* lua_pushpixel(lua_State* L, double r, double g, double b, double a);
 lua_Pixel* lua_pushpixel(lua_State* L, lua_Pixel def);
 lua_Pixel* lua_pushpixel(lua_State* L);
-
-// Image
-lua_Image* lua_toimage(lua_State* L, int idx);
-lua_Image* tm_toimage(lua_State* L, int idx);
-lua_Image* lua_convertcache(lua_State* L, int idx);
 
 // Misc
 bool luaL_checkmetatable(lua_State* L, int ud, const char* tname);

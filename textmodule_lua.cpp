@@ -1497,24 +1497,6 @@ lua_Pixel* lua_pushpixel(lua_State* L) {
 	return lua_pushpixel(L, 0.0, 0.0, 0.0, 0.0);
 }
 
-// Image
-lua_Image* lua_toimage(lua_State* L, int idx) {
-	return reinterpret_cast<lua_Image*>(luaL_checkudata(L, idx, TEXTMODULE_IMAGE));
-}
-
-lua_Image* tm_toimage(lua_State* L, int idx) {
-	luaL_argcheck(L, lua_type(L, idx) == LUA_TUSERDATA && luaL_checkmetatable(L, idx, TEXTMODULE_IMAGE), idx, "image expected");
-	return lua_toimage(L, idx);
-}
-
-lua_Image* lua_convertcache(lua_State* L, int idx) {
-	lua_Image* val = reinterpret_cast<lua_Image*>(lua_touserdata(L, idx));
-	luaL_getmetatable(L, TEXTMODULE_IMAGE);
-	lua_setmetatable(L, idx);
-
-	return val;
-}
-
 // Misc
 bool luaL_checkmetatable(lua_State* L, int ud, const char* tname) {
 	if (lua_getmetatable(L, ud)) {  /* does it have a metatable? */

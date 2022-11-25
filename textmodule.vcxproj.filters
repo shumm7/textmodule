@@ -267,6 +267,9 @@
     <ClCompile Include="exedit.cpp">
       <Filter>ソース ファイル\function</Filter>
     </ClCompile>
+    <ClCompile Include="textmodule_image.cpp">
+      <Filter>ソース ファイル\lib</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="os.hpp">
@@ -460,6 +463,9 @@
     </ClInclude>
     <ClInclude Include="exedit.hpp">
       <Filter>ヘッダー ファイル\function</Filter>
+    </ClInclude>
+    <ClInclude Include="textmodule_image.hpp">
+      <Filter>ヘッダー ファイル\lib</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

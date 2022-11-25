@@ -199,6 +199,7 @@
     <ClCompile Include="textmodule_aviutl.cpp" />
     <ClCompile Include="textmodule_exception.cpp" />
     <ClCompile Include="textmodule_fmt.cpp" />
+    <ClCompile Include="textmodule_image.cpp" />
     <ClCompile Include="textmodule_strtmp.cpp" />
     <ClCompile Include="textmodule.cpp" />
     <ClCompile Include="textmodule_color.cpp" />
@@ -262,6 +263,7 @@
     <ClInclude Include="string.hpp" />
     <ClInclude Include="textmodule_aviutl.hpp" />
     <ClInclude Include="textmodule_fmt.hpp" />
+    <ClInclude Include="textmodule_image.hpp" />
     <ClInclude Include="textmodule_strtmp.hpp" />
     <ClInclude Include="textmodule.hpp" />
     <ClInclude Include="textmodule_color.hpp" />
