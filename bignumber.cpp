@@ -164,6 +164,18 @@ int bignumber___eq(lua_State* L) {
 	}
 }
 
+int bignumber___gc(lua_State* L) {
+	try {
+		auto c = reinterpret_cast<lua_Bignumber*>(lua_touserdata(L, 1));
+		std::destroy_at(c);
+		return 0;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
 int bignumber___type(lua_State* L) {
 	try {
 		lua_pushstring(L, "bignumber");
@@ -274,6 +286,7 @@ static luaL_Reg TEXTMODULE_BIGNUMBER_META_REG[]{
 	{"__lt", bignumber___lt},
 	{"__le", bignumber___le},
 	{"__eq", bignumber___eq},
+	{"__gc", bignumber___gc},
 	{"__type", bignumber___type},
 	{nullptr, nullptr}
 };

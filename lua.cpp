@@ -73,7 +73,7 @@ void luaReg(lua_State* L, nlohmann::json opt, const char* module) {
 	luaReg_color(L, "color", api["color"]["color"]); //color
 	luaReg_colorlist(L, "colorlist", api["color"]["colorlist"]); //colorlist
 	luaReg_pixel(L, "pixel", api["color"]["pixel"]); //pixel
-	luaReg_image(L, "image", api["color"]["image"]); //image
+	//luaReg_image(L, "image", api["color"]["image"]); //image
 
 	//geometry
 	luaReg_complex(L, "complex", api["geometry"]["complex"]); //complex

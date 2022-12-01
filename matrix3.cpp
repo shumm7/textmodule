@@ -371,6 +371,18 @@ int matrix3____call(lua_State* L) {
 	}
 }
 
+int matrix3____gc(lua_State* L) {
+	try {
+		auto c = reinterpret_cast<lua_Matrix3*>(lua_touserdata(L, 1));
+		std::destroy_at(c);
+		return 0;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
 int matrix3__abs(lua_State* L) {
 	try {
 		lua_Matrix3 val = *tm_tomatrix3(L, 1);
@@ -562,6 +574,7 @@ static luaL_Reg TEXTMODULE_MATRIX3_META_REG[] = {
 	{"__unm", matrix3____unm},
 	{"__type", matrix3____type},
 	{"__call", matrix3____call},
+	{"__gc", matrix3____gc},
 
 	{"__abs", matrix3__abs},
 	{"__norm", matrix3__norm},

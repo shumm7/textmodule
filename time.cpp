@@ -209,6 +209,17 @@ int time___tonumber(lua_State* L) {
 	}
 }
 
+int time___gc(lua_State* L) {
+	try {
+		auto c = reinterpret_cast<lua_Clock*>(lua_toclock(L, 1));
+		std::destroy_at(c);
+		return 0;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
 
 int time_duration(lua_State* L) {
 	try {
@@ -335,6 +346,7 @@ static luaL_Reg TEXTMODULE_TIME_META_REG[] = {
 	{ "__sub", time___sub },
 	{"__type", time___type},
 	{"__tonumber", time___tonumber},
+	{"__gc", time___gc},
 
 	{"duration", time_duration},
 	{"epoch", time_epoch},

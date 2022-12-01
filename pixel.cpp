@@ -315,6 +315,18 @@ int pixel____type(lua_State* L) {
 	}
 }
 
+int pixel____gc(lua_State* L) {
+	try {
+		auto c = reinterpret_cast<lua_Pixel*>(lua_touserdata(L, 1));
+		std::destroy_at(c);
+		return 0;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
 
 int pixel_r(lua_State* L) {
 	try {
@@ -435,6 +447,7 @@ static luaL_Reg TEXTMODULE_PIXEL_META_REG[] = {
 	{"__index", pixel____index},
 	{"__newindex", pixel____newindex},
 	{"__type", pixel____type},
+	{"__gc", pixel____gc},
 
 	{"r", pixel_r},
 	{"g", pixel_g},

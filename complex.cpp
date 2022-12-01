@@ -116,10 +116,8 @@ int complex____tostring(lua_State* L) {
 
 int complex____gc(lua_State* L) {
 	try {
-		lua_Complex* c = lua_tocomplex(L, 1);
-		if(c!=nullptr)
-			free(c);
-
+		auto c = lua_tocomplex(L, 1);
+		std::destroy_at(c);
 		return 0;
 	}
 	catch (std::exception& e) {
@@ -705,6 +703,7 @@ static luaL_Reg TEXTMODULE_COMPLEX_META_REG[] = {
 	{"__unm", complex____unm},
 	{"__lt", complex____lt},
 	{"__le", complex____le},
+	{"__gc", complex____gc},
 	//{"__index", complex____index},
 	{"__newindex", complex____newindex},
 	{"__type", complex____type},

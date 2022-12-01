@@ -175,10 +175,8 @@ int vector4____tostring(lua_State* L) {
 
 int vector4____gc(lua_State* L) {
 	try {
-		lua_Vector4* c = tm_tovector4(L, 1);
-		if (c != nullptr)
-			free(c);
-
+		auto c = tm_tovector4(L, 1);
+		std::destroy_at(c);
 		return 0;
 	}
 	catch (std::exception& e) {
@@ -648,6 +646,7 @@ static luaL_Reg TEXTMODULE_VECTOR4_META_REG[] = {
 	{"__unm", vector4____unm},
 	{"__lt", vector4____lt},
 	{"__le", vector4____le},
+	{"__gc", vector4____gc},
 	//{"__index", vector4____index},
 	{"__newindex", vector4____newindex},
 	{"__type", vector4____type},

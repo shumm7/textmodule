@@ -326,6 +326,18 @@ int matrix2____call(lua_State* L) {
 	}
 }
 
+int matrix2____gc(lua_State* L) {
+	try {
+		auto c = reinterpret_cast<lua_Matrix2*>(lua_touserdata(L, 1));
+		std::destroy_at(c);
+		return 0;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
 int matrix2__abs(lua_State* L) {
 	try {
 		lua_Matrix2 val = *tm_tomatrix2(L, 1);
@@ -505,6 +517,7 @@ static luaL_Reg TEXTMODULE_MATRIX2_META_REG[] = {
 	{"__unm", matrix2____unm},
 	{"__type", matrix2____type},
 	{"__call", matrix2____call},
+	{"__gc", matrix2____gc},
 
 	{"__abs", matrix2__abs},
 	{"__norm", matrix2__norm},

@@ -259,10 +259,8 @@ int quaternion____tostring(lua_State* L) {
 
 int quaternion____gc(lua_State* L) {
 	try {
-		lua_Quaternion* c = tm_toquaternion(L, 1);
-		if (c != nullptr)
-			free(c);
-
+		auto c = tm_toquaternion(L, 1);
+		std::destroy_at(c);
 		return 0;
 	}
 	catch (std::exception& e) {
@@ -769,6 +767,7 @@ static luaL_Reg TEXTMODULE_QUATERNION_META_REG[] = {
 	{"__unm", quaternion____unm},
 	{"__lt", quaternion____lt},
 	{"__le", quaternion____le},
+	{"__gc", quaternion____gc},
 	//{"__index", quaternion____index},
 	{"__newindex", quaternion____newindex},
 	{"__type", quaternion____type},

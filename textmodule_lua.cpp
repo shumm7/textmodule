@@ -580,10 +580,11 @@ lua_Bignumber tm_tobignumber_s(lua_State* L, int idx) {
 }
 
 lua_Bignumber lua_pushbignumber(lua_State* L, lua_Bignumber value) {
-	lua_Bignumber* ret = reinterpret_cast<lua_Bignumber*>(lua_newuserdata(L, sizeof(lua_Bignumber)));
+	void* p = lua_newuserdata(L, sizeof(lua_Bignumber));
+	lua_Bignumber* ret = new(p) lua_Bignumber(value);
+
 	luaL_getmetatable(L, TEXTMODULE_BIGNUMBER);
 	lua_setmetatable(L, -2);
-	*ret = value;
 
 	return *ret;
 }
@@ -849,10 +850,11 @@ lua_Clock* tm_toclock_s(lua_State* L, int idx) {
 }
 
 lua_Clock* lua_pushclock(lua_State* L, lua_Clock clock) {
-	lua_Clock* ret = reinterpret_cast<lua_Clock*>(lua_newuserdata(L, sizeof(lua_Clock)));
+	void* p = lua_newuserdata(L, sizeof(lua_Clock));
+	lua_Clock* ret = new(p) lua_Clock(clock);
+
 	luaL_getmetatable(L, TEXTMODULE_CLOCK);
 	lua_setmetatable(L, -2);
-	*ret = clock;
 
 	return ret;
 }
@@ -912,11 +914,11 @@ lua_Complex* tm_tocomplex_s(lua_State* L, int idx) {
 }
 
 lua_Complex* lua_pushcomplex(lua_State* L, double real, double imag) {
-	std::complex<double>* ret = reinterpret_cast<std::complex<double>*>(lua_newuserdata(L, sizeof(std::complex<double>)));
+	void* p = lua_newuserdata(L, sizeof(lua_Complex));
+	lua_Complex* ret = new(p) lua_Complex(real, imag);
+
 	luaL_getmetatable(L, TEXTMODULE_COMPLEX);
 	lua_setmetatable(L, -2);
-	ret->real(real);
-	ret->imag(imag);
 
 	return ret;
 }

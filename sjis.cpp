@@ -2,6 +2,7 @@
 #include <iostream>
 #include <regex>
 #include <vector>
+#include <fstream>
 
 #include "textmodule_strtmp.hpp"
 #include "textmodule_lua.hpp"
@@ -297,6 +298,45 @@ int sjis___format(lua_State* L) {
 	}
 }
 
+int sjis__read(lua_State* L) {
+	try {
+		std::ifstream fs(tm_tosjis(L, 1));
+		lua_Sstring str((std::istreambuf_iterator<char>(fs)), std::istreambuf_iterator<char>());
+		fs.close();
+		lua_pushsjis(L, str);
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int sjis__write(lua_State* L) {
+	try {
+		std::ofstream fs(tm_tosjis(L, 1));
+		fs << tm_tosjis(L, 2);
+		fs.close();
+		return 0;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int sjis__append(lua_State* L) {
+	try {
+		std::ofstream fs(tm_tosjis(L, 1), std::ios::app);
+		fs << tm_tosjis(L, 2);
+		fs.close();
+		return 0;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
 
 static luaL_Reg TEXTMODULE_STRING_SJIS_TABLE_REG[]{
 	{"__call", sjis_new},
@@ -338,6 +378,9 @@ static luaL_Reg TEXTMODULE_STRING_SJIS_META_REG[]{
 	{"__gmatch", sjis___gmatch},
 	{"__rep", sjis___rep},
 	{"__format", sjis___format},
+	{"__read", sjis__read},
+	{"__write", sjis__write},
+	{"__append", sjis__append},
 
 	{"raw", sjis_raw},
 	{"find", sjis___find},

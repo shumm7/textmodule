@@ -350,6 +350,9 @@ int fs_space(lua_State* L) {
 
 int fs_read(lua_State* L) {
 	try {
+		if (luaL_callmeta(L, 1, "__read"))
+			return 1;
+
 		std::ifstream fs(tm_towstring(L, 1));
 		lua_Sstring str((std::istreambuf_iterator<char>(fs)), std::istreambuf_iterator<char>());
 		fs.close();
@@ -364,6 +367,9 @@ int fs_read(lua_State* L) {
 
 int fs_write(lua_State* L) {
 	try {
+		if (luaL_callmeta(L, 1, "__write"))
+			return 1;
+
 		std::ofstream fs(tm_towstring(L, 1));
 		fs << tm_tostring(L, 2);
 		fs.close();
@@ -377,6 +383,9 @@ int fs_write(lua_State* L) {
 
 int fs_append(lua_State* L) {
 	try {
+		if (luaL_callmeta(L, 1, "__append"))
+			return 1;
+
 		std::ofstream fs(tm_towstring(L, 1), std::ios::app);
 		fs << tm_tostring(L, 2);
 		fs.close();

@@ -312,6 +312,17 @@ int color____type(lua_State* L) {
 	}
 }
 
+int color____gc(lua_State* L) {
+	try {
+		auto c = reinterpret_cast<lua_Color*>(lua_touserdata(L, 1));
+		std::destroy_at(c);
+		return 0;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
 
 int color_r(lua_State* L) {
 	try {
@@ -523,6 +534,7 @@ static luaL_Reg TEXTMODULE_COLOR_META_REG[] = {
 	{"__index", color____index},
 	{"__newindex", color____newindex},
 	{"__type", color____type},
+	{"__gc", color____gc},
 
 	{"r", color_r},
 	{"g", color_g},

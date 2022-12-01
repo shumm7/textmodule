@@ -10,6 +10,7 @@
 #include "textmodule_lua.hpp"
 
 // Image
+/*
 lua_Cache* lua_tocache(lua_State* L, int idx) {;
 	return reinterpret_cast<lua_Cache*>(lua_touserdata(L, idx));
 }
@@ -108,3 +109,4 @@ int get_imgindex_s(lua_Vector2 coordinate, int width, int height) {
 		return -1;
 	return i;
 }
+*/
