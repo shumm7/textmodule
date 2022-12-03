@@ -8,6 +8,7 @@
 #include "textmodule_string.hpp"
 #include "textmodule_exception.hpp"
 #include "textmodule_geometry.hpp"
+#include "textmodule_option.hpp"
 
 int vector3_new(lua_State* L) {
 	try {
@@ -702,12 +703,16 @@ static luaL_Reg TEXTMODULE_VECTOR3_META_REG[] = {
 	{nullptr, nullptr}
 };
 
-void luaReg_vector3(lua_State* L, const char* name, bool reg) {
-	if (reg) {
+void luaReg_vector3(lua_State* L, lua_Option opt) {
+	if (opt["api"]["geometry"]["vector3"]) {
+		tm_debuglog_apiloaded(opt, "vector3");
 		luaL_newmetatable(L, TEXTMODULE_VECTOR3, TEXTMODULE_VECTOR3_META_REG);
 
 		lua_newtable(L);
 		luaL_register(L, NULL, TEXTMODULE_VECTOR3_REG);
-		lua_setfield(L, -2, name);
+		lua_setfield(L, -2, "vector3");
+	}
+	else {
+		tm_debuglog_apinoloaded(opt, "vector3");
 	}
 }

@@ -72,8 +72,8 @@ void tm_debuglog(lua_Option opt, lua_Sstring tag, lua_Sstring log) {
 
 		std::string c = fmt::vformat("[{0:%Y-%m-%d %H-%M-%S}] (textmodule): debug log: [{1:s}] {2:s}", store);
 
-		OutputDebugString(c.c_str());
-		std::cout << c << std::endl;
+		OutputDebugStringA(c.c_str());
+		//std::cout << c << std::endl;
 	}
 }
 

@@ -9,6 +9,7 @@
 #include "textmodule_color.hpp"
 #include "textmodule_lua.hpp"
 #include "textmodule_exception.hpp"
+#include "textmodule_option.hpp"
 
 int pixel_new(lua_State* L) {
 	try {
@@ -444,7 +445,7 @@ static luaL_Reg TEXTMODULE_PIXEL_META_REG[] = {
 	{"__div", pixel____div},
 	{"__lt", pixel____lt},
 	{"__le", pixel____le},
-	{"__index", pixel____index},
+	//{"__index", pixel____index},
 	{"__newindex", pixel____newindex},
 	{"__type", pixel____type},
 	{"__gc", pixel____gc},
@@ -459,12 +460,16 @@ static luaL_Reg TEXTMODULE_PIXEL_META_REG[] = {
 	{nullptr, nullptr}
 };
 
-void luaReg_pixel(lua_State* L, const char* name, bool reg) {
-	if (reg) {
+void luaReg_pixel(lua_State* L, lua_Option opt) {
+	if (opt["api"]["color"]["pixel"]) {
+		tm_debuglog_apiloaded(opt, "pixel");
 		luaL_newmetatable(L, TEXTMODULE_PIXEL, TEXTMODULE_PIXEL_META_REG);
 
 		lua_newtable(L);
 		luaL_register(L, NULL, TEXTMODULE_PIXEL_REG);
-		lua_setfield(L, -2, name);
+		lua_setfield(L, -2, "pixel");
+	}
+	else {
+		tm_debuglog_apinoloaded(opt, "pixel");
 	}
 }

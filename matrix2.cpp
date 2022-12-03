@@ -8,6 +8,7 @@
 #include "textmodule_string.hpp"
 #include "textmodule_exception.hpp"
 #include "textmodule_geometry.hpp"
+#include "textmodule_option.hpp"
 
 int matrix2_new(lua_State* L) {
 	try {
@@ -536,12 +537,16 @@ static luaL_Reg TEXTMODULE_MATRIX2_META_REG[] = {
 	{nullptr, nullptr}
 };
 
-void luaReg_matrix2(lua_State* L, const char* name, bool reg) {
-	if (reg) {
+void luaReg_matrix2(lua_State* L, lua_Option opt) {
+	if (opt["api"]["geometry"]["matrix2"]) {
+		tm_debuglog_apiloaded(opt, "matrix2");
 		luaL_newmetatable(L, TEXTMODULE_MATRIX2, TEXTMODULE_MATRIX2_META_REG);
 
 		lua_newtable(L);
 		luaL_register(L, NULL, TEXTMODULE_MATRIX2_REG);
-		lua_setfield(L, -2, name);
+		lua_setfield(L, -2, "matrix2");
+	}
+	else {
+		tm_debuglog_apinoloaded(opt, "matrix2");
 	}
 }

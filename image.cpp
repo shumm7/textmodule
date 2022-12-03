@@ -10,6 +10,7 @@
 #include "textmodule_lua.hpp"
 #include "textmodule_string.hpp"
 #include "textmodule_exception.hpp"
+#include "textmodule_option.hpp"
 
 /*
 int image_new(lua_State* L) {
@@ -124,12 +125,16 @@ static luaL_Reg TEXTMODULE_IMAGE_META_REG[] = {
 	{ nullptr, nullptr }
 };
 
-void luaReg_image(lua_State* L, const char* name, bool reg) {
-	if (reg) {
-		//luaL_newmetatable(L, TEXTMODULE_IMAGE, TEXTMODULE_IMAGE_META_REG);
+void luaReg_image(lua_State* L, lua_Option opt) {
+	if (opt["api"]["color"]["image"]) {
+		tm_debuglog_apiloaded(opt, "image");
+		luaL_newmetatable(L, TEXTMODULE_IMAGE, TEXTMODULE_IMAGE_META_REG);
 
-		//lua_newtable(L);
-		//luaL_register(L, NULL, TEXTMODULE_IMAGE_REG);
-		//lua_setfield(L, -2, name);
+		lua_newtable(L);
+		luaL_register(L, NULL, TEXTMODULE_IMAGE_REG);
+		lua_setfield(L, -2, "image");
+	}
+	else {
+		tm_debuglog_apinoloaded(opt, "image");
 	}
 }

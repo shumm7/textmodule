@@ -8,6 +8,7 @@
 #include "textmodule_string.hpp"
 #include "textmodule_exception.hpp"
 #include "textmodule_geometry.hpp"
+#include "textmodule_option.hpp"
 
 int quaternion_new(lua_State* L) {
 	try {
@@ -794,12 +795,16 @@ static luaL_Reg TEXTMODULE_QUATERNION_META_REG[] = {
 	{nullptr, nullptr}
 };
 
-void luaReg_quaternion(lua_State* L, const char* name, bool reg) {
-	if (reg) {
+void luaReg_quaternion(lua_State* L, lua_Option opt) {
+	if (opt["api"]["geometry"]["quaternion"]) {
+		tm_debuglog_apiloaded(opt, "quaternion");
 		luaL_newmetatable(L, TEXTMODULE_QUATERNION, TEXTMODULE_QUATERNION_META_REG);
 
 		lua_newtable(L);
 		luaL_register(L, NULL, TEXTMODULE_QUATERNION_REG);
-		lua_setfield(L, -2, name);
+		lua_setfield(L, -2, "quaternion");
+	}
+	else {
+		tm_debuglog_apinoloaded(opt, "quaternion");
 	}
 }

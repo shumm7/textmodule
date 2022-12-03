@@ -6,6 +6,7 @@
 
 #include "textmodule_lua.hpp"
 #include "textmodule_aviutl.hpp"
+#include "textmodule_option.hpp"
 
 bool is093rc1 = false; 
 
@@ -121,11 +122,15 @@ static luaL_Reg TEXTMODULE_EXEDIT_REG[] = {
 	{ nullptr, nullptr }
 };
 
-void luaReg_exedit(lua_State* L, const char* name, bool reg) {
-	if (reg) {
+void luaReg_exedit(lua_State* L, lua_Option opt) {
+	if (opt["api"]["exedit"]) {
+		tm_debuglog_apiloaded(opt, "exedit");
+
 		lua_newtable(L);
 		luaL_register(L, NULL, TEXTMODULE_EXEDIT_REG);
-
-		lua_setfield(L, -2, name);
+		lua_setfield(L, -2, "exedit");
+	}
+	else {
+		tm_debuglog_apinoloaded(opt, "exedit");
 	}
 }

@@ -1,5 +1,6 @@
 #pragma once
 #include <lua.hpp>
 #include <exedit.hpp>
+#include "textmodule_option.hpp"
 
-void luaReg_exedit(lua_State* L, const char* name, bool reg);
+void luaReg_exedit(lua_State* L, lua_Option opt);

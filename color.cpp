@@ -10,6 +10,7 @@
 #include "textmodule_lua.hpp"
 #include "textmodule_string.hpp"
 #include "textmodule_exception.hpp"
+#include "textmodule_option.hpp"
 
 #define NOMINMAX
 
@@ -531,7 +532,7 @@ static luaL_Reg TEXTMODULE_COLOR_META_REG[] = {
 	{"__div", color____div},
 	{"__lt", color____lt},
 	{"__le", color____le},
-	{"__index", color____index},
+	//{"__index", color____index},
 	{"__newindex", color____newindex},
 	{"__type", color____type},
 	{"__gc", color____gc},
@@ -552,12 +553,16 @@ static luaL_Reg TEXTMODULE_COLOR_META_REG[] = {
 	{nullptr, nullptr}
 };
 
-void luaReg_color(lua_State* L, const char* name, bool reg) {
-	if (reg) {
+void luaReg_color(lua_State* L, lua_Option opt) {
+	if (opt["api"]["color"]["color"]) {
+		tm_debuglog_apiloaded(opt, "color");
 		luaL_newmetatable(L, TEXTMODULE_COLOR, TEXTMODULE_COLOR_META_REG);
 
 		lua_newtable(L);
 		luaL_register(L, NULL, TEXTMODULE_COLOR_REG);
-		lua_setfield(L, -2, name);
+		lua_setfield(L, -2, "color");
+	}
+	else {
+		tm_debuglog_apinoloaded(opt, "color");
 	}
 }

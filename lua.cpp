@@ -63,27 +63,27 @@ void luaReg(lua_State* L, nlohmann::json opt, const char* module) {
 	luaReg_bit(L, opt); //bit
 	luaReg_qrcode(L, opt); //qrcode
 	luaReg_obj(L, opt); //obj
-	luaReg_ease(L, "ease", api["ease"]); //ease
-	luaReg_device(L, "device", api["device"]); //device
-	luaReg_time(L, "time", api["time"]); //time
-	luaReg_json(L, "json", api["json"]); //json
-	//luaReg_exedit(L, "exedit", api["exedit"]); //exedit
+	luaReg_ease(L, opt); //ease
+	luaReg_device(L, opt); //device
+	luaReg_time(L, opt); //time
+	luaReg_json(L, opt); //json
+	//luaReg_exedit(L, opt); //exedit
 
 	//color
-	luaReg_color(L, "color", api["color"]["color"]); //color
-	luaReg_colorlist(L, "colorlist", api["color"]["colorlist"]); //colorlist
-	luaReg_pixel(L, "pixel", api["color"]["pixel"]); //pixel
-	//luaReg_image(L, "image", api["color"]["image"]); //image
+	luaReg_color(L, opt); //color
+	luaReg_pixel(L, opt); //pixel
+	luaReg_colorlist(L, opt); //colorlist
+	//luaReg_image(L, opt); //image
 
 	//geometry
-	luaReg_complex(L, "complex", api["geometry"]["complex"]); //complex
-	luaReg_quaternion(L, "quaternion", api["geometry"]["quaternion"]); //quaternion
-	luaReg_vector2(L, "vector2", api["geometry"]["vector2"]); //vector2
-	luaReg_vector3(L, "vector3", api["geometry"]["vector3"]); //vector3
-	luaReg_vector4(L, "vector4", api["geometry"]["vector4"]); //vector4
-	luaReg_matrix2(L, "matrix2", api["geometry"]["matrix2"]); //matrix2
-	luaReg_matrix3(L, "matrix3", api["geometry"]["matrix3"]); //matrix3
-	luaReg_matrix4(L, "matrix4", api["geometry"]["matrix4"]); //matrix4
+	luaReg_complex(L, opt); //complex
+	luaReg_quaternion(L, opt); //quaternion
+	luaReg_vector2(L, opt); //vector2
+	luaReg_vector3(L, opt); //vector3
+	luaReg_vector4(L, opt); //vector4
+	luaReg_matrix2(L, opt); //matrix2
+	luaReg_matrix3(L, opt); //matrix3
+	luaReg_matrix4(L, opt); //matrix4
 }
 
 

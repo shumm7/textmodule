@@ -8,6 +8,7 @@
 #include "textmodule_string.hpp"
 #include "textmodule_exception.hpp"
 #include "textmodule_geometry.hpp"
+#include "textmodule_option.hpp"
 
 
 int matrix3_new(lua_State* L) {
@@ -594,12 +595,16 @@ static luaL_Reg TEXTMODULE_MATRIX3_META_REG[] = {
 };
 
 
-void luaReg_matrix3(lua_State* L, const char* name, bool reg) {
-	if (reg) {
+void luaReg_matrix3(lua_State* L, lua_Option opt) {
+	if (opt["api"]["geometry"]["matrix3"]) {
+		tm_debuglog_apiloaded(opt, "matrix3");
 		luaL_newmetatable(L, TEXTMODULE_MATRIX3, TEXTMODULE_MATRIX3_META_REG);
 
 		lua_newtable(L);
 		luaL_register(L, NULL, TEXTMODULE_MATRIX3_REG);
-		lua_setfield(L, -2, name);
+		lua_setfield(L, -2, "matrix3");
+	}
+	else {
+		tm_debuglog_apinoloaded(opt, "matrix3");
 	}
 }

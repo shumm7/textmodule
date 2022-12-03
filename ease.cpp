@@ -6,6 +6,7 @@
 #include "textmodule_string.hpp"
 #include "textmodule_exception.hpp"
 #include "textmodule_ease.hpp"
+#include "textmodule_option.hpp"
 
 int ease_linear(lua_State* L) {
 	try {
@@ -834,10 +835,15 @@ static luaL_Reg TEXTMODULE_EASE_REG[] = {
 	{nullptr, nullptr}
 };
 
-void luaReg_ease(lua_State* L, const char* name, bool reg) {
-	if (reg) {
+void luaReg_ease(lua_State* L, lua_Option opt) {
+	if (opt["api"]["ease"]) {
+		tm_debuglog_apiloaded(opt, "ease");
+
 		lua_newtable(L);
 		luaL_register(L, NULL, TEXTMODULE_EASE_REG);
-		lua_setfield(L, -2, name);
+		lua_setfield(L, -2, "ease");
+	}
+	else {
+		tm_debuglog_apinoloaded(opt, "ease");
 	}
 }

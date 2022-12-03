@@ -14,6 +14,7 @@
 #include "textmodule_lua.hpp"
 #include "textmodule_exception.hpp"
 #include "textmodule_string.hpp"
+#include "textmodule_option.hpp"
 
 #pragma comment(lib, "winmm.lib")
 
@@ -600,13 +601,18 @@ static luaL_Reg TEXTMODULE_DEVICE_REG[] = {
 	{ nullptr, nullptr }
 };
 
-void luaReg_device(lua_State* L, const char* name, bool reg) {
-	if (reg) {
+void luaReg_device(lua_State* L, lua_Option opt) {
+	if (opt["api"]["device"]) {
+		tm_debuglog_apiloaded(opt, "device");
+
 		lua_newtable(L);
 		luaL_register(L, NULL, TEXTMODULE_DEVICE_REG);
 
 		luaReg_const_keycode(L, "keycode");
 
-		lua_setfield(L, -2, name);
+		lua_setfield(L, -2, "device");
+	}
+	else {
+		tm_debuglog_apinoloaded(opt, "device");
 	}
 }

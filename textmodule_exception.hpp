@@ -41,6 +41,7 @@ void tm_debuglog(std::string message, nlohmann::json option);
 //string
 #define STRING_COVERSION_FAILED "string conversion failed"
 #define INVALID_CHARACTER "invalid character"
+#define INVALID_FORMAT_STRING "invalid format string"
 
 //obj
 #define EXEDIT_AUF_NOTFOUND "exedit.auf was not found"

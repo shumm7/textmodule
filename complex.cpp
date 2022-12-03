@@ -9,6 +9,7 @@
 #include "textmodule_string.hpp"
 #include "textmodule_exception.hpp"
 #include "textmodule_geometry.hpp"
+#include "textmodule_option.hpp"
 
 int complex_new(lua_State* L) {
 	try {
@@ -739,12 +740,16 @@ static luaL_Reg TEXTMODULE_COMPLEX_META_REG[] = {
 	{nullptr, nullptr}
 };
 
-void luaReg_complex(lua_State* L, const char* name, bool reg) {
-	if (reg) {
+void luaReg_complex(lua_State* L, lua_Option opt) {
+	if (opt["api"]["geometry"]["complex"]) {
+		tm_debuglog_apiloaded(opt, "complex");
 		luaL_newmetatable(L, TEXTMODULE_COMPLEX, TEXTMODULE_COMPLEX_META_REG);
 
 		lua_newtable(L);
 		luaL_register(L, NULL, TEXTMODULE_COMPLEX_REG);
-		lua_setfield(L, -2, name);
+		lua_setfield(L, -2, "complex");
+	}
+	else {
+		tm_debuglog_apinoloaded(opt, "complex");
 	}
 }
