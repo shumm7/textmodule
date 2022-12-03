@@ -14,6 +14,7 @@ textmoduleは、AviUtlでワイド文字列を処理する関数などを複数�
 - テキスト遷移 （https://github.com/shumm7/AviUtl-TextTransition ）
 - オセロ （https://github.com/shumm7/AviUtl-Othello ）
 - マインスイーパ （https://github.com/shumm7/AviUtl-MineSweeper ）
+- QR （https://github.com/shumm7/AviUtl-QR ）
 
 # Licence
 textmoduleの著作権は、しゅう（ https://twitter.com/shulmj_ ）にあります。  
