@@ -17,6 +17,7 @@ void tm_debuglog(std::string message, nlohmann::json option);
 #define WRONG_NUMBER_OF_ARGS "wrong number of arguments"
 #define INVALID_TYPE "invalid type of argument"
 #define OUT_OF_RANGE "the value is out of range"
+#define FAILED_TO_LOAD_FILE "failed to load file"
 
 //device
 #define JOYSTICK_NOTFOUND "the specified joystick is not connected"

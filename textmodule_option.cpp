@@ -8,6 +8,7 @@
 #include <fstream>
 #include <string>
 #include <regex>
+#include <stdexcept>
 
 #include <fmt/core.h>
 #include <fmt/format.h>
@@ -16,6 +17,7 @@
 #include "textmodule.hpp"
 #include "textmodule_string.hpp"
 #include "textmodule_lua.hpp"
+#include "textmodule_exception.hpp"
 
 #define OPTION_PATH ".\\textmodule\\config.json"
 #define VERSION_CHECK_URL L"https://raw.githubusercontent.com/shumm7/textmodule/main/VERSION"
@@ -27,7 +29,12 @@ using namespace std;
 
 nlohmann::json getOption() {
 	std::ifstream ifs(OPTION_PATH);
-	nlohmann::json j = nlohmann::json::parse(ifs);
+	if (ifs.fail()) {
+		throw std::runtime_error(FAILED_TO_LOAD_FILE);
+	}
+	std::string str((std::istreambuf_iterator<char>(ifs)), std::istreambuf_iterator<char>());
+
+	nlohmann::json j = nlohmann::json::parse(str);
 
 	return j;
 }
