@@ -27,8 +27,7 @@ using namespace std;
 
 nlohmann::json getOption() {
 	std::ifstream ifs(OPTION_PATH);
-	nlohmann::json j;
-	ifs >> j;
+	nlohmann::json j = nlohmann::json::parse(ifs);
 
 	return j;
 }
