@@ -2,37 +2,38 @@
   "module": true,
   "module-alias": true,
   "version-check": false,
+  "debug": true,
   "api": {
     "base": true,
     "string": true,
     "os": true,
-    "math": true,
-    "random": true,
-    "bit": true,
-    "color": {
-       "color": true,
-       "pixel": true,
-       "colorlist": true
-    },
-    "geometry": {
-       "vector2": true,
-       "vector3": true,
-       "vector4": true,
-       "matrix2": true,
-       "matrix3": true,
-       "complex": true,
-       "quaternion": true
-    },
     "clipboard": true,
     "filesystem": true,
     "hash": true,
     "http": true,
+    "math": true,
+    "random": true,
+    "bit": true,
     "qrcode": true,
     "object": true,
     "ease": true,
     "device": true,
-    "table": true,
     "time": true,
-    "json": true
+    "json": true,
+    "color": {
+       "color": true,
+       "colorlist": true,
+       "pixel": true
+    },
+    "geometry": {
+      "complex": true,
+      "quaternion": true,
+       "vector2": true,
+       "vector3": true,
+       "vector4": true,
+       "matrix2": true, 
+       "matrix3": true,
+       "matrix4": true
+    }
   }
 }
