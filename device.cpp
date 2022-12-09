@@ -385,21 +385,33 @@ int device_font(lua_State* L) {
 		HDC hdc = GetDC(0);
 		lf.lfFaceName[0] = _T('\0'); // 全てのフォント名
 		lf.lfPitchAndFamily = DEFAULT_PITCH;
-		lf.lfCharSet = tm_tonumber_s(L, 1, SHIFTJIS_CHARSET);
+		lf.lfCharSet = tm_tonumber_s(L, 2, SHIFTJIS_CHARSET);
 		EnumFontFamiliesEx(hdc, &lf, (FONTENUMPROC)EnumFontFamProc, (LONG_PTR)&lf, 0);
 		ReleaseDC(0, hdc);
+		
+		bool find_font_mode = false;
+		std::string find_font_key = "";
+		if (lua_type(L, 1) == LUA_TSTRING) {
+			find_font_key = lua_tosstring(L, 1);
+			if (find_font_key.length() > 0)
+				find_font_mode = true;
+		}
 
 		lua_newtable(L);
+		int count = 0;
 		for (int n = 0; n < fonts.size(); n++) {
-			lua_pushinteger(L, n+1);
-			lua_newtable(L);
-			lua_settablevalue(L, "name", fonts[n]->FullName);
-			lua_settablevalue(L, "script", fonts[n]->Script);
-			lua_settablevalue(L, "style", fonts[n]->Style);
-			lua_settablevalue(L, "type", fonts[n]->FontType);
-			lua_settablevalue(L, "height", (lua_Number)(fonts[n]->Height));
-			lua_settablevalue(L, "width", (lua_Number)(fonts[n]->Width));
-			lua_settable(L, -3);
+			if (!find_font_mode || (std::string(fonts[n]->FullName).find(find_font_key) != std::string::npos && find_font_key.length() > 0)) {
+				lua_pushinteger(L, count + 1);
+				lua_newtable(L);
+				lua_settablevalue(L, "name", fonts[n]->FullName);
+				lua_settablevalue(L, "script", fonts[n]->Script);
+				lua_settablevalue(L, "style", fonts[n]->Style);
+				lua_settablevalue(L, "type", fonts[n]->FontType);
+				lua_settablevalue(L, "height", (lua_Number)(fonts[n]->Height));
+				lua_settablevalue(L, "width", (lua_Number)(fonts[n]->Width));
+				lua_settable(L, -3);
+				count++;
+			}
 		}
 		return 1;
 	}

@@ -6,6 +6,7 @@
 #include <fmt/core.h>
 #include <fmt/format.h>
 #include <fmt/chrono.h>
+#include <fmt/args.h>
 
 #include "textmodule_lua.hpp"
 #include "textmodule_string.hpp"

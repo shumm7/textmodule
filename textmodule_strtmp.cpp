@@ -9,14 +9,14 @@ void myInvalidParameterHandler(const wchar_t* expression, const wchar_t* functio
 
 lua_Sstring string_template_format(lua_State* L, lua_Sstring str, int idx) {
 	try {
-		fmt::dynamic_format_arg_store<fmt::format_context> store;
+		auto store = fmt::dynamic_format_arg_store<fmt::format_context>();
 
 		lua_formatargs_store(L, &store, idx+1, lua_gettop(L));
 
 		_invalid_parameter_handler oldHandler, newHandler;
 		newHandler = myInvalidParameterHandler;
 		oldHandler = _set_thread_local_invalid_parameter_handler(newHandler);
-		//_CrtSetReportMode(_CRT_ASSERT, 0);
+		_CrtSetReportMode(_CRT_ASSERT, 0);
 		return fmt::vformat(str, store);
 	}
 	catch (fmt::format_error) {

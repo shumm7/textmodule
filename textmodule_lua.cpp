@@ -15,6 +15,7 @@
 #include <fmt/core.h>
 #include <fmt/chrono.h>
 #include <fmt/format.h>
+#include <fmt/args.h>
 #include <chrono>
 
 #include <complex>
@@ -1552,7 +1553,6 @@ std::string tm_convtostring(lua_State* L, int idx) {
 			store.push_back(luaL_typename(L, idx));
 			store.push_back(lua_topointer(L, idx));
 			lua_Sstring _f = fmt::vformat("{0:s}: {1:p}", store);
-			std::cout << _f << std::endl;
 			return _f;
 		}
 	}
@@ -1687,15 +1687,12 @@ void lua_formatargs_store(lua_State* L, fmt::dynamic_format_arg_store<fmt::forma
 		else if (tp == LUA_TSTRING)
 			ret->push_back(lua_tostring(L, i));
 		else if (tp == LUA_TNIL)
-			ret->push_back("nil");
+			ret->push_back(std::string("nil"));
 		else if (tp == LUA_TNONE)
 			break;
 		else if (tp == LUA_TUSERDATA) {
 			if (lua_isclock(L, i)) {
-				std::tm tm;
-				__time64_t time_t = std::chrono::system_clock::to_time_t(std::chrono::utc_clock::to_sys(*tm_toclock(L, i)));
-				_gmtime64_s(&tm, &time_t);
-				ret->push_back(tm);
+				ret->push_back(std::chrono::utc_clock::to_sys(*tm_toclock(L, i)));
 			}
 			else
 				ret->push_back(lua_topointer(L, i));

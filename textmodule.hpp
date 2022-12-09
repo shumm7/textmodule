@@ -3,7 +3,7 @@
 #include <windows.h>
 
 #define MODULE_NAME "textmodule"
-#define MODULE_VERSION 142
+#define MODULE_VERSION 143
 #define ALIAS_MODULE_NAME "tm"
 
 #define MODULE_DLLDIR "./textmodule/bin"

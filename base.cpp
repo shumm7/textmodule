@@ -7,6 +7,7 @@
 #include <fmt/core.h>
 #include <fmt/format.h>
 #include <fmt/chrono.h>
+#include <fmt/args.h>
 
 #include <boost/version.hpp>
 #include <Eigen/Core>
@@ -196,9 +197,28 @@ int base_maketable(lua_State* L) {
 		}
 
 		lua_newtable(L);
+		for (int i = 0; i < n/2; i++) {
+			lua_pushvalue(L, i*2 + 2);
+			lua_pushvalue(L, i*2 + 1);
+			lua_settable(L, -3);
+		}
+
+		return 1;
+	}
+	catch (std::exception& e) {
+		luaL_error(L, e.what());
+		return 1;
+	}
+}
+
+int base_makelist(lua_State* L) {
+	try {
+		int n = lua_gettop(L);
+
+		lua_newtable(L);
 		for (int i = 0; i < n; i++) {
-			lua_pushinteger(L, i+1);
-			lua_pushvalue(L, n + 1);
+			lua_pushinteger(L, i + 1);
+			lua_pushvalue(L, i + 1);
 			lua_settable(L, -3);
 		}
 
@@ -271,7 +291,7 @@ int base_print(lua_State* L) {
 int base_printf(lua_State* L) {
 	try {
 		lua_Sstring str = tm_tosstring(L, 1);
-		fmt::dynamic_format_arg_store<fmt::format_context> store;
+		auto store = fmt::dynamic_format_arg_store<fmt::format_context>();
 
 		lua_formatargs_store(L, &store, 2, lua_gettop(L));
 
@@ -402,10 +422,12 @@ int base_tonumber(lua_State* L) {
 
 int base_pointer(lua_State* L) {
 	try {
-		luaL_checkany(L, 1);
-		std::string s = fmt::format("{0:p}", lua_topointer(L, 1));
-		lua_pushsstring(L, s);
-		return 1;
+		int s = lua_gettop(L);
+		for (int i = 1; i <= s; i++) {
+			std::string s = fmt::format("{0:p}", lua_topointer(L, i));
+			lua_pushsstring(L, s);
+		}
+		return s;
 	}
 	catch (std::exception& e) {
 		luaL_error(L, e.what());
@@ -471,6 +493,7 @@ static luaL_Reg TEXTMODULE_BASE_REG[] = {
 	{"showtable", base_showtable},
 	{"showmetatable", base_showmetatable},
 	{"maketable", base_maketable},
+	{"makelist", base_makelist},
 	{"debug_print", base_debug_print},
 	{"type", base_type},
 	{"print", base_print},

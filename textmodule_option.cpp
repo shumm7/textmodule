@@ -13,6 +13,7 @@
 #include <fmt/core.h>
 #include <fmt/format.h>
 #include <fmt/chrono.h>
+#include <fmt/args.h>
 
 #include "textmodule.hpp"
 #include "textmodule_string.hpp"
@@ -67,7 +68,7 @@ int versionCheck() {
 
 void tm_debuglog(lua_Option opt, lua_Sstring tag, lua_Sstring log) {
 	if (opt["debug"]) {
-		fmt::dynamic_format_arg_store<fmt::format_context> store;
+		auto store = fmt::dynamic_format_arg_store<fmt::format_context>();
 
 		std::tm tm;
 		__time64_t time_t = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
